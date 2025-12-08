@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
   <title>Pixel PFP Slingshot – Cloaks vs Migos</title>
   <style>
     * {
@@ -9,6 +10,12 @@
       margin: 0;
       padding: 0;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      overflow-x: hidden;
+      touch-action: manipulation;
     }
 
     body {
@@ -18,21 +25,21 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 12px;
-      gap: 8px;
+      padding: 8px;
+      gap: 6px;
     }
 
     h1 {
-      font-size: 1.1rem;
+      font-size: 1rem;
       text-align: center;
-      margin-bottom: 4px;
+      margin-bottom: 2px;
     }
 
     canvas {
       background: #020617;
       width: 100%;
       max-width: 960px;
-      border-radius: 10px;
+      border-radius: 8px;
       border: 1px solid #1f2937;
       touch-action: none;
     }
@@ -42,30 +49,30 @@
       max-width: 960px;
       display: flex;
       flex-direction: column;
-      gap: 6px;
-      margin-bottom: 4px;
+      gap: 4px;
+      margin-bottom: 2px;
     }
 
     .top-row {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      gap: 8px;
+      gap: 6px;
     }
 
     .stats-row {
       display: flex;
       flex-wrap: wrap;
       justify-content: flex-start;
-      gap: 10px;
-      font-size: 0.8rem;
+      gap: 8px;
+      font-size: 0.7rem;
       color: #e5e7eb;
     }
 
     .stat {
       display: flex;
       align-items: center;
-      gap: 3px;
+      gap: 2px;
     }
 
     .stat .value {
@@ -77,16 +84,15 @@
       background: #020617;
       border: 1px solid #4b5563;
       border-radius: 999px;
-      padding: 2px 8px;
+      padding: 2px 6px;
       color: #e5e7eb;
-      font-size: 0.75rem;
-      min-width: 80px;
+      font-size: 0.65rem;
+      min-width: 60px;
     }
 
     .stats-row input:focus {
       outline: none;
       border-color: #f97316;
-      box-shadow: 0 0 0 1px rgba(249,115,22,0.6);
     }
 
     .chamber-label-inline {
@@ -95,7 +101,7 @@
 
     .chamber-slots {
       display: flex;
-      gap: 4px;
+      gap: 3px;
       align-items: center;
     }
 
@@ -104,6 +110,8 @@
       border: 1px solid #020617;
       box-shadow: 0 0 0 1px rgba(15,23,42,0.7);
       cursor: pointer;
+      min-width: 12px;
+      min-height: 12px;
     }
 
     .chamber-slot.next {
@@ -115,25 +123,26 @@
       color: #e5e7eb;
       border: 1px solid #4b5563;
       border-radius: 999px;
-      padding: 4px 10px;
-      font-size: 0.75rem;
+      padding: 6px 12px;
+      font-size: 0.7rem;
       cursor: pointer;
       align-self: flex-start;
       white-space: nowrap;
+      min-height: 32px;
     }
 
-    .menu-btn:hover {
+    .menu-btn:hover, .menu-btn:active {
       background: #1f2937;
     }
 
-    /* SHOP */
+    /* SHOP - Mobile friendly with larger touch targets */
 
     .bomb-shop-wrapper {
       width: 100%;
       max-width: 960px;
-      margin-top: 6px;
-      border-radius: 10px;
-      transition: box-shadow 0.15s ease, border-color 0.15s ease;
+      margin-top: 4px;
+      border-radius: 8px;
+      transition: box-shadow 0.15s ease;
     }
 
     .bomb-shop-wrapper.highlight {
@@ -141,54 +150,78 @@
     }
 
     @keyframes pulseBorder {
-      0% {
-        box-shadow: 0 0 0 0 rgba(249,115,22,0.7);
-      }
-      100% {
-        box-shadow: 0 0 0 8px rgba(249,115,22,0);
-      }
+      0% { box-shadow: 0 0 0 0 rgba(249,115,22,0.7); }
+      100% { box-shadow: 0 0 0 6px rgba(249,115,22,0); }
     }
 
     .bomb-shop {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 6px;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 4px;
       justify-items: stretch;
     }
 
+    @media (max-width: 600px) {
+      .bomb-shop {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
     .bomb-shop button {
-      display: inline-flex;
-      flex-direction: row;
+      display: flex;
+      flex-direction: column;
       align-items: center;
-      gap: 6px;
-      padding: 6px 10px;
+      gap: 2px;
+      padding: 8px 4px;
       border-radius: 6px;
-      border: 1px solid #1d4ed8;
+      border: 2px solid #1d4ed8;
       cursor: pointer;
-      font-size: 0.75rem;
-      line-height: 1.2;
-      justify-content: flex-start;
+      font-size: 0.65rem;
+      line-height: 1.1;
+      justify-content: center;
       box-shadow: 0 2px 4px rgba(0,0,0,0.35);
       color: #e5e7eb;
       background: linear-gradient(135deg, #0f172a, #1d4ed8);
-      transition: transform 0.08s ease, box-shadow 0.08s ease, opacity 0.08s ease, border-color 0.08s ease;
-      min-height: 42px;
+      transition: transform 0.08s ease, box-shadow 0.08s ease;
+      min-height: 60px;
+      text-align: center;
     }
 
     .bomb-shop button .bomb-dot {
-      width: 18px;
-      height: 18px;
-      border-radius: 3px;
+      width: 20px;
+      height: 20px;
+      border-radius: 4px;
       border: 2px solid rgba(0,0,0,0.6);
       flex-shrink: 0;
     }
 
+    .bomb-shop button .bomb-label {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1px;
+    }
+
+    .bomb-shop button .bomb-label .pill-name {
+      font-weight: 600;
+      font-size: 0.7rem;
+    }
+
     .bomb-shop button .bomb-label small {
-      font-size: 0.65rem;
+      font-size: 0.55rem;
       opacity: 0.9;
     }
 
-    /* Only dot color changes per bomb type */
+    .bomb-shop button .bomb-label .special-tag {
+      font-size: 0.5rem;
+      background: rgba(249,115,22,0.3);
+      padding: 1px 4px;
+      border-radius: 3px;
+      color: #fb923c;
+      margin-top: 2px;
+    }
+
+    /* Bomb dot colors */
     .bomb-shop button[data-type="b1"] .bomb-dot { background: #93c5fd; }
     .bomb-shop button[data-type="b2"] .bomb-dot { background: #ddd6fe; }
     .bomb-shop button[data-type="b3"] .bomb-dot { background: #fed7aa; }
@@ -215,119 +248,21 @@
       border-style: dashed;
     }
 
-    /* FIRE PANEL (firing pin) */
-
-    .fire-panel-wrapper {
+    /* Instructions panel */
+    .instructions-panel {
       width: 100%;
       max-width: 960px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin-top: 6px;
-      gap: 4px;
-    }
-
-    .fire-panel {
-      display: flex;
-      align-items: center;
-      gap: 6px;
       background: #111827;
-      border-radius: 10px;
-      border: 1px solid #4b5563;
-      padding: 6px 10px;
-      width: 100%;
-      max-width: 520px;
-    }
-
-    .fire-label {
-      font-size: 0.8rem;
-      opacity: 0.9;
-      flex-shrink: 0;
-    }
-
-    .fire-arrow {
-      background: #1f2937;
-      border: 1px solid #4b5563;
-      color: #e5e7eb;
-      width: 30px;
-      height: 26px;
-      font-size: 1rem;
-      cursor: pointer;
-      padding: 0;
-      line-height: 1;
-      border-radius: 6px;
-      flex-shrink: 0;
-    }
-
-    .fire-arrow:hover {
-      background: #374151;
-    }
-
-    .fire-track {
-      position: relative;
-      flex: 1;
-      height: 10px;
-      background: #020617;
-      border-radius: 999px;
-      box-shadow: 0 0 0 1px rgba(31,41,55,0.9);
-      overflow: hidden;
-    }
-
-    #fireTrackFill {
-      position: absolute;
-      left: 0;
-      top: 0;
-      height: 100%;
-      width: 0%;
-      background: linear-gradient(90deg, #22c55e, #f97316, #ef4444);
-      border-radius: 999px;
-      pointer-events: none;
-    }
-
-    #fireHandle {
-      position: absolute;
-      top: 50%;
-      left: 0%;
-      width: 18px;
-      height: 18px;
-      border-radius: 3px;
-      border: 2px solid rgba(0,0,0,0.7);
-      background: #4b5563;
-      transform: translate(-50%, -50%);
-      cursor: pointer;
-      box-shadow: 0 0 0 1px rgba(15,23,42,0.9);
-    }
-
-    .fire-percent-label {
+      border-radius: 8px;
+      padding: 8px 12px;
       font-size: 0.7rem;
-      opacity: 0.8;
-      min-width: 32px;
-      text-align: right;
+      color: #9ca3af;
+      text-align: center;
+      margin-top: 4px;
     }
 
-    .fire-panel-fire {
-      display: flex;
-      justify-content: center;
-      width: 100%;
-      max-width: 520px;
-    }
-
-    #fireButton {
-      background: #f97316;
-      border: 1px solid #fb923c;
-      color: #111827;
-      font-weight: 700;
-      letter-spacing: 0.03em;
-      border-radius: 999px;
-      padding: 6px 20px;
-      cursor: pointer;
-      font-size: 0.85rem;
-      text-transform: uppercase;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-    }
-
-    #fireButton:hover {
-      background: #fb923c;
+    .instructions-panel strong {
+      color: #f97316;
     }
 
     .menu-overlay {
@@ -352,7 +287,9 @@
       max-width: 360px;
       width: 90%;
       color: #e5e7eb;
-      font-size: 0.8rem;
+      font-size: 0.75rem;
+      max-height: 80vh;
+      overflow-y: auto;
     }
 
     .menu-content h2 {
@@ -361,7 +298,7 @@
     }
 
     .menu-content ul {
-      padding-left: 18px;
+      padding-left: 16px;
       margin-top: 4px;
     }
 
@@ -374,10 +311,11 @@
       background: #1f2937;
       border-radius: 999px;
       border: 1px solid #4b5563;
-      padding: 4px 10px;
+      padding: 8px 16px;
       color: #e5e7eb;
       font-size: 0.75rem;
       cursor: pointer;
+      min-height: 40px;
     }
   </style>
 </head>
@@ -397,7 +335,7 @@
         </div>
         <div class="stat">
           Target:
-          <span id="targetName" class="value">Loading…</span>
+          <span id="targetName" class="value">Loading...</span>
         </div>
         <div class="stat">
           Bank:
@@ -412,24 +350,8 @@
           <span id="destroyPct" class="value">0</span><span>%</span>
         </div>
         <div class="stat">
-          Last +/–:
-          <span id="lastGain" class="value">0</span><span> px</span>
-        </div>
-        <div class="stat">
-          Angle:
-          <span id="angle" class="value">0</span><span>°</span>
-        </div>
-        <div class="stat">
-          Power:
-          <span id="power" class="value">0</span>
-        </div>
-        <div class="stat">
           Shots:
           <span id="shots" class="value">0</span>
-        </div>
-        <div class="stat">
-          Cleared:
-          <span id="hits" class="value">0</span>
         </div>
         <div class="stat">
           <span class="chamber-label-inline">Chamber:</span>
@@ -442,80 +364,14 @@
 
   <canvas id="game"></canvas>
 
-  <div class="bomb-shop-wrapper">
-    <div class="bomb-shop">
-      <button data-type="b1" class="selected">
-        <span class="bomb-dot"></span>
-        <span class="bomb-label">
-          Mini (Lvl 1)<br>
-          <small>Cost 1 px • Owned <span class="owned" data-type="b1">0</span></small>
-        </span>
-      </button>
-      <button data-type="b2">
-        <span class="bomb-dot"></span>
-        <span class="bomb-label">
-          Wide (Lvl 1)<br>
-          <small>Cost 2 px • Owned <span class="owned" data-type="b2">0</span></small>
-        </span>
-      </button>
-      <button data-type="b3">
-        <span class="bomb-dot"></span>
-        <span class="bomb-label">
-          Burst (Lvl 1)<br>
-          <small>Cost 3 px • Owned <span class="owned" data-type="b3">0</span></small>
-        </span>
-      </button>
-      <button data-type="b4">
-        <span class="bomb-dot"></span>
-        <span class="bomb-label">
-          Cluster (Lvl 2)<br>
-          <small>Cost 4 px • Owned <span class="owned" data-type="b4">0</span></small>
-        </span>
-      </button>
-      <button data-type="b5">
-        <span class="bomb-dot"></span>
-        <span class="bomb-label">
-          Heavy (Lvl 3)<br>
-          <small>Cost 5 px • Owned <span class="owned" data-type="b5">0</span></small>
-        </span>
-      </button>
-      <button data-type="b6">
-        <span class="bomb-dot"></span>
-        <span class="bomb-label">
-          Shock (Lvl 4)<br>
-          <small>Cost 6 px • Owned <span class="owned" data-type="b6">0</span></small>
-        </span>
-      </button>
-      <button data-type="b7">
-        <span class="bomb-dot"></span>
-        <span class="bomb-label">
-          Nova (Lvl 5)<br>
-          <small>Cost 7 px • Owned <span class="owned" data-type="b7">0</span></small>
-        </span>
-      </button>
-      <button data-type="b8">
-        <span class="bomb-dot"></span>
-        <span class="bomb-label">
-          Omega (Lvl 6)<br>
-          <small>Cost 8 px • Owned <span class="owned" data-type="b8">0</span></small>
-        </span>
-      </button>
-    </div>
+  <div class="instructions-panel">
+    <strong>Pull back</strong> on the launcher and <strong>release</strong> to fire!
+    No ammo? You'll fire a single pixel. Tap canvas while flying to detonate early.
   </div>
 
-  <div class="fire-panel-wrapper">
-    <div class="fire-panel">
-      <span class="fire-label">Power</span>
-      <button id="powerDown" class="fire-arrow">-</button>
-      <div class="fire-track" id="fireTrack">
-        <div id="fireTrackFill"></div>
-        <div id="fireHandle"></div>
-      </div>
-      <button id="powerUp" class="fire-arrow">+</button>
-      <div class="fire-percent-label" id="firePercent">0%</div>
-    </div>
-    <div class="fire-panel-fire">
-      <button id="fireButton">Fire</button>
+  <div class="bomb-shop-wrapper" id="shopWrapper">
+    <div class="bomb-shop" id="bombShop">
+      <!-- Pills generated by JS -->
     </div>
   </div>
 
@@ -523,60 +379,60 @@
     <div class="menu-content">
       <h2>How to Play</h2>
       <ul>
-        <li>You start with a bank of <strong>100 pixels</strong>.</li>
-        <li>Tap a bomb in the blue shop to <strong>buy</strong> it (cost in pixels). Purchases go into the <strong>chamber queue</strong>.</li>
-        <li>The first item in the chamber is the <strong>next shot</strong>. Click any slot to swap it with the first and reorder.</li>
-        <li>Move the launcher up/down on the thin vertical track at the right to change your angle.</li>
-        <li>Click/hold the colored pixel on the power bar to let power oscillate, or tap <strong>- / +</strong> to nudge power down/up.</li>
-        <li>Press the <strong>Fire</strong> button (or double-click the pixel on the power bar) to shoot left with the current power.</li>
-        <li>Tap the game area while a bomb is flying to <strong>detonate early</strong>.</li>
-        <li>Destroying PFP pixels <strong>adds</strong> pixels and score (yellow +N).</li>
-        <li>Destroying red blocking pixels <strong>subtracts</strong> pixels and score (red –N).</li>
+        <li>You start with <strong>100 pixels</strong> as currency.</li>
+        <li>Tap a pill in the shop to <strong>buy</strong> it. It goes into your chamber.</li>
+        <li>The first item in the chamber is your <strong>next shot</strong>. Tap other slots to reorder.</li>
+        <li><strong>Pull back</strong> on the launcher (right side) and <strong>release</strong> to fire.</li>
+        <li>Pull further = more power. Direction follows your pull.</li>
+        <li>If chamber is empty, you fire a <strong>default 1-pixel shot</strong> for free.</li>
+        <li>Tap the canvas while a shot is flying to <strong>detonate early</strong>.</li>
+        <li>Destroying PFP pixels <strong>earns</strong> pixels (yellow +N).</li>
+        <li>Destroying red obstacles <strong>costs</strong> pixels (red -N).</li>
+        <li><strong>Gravity</strong>: When pixels are destroyed, pixels above will fall!</li>
+      </ul>
+      <h2 style="margin-top:12px;">Pill Types</h2>
+      <ul>
+        <li><strong>Default</strong>: 1 pixel (free when no ammo)</li>
+        <li><strong>Spread pills</strong>: Fire multiple pixels in a spread pattern</li>
+        <li>Higher-tier pills fire more pixels: 10, 20, 40, 80, 160, 320, 640</li>
       </ul>
       <button id="closeMenu">Close</button>
     </div>
   </div>
 
   <script>
+    // ==========================================================================
+    // PIXEL PFP SLINGSHOT - Main Game Code
+    // ==========================================================================
+    // Key sections:
+    // - PULL-BACK FIRING: pointerDown/pointerMove/pointerUp + drawPullback()
+    // - AMMO & PIXELCOUNT: bombDefsArray with pixelCount property
+    // - GRAVITY SYSTEM: applyGravityToTargets() called after explosions
+    // - MOBILE/TOUCH: unified pointer handlers for mouse + touch
+    // ==========================================================================
+
     const canvas = document.getElementById("game");
     const ctx = canvas.getContext("2d");
 
-    const angleEl = document.getElementById("angle");
-    const powerEl = document.getElementById("power");
-    const shotsEl = document.getElementById("shots");
-    const hitsEl = document.getElementById("hits");
+    // DOM elements
+    const levelEl = document.getElementById("level");
     const targetNameEl = document.getElementById("targetName");
     const creditsEl = document.getElementById("credits");
-    const levelEl = document.getElementById("level");
     const scoreEl = document.getElementById("score");
-    const lastGainEl = document.getElementById("lastGain");
     const destroyPctEl = document.getElementById("destroyPct");
+    const shotsEl = document.getElementById("shots");
     const chamberSlotsEl = document.getElementById("chamberSlots");
-
     const menuBtn = document.getElementById("menuButton");
     const menuOverlay = document.getElementById("menuOverlay");
     const closeMenuBtn = document.getElementById("closeMenu");
+    const bombShopWrapper = document.getElementById("shopWrapper");
+    const bombShopEl = document.getElementById("bombShop");
 
-    const bombShopWrapper = document.querySelector(".bomb-shop-wrapper");
-
-    const fireTrack = document.getElementById("fireTrack");
-    const fireTrackFill = document.getElementById("fireTrackFill");
-    const fireHandle = document.getElementById("fireHandle");
-    const firePercent = document.getElementById("firePercent");
-    const powerDownBtn = document.getElementById("powerDown");
-    const powerUpBtn = document.getElementById("powerUp");
-    const fireButton = document.getElementById("fireButton");
-
+    // Menu toggle
     menuBtn.addEventListener("click", () => menuOverlay.classList.add("open"));
     closeMenuBtn.addEventListener("click", () => menuOverlay.classList.remove("open"));
     menuOverlay.addEventListener("click", (e) => {
       if (e.target === menuOverlay) menuOverlay.classList.remove("open");
-    });
-
-    const bombButtons = Array.from(document.querySelectorAll(".bomb-shop button"));
-    const ownedEls = {};
-    document.querySelectorAll(".owned").forEach(span => {
-      ownedEls[span.getAttribute("data-type")] = span;
     });
 
     // ---------- PFP list ----------
@@ -605,23 +461,186 @@
     let totalTargetPixels = 0;
     let pfpPixelSize = 8;
 
-    // scoring / economy
+    // Economy
     const STARTING_BANK = 100;
     let credits = STARTING_BANK;
     let score = 0;
     let lastGain = 0;
-    let outOfAmmo = true;
-    let lastOutOfAmmo = false;
     let ammoReminderTimer = 0;
 
-    // lava line
+    // Lava/ground
     let lavaY = 0;
     let groundY = 0;
     let floorY = 0;
 
-    // floating texts
+    // Floating texts
     let floatingTexts = [];
 
+    // ==========================================================================
+    // BOMB/PILL DEFINITIONS WITH PIXEL COUNTS
+    // ==========================================================================
+    // pixelCount progression: 1 (default), 10, 20, 40, 80, 160, 320, 640
+    // isSpread: fires pixels in a spread pattern
+    // isClickableActivation: special tap-to-activate behavior (future use)
+    // ==========================================================================
+    const bombDefsArray = [
+      {
+        id: "b1",
+        name: "Basic",
+        cost: 1,
+        radiusCells: 1.5,
+        unlockLevel: 1,
+        pixelCount: 1,        // Base: 1 pixel
+        isSpread: false,
+        isClickableActivation: false,
+        palette: [[147, 197, 253], [59, 130, 246], [37, 99, 235]]
+      },
+      {
+        id: "b2",
+        name: "Scatter",
+        cost: 5,
+        radiusCells: 2.0,
+        unlockLevel: 1,
+        pixelCount: 10,       // 10 pixels spread
+        isSpread: true,
+        isClickableActivation: false,
+        palette: [[233, 213, 255], [192, 132, 252], [168, 85, 247]]
+      },
+      {
+        id: "b3",
+        name: "Burst",
+        cost: 10,
+        radiusCells: 2.5,
+        unlockLevel: 1,
+        pixelCount: 20,       // 20 pixels spread
+        isSpread: true,
+        isClickableActivation: false,
+        palette: [[254, 215, 170], [251, 146, 60], [234, 88, 12]]
+      },
+      {
+        id: "b4",
+        name: "Cluster",
+        cost: 18,
+        radiusCells: 3.0,
+        unlockLevel: 2,
+        pixelCount: 40,       // 40 pixels spread
+        isSpread: true,
+        isClickableActivation: false,
+        palette: [[45, 212, 191], [20, 184, 166], [13, 148, 136]]
+      },
+      {
+        id: "b5",
+        name: "Heavy",
+        cost: 30,
+        radiusCells: 3.5,
+        unlockLevel: 3,
+        pixelCount: 80,       // 80 pixels spread
+        isSpread: true,
+        isClickableActivation: false,
+        palette: [[248, 113, 113], [239, 68, 68], [220, 38, 38]]
+      },
+      {
+        id: "b6",
+        name: "Shock",
+        cost: 50,
+        radiusCells: 4.0,
+        unlockLevel: 4,
+        pixelCount: 160,      // 160 pixels spread
+        isSpread: true,
+        isClickableActivation: false,
+        palette: [[252, 211, 77], [250, 204, 21], [202, 138, 4]]
+      },
+      {
+        id: "b7",
+        name: "Nova",
+        cost: 80,
+        radiusCells: 4.5,
+        unlockLevel: 5,
+        pixelCount: 320,      // 320 pixels spread
+        isSpread: true,
+        isClickableActivation: false,
+        palette: [[244, 114, 182], [236, 72, 153], [219, 39, 119]]
+      },
+      {
+        id: "b8",
+        name: "Omega",
+        cost: 120,
+        radiusCells: 5.0,
+        unlockLevel: 6,
+        pixelCount: 640,      // 640 pixels spread
+        isSpread: true,
+        isClickableActivation: false,
+        palette: [[248, 250, 252], [191, 219, 254], [129, 140, 248]]
+      }
+    ];
+
+    // Default shot when no ammo (free, 1 pixel)
+    const DEFAULT_SHOT = {
+      id: "default",
+      name: "Default",
+      cost: 0,
+      radiusCells: 1.2,
+      pixelCount: 1,
+      isSpread: false,
+      isClickableActivation: false,
+      palette: [[200, 200, 200], [150, 150, 150], [100, 100, 100]]
+    };
+
+    const bombDefs = {};
+    bombDefsArray.forEach(b => { bombDefs[b.id] = b; });
+
+    let inventory = {};
+    bombDefsArray.forEach(b => { inventory[b.id] = 0; });
+
+    let selectedBombId = "b1";
+    let chamberQueue = [];
+
+    // ==========================================================================
+    // GAME STATE
+    // ==========================================================================
+    let width = 900;
+    let height = 500;
+    let tileSize = 10;
+
+    // Launcher
+    let launcherZoneX = 0;
+    let launcherZoneWidth = 0;
+    let launchTrackX = 0;
+    let launchTrackTopY = 0;
+    let launchTrackBottomY = 0;
+    let launchY = 0;
+    const launchPoint = { x: 0, y: 0 };
+
+    // Blocks (floor, pedestals, obstacles)
+    const blocks = [];
+
+    // Projectiles (can be multiple for spread shots)
+    let projectiles = [];
+
+    // ==========================================================================
+    // PULL-BACK FIRING STATE
+    // ==========================================================================
+    let isPullingBack = false;
+    let pullStartPos = { x: 0, y: 0 };
+    let pullCurrentPos = { x: 0, y: 0 };
+    const maxPullDistance = 150;
+    const maxPower = 26;
+
+    // ==========================================================================
+    // GRAVITY SETTINGS (tweak these to adjust falling speed)
+    // ==========================================================================
+    const GRAVITY_PROJECTILE = 0.45;   // Gravity for flying projectiles
+    const GRAVITY_BLOCK = 0.35;        // Gravity for falling blocks/pixels
+    const GRAVITY_FALL_DELAY = 3;      // Frames before gravity kicks in after explosion
+
+    let shotsFired = 0;
+    let targetsCleared = 0;
+    let pixelParticles = [];
+    let levelAdvanceTimer = -1;
+
+    // ==========================================================================
+    // PFP LOADING
+    // ==========================================================================
     function loadCurrentPfp() {
       const data = PFP_LIST[currentPfpIndex];
       targetNameEl.textContent = data.name;
@@ -674,14 +693,15 @@
           targetBlocks.push({
             x: px,
             y: py,
+            gridX: x,
+            gridY: y,
             w: pfpPixelSize,
             h: pfpPixelSize,
-            r,
-            g,
-            b,
+            r, g, b,
             alive: true,
             dynamic: false,
-            vy: 0
+            vy: 0,
+            gravityDelay: 0
           });
         }
       }
@@ -700,126 +720,74 @@
       destroyPctEl.textContent = String(pct);
     }
 
-    // ---------- Bombs & economy & chamber ----------
-    const bombDefsArray = [
-      {
-        id: "b1",
-        name: "Mini",
-        cost: 1,
-        radiusCells: 1.8,
-        unlockLevel: 1,
-        palette: [
-          [147, 197, 253],
-          [59, 130, 246],
-          [37, 99, 235]
-        ]
-      },
-      {
-        id: "b2",
-        name: "Wide",
-        cost: 2,
-        radiusCells: 2.4,
-        unlockLevel: 1,
-        palette: [
-          [233, 213, 255],
-          [192, 132, 252],
-          [168, 85, 247]
-        ]
-      },
-      {
-        id: "b3",
-        name: "Burst",
-        cost: 3,
-        radiusCells: 3.0,
-        unlockLevel: 1,
-        palette: [
-          [254, 215, 170],
-          [251, 146, 60],
-          [234, 88, 12]
-        ]
-      },
-      {
-        id: "b4",
-        name: "Cluster",
-        cost: 4,
-        radiusCells: 3.5,
-        unlockLevel: 2,
-        palette: [
-          [45, 212, 191],
-          [20, 184, 166],
-          [13, 148, 136]
-        ]
-      },
-      {
-        id: "b5",
-        name: "Heavy",
-        cost: 5,
-        radiusCells: 4.0,
-        unlockLevel: 3,
-        palette: [
-          [248, 113, 113],
-          [239, 68, 68],
-          [220, 38, 38]
-        ]
-      },
-      {
-        id: "b6",
-        name: "Shock",
-        cost: 6,
-        radiusCells: 4.6,
-        unlockLevel: 4,
-        palette: [
-          [252, 211, 77],
-          [250, 204, 21],
-          [202, 138, 4]
-        ]
-      },
-      {
-        id: "b7",
-        name: "Nova",
-        cost: 7,
-        radiusCells: 5.2,
-        unlockLevel: 5,
-        palette: [
-          [244, 114, 182],
-          [236, 72, 153],
-          [219, 39, 119]
-        ]
-      },
-      {
-        id: "b8",
-        name: "Omega",
-        cost: 8,
-        radiusCells: 5.8,
-        unlockLevel: 6,
-        palette: [
-          [248, 250, 252],
-          [191, 219, 254],
-          [129, 140, 248]
-        ]
+    // ==========================================================================
+    // SHOP UI GENERATION
+    // ==========================================================================
+    function generateShopUI() {
+      bombShopEl.innerHTML = "";
+
+      bombDefsArray.forEach(bomb => {
+        const btn = document.createElement("button");
+        btn.setAttribute("data-type", bomb.id);
+
+        // Build label with special tags
+        let specialTag = "";
+        if (bomb.isSpread && bomb.pixelCount > 1) {
+          specialTag = `<span class="special-tag">Spread x${bomb.pixelCount}</span>`;
+        }
+        if (bomb.isClickableActivation) {
+          specialTag += `<span class="special-tag">Tap to Activate</span>`;
+        }
+
+        btn.innerHTML = `
+          <span class="bomb-dot"></span>
+          <span class="bomb-label">
+            <span class="pill-name">${bomb.name}</span>
+            <small>Lvl ${bomb.unlockLevel} • ${bomb.cost}px</small>
+            <small>Owned: <span class="owned" data-type="${bomb.id}">0</span></small>
+            ${specialTag}
+          </span>
+        `;
+
+        btn.addEventListener("click", () => handleBombPurchase(bomb.id));
+        bombShopEl.appendChild(btn);
+      });
+    }
+
+    function handleBombPurchase(id) {
+      const bomb = bombDefs[id];
+      const currentLevel = currentPfpIndex + 1;
+
+      if (currentLevel < bomb.unlockLevel) return;
+
+      const canAfford = credits >= bomb.cost;
+
+      if (canAfford) {
+        credits -= bomb.cost;
+        inventory[id] = (inventory[id] || 0) + 1;
+        chamberQueue.push(id);
       }
-    ];
 
-    const bombDefs = {};
-    bombDefsArray.forEach(b => { bombDefs[b.id] = b; });
+      selectedBombId = id;
+      updateShopUI();
+    }
 
-    let inventory = {};
-    bombDefsArray.forEach(b => { inventory[b.id] = 0; });
-
-    let selectedBombId = "b1";
-    let chamberQueue = [];
-
+    // ==========================================================================
+    // CHAMBER UI
+    // ==========================================================================
     function updateChamberUI() {
       if (!chamberSlotsEl) return;
       chamberSlotsEl.innerHTML = "";
 
       if (chamberQueue.length === 0) {
+        // Show empty slot indicator
         const slot = document.createElement("div");
         slot.className = "chamber-slot";
         slot.style.width = "14px";
         slot.style.height = "14px";
-        slot.style.background = "#020617";
-        slot.style.opacity = "0.4";
+        slot.style.background = "#374151";
+        slot.style.opacity = "0.5";
+        slot.title = "Empty - will use default shot";
         chamberSlotsEl.appendChild(slot);
         return;
       }
@@ -829,133 +797,85 @@
         const slot = document.createElement("div");
         slot.className = "chamber-slot";
         if (index === 0) slot.classList.add("next");
-        const base = 10;
-        const size = Math.round(base + bomb.radiusCells * 2);
+
+        const base = 12;
+        const size = Math.round(base + Math.min(bomb.pixelCount / 50, 8));
         slot.style.width = size + "px";
         slot.style.height = size + "px";
 
         const [r, g, b] = bomb.palette[0];
         slot.style.background = `rgb(${r},${g},${b})`;
+        slot.title = `${bomb.name} (x${bomb.pixelCount} pixels)`;
 
         slot.addEventListener("click", () => {
           if (index === 0) return;
+          // Swap with first position
           const tmp = chamberQueue[0];
           chamberQueue[0] = chamberQueue[index];
           chamberQueue[index] = tmp;
           updateChamberUI();
-          updateFirePanelUI();
         });
 
         chamberSlotsEl.appendChild(slot);
       });
     }
 
-    // power UI state
-    let powerOscillating = false;
-    let powerDirection = 1;
-    let powerValueNorm = 0.6; // 0..1
+    function updateShopUI() {
+      creditsEl.textContent = String(credits);
+      scoreEl.textContent = String(score);
 
-    function updateFirePanelUI() {
-      if (!fireTrackFill || !fireHandle || !firePercent) return;
-      const pct = Math.max(0, Math.min(1, powerValueNorm));
-      fireTrackFill.style.width = (pct * 100).toFixed(1) + "%";
-      firePercent.textContent = Math.round(pct * 100) + "%";
+      // Update owned counts
+      document.querySelectorAll(".owned").forEach(span => {
+        const id = span.getAttribute("data-type");
+        span.textContent = inventory[id] || 0;
+      });
 
-      fireHandle.style.left = (pct * 100).toFixed(1) + "%";
+      const currentLevel = currentPfpIndex + 1;
 
-      let color = "#4b5563";
-      if (chamberQueue.length > 0) {
-        const bomb = bombDefs[chamberQueue[0]];
-        if (bomb) {
-          const [r, g, b] = bomb.palette[0];
-          color = `rgb(${r},${g},${b})`;
+      // Update button states
+      document.querySelectorAll(".bomb-shop button").forEach(btn => {
+        const id = btn.getAttribute("data-type");
+        const bomb = bombDefs[id];
+        const unlocked = currentLevel >= bomb.unlockLevel;
+        const canAfford = credits >= bomb.cost;
+
+        btn.classList.remove("locked", "disabled", "selected");
+
+        if (!unlocked) {
+          btn.classList.add("locked", "disabled");
+        } else if (!canAfford) {
+          btn.classList.add("disabled");
         }
+
+        if (id === selectedBombId) {
+          btn.classList.add("selected");
+        }
+      });
+
+      // Check if out of ammo
+      const hasAmmo = chamberQueue.length > 0;
+      if (!hasAmmo && ammoReminderTimer <= 0) {
+        ammoReminderTimer = 60;
       }
-      fireHandle.style.backgroundColor = color;
+
+      updateChamberUI();
     }
 
     function resetLevelEconomy() {
       bombDefsArray.forEach(b => { inventory[b.id] = 0; });
       chamberQueue = [];
-
-      const currentLevel = currentPfpIndex + 1;
-      let firstUnlocked = bombDefsArray.find(b => currentLevel >= b.unlockLevel) || bombDefsArray[0];
-      selectedBombId = firstUnlocked.id;
-
-      bombButtons.forEach(btn => {
-        const id = btn.getAttribute("data-type");
-        if (id === selectedBombId) btn.classList.add("selected");
-        else btn.classList.remove("selected");
-      });
-
+      selectedBombId = "b1";
       updateShopUI();
     }
 
-    function updateShopUI() {
-      creditsEl.textContent = String(credits);
-      scoreEl.textContent = String(score);
-      lastGainEl.textContent = String(lastGain);
-
-      Object.keys(ownedEls).forEach(id => {
-        ownedEls[id].textContent = inventory[id] || 0;
-      });
-
-      const currentLevel = currentPfpIndex + 1;
-
-      bombButtons.forEach(btn => {
-        const id = btn.getAttribute("data-type");
-        const bomb = bombDefs[id];
-        const unlocked = currentLevel >= bomb.unlockLevel;
-        const hasAny = (inventory[id] || 0) > 0;
-        const canAfford = credits >= bomb.cost;
-
-        btn.classList.remove("locked");
-        btn.classList.remove("disabled");
-
-        if (!unlocked) {
-          btn.classList.add("locked");
-          btn.classList.add("disabled");
-        } else if (!canAfford && !hasAny) {
-          btn.classList.add("disabled");
-        }
-      });
-
-      const newOut = (chamberQueue.length === 0);
-      if (newOut && !lastOutOfAmmo) {
-        ammoReminderTimer = 120;
-      }
-      outOfAmmo = newOut;
-      lastOutOfAmmo = newOut;
-
-      updateChamberUI();
-      updateFirePanelUI();
-    }
-
-    bombButtons.forEach(btn => {
-      btn.addEventListener("click", () => {
-        const id = btn.getAttribute("data-type");
-        const bomb = bombDefs[id];
-        const currentLevel = currentPfpIndex + 1;
-
-        if (currentLevel < bomb.unlockLevel) return;
-
-        const canAfford = credits >= bomb.cost;
-
-        if (canAfford) {
-          credits -= bomb.cost;
-          inventory[id] = (inventory[id] || 0) + 1;
-          chamberQueue.push(id);
-        }
-
-        selectedBombId = id;
-        bombButtons.forEach(b => b.classList.remove("selected"));
-        btn.classList.add("selected");
-        updateShopUI();
-      });
-    });
-
+    // ==========================================================================
+    // GET NEXT BOMB OR DEFAULT SHOT
+    // ==========================================================================
     function getNextBombFromQueue() {
-      if (chamberQueue.length === 0) return null;
+      if (chamberQueue.length === 0) {
+        // No ammo - return default shot (free, 1 pixel)
+        return DEFAULT_SHOT;
+      }
       const id = chamberQueue.shift();
       inventory[id] = Math.max(0, (inventory[id] || 0) - 1);
       updateShopUI();
@@ -971,51 +891,11 @@
       updateShopUI();
     }
 
-    // ---------- Game state ----------
-    let width = 900;
-    let height = 500;
-    let tileSize = 10;
-
-    // launcher vertical track
-    let launcherZoneX = 0;
-    let launcherZoneWidth = 0;
-    let launchTrackX = 0;
-    let launchTrackTopY = 0;
-    let launchTrackBottomY = 0;
-    let launchY = 0;
-    const arrowTopPos = { x: 0, y: 0 };
-    const arrowBottomPos = { x: 0, y: 0 };
-    const launchPoint = { x: 0, y: 0 };
-
-    const blocks = [];
-
-    let projectile = {
-      x: 0,
-      y: 0,
-      vx: 0,
-      vy: 0,
-      size: 10,
-      bombId: null,
-      active: false
-    };
-
-    let movingLauncher = false;
-    const maxPower = 24;
-    const gravity = 0.45;
-    const blockGravity = 0.25;
-
-    let lastAngleDeg = 45;
-    let lastAngleRad = -Math.PI / 4;
-    let lastPower = maxPower * 0.6;
-    let shotsFired = 0;
-    let targetsCleared = 0;
-
-    let pixelParticles = [];
-    let levelAdvanceTimer = -1;
-
+    // ==========================================================================
+    // CANVAS SETUP
+    // ==========================================================================
     function setupLauncherTrack() {
-      // thinner gray area on the right
-      launcherZoneWidth = Math.max(tileSize * 8, width * 0.16);
+      launcherZoneWidth = Math.max(tileSize * 8, width * 0.14);
       launcherZoneX = width - launcherZoneWidth;
 
       launchTrackX = launcherZoneX + launcherZoneWidth * 0.5;
@@ -1026,19 +906,11 @@
 
       launchPoint.x = launchTrackX;
       launchPoint.y = launchY;
-
-      arrowTopPos.x = launchTrackX;
-      arrowTopPos.y = launchTrackTopY;
-      arrowBottomPos.x = launchTrackX;
-      arrowBottomPos.y = launchTrackBottomY;
-
-      projectile.x = launchPoint.x;
-      projectile.y = launchPoint.y;
     }
 
     function resizeCanvas() {
       const maxW = 960;
-      const screenW = Math.min(window.innerWidth - 24, maxW);
+      const screenW = Math.min(window.innerWidth - 16, maxW);
       const aspect = 16 / 9;
       const screenH = screenW / aspect;
 
@@ -1049,7 +921,7 @@
       height = canvas.height;
 
       tileSize = Math.max(6, Math.round(height / 34));
-      pfpPixelSize = Math.max(3, Math.floor(tileSize * 0.6));
+      pfpPixelSize = Math.max(3, Math.floor(tileSize * 0.55));
 
       lavaY = height - tileSize * 4;
       groundY = lavaY;
@@ -1057,145 +929,109 @@
 
       setupLauncherTrack();
       resetLevel();
-
-      const angleInfo = computeAngleFromLauncher();
-      lastAngleDeg = angleInfo.deg;
-      lastAngleRad = angleInfo.rad;
-      lastPower = maxPower * 0.6;
-      powerValueNorm = lastPower / maxPower;
-      angleEl.textContent = lastAngleDeg.toFixed(1);
-      powerEl.textContent = lastPower.toFixed(1);
-      updateFirePanelUI();
     }
 
     function resetLevel() {
       blocks.length = 0;
+      projectiles = [];
       pixelParticles = [];
       floatingTexts = [];
       levelAdvanceTimer = -1;
-      resetProjectile();
+      isPullingBack = false;
       resetLevelEconomy();
       destroyPctEl.textContent = "0";
 
-      const pedestalColor = [248, 250, 252]; // white ledge
-      const obstacleColor = [220, 38, 38];   // red blockers
+      const pedestalColor = [248, 250, 252];
+      const obstacleColor = [220, 38, 38];
       const floorColor = [15, 23, 42];
 
-      function addRow(xLeftLocal, y, cols, color, kind, dynamic = false, indestructible = false) {
+      function addRow(xLeft, y, cols, color, kind, dynamic = false, indestructible = false) {
         const [r, g, b] = color;
         for (let c = 0; c < cols; c++) {
           blocks.push({
-            x: xLeftLocal + c * tileSize,
+            x: xLeft + c * tileSize,
             y,
             size: tileSize,
-            r,
-            g,
-            b,
+            r, g, b,
             alive: true,
             dynamic,
             vy: 0,
             kind,
-            indestructible
+            indestructible,
+            gravityDelay: 0
           });
         }
       }
 
-      function addColumn(x, yTopLocal, rows, color, kind, dynamic = false, indestructible = false) {
+      function addColumn(x, yTop, rows, color, kind, dynamic = false, indestructible = false) {
         const [r, g, b] = color;
         for (let rIdx = 0; rIdx < rows; rIdx++) {
           blocks.push({
-            x: x,
-            y: yTopLocal + rIdx * tileSize,
+            x,
+            y: yTop + rIdx * tileSize,
             size: tileSize,
-            r,
-            g,
-            b,
+            r, g, b,
             alive: true,
             dynamic,
             vy: 0,
             kind,
-            indestructible
+            indestructible,
+            gravityDelay: 0
           });
         }
       }
 
-      // Floor row (physics only, invisible)
+      // Floor (invisible physics)
       const floorCols = Math.ceil(width / tileSize) + 4;
       addRow(-tileSize * 2, floorY, floorCols, floorColor, "floor", false, true);
 
-      // PFP pedestal + placement
-      const platformOffsetRows = Math.floor(Math.random() * 4);
+      // PFP placement
+      const platformOffsetRows = Math.floor(Math.random() * 3);
       const pfpWidth = PFP_GRID * pfpPixelSize;
       const pfpHeight = PFP_GRID * pfpPixelSize;
-
       const baseY = groundY - tileSize * (3 + platformOffsetRows);
 
       const variant = currentPfpIndex % 3;
-      const targetXFactors = [0.16, 0.22, 0.28];
+      const targetXFactors = [0.18, 0.24, 0.30];
       const centerX = width * targetXFactors[variant];
 
       const xLeft = Math.round(centerX - pfpWidth / 2);
       const yTop = Math.round(baseY - pfpHeight);
 
-      targetBounds = {
-        x: xLeft,
-        y: yTop,
-        w: pfpWidth,
-        h: pfpHeight
-      };
+      targetBounds = { x: xLeft, y: yTop, w: pfpWidth, h: pfpHeight };
 
-      // Small white pedestal row directly under PFP (indestructible)
+      // Pedestal
       const platCols = Math.round(pfpWidth / tileSize);
       const platX = targetBounds.x;
       addRow(platX, baseY, platCols, pedestalColor, "pedestal_base", false, true);
 
-      // White pillars down into lava (destructible supports)
       const pillarRows = Math.max(2, Math.round((floorY - baseY) / tileSize));
-      const leftPillarX = platX;
-      const rightPillarX = platX + (platCols - 1) * tileSize;
-      addColumn(leftPillarX, baseY + tileSize, pillarRows, pedestalColor, "pedestal", true, false);
-      addColumn(rightPillarX, baseY + tileSize, pillarRows, pedestalColor, "pedestal", true, false);
+      addColumn(platX, baseY + tileSize, pillarRows, pedestalColor, "pedestal", true, false);
+      addColumn(platX + (platCols - 1) * tileSize, baseY + tileSize, pillarRows, pedestalColor, "pedestal", true, false);
 
       // Red obstacles
-      const obstacleStartX = targetBounds.x + targetBounds.w + tileSize * 3;
-      const pillar1X = Math.round(((obstacleStartX + (width - tileSize * 6)) / 2) / tileSize) * tileSize;
-      const pillar1Height = 7;
-      const pillar1Top = baseY - tileSize * 2;
-      addColumn(pillar1X, pillar1Top, pillar1Height, obstacleColor, "obstacle", true, false);
-
-      const pillar2X = pillar1X + tileSize * 3;
-      const pillar2Height = 5;
-      const pillar2Top = baseY - tileSize * 4;
-      addColumn(pillar2X, pillar2Top, pillar2Height, obstacleColor, "obstacle", true, false);
+      const obstacleStartX = targetBounds.x + targetBounds.w + tileSize * 4;
+      const pillar1X = Math.round(((obstacleStartX + (width - tileSize * 8)) / 2) / tileSize) * tileSize;
+      addColumn(pillar1X, baseY - tileSize * 2, 6, obstacleColor, "obstacle", true, false);
+      addColumn(pillar1X + tileSize * 3, baseY - tileSize * 3, 4, obstacleColor, "obstacle", true, false);
 
       rebuildPixelTargetIfReady();
     }
 
-    function resetProjectile() {
-      projectile.x = launchPoint.x;
-      projectile.y = launchPoint.y;
-      projectile.vx = 0;
-      projectile.vy = 0;
-      projectile.size = tileSize;
-      projectile.bombId = null;
-      projectile.active = false;
-      movingLauncher = false;
-    }
-
-    // ---------- Floating +N / –N ----------
+    // ==========================================================================
+    // FLOATING TEXT
+    // ==========================================================================
     function spawnFloatingText(x, y, delta) {
-      floatingTexts.push({
-        x,
-        y,
-        delta,
-        life: 40
-      });
+      floatingTexts.push({ x, y, delta, life: 40 });
     }
 
-    // ---------- Pointer input (launcher track on canvas) ----------
+    // ==========================================================================
+    // POINTER INPUT - UNIFIED MOUSE + TOUCH
+    // ==========================================================================
     function getPointerPosition(evt) {
       const rect = canvas.getBoundingClientRect();
       let clientX, clientY;
+
       if (evt.touches && evt.touches.length > 0) {
         clientX = evt.touches[0].clientX;
         clientY = evt.touches[0].clientY;
@@ -1206,73 +1042,129 @@
         clientX = evt.clientX;
         clientY = evt.clientY;
       }
+
       const x = ((clientX - rect.left) / rect.width) * canvas.width;
       const y = ((clientY - rect.top) / rect.height) * canvas.height;
       return { x, y };
     }
 
+    // ==========================================================================
+    // MANUAL DETONATE (tap while flying)
+    // ==========================================================================
     function manualDetonate() {
-      if (!projectile.active) return;
-      const bomb = bombDefs[projectile.bombId];
-      if (!bomb) return;
-      projectile.active = false;
-      applyExplosion(projectile.x, projectile.y, bomb);
+      projectiles.forEach(p => {
+        if (p.active && p.bomb) {
+          p.active = false;
+          applyExplosion(p.x, p.y, p.bomb);
+        }
+      });
+      projectiles = projectiles.filter(p => p.active);
     }
 
+    // ==========================================================================
+    // PULL-BACK FIRING MECHANICS
+    // ==========================================================================
     function pointerDown(evt) {
       evt.preventDefault();
       const pos = getPointerPosition(evt);
 
-      if (projectile.active) {
+      // If projectiles are flying, tap to detonate
+      const hasActiveProjectiles = projectiles.some(p => p.active);
+      if (hasActiveProjectiles) {
         manualDetonate();
         return;
       }
 
-      const distToTopArrow = Math.hypot(pos.x - arrowTopPos.x, pos.y - arrowTopPos.y);
-      const distToBottomArrow = Math.hypot(pos.x - arrowBottomPos.x, pos.y - arrowBottomPos.y);
-      const nearTrack =
-        Math.abs(pos.x - launchTrackX) < tileSize * 0.8 &&
-        pos.y >= launchTrackTopY &&
-        pos.y <= launchTrackBottomY;
+      // Check if clicking near the launcher zone to start pull-back
+      const distToLauncher = Math.hypot(pos.x - launchPoint.x, pos.y - launchPoint.y);
+      const inLauncherZone = pos.x >= launcherZoneX - tileSize * 2;
 
-      if (distToTopArrow < tileSize * 2 || distToBottomArrow < tileSize * 2 || nearTrack) {
-        movingLauncher = true;
-        return;
+      if (distToLauncher < tileSize * 4 || inLauncherZone) {
+        isPullingBack = true;
+        pullStartPos = { x: launchPoint.x, y: launchPoint.y };
+        pullCurrentPos = { x: pos.x, y: pos.y };
       }
     }
 
     function pointerMove(evt) {
-      if (!movingLauncher) return;
+      if (!isPullingBack) return;
       evt.preventDefault();
+
       const pos = getPointerPosition(evt);
-
-      let newY = pos.y;
-      newY = Math.max(launchTrackTopY, Math.min(launchTrackBottomY, newY));
-      launchY = newY;
-      launchPoint.y = launchY;
-
-      arrowTopPos.x = launchTrackX;
-      arrowTopPos.y = launchTrackTopY;
-      arrowBottomPos.x = launchTrackX;
-      arrowBottomPos.y = launchTrackBottomY;
-
-      if (!projectile.active) {
-        projectile.x = launchPoint.x;
-        projectile.y = launchPoint.y;
-      }
-
-      const info = computeAngleFromLauncher();
-      lastAngleDeg = info.deg;
-      lastAngleRad = info.rad;
-      angleEl.textContent = lastAngleDeg.toFixed(1);
+      pullCurrentPos = { x: pos.x, y: pos.y };
     }
 
     function pointerUp(evt) {
-      if (!movingLauncher) return;
+      if (!isPullingBack) return;
       evt.preventDefault();
-      movingLauncher = false;
+      isPullingBack = false;
+
+      // Calculate pull vector
+      const dx = pullStartPos.x - pullCurrentPos.x;
+      const dy = pullStartPos.y - pullCurrentPos.y;
+      const pullDist = Math.hypot(dx, dy);
+
+      // Need minimum pull to fire
+      if (pullDist < 20) return;
+
+      // Get bomb (or default if no ammo)
+      const bomb = getNextBombFromQueue();
+
+      // Calculate power based on pull distance
+      const clampedDist = Math.min(pullDist, maxPullDistance);
+      const power = (clampedDist / maxPullDistance) * maxPower;
+
+      // Direction is opposite of pull (slingshot style)
+      const angle = Math.atan2(dy, dx);
+
+      // Fire projectile(s) based on pixelCount
+      fireProjectiles(bomb, power, angle);
+
+      shotsFired++;
+      shotsEl.textContent = String(shotsFired);
     }
 
+    // ==========================================================================
+    // FIRE PROJECTILES (handles spread shots)
+    // ==========================================================================
+    function fireProjectiles(bomb, power, angle) {
+      const count = bomb.pixelCount || 1;
+
+      if (count === 1 || !bomb.isSpread) {
+        // Single projectile
+        projectiles.push({
+          x: launchPoint.x,
+          y: launchPoint.y,
+          vx: Math.cos(angle) * power,
+          vy: Math.sin(angle) * power,
+          size: tileSize,
+          bomb: bomb,
+          active: true
+        });
+      } else {
+        // Spread shot - fan pattern
+        const spreadAngle = Math.PI / 6; // 30 degrees total spread
+        const angleStep = spreadAngle / Math.max(1, count - 1);
+        const startAngle = angle - spreadAngle / 2;
+
+        for (let i = 0; i < count; i++) {
+          const a = startAngle + angleStep * i;
+          const speedVariation = 0.85 + Math.random() * 0.3;
+
+          projectiles.push({
+            x: launchPoint.x + (Math.random() - 0.5) * 4,
+            y: launchPoint.y + (Math.random() - 0.5) * 4,
+            vx: Math.cos(a) * power * speedVariation,
+            vy: Math.sin(a) * power * speedVariation,
+            size: Math.max(3, tileSize * 0.6),
+            bomb: bomb,
+            active: true
+          });
+        }
+      }
+    }
+
+    // Event listeners
     canvas.addEventListener("mousedown", pointerDown);
     window.addEventListener("mousemove", pointerMove);
     window.addEventListener("mouseup", pointerUp);
@@ -1282,26 +1174,9 @@
     canvas.addEventListener("touchend", pointerUp, { passive: false });
     canvas.addEventListener("touchcancel", pointerUp, { passive: false });
 
-    // ---------- Angle and power ----------
-
-    function computeAngleFromLauncher() {
-      const range = launchTrackBottomY - launchTrackTopY;
-      let t = range > 0 ? (launchY - launchTrackTopY) / range : 0.5;
-      t = Math.max(0, Math.min(1, t));
-      const maxDeg = 75;
-      const minDeg = 15;
-      const deg = maxDeg - t * (maxDeg - minDeg);
-      const rad = (-deg * Math.PI) / 180;
-      return { deg, rad };
-    }
-
-    function updateStatsUI() {
-      angleEl.textContent = lastAngleDeg.toFixed(1);
-      powerEl.textContent = lastPower.toFixed(1);
-      hitsEl.textContent = String(targetsCleared);
-      updateFirePanelUI();
-    }
-
+    // ==========================================================================
+    // COLLISION DETECTION
+    // ==========================================================================
     function circleRectCollision(circle, rect) {
       const radius = circle.size / 2;
       const nearestX = Math.max(rect.x, Math.min(circle.x, rect.x + rect.w));
@@ -1311,20 +1186,58 @@
       return dx * dx + dy * dy <= radius * radius;
     }
 
-    function markNearbyTargetDynamic(cx, cy, radius) {
-      const extraRadiusSq = radius * radius * 1.5;
-      for (const b of targetBlocks) {
-        if (!b.alive || b.dynamic) continue;
-        const ox = b.x + b.w / 2;
-        const oy = b.y + b.h / 2;
-        const dx = ox - cx;
-        const dy = oy - cy;
-        if (dx * dx + dy * dy <= extraRadiusSq) {
-          b.dynamic = true;
+    // ==========================================================================
+    // GRAVITY SYSTEM - Apply to target pixels after explosion
+    // ==========================================================================
+    function applyGravityToTargets() {
+      // Mark pixels above destroyed areas as dynamic
+      for (const block of targetBlocks) {
+        if (!block.alive || block.dynamic) continue;
+
+        // Check if there's empty space below
+        const belowY = block.y + block.h;
+        let hasSupport = belowY >= lavaY;
+
+        if (!hasSupport) {
+          // Check for any block directly below
+          for (const other of targetBlocks) {
+            if (!other.alive || other === block) continue;
+            if (other.y === belowY &&
+                other.x < block.x + block.w &&
+                other.x + other.w > block.x) {
+              hasSupport = true;
+              break;
+            }
+          }
+        }
+
+        if (!hasSupport) {
+          // Check blocks array too
+          for (const other of blocks) {
+            if (!other.alive) continue;
+            const otherTop = other.y;
+            const otherLeft = other.x;
+            const otherRight = other.x + (other.size || other.w);
+
+            if (Math.abs(otherTop - belowY) < 2 &&
+                otherLeft < block.x + block.w &&
+                otherRight > block.x) {
+              hasSupport = true;
+              break;
+            }
+          }
+        }
+
+        if (!hasSupport) {
+          block.dynamic = true;
+          block.gravityDelay = GRAVITY_FALL_DELAY;
         }
       }
     }
 
+    // ==========================================================================
+    // EXPLOSION HANDLING
+    // ==========================================================================
     function applyExplosion(cx, cy, bomb) {
       const radius = bomb.radiusCells * tileSize;
       const radiusSq = radius * radius;
@@ -1332,20 +1245,23 @@
       let hadAliveTarget = targetBlocks.some(b => b.alive);
       let netDelta = 0;
 
-      function affectBlocksArray(arr, isTargetPixel = false) {
+      function affectBlocks(arr, isTarget) {
         for (const block of arr) {
           if (!block.alive) continue;
           if (block.indestructible) continue;
+
           const w = block.w || block.size;
           const h = block.h || block.size;
           const ox = block.x + w / 2;
           const oy = block.y + h / 2;
           const dx = ox - cx;
           const dy = oy - cy;
+
           if (dx * dx + dy * dy <= radiusSq) {
             block.alive = false;
-            spawnBlockShatter(block, isTargetPixel);
-            if (isTargetPixel) {
+            spawnBlockShatter(block, isTarget);
+
+            if (isTarget) {
               netDelta += 1;
             } else if (block.kind === "obstacle") {
               netDelta -= 1;
@@ -1354,9 +1270,12 @@
         }
       }
 
-      affectBlocksArray(blocks, false);
-      affectBlocksArray(targetBlocks, true);
-      markNearbyTargetDynamic(cx, cy, radius);
+      affectBlocks(blocks, false);
+      affectBlocks(targetBlocks, true);
+
+      // Apply gravity to remaining pixels
+      applyGravityToTargets();
+
       spawnBombPixels(cx, cy, bomb);
 
       if (netDelta !== 0) {
@@ -1375,338 +1294,230 @@
     function spawnBombPixels(cx, cy, bomb) {
       const colors = bomb.palette;
       const radius = bomb.radiusCells * tileSize;
-      const count = Math.round(30 + radius * 0.6);
+      const count = Math.round(20 + radius * 0.5);
+
       for (let i = 0; i < count; i++) {
         const angle = Math.random() * Math.PI * 2;
-        const speed = radius * (0.02 + Math.random() * 0.06);
-        const size = Math.max(2, Math.round(tileSize * (0.4 + Math.random())));
+        const speed = radius * (0.02 + Math.random() * 0.05);
+        const size = Math.max(2, Math.round(tileSize * (0.3 + Math.random() * 0.5)));
         const [r, g, b] = colors[Math.floor(Math.random() * colors.length)];
+
         pixelParticles.push({
-          x: cx,
-          y: cy,
+          x: cx, y: cy,
           vx: Math.cos(angle) * speed,
           vy: Math.sin(angle) * speed,
-          life: 18 + Math.floor(Math.random() * 10),
-          maxLife: 28,
-          size,
-          r,
-          g,
-          b
+          life: 15 + Math.floor(Math.random() * 10),
+          maxLife: 25,
+          size, r, g, b
         });
       }
     }
 
-    function spawnBlockShatter(block, isTargetPixel) {
+    function spawnBlockShatter(block, isTarget) {
       const w = block.w || block.size;
       const h = block.h || block.size;
       const centerX = block.x + w / 2;
       const centerY = block.y + h / 2;
-      const baseCount = isTargetPixel ? 4 : 2;
-      const extra = isTargetPixel ? 4 : 2;
-      const count = baseCount + Math.floor(Math.random() * extra);
+      const count = isTarget ? 4 + Math.floor(Math.random() * 3) : 2;
 
-      const r = block.r ?? 148;
-      const g = block.g ?? 163;
-      const b = block.b ?? 184;
+      const r = block.r ?? 150;
+      const g = block.g ?? 150;
+      const b = block.b ?? 150;
 
       for (let i = 0; i < count; i++) {
         const angle = Math.random() * Math.PI * 2;
-        const speed = (tileSize + 4) * (0.1 + Math.random() * 0.25);
-        const size = Math.max(2, Math.round(tileSize * (0.4 + Math.random() * 0.4)));
+        const speed = tileSize * (0.1 + Math.random() * 0.2);
+        const size = Math.max(2, Math.round(tileSize * 0.4));
+
         pixelParticles.push({
-          x: centerX,
-          y: centerY,
+          x: centerX, y: centerY,
           vx: Math.cos(angle) * speed,
           vy: Math.sin(angle) * speed,
-          life: 10 + Math.floor(Math.random() * 8),
-          maxLife: 20,
-          size,
-          r,
-          g,
-          b
+          life: 10 + Math.floor(Math.random() * 6),
+          maxLife: 16,
+          size, r, g, b
         });
       }
     }
 
-    // ---------- Fire gauge (firing pin) ----------
-
-    function fireUsingCurrentPower() {
-      if (projectile.active) {
-        manualDetonate();
-        return;
-      }
-      const bomb = getNextBombFromQueue();
-      if (!bomb) {
-        ammoReminderTimer = 120;
-        return;
-      }
-
-      const angleInfo = computeAngleFromLauncher();
-      lastAngleDeg = angleInfo.deg;
-      lastAngleRad = angleInfo.rad;
-
-      const power = Math.max(2, powerValueNorm * maxPower);
-      lastPower = power;
-
-      projectile.x = launchPoint.x;
-      projectile.y = launchPoint.y;
-      // Shoot LEFT
-      projectile.vx = -Math.cos(lastAngleRad) * power;
-      projectile.vy = Math.sin(lastAngleRad) * power;
-      projectile.size = tileSize;
-      projectile.bombId = bomb.id;
-      projectile.active = true;
-
-      shotsFired++;
-      shotsEl.textContent = String(shotsFired);
-      updateShopUI();
-    }
-
-    function firePowerDown(evt) {
-      evt.preventDefault();
-      if (projectile.active) {
-        manualDetonate();
-        return;
-      }
-      if (chamberQueue.length === 0) {
-        ammoReminderTimer = 120;
-        return;
-      }
-      powerOscillating = true;
-      powerDirection = 1;
-    }
-
-    function firePowerUp(evt) {
-      if (!powerOscillating) return;
-      if (evt && evt.preventDefault) evt.preventDefault();
-      // stop oscillation, don't auto-fire
-      powerOscillating = false;
-    }
-
-    if (fireHandle) {
-      fireHandle.addEventListener("mousedown", firePowerDown);
-      fireHandle.addEventListener("touchstart", firePowerDown, { passive: false });
-
-      // double-click pixel to fire with current power
-      fireHandle.addEventListener("dblclick", (e) => {
-        e.preventDefault();
-        powerOscillating = false;
-        fireUsingCurrentPower();
-      });
-    }
-    if (fireTrack) {
-      fireTrack.addEventListener("mousedown", firePowerDown);
-      fireTrack.addEventListener("touchstart", firePowerDown, { passive: false });
-    }
-    window.addEventListener("mouseup", firePowerUp);
-    window.addEventListener("touchend", firePowerUp, { passive: false });
-    window.addEventListener("touchcancel", firePowerUp, { passive: false });
-
-    function adjustPowerBy(step) {
-      powerOscillating = false;
-      powerValueNorm = Math.max(0, Math.min(1, powerValueNorm + step));
-      lastPower = powerValueNorm * maxPower;
-      powerEl.textContent = lastPower.toFixed(1);
-      updateFirePanelUI();
-    }
-
-    if (powerDownBtn) {
-      powerDownBtn.addEventListener("click", () => adjustPowerBy(-0.05));
-    }
-    if (powerUpBtn) {
-      powerUpBtn.addEventListener("click", () => adjustPowerBy(0.05));
-    }
-
-    if (fireButton) {
-      fireButton.addEventListener("click", (e) => {
-        e.preventDefault();
-        powerOscillating = false;
-        fireUsingCurrentPower();
-      });
-    }
-
-    // ---------- Update ----------
+    // ==========================================================================
+    // UPDATE LOOP
+    // ==========================================================================
     function update() {
-      // Power gauge oscillation
-      if (powerOscillating) {
-        powerValueNorm += 0.02 * powerDirection;
-        if (powerValueNorm >= 1) {
-          powerValueNorm = 1;
-          powerDirection = -1;
-        } else if (powerValueNorm <= 0) {
-          powerValueNorm = 0;
-          powerDirection = 1;
+      // Update projectiles
+      for (const p of projectiles) {
+        if (!p.active) continue;
+
+        p.vy += GRAVITY_PROJECTILE;
+        p.x += p.vx;
+        p.y += p.vy;
+
+        // Check lava collision
+        if (p.y + p.size / 2 >= lavaY) {
+          p.active = false;
+          applyExplosion(p.x, p.y, p.bomb);
+          continue;
+        }
+
+        // Check block collisions
+        const allBlocks = [
+          ...blocks.filter(b => b.alive),
+          ...targetBlocks.filter(b => b.alive).map(b => ({ ...b, w: b.w, h: b.h }))
+        ];
+
+        for (const block of allBlocks) {
+          const rect = {
+            x: block.x,
+            y: block.y,
+            w: block.w || block.size,
+            h: block.h || block.size
+          };
+
+          if (circleRectCollision(p, rect)) {
+            p.active = false;
+            applyExplosion(p.x, p.y, p.bomb);
+            break;
+          }
+        }
+
+        // Out of bounds
+        if (p.x < -100 || p.x > width + 100 || p.y > height + 100) {
+          p.active = false;
         }
       }
 
-      // Projectile
-      if (projectile.active) {
-        projectile.vy += gravity;
-        projectile.x += projectile.vx;
-        projectile.y += projectile.vy;
+      projectiles = projectiles.filter(p => p.active);
 
-        const bomb = bombDefs[projectile.bombId];
-        if (!bomb) {
-          projectile.active = false;
-        } else {
-          if (projectile.y + projectile.size / 2 >= lavaY) {
-            projectile.active = false;
-            applyExplosion(projectile.x, projectile.y, bomb);
-          } else {
-            const allBlocks = [
-              ...blocks.filter(b => b.alive),
-              ...targetBlocks.filter(b => b.alive).map(b => ({
-                ...b,
-                size: b.w,
-                w: b.w,
-                h: b.h
-              }))
-            ];
-            for (const block of allBlocks) {
-              const rect = {
-                x: block.x,
-                y: block.y,
-                w: block.w || block.size,
-                h: block.h || block.size
-              };
-              if (circleRectCollision(projectile, rect)) {
-                projectile.active = false;
-                applyExplosion(projectile.x, projectile.y, bomb);
-                break;
-              }
-            }
-          }
-
-          if (
-            projectile.x < -120 ||
-            projectile.x > width + 120 ||
-            projectile.y > height + 120
-          ) {
-            projectile.active = false;
-          }
-        }
-      }
-
-      // Dynamic blocks
+      // ==========================================================================
+      // GRAVITY FOR DYNAMIC BLOCKS
+      // ==========================================================================
       for (const b of blocks) {
         if (!b.alive || !b.dynamic) continue;
-        b.vy += blockGravity;
+
+        if (b.gravityDelay > 0) {
+          b.gravityDelay--;
+          continue;
+        }
+
+        b.vy += GRAVITY_BLOCK;
         let newY = b.y + b.vy;
 
-        const supporters = [
-          ...blocks.filter(o => o.alive && o !== b),
-          ...targetBlocks.filter(o => o.alive)
-        ];
+        // Check for support below
+        const supporters = [...blocks.filter(o => o.alive && o !== b), ...targetBlocks.filter(o => o.alive)];
 
         for (const s of supporters) {
           const sTop = s.y;
           const sLeft = s.x;
           const sRight = s.x + (s.w || s.size);
-
           const bLeft = b.x;
           const bRight = b.x + b.size;
-          const horizOverlap = bRight > sLeft && bLeft < sRight;
-          const wasAbove = b.y + b.size <= sTop + 0.1;
-          const wouldPass = newY + b.size >= sTop && b.y + b.size <= sTop;
 
-          if (horizOverlap && wasAbove && wouldPass) {
-            newY = sTop - b.size;
-            b.vy = 0;
-            break;
+          if (bRight > sLeft && bLeft < sRight) {
+            if (b.y + b.size <= sTop + 1 && newY + b.size >= sTop) {
+              newY = sTop - b.size;
+              b.vy = 0;
+              break;
+            }
           }
         }
 
         b.y = newY;
 
-        const centerY = b.y + b.size / 2;
-        if (centerY >= lavaY && b.alive && b.kind !== "floor") {
+        // Lava death
+        if (b.y + b.size / 2 >= lavaY && b.kind !== "floor") {
           b.alive = false;
           spawnBlockShatter(b, false);
           if (b.kind === "obstacle") {
-            grantPixels(-1, b.x + b.size / 2, centerY);
+            grantPixels(-1, b.x + b.size / 2, b.y);
           }
         }
       }
 
-      // Dynamic target pixels
+      // ==========================================================================
+      // GRAVITY FOR TARGET PIXELS (falling when unsupported)
+      // ==========================================================================
       for (const b of targetBlocks) {
         if (!b.alive || !b.dynamic) continue;
-        b.vy += blockGravity;
+
+        if (b.gravityDelay > 0) {
+          b.gravityDelay--;
+          continue;
+        }
+
+        b.vy += GRAVITY_BLOCK;
         let newY = b.y + b.vy;
 
-        const supporters = [
-          ...blocks.filter(o => o.alive),
-          ...targetBlocks.filter(o => o.alive && o !== b)
-        ];
+        // Check for support
+        const supporters = [...blocks.filter(o => o.alive), ...targetBlocks.filter(o => o.alive && o !== b)];
 
         for (const s of supporters) {
           const sTop = s.y;
           const sLeft = s.x;
           const sRight = s.x + (s.w || s.size);
-
           const bLeft = b.x;
           const bRight = b.x + b.w;
-          const horizOverlap = bRight > sLeft && bLeft < sRight;
-          const wasAbove = b.y + b.h <= sTop + 0.1;
-          const wouldPass = newY + b.h >= sTop && b.y + b.h <= sTop;
 
-          if (horizOverlap && wasAbove && wouldPass) {
-            newY = sTop - b.h;
-            b.vy = 0;
-            break;
+          if (bRight > sLeft && bLeft < sRight) {
+            if (b.y + b.h <= sTop + 1 && newY + b.h >= sTop) {
+              newY = sTop - b.h;
+              b.vy = 0;
+              b.dynamic = false; // Stop falling when landed
+              break;
+            }
           }
         }
 
         b.y = newY;
 
-        const centerY = b.y + b.h / 2;
-        if (centerY >= lavaY && b.alive && b.dynamic) {
+        // Lava death - counts as destroyed (positive)
+        if (b.y + b.h / 2 >= lavaY) {
           b.alive = false;
           spawnBlockShatter(b, true);
-          grantPixels(1, b.x + b.w / 2, centerY);
+          grantPixels(1, b.x + b.w / 2, b.y);
           updateDestructionStats();
+          applyGravityToTargets(); // Check for more pixels to fall
         }
       }
 
-      // Pixel particles
+      // Particle physics
       const friction = 0.98;
       for (const p of pixelParticles) {
-        p.vy += 0.25;
+        p.vy += 0.2;
         p.vx *= friction;
         p.vy *= friction;
         p.x += p.vx;
         p.y += p.vy;
-        p.life -= 1;
+        p.life--;
       }
       pixelParticles = pixelParticles.filter(p => p.life > 0);
 
       // Floating text
       for (const ft of floatingTexts) {
-        ft.y -= 0.4;
-        ft.life -= 1;
+        ft.y -= 0.5;
+        ft.life--;
       }
       floatingTexts = floatingTexts.filter(ft => ft.life > 0);
 
       // Level advance
       if (levelAdvanceTimer >= 0) {
-        levelAdvanceTimer -= 1;
+        levelAdvanceTimer--;
         if (levelAdvanceTimer === 0) {
           nextPfp();
         }
       }
 
-      // Ammo reminder timer & highlight
+      // Ammo reminder
       if (ammoReminderTimer > 0) {
         ammoReminderTimer--;
-        if (bombShopWrapper) bombShopWrapper.classList.add("highlight");
+        bombShopWrapper.classList.add("highlight");
       } else {
-        if (bombShopWrapper) bombShopWrapper.classList.remove("highlight");
+        bombShopWrapper.classList.remove("highlight");
       }
-
-      updateStatsUI();
     }
 
-    // ---------- Drawing ----------
+    // ==========================================================================
+    // DRAWING
+    // ==========================================================================
     function drawBackground() {
       const grad = ctx.createLinearGradient(0, 0, 0, groundY);
       grad.addColorStop(0, "#0ea5e9");
@@ -1714,17 +1525,15 @@
       ctx.fillStyle = grad;
       ctx.fillRect(0, 0, width, groundY);
 
-      // pink grid
-      ctx.strokeStyle = "rgba(236,72,153,0.35)";
+      // Pink grid
+      ctx.strokeStyle = "rgba(236,72,153,0.3)";
       ctx.lineWidth = 1;
-
       for (let x = 0; x < width; x += tileSize) {
         ctx.beginPath();
         ctx.moveTo(x + 0.5, 0);
         ctx.lineTo(x + 0.5, groundY);
         ctx.stroke();
       }
-
       for (let y = 0; y < groundY; y += tileSize) {
         ctx.beginPath();
         ctx.moveTo(0, y + 0.5);
@@ -1732,38 +1541,20 @@
         ctx.stroke();
       }
 
-      // launcher gray zone (thinner)
-      ctx.fillStyle = "rgba(15,23,42,0.96)";
+      // Launcher zone
+      ctx.fillStyle = "rgba(15,23,42,0.95)";
       ctx.fillRect(launcherZoneX, 0, launcherZoneWidth, groundY);
 
-      // vertical track line
+      // Launcher track
       ctx.beginPath();
       ctx.moveTo(launchTrackX, launchTrackTopY);
       ctx.lineTo(launchTrackX, launchTrackBottomY);
-      ctx.strokeStyle = "rgba(148,163,184,0.7)";
-      ctx.lineWidth = tileSize * 0.35;
+      ctx.strokeStyle = "rgba(148,163,184,0.6)";
+      ctx.lineWidth = tileSize * 0.3;
       ctx.stroke();
-
-      // arrows
-      const arrowSize = tileSize * 0.9;
-      ctx.fillStyle = "#e5e7eb";
-      // top
-      ctx.beginPath();
-      ctx.moveTo(arrowTopPos.x, arrowTopPos.y - arrowSize * 0.8);
-      ctx.lineTo(arrowTopPos.x - arrowSize * 0.6, arrowTopPos.y + arrowSize * 0.3);
-      ctx.lineTo(arrowTopPos.x + arrowSize * 0.6, arrowTopPos.y + arrowSize * 0.3);
-      ctx.closePath();
-      ctx.fill();
-      // bottom
-      ctx.beginPath();
-      ctx.moveTo(arrowBottomPos.x, arrowBottomPos.y + arrowSize * 0.8);
-      ctx.lineTo(arrowBottomPos.x - arrowSize * 0.6, arrowBottomPos.y - arrowSize * 0.3);
-      ctx.lineTo(arrowBottomPos.x + arrowSize * 0.6, arrowBottomPos.y - arrowSize * 0.3);
-      ctx.closePath();
-      ctx.fill();
     }
 
-    function drawGroundAndLava() {
+    function drawLava() {
       const lavaGrad = ctx.createLinearGradient(0, lavaY, 0, height);
       lavaGrad.addColorStop(0, "#f97316");
       lavaGrad.addColorStop(0.5, "#ef4444");
@@ -1771,8 +1562,8 @@
       ctx.fillStyle = lavaGrad;
       ctx.fillRect(0, lavaY, width, height - lavaY);
 
-      // pixelated checker overlay
-      ctx.globalAlpha = 0.35;
+      // Checker pattern
+      ctx.globalAlpha = 0.3;
       ctx.fillStyle = "#fee2e2";
       for (let y = lavaY; y < height; y += tileSize) {
         for (let x = 0; x < width; x += tileSize) {
@@ -1782,112 +1573,117 @@
         }
       }
       ctx.globalAlpha = 1;
-
-      // grid lines on lava
-      ctx.strokeStyle = "rgba(254,249,195,0.35)";
-      ctx.lineWidth = 1;
-      for (let x = 0; x < width; x += tileSize) {
-        ctx.beginPath();
-        ctx.moveTo(x + 0.5, lavaY);
-        ctx.lineTo(x + 0.5, height);
-        ctx.stroke();
-      }
-      for (let y = lavaY; y < height; y += tileSize) {
-        ctx.beginPath();
-        ctx.moveTo(0, y + 0.5);
-        ctx.lineTo(width, y + 0.5);
-        ctx.stroke();
-      }
     }
 
     function drawLauncher() {
       const s = tileSize * 2;
+
+      // Outer square
       ctx.fillStyle = "#e5e7eb";
-      ctx.fillRect(
-        Math.round(launchPoint.x - s / 2),
-        Math.round(launchPoint.y - s / 2),
-        s,
-        s
-      );
+      ctx.fillRect(launchPoint.x - s/2, launchPoint.y - s/2, s, s);
 
+      // Inner dark
       ctx.fillStyle = "#0f172a";
-      ctx.fillRect(
-        Math.round(launchPoint.x - (s - 4) / 2),
-        Math.round(launchPoint.y - (s - 4) / 2),
-        s - 4,
-        s - 4
-      );
+      ctx.fillRect(launchPoint.x - (s-4)/2, launchPoint.y - (s-4)/2, s-4, s-4);
 
+      // Center dot
       ctx.fillStyle = "#22c55e";
-      ctx.fillRect(
-        Math.round(launchPoint.x - 1),
-        Math.round(launchPoint.y - 1),
-        2,
-        2
-      );
+      ctx.fillRect(launchPoint.x - 2, launchPoint.y - 2, 4, 4);
     }
 
-    function drawProjectile() {
-      if (!projectile.active) {
-        const s = tileSize;
-        ctx.fillStyle = "#facc15";
-        ctx.fillRect(
-          Math.round(launchPoint.x - s / 2),
-          Math.round(launchPoint.y - s / 2),
-          s,
-          s
-        );
-        return;
-      }
+    // ==========================================================================
+    // DRAW PULL-BACK INDICATOR (slingshot visual)
+    // ==========================================================================
+    function drawPullback() {
+      if (!isPullingBack) return;
 
-      const s = projectile.size;
-      ctx.fillStyle = "#facc15";
-      ctx.fillRect(
-        Math.round(projectile.x - s / 2),
-        Math.round(projectile.y - s / 2),
-        s,
-        s
-      );
+      const dx = pullStartPos.x - pullCurrentPos.x;
+      const dy = pullStartPos.y - pullCurrentPos.y;
+      const dist = Math.hypot(dx, dy);
+
+      if (dist < 10) return;
+
+      // Draw elastic band
+      ctx.beginPath();
+      ctx.moveTo(launchPoint.x, launchPoint.y);
+      ctx.lineTo(pullCurrentPos.x, pullCurrentPos.y);
+      ctx.strokeStyle = "rgba(249,115,22,0.8)";
+      ctx.lineWidth = 3;
+      ctx.stroke();
+
+      // Draw power indicator circle
+      const clampedDist = Math.min(dist, maxPullDistance);
+      const power = clampedDist / maxPullDistance;
+      const indicatorRadius = 8 + power * 12;
+
+      ctx.beginPath();
+      ctx.arc(pullCurrentPos.x, pullCurrentPos.y, indicatorRadius, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(249,115,22,${0.3 + power * 0.5})`;
+      ctx.fill();
+      ctx.strokeStyle = "#f97316";
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // Draw direction arrow (where shot will go)
+      const angle = Math.atan2(dy, dx);
+      const arrowLen = 30 + power * 40;
+      const endX = launchPoint.x + Math.cos(angle) * arrowLen;
+      const endY = launchPoint.y + Math.sin(angle) * arrowLen;
+
+      ctx.beginPath();
+      ctx.moveTo(launchPoint.x, launchPoint.y);
+      ctx.lineTo(endX, endY);
+      ctx.strokeStyle = "rgba(34,197,94,0.7)";
+      ctx.lineWidth = 2;
+      ctx.setLineDash([4, 4]);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Arrow head
+      const headLen = 8;
+      ctx.beginPath();
+      ctx.moveTo(endX, endY);
+      ctx.lineTo(endX - headLen * Math.cos(angle - 0.4), endY - headLen * Math.sin(angle - 0.4));
+      ctx.moveTo(endX, endY);
+      ctx.lineTo(endX - headLen * Math.cos(angle + 0.4), endY - headLen * Math.sin(angle + 0.4));
+      ctx.stroke();
+
+      // Power percentage text
+      ctx.fillStyle = "#fff";
+      ctx.font = `${Math.round(tileSize * 0.9)}px monospace`;
+      ctx.textAlign = "center";
+      ctx.fillText(`${Math.round(power * 100)}%`, pullCurrentPos.x, pullCurrentPos.y - indicatorRadius - 8);
+    }
+
+    function drawProjectiles() {
+      for (const p of projectiles) {
+        if (!p.active) continue;
+        ctx.fillStyle = "#facc15";
+        ctx.fillRect(p.x - p.size/2, p.y - p.size/2, p.size, p.size);
+      }
     }
 
     function drawBlocks() {
       for (const b of blocks) {
-        if (!b.alive) continue;
-        if (b.kind === "floor") continue;
-        if (b.y >= lavaY) continue;
+        if (!b.alive || b.kind === "floor" || b.y >= lavaY) continue;
         ctx.fillStyle = `rgb(${b.r},${b.g},${b.b})`;
-        ctx.fillRect(
-          Math.round(b.x),
-          Math.round(b.y),
-          b.size,
-          b.size
-        );
+        ctx.fillRect(Math.round(b.x), Math.round(b.y), b.size, b.size);
       }
     }
 
     function drawTarget() {
-      for (const block of targetBlocks) {
-        if (!block.alive) continue;
-        ctx.fillStyle = `rgb(${block.r},${block.g},${block.b})`;
-        ctx.fillRect(
-          Math.round(block.x),
-          Math.round(block.y),
-          block.w,
-          block.h
-        );
+      for (const b of targetBlocks) {
+        if (!b.alive) continue;
+        ctx.fillStyle = `rgb(${b.r},${b.g},${b.b})`;
+        ctx.fillRect(Math.round(b.x), Math.round(b.y), b.w, b.h);
       }
     }
 
-    function drawPixelParticles() {
+    function drawParticles() {
       for (const p of pixelParticles) {
         const alpha = Math.max(0, p.life / p.maxLife);
         ctx.fillStyle = `rgba(${p.r},${p.g},${p.b},${alpha})`;
-        ctx.fillRect(
-          Math.round(p.x - p.size / 2),
-          Math.round(p.y - p.size / 2),
-          p.size,
-          p.size
-        );
+        ctx.fillRect(Math.round(p.x - p.size/2), Math.round(p.y - p.size/2), p.size, p.size);
       }
     }
 
@@ -1897,76 +1693,20 @@
       for (const ft of floatingTexts) {
         const alpha = Math.max(0, ft.life / 40);
         ctx.globalAlpha = alpha;
-        const text = (ft.delta > 0 ? "+" : "") + ft.delta;
         ctx.fillStyle = ft.delta >= 0 ? "#facc15" : "#f97373";
-        ctx.font = `${Math.round(tileSize * 1.2)}px monospace`;
-        ctx.fillText(text, ft.x, ft.y);
+        ctx.font = `${Math.round(tileSize * 1.1)}px monospace`;
+        ctx.fillText((ft.delta > 0 ? "+" : "") + ft.delta, ft.x, ft.y);
         ctx.globalAlpha = 1;
       }
     }
 
-    function drawTrajectoryPreview() {
-      if (projectile.active) return;
-      if (chamberQueue.length === 0) return;
-
-      const power = Math.max(2, powerValueNorm * maxPower);
-      const angleInfo = computeAngleFromLauncher();
-      const rad = angleInfo.rad;
-
-      // Use discrete physics simulation to match actual projectile behavior
-      let simX = launchPoint.x;
-      let simY = launchPoint.y;
-      let simVX = -Math.cos(rad) * power;
-      let simVY = Math.sin(rad) * power;
-
-      const steps = 30;
-      ctx.strokeStyle = "rgba(248,250,252,0.5)";
-      ctx.lineWidth = 1;
-      ctx.setLineDash([2, 4]);
-      ctx.beginPath();
-      ctx.moveTo(simX, simY);
-
-      for (let i = 0; i < steps; i++) {
-        simVY += gravity;
-        simX += simVX;
-        simY += simVY;
-
-        ctx.lineTo(simX, simY);
-
-        if (simY > lavaY - tileSize) break;
-        if (simX < tileSize) break;
-      }
-      ctx.stroke();
-      ctx.setLineDash([]);
-    }
-
-    function drawOutOfAmmoOverlay() {
-      if (!outOfAmmo || ammoReminderTimer <= 0) return;
-      const t = ammoReminderTimer / 120;
-      const alpha = 0.3 + 0.4 * t;
-      const w = width * 0.7;
-      const h = height * 0.22;
-      const x = (width - w) / 2;
-      const y = height * 0.28;
-
-      ctx.globalAlpha = alpha;
-      ctx.fillStyle = "rgba(15,23,42,0.95)";
-      ctx.fillRect(x, y, w, h);
-      ctx.globalAlpha = 1;
-
-      ctx.strokeStyle = "rgba(248,250,252,0.4)";
-      ctx.strokeRect(x + 0.5, y + 0.5, w - 1, h - 1);
+    function drawOutOfAmmoHint() {
+      if (chamberQueue.length > 0) return;
 
       ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-
-      ctx.fillStyle = "#f97316";
-      ctx.font = `${Math.round(tileSize * 1.4)}px monospace`;
-      ctx.fillText("OUT OF AMMO", width / 2, y + h * 0.4);
-
-      ctx.fillStyle = "#e5e7eb";
-      ctx.font = `${Math.round(tileSize * 0.9)}px monospace`;
-      ctx.fillText("Buy bombs in the blue shop below", width / 2, y + h * 0.7);
+      ctx.fillStyle = "rgba(249,115,22,0.8)";
+      ctx.font = `${Math.round(tileSize * 0.8)}px monospace`;
+      ctx.fillText("Pull back to fire default shot", launchPoint.x, launchPoint.y + tileSize * 3);
     }
 
     function render() {
@@ -1974,15 +1714,15 @@
       ctx.imageSmoothingEnabled = false;
 
       drawBackground();
-      drawGroundAndLava();
+      drawLava();
       drawBlocks();
       drawTarget();
       drawLauncher();
-      drawProjectile();
-      drawPixelParticles();
+      drawProjectiles();
+      drawParticles();
       drawFloatingTexts();
-      drawTrajectoryPreview();
-      drawOutOfAmmoOverlay();
+      drawPullback();
+      drawOutOfAmmoHint();
     }
 
     function loop() {
@@ -1991,9 +1731,12 @@
       requestAnimationFrame(loop);
     }
 
+    // ==========================================================================
+    // INITIALIZATION
+    // ==========================================================================
     window.addEventListener("resize", resizeCanvas);
 
-    // Init
+    generateShopUI();
     loadCurrentPfp();
     resizeCanvas();
     loop();
