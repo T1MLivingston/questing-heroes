@@ -1,0 +1,1553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Pixel PFP Slingshot – Cloaks vs Migos</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    body {
+      background: #020617;
+      color: #f5f5f5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 12px;
+      gap: 8px;
+    }
+
+    h1 {
+      font-size: 1.1rem;
+      text-align: center;
+      margin-bottom: 4px;
+    }
+
+    canvas {
+      background: #020617;
+      width: 100%;
+      max-width: 960px;
+      border-radius: 10px;
+      border: 1px solid #1f2937;
+      touch-action: none;
+    }
+
+    .hud {
+      width: 100%;
+      max-width: 960px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 4px;
+    }
+
+    .top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .bomb-shop {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .bomb-shop button {
+      display: inline-flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: 10px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      font-size: 0.75rem;
+      line-height: 1.2;
+      min-width: 135px;
+      justify-content: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.35);
+      color: #fff;
+      background: #1f2937;
+      transition: transform 0.08s ease, box-shadow 0.08s ease, opacity 0.08s ease;
+    }
+
+    .bomb-shop button .bomb-dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 4px; /* blocky */
+      border: 2px solid rgba(0,0,0,0.5);
+      flex-shrink: 0;
+    }
+
+    .bomb-shop button .bomb-label small {
+      font-size: 0.65rem;
+      opacity: 0.9;
+    }
+
+    /* Individual bomb colors */
+    .bomb-shop button[data-type="b1"] { background: #2563eb; }
+    .bomb-shop button[data-type="b1"] .bomb-dot { background: #93c5fd; }
+
+    .bomb-shop button[data-type="b2"] { background: #7c3aed; }
+    .bomb-shop button[data-type="b2"] .bomb-dot { background: #ddd6fe; }
+
+    .bomb-shop button[data-type="b3"] { background: #f97316; }
+    .bomb-shop button[data-type="b3"] .bomb-dot { background: #fed7aa; }
+
+    .bomb-shop button[data-type="b4"] { background: #0d9488; }
+    .bomb-shop button[data-type="b4"] .bomb-dot { background: #5eead4; }
+
+    .bomb-shop button[data-type="b5"] { background: #dc2626; }
+    .bomb-shop button[data-type="b5"] .bomb-dot { background: #fecaca; }
+
+    .bomb-shop button[data-type="b6"] { background: #ca8a04; }
+    .bomb-shop button[data-type="b6"] .bomb-dot { background: #facc15; }
+
+    .bomb-shop button[data-type="b7"] { background: #db2777; }
+    .bomb-shop button[data-type="b7"] .bomb-dot { background: #f9a8d4; }
+
+    .bomb-shop button[data-type="b8"] { background: #4b5563; }
+    .bomb-shop button[data-type="b8"] .bomb-dot { background: #e5e7eb; }
+
+    .bomb-shop button.selected {
+      border-color: #f97316;
+      box-shadow: 0 0 0 2px rgba(249,115,22,0.6);
+      transform: translateY(-1px);
+    }
+
+    .bomb-shop button.disabled {
+      opacity: 0.35;
+      box-shadow: none;
+      cursor: default;
+    }
+
+    .bomb-shop button.locked {
+      opacity: 0.25;
+      border-style: dashed;
+    }
+
+    .stats-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+      gap: 10px;
+      font-size: 0.8rem;
+      color: #e5e7eb;
+    }
+
+    .stat {
+      display: flex;
+      align-items: baseline;
+      gap: 3px;
+    }
+
+    .stat .value {
+      font-weight: 600;
+      color: #f97316;
+    }
+
+    .stats-row input {
+      background: #020617;
+      border: 1px solid #4b5563;
+      border-radius: 999px;
+      padding: 2px 8px;
+      color: #e5e7eb;
+      font-size: 0.75rem;
+      min-width: 80px;
+    }
+
+    .stats-row input:focus {
+      outline: none;
+      border-color: #f97316;
+      box-shadow: 0 0 0 1px rgba(249,115,22,0.6);
+    }
+
+    .menu-btn {
+      background: #111827;
+      color: #e5e7eb;
+      border: 1px solid #4b5563;
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      align-self: flex-start;
+      white-space: nowrap;
+    }
+
+    .menu-btn:hover {
+      background: #1f2937;
+    }
+
+    .menu-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15,23,42,0.9);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 20;
+    }
+
+    .menu-overlay.open {
+      display: flex;
+    }
+
+    .menu-content {
+      background: #020617;
+      border: 1px solid #4b5563;
+      border-radius: 12px;
+      padding: 16px;
+      max-width: 360px;
+      width: 90%;
+      color: #e5e7eb;
+      font-size: 0.8rem;
+    }
+
+    .menu-content h2 {
+      font-size: 0.9rem;
+      margin-bottom: 8px;
+    }
+
+    .menu-content ul {
+      padding-left: 18px;
+      margin-top: 4px;
+    }
+
+    .menu-content li {
+      margin-bottom: 4px;
+    }
+
+    .menu-content button {
+      margin-top: 12px;
+      background: #1f2937;
+      border-radius: 999px;
+      border: 1px solid #4b5563;
+      padding: 4px 10px;
+      color: #e5e7eb;
+      font-size: 0.75rem;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>Pixel PFP Slingshot</h1>
+
+  <div class="hud">
+    <div class="top-row">
+      <div class="stats-row">
+        <div class="stat">
+          Player:
+          <input id="playerName" placeholder="anon" />
+        </div>
+        <div class="stat">
+          Level:
+          <span id="level" class="value">1</span>
+        </div>
+        <div class="stat">
+          Target:
+          <span id="targetName" class="value">Loading…</span>
+        </div>
+        <div class="stat">
+          Bank:
+          <span id="credits" class="value">100</span><span> px</span>
+        </div>
+        <div class="stat">
+          Score:
+          <span id="score" class="value">0</span>
+        </div>
+        <div class="stat">
+          Destroyed:
+          <span id="destroyPct" class="value">0</span><span>%</span>
+        </div>
+        <div class="stat">
+          Last +/–:
+          <span id="lastGain" class="value">0</span><span> px</span>
+        </div>
+        <div class="stat">
+          Angle:
+          <span id="angle" class="value">0</span><span>°</span>
+        </div>
+        <div class="stat">
+          Power:
+          <span id="power" class="value">0</span>
+        </div>
+        <div class="stat">
+          Shots:
+          <span id="shots" class="value">0</span>
+        </div>
+        <div class="stat">
+          Cleared:
+          <span id="hits" class="value">0</span>
+        </div>
+      </div>
+      <button id="menuButton" class="menu-btn">Menu</button>
+    </div>
+
+    <div class="bomb-shop">
+      <!-- 8 bombs, 3 unlocked from level 1, others unlock as you go -->
+      <button data-type="b1" class="selected">
+        <span class="bomb-dot"></span>
+        <span class="bomb-label">
+          Mini (Lvl 1)<br>
+          <small>Cost 1 px • Owned <span class="owned" data-type="b1">0</span></small>
+        </span>
+      </button>
+      <button data-type="b2">
+        <span class="bomb-dot"></span>
+        <span class="bomb-label">
+          Wide (Lvl 1)<br>
+          <small>Cost 2 px • Owned <span class="owned" data-type="b2">0</span></small>
+        </span>
+      </button>
+      <button data-type="b3">
+        <span class="bomb-dot"></span>
+        <span class="bomb-label">
+          Burst (Lvl 1)<br>
+          <small>Cost 3 px • Owned <span class="owned" data-type="b3">0</span></small>
+        </span>
+      </button>
+      <button data-type="b4">
+        <span class="bomb-dot"></span>
+        <span class="bomb-label">
+          Cluster (Lvl 2)<br>
+          <small>Cost 4 px • Owned <span class="owned" data-type="b4">0</span></small>
+        </span>
+      </button>
+      <button data-type="b5">
+        <span class="bomb-dot"></span>
+        <span class="bomb-label">
+          Heavy (Lvl 3)<br>
+          <small>Cost 5 px • Owned <span class="owned" data-type="b5">0</span></small>
+        </span>
+      </button>
+      <button data-type="b6">
+        <span class="bomb-dot"></span>
+        <span class="bomb-label">
+          Shock (Lvl 4)<br>
+          <small>Cost 6 px • Owned <span class="owned" data-type="b6">0</span></small>
+        </span>
+      </button>
+      <button data-type="b7">
+        <span class="bomb-dot"></span>
+        <span class="bomb-label">
+          Nova (Lvl 5)<br>
+          <small>Cost 7 px • Owned <span class="owned" data-type="b7">0</span></small>
+        </span>
+      </button>
+      <button data-type="b8">
+        <span class="bomb-dot"></span>
+        <span class="bomb-label">
+          Omega (Lvl 6)<br>
+          <small>Cost 8 px • Owned <span class="owned" data-type="b8">0</span></small>
+        </span>
+      </button>
+    </div>
+  </div>
+
+  <canvas id="game"></canvas>
+
+  <div id="menuOverlay" class="menu-overlay">
+    <div class="menu-content">
+      <h2>How to Play</h2>
+      <ul>
+        <li>You start with a bank of <strong>100 pixels</strong>.</li>
+        <li>Tap a bomb in the shop to <strong>buy</strong> it (cost in pixels).</li>
+        <li>Drag back from the launcher handle to set <strong>angle &amp; power</strong>, then release to fire.</li>
+        <li>Tap while a bomb is flying to <strong>detonate early</strong>.</li>
+        <li>Destroying PFP pixels <strong>adds</strong> pixels and score (yellow +N).</li>
+        <li>Destroying red blocking pixels <strong>subtracts</strong> pixels and score (red –N).</li>
+        <li>Getting pixels into the lava also counts as destroyed.</li>
+      </ul>
+      <button id="closeMenu">Close</button>
+    </div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById("game");
+    const ctx = canvas.getContext("2d");
+
+    const angleEl = document.getElementById("angle");
+    const powerEl = document.getElementById("power");
+    const shotsEl = document.getElementById("shots");
+    const hitsEl = document.getElementById("hits");
+    const targetNameEl = document.getElementById("targetName");
+    const creditsEl = document.getElementById("credits");
+    const levelEl = document.getElementById("level");
+    const scoreEl = document.getElementById("score");
+    const lastGainEl = document.getElementById("lastGain");
+    const destroyPctEl = document.getElementById("destroyPct");
+
+    const menuBtn = document.getElementById("menuButton");
+    const menuOverlay = document.getElementById("menuOverlay");
+    const closeMenuBtn = document.getElementById("closeMenu");
+
+    menuBtn.addEventListener("click", () => {
+      menuOverlay.classList.add("open");
+    });
+    closeMenuBtn.addEventListener("click", () => {
+      menuOverlay.classList.remove("open");
+    });
+    menuOverlay.addEventListener("click", (e) => {
+      if (e.target === menuOverlay) {
+        menuOverlay.classList.remove("open");
+      }
+    });
+
+    const bombButtons = Array.from(document.querySelectorAll(".bomb-shop button"));
+    const ownedEls = {};
+    document.querySelectorAll(".owned").forEach(span => {
+      ownedEls[span.getAttribute("data-type")] = span;
+    });
+
+    // ---------- PFP list ----------
+    const PFP_LIST = [
+      { name: "Bat", url: "https://cdn.prod.website-files.com/64aa957da446d8dc44869f81/691be24e3333bf67710ef8d0_c_151.png" },
+      { name: "Scythe", url: "https://cdn.prod.website-files.com/64aa957da446d8dc44869f81/691be24ee1e3bdf8eb1d3d97_c_7130.png" },
+      { name: "Archer - Eyepatch", url: "https://cdn.prod.website-files.com/64aa957da446d8dc44869f81/691be24e962d34eb4472da90_c_11292.png" },
+      { name: "Cheetah", url: "https://cdn.prod.website-files.com/64aa957da446d8dc44869f81/691be24e0afc9c0f75ff097c_c_16564.png" },
+      { name: "Archer - Fire", url: "https://cdn.prod.website-files.com/64aa957da446d8dc44869f81/691be24eea51a7384061698b_c_19431.png" },
+      { name: "Forest Wolf", url: "https://cdn.prod.website-files.com/64aa957da446d8dc44869f81/691be24ee3a8c903c6bf3ab0_c_1887.png" },
+      { name: "White Shag", url: "https://cdn.prod.website-files.com/64aa957da446d8dc44869f81/691be24ee043e99baed366a1_n_17763.png" },
+      { name: "Pigtails", url: "https://cdn.prod.website-files.com/64aa957da446d8dc44869f81/691be24e7e99d28670266a13_N_2818.png" },
+      { name: "Ginger", url: "https://cdn.prod.website-files.com/64aa957da446d8dc44869f81/691be24eafcfe74681d63ca1_n_6672.png" },
+      { name: "Croc", url: "https://cdn.prod.website-files.com/64aa957da446d8dc44869f81/691be24e19872724aa3ba4ad_N_9770.png" },
+      { name: "Snowman", url: "https://cdn.prod.website-files.com/64aa957da446d8dc44869f81/691be24ec00212b1b303ce07_N_19130.png" },
+      { name: "Frog", url: "https://cdn.prod.website-files.com/64aa957da446d8dc44869f81/691be24edcb42d79f6aef702_n_2869.png" }
+    ];
+
+    let currentPfpIndex = 0;
+    let pfpImage = new Image();
+    let pfpLoaded = false;
+
+    const PFP_GRID = 32;
+
+    let targetBounds = null;
+    let targetBlocks = [];
+    let totalTargetPixels = 0;
+
+    // scoring
+    const STARTING_BANK = 100;
+    let credits = STARTING_BANK;
+    let score = 0;
+    let lastGain = 0;
+    let outOfAmmo = false;
+
+    // lava
+    let lavaY = 0;
+
+    // floating +N texts
+    let floatingTexts = [];
+
+    function loadCurrentPfp() {
+      const data = PFP_LIST[currentPfpIndex];
+      targetNameEl.textContent = data.name;
+      levelEl.textContent = (currentPfpIndex + 1).toString();
+      pfpLoaded = false;
+      pfpImage = new Image();
+      pfpImage.crossOrigin = "anonymous";
+      pfpImage.onload = () => {
+        pfpLoaded = true;
+        rebuildPixelTargetIfReady();
+      };
+      pfpImage.src = data.url;
+    }
+
+    function nextPfp() {
+      currentPfpIndex = (currentPfpIndex + 1) % PFP_LIST.length;
+      loadCurrentPfp();
+      resetLevel();
+    }
+
+    function rebuildPixelTargetIfReady() {
+      if (!pfpLoaded || !targetBounds) return;
+      buildPixelTarget();
+    }
+
+    function buildPixelTarget() {
+      const off = document.createElement("canvas");
+      off.width = PFP_GRID;
+      off.height = PFP_GRID;
+      const offCtx = off.getContext("2d");
+      offCtx.imageSmoothingEnabled = false;
+      offCtx.drawImage(pfpImage, 0, 0, PFP_GRID, PFP_GRID);
+
+      const imgData = offCtx.getImageData(0, 0, PFP_GRID, PFP_GRID).data;
+      targetBlocks = [];
+
+      const cellSize = targetBounds.w / PFP_GRID;
+      for (let y = 0; y < PFP_GRID; y++) {
+        for (let x = 0; x < PFP_GRID; x++) {
+          const idx = (y * PFP_GRID + x) * 4;
+          const r = imgData[idx];
+          const g = imgData[idx + 1];
+          const b = imgData[idx + 2];
+          const a = imgData[idx + 3];
+          if (a < 10) continue;
+
+          const px = targetBounds.x + x * cellSize;
+          const py = targetBounds.y + y * cellSize;
+
+          targetBlocks.push({
+            x: px,
+            y: py,
+            w: cellSize,
+            h: cellSize,
+            r,
+            g,
+            b,
+            alive: true
+          });
+        }
+      }
+      totalTargetPixels = targetBlocks.length;
+      updateDestructionStats();
+    }
+
+    function updateDestructionStats() {
+      if (totalTargetPixels === 0) {
+        destroyPctEl.textContent = "0";
+        return;
+      }
+      const alive = targetBlocks.filter(b => b.alive).length;
+      const destroyed = totalTargetPixels - alive;
+      const pct = Math.round((destroyed / totalTargetPixels) * 100);
+      destroyPctEl.textContent = String(pct);
+    }
+
+    // ---------- Bombs & economy ----------
+    const bombDefsArray = [
+      {
+        id: "b1",
+        name: "Mini",
+        cost: 1,
+        radiusCells: 1.8,
+        unlockLevel: 1,
+        palette: [
+          [147, 197, 253],
+          [59, 130, 246],
+          [37, 99, 235]
+        ]
+      },
+      {
+        id: "b2",
+        name: "Wide",
+        cost: 2,
+        radiusCells: 2.4,
+        unlockLevel: 1,
+        palette: [
+          [233, 213, 255],
+          [192, 132, 252],
+          [168, 85, 247]
+        ]
+      },
+      {
+        id: "b3",
+        name: "Burst",
+        cost: 3,
+        radiusCells: 3.0,
+        unlockLevel: 1,
+        palette: [
+          [254, 215, 170],
+          [251, 146, 60],
+          [234, 88, 12]
+        ]
+      },
+      {
+        id: "b4",
+        name: "Cluster",
+        cost: 4,
+        radiusCells: 3.5,
+        unlockLevel: 2,
+        palette: [
+          [45, 212, 191],
+          [20, 184, 166],
+          [13, 148, 136]
+        ]
+      },
+      {
+        id: "b5",
+        name: "Heavy",
+        cost: 5,
+        radiusCells: 4.0,
+        unlockLevel: 3,
+        palette: [
+          [248, 113, 113],
+          [239, 68, 68],
+          [220, 38, 38]
+        ]
+      },
+      {
+        id: "b6",
+        name: "Shock",
+        cost: 6,
+        radiusCells: 4.6,
+        unlockLevel: 4,
+        palette: [
+          [252, 211, 77],
+          [250, 204, 21],
+          [202, 138, 4]
+        ]
+      },
+      {
+        id: "b7",
+        name: "Nova",
+        cost: 7,
+        radiusCells: 5.2,
+        unlockLevel: 5,
+        palette: [
+          [244, 114, 182],
+          [236, 72, 153],
+          [219, 39, 119]
+        ]
+      },
+      {
+        id: "b8",
+        name: "Omega",
+        cost: 8,
+        radiusCells: 5.8,
+        unlockLevel: 6,
+        palette: [
+          [248, 250, 252],
+          [191, 219, 254],
+          [129, 140, 248]
+        ]
+      }
+    ];
+
+    const bombDefs = {};
+    bombDefsArray.forEach(b => { bombDefs[b.id] = b; });
+
+    let inventory = {};
+    bombDefsArray.forEach(b => { inventory[b.id] = 0; });
+
+    let selectedBombId = "b1";
+
+    function resetLevelEconomy() {
+      bombDefsArray.forEach(b => { inventory[b.id] = 0; });
+
+      const currentLevel = currentPfpIndex + 1;
+      let firstUnlocked = bombDefsArray.find(b => currentLevel >= b.unlockLevel) || bombDefsArray[0];
+      selectedBombId = firstUnlocked.id;
+
+      bombButtons.forEach(btn => {
+        const id = btn.getAttribute("data-type");
+        if (id === selectedBombId) btn.classList.add("selected");
+        else btn.classList.remove("selected");
+      });
+
+      updateShopUI();
+    }
+
+    function updateShopUI() {
+      creditsEl.textContent = String(credits);
+      scoreEl.textContent = String(score);
+      lastGainEl.textContent = String(lastGain);
+
+      Object.keys(ownedEls).forEach(id => {
+        ownedEls[id].textContent = inventory[id] || 0;
+      });
+
+      const currentLevel = currentPfpIndex + 1;
+      let totalOwned = 0;
+      let cheapestUnlocked = Infinity;
+
+      bombButtons.forEach(btn => {
+        const id = btn.getAttribute("data-type");
+        const bomb = bombDefs[id];
+        const unlocked = currentLevel >= bomb.unlockLevel;
+        const hasAny = inventory[id] > 0;
+        const canAfford = credits >= bomb.cost;
+
+        totalOwned += inventory[id] || 0;
+
+        if (unlocked && bomb.cost < cheapestUnlocked) {
+          cheapestUnlocked = bomb.cost;
+        }
+
+        btn.classList.remove("locked");
+        btn.classList.remove("disabled");
+
+        if (!unlocked) {
+          btn.classList.add("locked");
+          btn.classList.add("disabled");
+        } else if (!hasAny && !canAfford) {
+          btn.classList.add("disabled");
+        }
+      });
+
+      if (cheapestUnlocked === Infinity) cheapestUnlocked = 0;
+      outOfAmmo = (totalOwned === 0 && credits < cheapestUnlocked);
+    }
+
+    bombButtons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        const id = btn.getAttribute("data-type");
+        const bomb = bombDefs[id];
+        const currentLevel = currentPfpIndex + 1;
+
+        if (currentLevel < bomb.unlockLevel) return; // locked
+
+        const hasAny = inventory[id] > 0;
+        const canAfford = credits >= bomb.cost;
+
+        if (canAfford) {
+          credits -= bomb.cost;
+          inventory[id] = (inventory[id] || 0) + 1;
+          selectedBombId = id;
+        } else if (hasAny) {
+          selectedBombId = id;
+        } else {
+          return;
+        }
+
+        bombButtons.forEach(b => b.classList.remove("selected"));
+        btn.classList.add("selected");
+        updateShopUI();
+      });
+    });
+
+    function getSelectedBomb() {
+      return bombDefs[selectedBombId];
+    }
+
+    function grantPixels(delta, cx, cy) {
+      if (delta === 0) return;
+      credits += delta;
+      score += delta;
+      lastGain = delta;
+      spawnFloatingText(cx, cy, delta);
+      updateShopUI();
+    }
+
+    // ---------- Game state ----------
+    let width = 900;
+    let height = 500;
+    let tileSize = 10;
+    let groundY;
+
+    // launcher track zone
+    let launcherZoneX, launcherZoneWidth;
+    let launchTrackX, launchTrackTopY, launchTrackBottomY;
+    let launchY;
+    let launchPoint = { x: 0, y: 0 };
+
+    const blocks = []; // 1-pixel blocks (floor, pedestals, obstacles)
+
+    let projectile = {
+      x: 0,
+      y: 0,
+      vx: 0,
+      vy: 0,
+      size: 10,
+      bombId: null,
+      active: false
+    };
+
+    let isDragging = false;
+    let movingLauncher = false;
+    let dragPos = { x: 0, y: 0 };
+    const maxPull = 140;
+    const maxPower = 23;
+    const gravity = 0.45;
+    const blockGravity = 0.25;
+
+    let lastAngleDeg = 0;
+    let lastPower = 0;
+    let shotsFired = 0;
+    let targetsCleared = 0;
+
+    let pixelParticles = [];
+    let levelAdvanceTimer = -1;
+
+    function setupLauncherTrack() {
+      launcherZoneWidth = tileSize * 6;
+      launcherZoneX = width - launcherZoneWidth;
+
+      launchTrackX = launcherZoneX + launcherZoneWidth / 2;
+      launchTrackTopY = tileSize * 3;
+      launchTrackBottomY = groundY - tileSize * 1.5;
+      launchY = (launchTrackTopY + launchTrackBottomY) / 2;
+
+      launchPoint.x = launchTrackX;
+      launchPoint.y = launchY;
+    }
+
+    function resizeCanvas() {
+      const maxW = 960;
+      const screenW = Math.min(window.innerWidth - 24, maxW);
+      const aspect = 16 / 9;
+      const screenH = screenW / aspect;
+
+      canvas.width = screenW;
+      canvas.height = screenH;
+
+      width = canvas.width;
+      height = canvas.height;
+
+      tileSize = Math.max(6, Math.round(height / 34));
+      groundY = height - tileSize * 6;
+      lavaY = height - tileSize * 2.5;
+
+      setupLauncherTrack();
+      resetLevel();
+    }
+
+    function resetLevel() {
+      blocks.length = 0;
+      pixelParticles = [];
+      floatingTexts = [];
+      levelAdvanceTimer = -1;
+      resetProjectile();
+      resetLevelEconomy();
+      destroyPctEl.textContent = "0";
+
+      // platform height for PFP (flat surface, sometimes raised)
+      const platformOffsetRows = Math.floor(Math.random() * 4); // 0..3
+      const platformY = groundY - tileSize - platformOffsetRows * tileSize;
+
+      const targetSize = tileSize * 12;
+
+      // vary horizontal position per level so characters feel in different spots
+      const variant = currentPfpIndex % 3;
+      const targetXFactors = [0.14, 0.20, 0.26];
+      const targetX = width * targetXFactors[variant];
+
+      const snappedTargetX = Math.round(targetX / tileSize) * tileSize;
+      const targetY = platformY - targetSize;
+
+      targetBounds = {
+        x: snappedTargetX,
+        y: Math.round(targetY / tileSize) * tileSize,
+        w: targetSize,
+        h: targetSize
+      };
+
+      function addColumn(x, yTop, rows, color, kind, dynamic=false) {
+        const [r, g, b] = color;
+        for (let rIdx = 0; rIdx < rows; rIdx++) {
+          blocks.push({
+            x: x,
+            y: yTop + rIdx * tileSize,
+            size: tileSize,
+            r,
+            g,
+            b,
+            alive: true,
+            dynamic,
+            vy: 0,
+            kind
+          });
+        }
+      }
+
+      function addRow(xLeft, y, cols, color, kind, dynamic=false) {
+        const [r, g, b] = color;
+        for (let c = 0; c < cols; c++) {
+          blocks.push({
+            x: xLeft + c * tileSize,
+            y: y,
+            size: tileSize,
+            r,
+            g,
+            b,
+            alive: true,
+            dynamic,
+            vy: 0,
+            kind
+          });
+        }
+      }
+
+      const wallColor = [56, 189, 248];   // cyan-ish pedestals
+      const obstacleColor = [220, 38, 38];  // red blockers
+
+      // Floor row (static) – structure foundation just above lava
+      const floorCols = Math.ceil(width / tileSize) + 2;
+      addRow(-tileSize, groundY, floorCols, [15, 23, 42], "floor", false);
+
+      // Platform under PFP (dynamic row sitting on floor, but neutral for scoring)
+      const platCols = Math.round(targetBounds.w / tileSize) + 2;
+      const platX = targetBounds.x - tileSize;
+      addRow(platX, platformY, platCols, wallColor, "pedestal", true);
+
+      // Obstacles ONLY to the right of the PFP, never over or in front of it
+      const obstacleStartX = targetBounds.x + targetBounds.w + tileSize * 3;
+
+      // A vertical column of red obstacles
+      const colHeight = 8;
+      const colBottomY = groundY - tileSize;
+      const colTopY = colBottomY - colHeight * tileSize;
+      const colX = Math.round(((obstacleStartX + (width - tileSize * 10)) / 2) / tileSize) * tileSize;
+      addColumn(colX, colTopY, colHeight, obstacleColor, "obstacle", true);
+
+      // Some extra red crates stacked higher to the right
+      const colX2 = colX + tileSize * 3;
+      const h2 = 6;
+      const top2 = colBottomY - h2 * tileSize - tileSize * 2;
+      addColumn(colX2, top2, h2, obstacleColor, "obstacle", true);
+
+      rebuildPixelTargetIfReady();
+    }
+
+    function resetProjectile() {
+      projectile.x = launchPoint.x;
+      projectile.y = launchPoint.y;
+      projectile.vx = 0;
+      projectile.vy = 0;
+      projectile.size = tileSize;
+      projectile.bombId = null;
+      projectile.active = false;
+      isDragging = false;
+      movingLauncher = false;
+    }
+
+    // ---------- Floating +N / –N ----------
+    function spawnFloatingText(x, y, delta) {
+      floatingTexts.push({
+        x,
+        y,
+        delta,
+        life: 40
+      });
+    }
+
+    // ---------- Pointer input (with click-to-detonate & vertical movement) ----------
+    function getPointerPosition(evt) {
+      const rect = canvas.getBoundingClientRect();
+      let clientX, clientY;
+      if (evt.touches && evt.touches.length > 0) {
+        clientX = evt.touches[0].clientX;
+        clientY = evt.touches[0].clientY;
+      } else if (evt.changedTouches && evt.changedTouches.length > 0) {
+        clientX = evt.changedTouches[0].clientX;
+        clientY = evt.changedTouches[0].clientY;
+      } else {
+        clientX = evt.clientX;
+        clientY = evt.clientY;
+      }
+      const x = ((clientX - rect.left) / rect.width) * canvas.width;
+      const y = ((clientY - rect.top) / rect.height) * canvas.height;
+      return { x, y };
+    }
+
+    function manualDetonate() {
+      if (!projectile.active) return;
+      const bomb = bombDefs[projectile.bombId || selectedBombId];
+      projectile.active = false;
+      applyExplosion(projectile.x, projectile.y, bomb);
+    }
+
+    function pointerDown(evt) {
+      evt.preventDefault();
+      const pos = getPointerPosition(evt);
+
+      // If a bomb is flying, tap detonates it
+      if (projectile.active) {
+        manualDetonate();
+        return;
+      }
+
+      const distToHandle = Math.hypot(pos.x - launchPoint.x, pos.y - launchPoint.y);
+
+      // Move launcher if grabbing near handle
+      if (distToHandle < tileSize * 1.5) {
+        movingLauncher = true;
+        return;
+      }
+
+      // Start aiming if near launch point
+      if (distToHandle < tileSize * 3) {
+        isDragging = true;
+        dragPos = pos;
+        updateAimUI(pos);
+      }
+    }
+
+    function pointerMove(evt) {
+      if (!isDragging && !movingLauncher) return;
+      evt.preventDefault();
+      const pos = getPointerPosition(evt);
+
+      if (movingLauncher) {
+        let newY = pos.y;
+        newY = Math.max(launchTrackTopY, Math.min(launchTrackBottomY, newY));
+        launchY = newY;
+        launchPoint.y = launchY;
+
+        if (!projectile.active && !isDragging) {
+          projectile.x = launchPoint.x;
+          projectile.y = launchPoint.y;
+        }
+        return;
+      }
+
+      // dragging aim
+      let dx = pos.x - launchPoint.x;
+      let dy = pos.y - launchPoint.y;
+      const dist = Math.hypot(dx, dy);
+      if (dist > maxPull) {
+        const scale = maxPull / dist;
+        dx *= scale;
+        dy *= scale;
+      }
+      dragPos = {
+        x: launchPoint.x + dx,
+        y: launchPoint.y + dy
+      };
+      updateAimUI(dragPos);
+    }
+
+    function pointerUp(evt) {
+      if (movingLauncher) {
+        movingLauncher = false;
+        return;
+      }
+      if (!isDragging) return;
+      evt.preventDefault();
+      isDragging = false;
+
+      const bomb = getSelectedBomb();
+      if (inventory[bomb.id] <= 0) return; // no bomb to fire
+
+      const { angleRad, power, displayAngle } = computeShotFromDrag(dragPos);
+      if (power < 2) return;
+
+      lastAngleDeg = displayAngle;
+      lastPower = power;
+
+      projectile.x = launchPoint.x;
+      projectile.y = launchPoint.y;
+      projectile.vx = Math.cos(angleRad) * power;
+      projectile.vy = Math.sin(angleRad) * power;
+      projectile.size = tileSize;
+      projectile.bombId = bomb.id;
+      projectile.active = true;
+
+      inventory[bomb.id] -= 1;
+      shotsFired++;
+      shotsEl.textContent = String(shotsFired);
+      updateShopUI();
+    }
+
+    canvas.addEventListener("mousedown", pointerDown);
+    window.addEventListener("mousemove", pointerMove);
+    window.addEventListener("mouseup", pointerUp);
+
+    canvas.addEventListener("touchstart", pointerDown, { passive: false });
+    canvas.addEventListener("touchmove", pointerMove, { passive: false });
+    canvas.addEventListener("touchend", pointerUp, { passive: false });
+    canvas.addEventListener("touchcancel", pointerUp, { passive: false });
+
+    // ---------- Aim & physics ----------
+    function computeShotFromDrag(pos) {
+      let dx = pos.x - launchPoint.x;
+      let dy = pos.y - launchPoint.y;
+      const dist = Math.hypot(dx, dy);
+      const clampedDist = Math.min(dist, maxPull);
+
+      // Reverse slingshot: shot goes opposite drag
+      const shotDx = -dx;
+      const shotDy = -dy;
+
+      const angleRad = Math.atan2(shotDy, shotDx);
+      const power = (clampedDist / maxPull) * maxPower;
+
+      const angleDegCanvas = angleRad * (180 / Math.PI);
+      const displayAngle = Math.max(0, Math.min(90, -angleDegCanvas));
+
+      return { angleRad, power, displayAngle };
+    }
+
+    function updateAimUI(pos) {
+      const { power, displayAngle } = computeShotFromDrag(pos);
+      angleEl.textContent = power ? displayAngle.toFixed(1) : "0";
+      powerEl.textContent = power.toFixed(1);
+    }
+
+    function updateStatsUI() {
+      if (!isDragging && !projectile.active) {
+        angleEl.textContent = lastAngleDeg.toFixed(1);
+        powerEl.textContent = lastPower.toFixed(1);
+      }
+      hitsEl.textContent = String(targetsCleared);
+    }
+
+    function circleRectCollision(circle, rect) {
+      const radius = circle.size / 2;
+      const nearestX = Math.max(rect.x, Math.min(circle.x, rect.x + rect.w));
+      const nearestY = Math.max(rect.y, Math.min(circle.y, rect.y + rect.h));
+      const dx = circle.x - nearestX;
+      const dy = circle.y - nearestY;
+      return dx * dx + dy * dy <= radius * radius;
+    }
+
+    function applyExplosion(cx, cy, bomb) {
+      const radius = bomb.radiusCells * tileSize;
+      const radiusSq = radius * radius;
+
+      let hadAliveTarget = targetBlocks.some(b => b.alive);
+      let netDelta = 0;
+
+      function affectBlockArray(arr, isTargetPixel = false) {
+        for (const block of arr) {
+          if (!block.alive) continue;
+          const w = block.w || block.size;
+          const h = block.h || block.size;
+          const ox = block.x + w / 2;
+          const oy = block.y + h / 2;
+          const dx = ox - cx;
+          const dy = oy - cy;
+          if (dx * dx + dy * dy <= radiusSq) {
+            block.alive = false;
+            spawnBlockShatter(block, isTargetPixel);
+            if (isTargetPixel) {
+              netDelta += 1;
+            } else if (block.kind === "obstacle") {
+              netDelta -= 1;
+            }
+          }
+        }
+      }
+
+      affectBlockArray(blocks, false);
+      affectBlockArray(targetBlocks, true);
+      spawnBombPixels(cx, cy, bomb);
+
+      if (netDelta !== 0) {
+        grantPixels(netDelta, cx, cy);
+      }
+
+      updateDestructionStats();
+
+      const stillAlive = targetBlocks.some(b => b.alive);
+      if (hadAliveTarget && !stillAlive) {
+        targetsCleared++;
+        levelAdvanceTimer = 60;
+      }
+    }
+
+    function spawnBombPixels(cx, cy, bomb) {
+      const colors = bomb.palette;
+      const radius = bomb.radiusCells * tileSize;
+      const count = Math.round(30 + radius * 0.6);
+      for (let i = 0; i < count; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const speed = radius * (0.02 + Math.random() * 0.06);
+        const size = Math.max(2, Math.round(tileSize * (0.4 + Math.random())));
+        const [r, g, b] = colors[Math.floor(Math.random() * colors.length)];
+        pixelParticles.push({
+          x: cx,
+          y: cy,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed,
+          life: 18 + Math.floor(Math.random() * 10),
+          maxLife: 28,
+          size,
+          r,
+          g,
+          b
+        });
+      }
+    }
+
+    function spawnBlockShatter(block, isTargetPixel) {
+      const w = block.w || block.size;
+      const h = block.h || block.size;
+      const centerX = block.x + w / 2;
+      const centerY = block.y + h / 2;
+      const baseCount = isTargetPixel ? 4 : 2;
+      const extra = isTargetPixel ? 4 : 2;
+      const count = baseCount + Math.floor(Math.random() * extra);
+
+      const r = block.r ?? 148;
+      const g = block.g ?? 163;
+      const b = block.b ?? 184;
+
+      for (let i = 0; i < count; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const speed = (tileSize + 4) * (0.1 + Math.random() * 0.25);
+        const size = Math.max(2, Math.round(tileSize * (0.4 + Math.random() * 0.4)));
+        pixelParticles.push({
+          x: centerX,
+          y: centerY,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed,
+          life: 10 + Math.floor(Math.random() * 8),
+          maxLife: 20,
+          size,
+          r,
+          g,
+          b
+        });
+      }
+    }
+
+    // ---------- Update ----------
+    function update() {
+      // Projectile
+      if (projectile.active) {
+        projectile.vy += gravity;
+        projectile.x += projectile.vx;
+        projectile.y += projectile.vy;
+
+        const bomb = bombDefs[projectile.bombId || selectedBombId];
+
+        // Lava detonation
+        if (projectile.y + projectile.size / 2 >= lavaY) {
+          projectile.active = false;
+          applyExplosion(projectile.x, projectile.y, bomb);
+        } else {
+          const allBlocks = [
+            ...blocks.filter(b => b.alive),
+            ...targetBlocks.filter(b => b.alive).map(b => ({
+              ...b,
+              size: b.w,
+              w: b.w,
+              h: b.h
+            }))
+          ];
+          for (const block of allBlocks) {
+            const rect = {
+              x: block.x,
+              y: block.y,
+              w: block.w || block.size,
+              h: block.h || block.size
+            };
+            if (circleRectCollision(projectile, rect)) {
+              projectile.active = false;
+              applyExplosion(projectile.x, projectile.y, bomb);
+              break;
+            }
+          }
+        }
+
+        if (
+          projectile.x < -120 ||
+          projectile.x > width + 120 ||
+          projectile.y > height + 120
+        ) {
+          projectile.active = false;
+        }
+      }
+
+      // Dynamic falling blocks (floor/pedestals/obstacles)
+      for (const b of blocks) {
+        if (!b.alive || !b.dynamic) continue;
+        b.vy += blockGravity;
+        let newY = b.y + b.vy;
+
+        const supporters = [
+          ...blocks.filter(o => o.alive && o !== b),
+          ...targetBlocks.filter(o => o.alive)
+        ];
+
+        for (const s of supporters) {
+          const sH = s.h || s.size;
+          const sTop = s.y;
+          const sLeft = s.x;
+          const sRight = s.x + (s.w || s.size);
+
+          const bLeft = b.x;
+          const bRight = b.x + b.size;
+          const horizOverlap = bRight > sLeft && bLeft < sRight;
+          const wasAbove = b.y + b.size <= sTop + 0.1;
+          const wouldPass = newY + b.size >= sTop && b.y + b.size <= sTop;
+
+          if (horizOverlap && wasAbove && wouldPass) {
+            newY = sTop - b.size;
+            b.vy = 0;
+            break;
+          }
+        }
+
+        b.y = newY;
+
+        const centerY = b.y + b.size / 2;
+        if (centerY >= lavaY && b.alive) {
+          b.alive = false;
+          spawnBlockShatter(b, false);
+          if (b.kind === "obstacle") {
+            grantPixels(-1, b.x + b.size / 2, centerY);
+          }
+        }
+      }
+
+      // Pixel particles
+      const friction = 0.98;
+      for (const p of pixelParticles) {
+        p.vy += 0.25;
+        p.vx *= friction;
+        p.vy *= friction;
+        p.x += p.vx;
+        p.y += p.vy;
+        p.life -= 1;
+      }
+      pixelParticles = pixelParticles.filter(p => p.life > 0);
+
+      // Floating text
+      for (const ft of floatingTexts) {
+        ft.y -= 0.4;
+        ft.life -= 1;
+      }
+      floatingTexts = floatingTexts.filter(ft => ft.life > 0);
+
+      // Level advance
+      if (levelAdvanceTimer >= 0) {
+        levelAdvanceTimer -= 1;
+        if (levelAdvanceTimer === 0) {
+          nextPfp();
+        }
+      }
+
+      updateStatsUI();
+    }
+
+    // ---------- Drawing ----------
+    function drawBackground() {
+      const grad = ctx.createLinearGradient(0, 0, 0, groundY);
+      grad.addColorStop(0, "#0ea5e9");
+      grad.addColorStop(1, "#1d4ed8");
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, width, groundY);
+
+      // launcher zone (thin cloak-gray section) on the right
+      ctx.fillStyle = "rgba(15,23,42,0.95)";
+      ctx.fillRect(launcherZoneX, 0, launcherZoneWidth, groundY);
+
+      // vertical track path for launcher
+      ctx.beginPath();
+      ctx.moveTo(launchTrackX, launchTrackTopY);
+      ctx.lineTo(launchTrackX, launchTrackBottomY);
+      ctx.strokeStyle = "rgba(148,163,184,0.7)";
+      ctx.lineWidth = tileSize * 0.4;
+      ctx.stroke();
+    }
+
+    function drawGroundAndLava() {
+      // Area between ground and lava (shadow)
+      ctx.fillStyle = "#020617";
+      ctx.fillRect(0, groundY, width, lavaY - groundY);
+
+      // lava band
+      const lavaGrad = ctx.createLinearGradient(0, lavaY, 0, height);
+      lavaGrad.addColorStop(0, "#f97316");
+      lavaGrad.addColorStop(0.5, "#ef4444");
+      lavaGrad.addColorStop(1, "#b91c1c");
+      ctx.fillStyle = lavaGrad;
+      ctx.fillRect(0, lavaY, width, height - lavaY);
+
+      // bright edge at top of lava
+      ctx.fillStyle = "#fee2e2";
+      ctx.fillRect(0, lavaY - 2, width, 2);
+
+      // pixel waves on lava
+      ctx.fillStyle = "rgba(254, 249, 195, 0.7)";
+      for (let y = lavaY; y < height; y += tileSize) {
+        const offset = (Math.floor(y / tileSize) % 2) * tileSize;
+        for (let x = -offset; x < width; x += tileSize * 2) {
+          ctx.fillRect(x, y + tileSize / 3, tileSize, 2);
+        }
+      }
+
+      // subtle "LAVA" text in the middle
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillStyle = "rgba(15,23,42,0.5)";
+      ctx.font = `${Math.round(tileSize * 1.6)}px monospace`;
+      ctx.fillText("LAVA", width / 2, lavaY + (height - lavaY) / 2);
+    }
+
+    function drawLauncher() {
+      const podRadius = tileSize * 1.0;
+      ctx.fillStyle = "#e5e7eb";
+      ctx.beginPath();
+      ctx.arc(launchPoint.x, launchPoint.y, podRadius, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = "#0f172a";
+      ctx.beginPath();
+      ctx.arc(launchPoint.x, launchPoint.y, podRadius - 3, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = "#22c55e";
+      ctx.fillRect(
+        Math.round(launchPoint.x - 1),
+        Math.round(launchPoint.y - 1),
+        2,
+        2
+      );
+    }
+
+    function drawProjectile() {
+      let px, py;
+      if (projectile.active) {
+        px = projectile.x;
+        py = projectile.y;
+      } else if (isDragging) {
+        px = dragPos.x;
+        py = dragPos.y;
+      } else {
+        px = launchPoint.x;
+        py = launchPoint.y;
+      }
+
+      const s = projectile.size;
+      ctx.fillStyle = "#facc15";
+      ctx.fillRect(
+        Math.round(px - s / 2),
+        Math.round(py - s / 2),
+        s,
+        s
+      );
+    }
+
+    function drawBlocks() {
+      for (const b of blocks) {
+        if (!b.alive) continue;
+        ctx.fillStyle = `rgb(${b.r},${b.g},${b.b})`;
+        ctx.fillRect(
+          Math.round(b.x),
+          Math.round(b.y),
+          b.size,
+          b.size
+        );
+      }
+    }
+
+    function drawTarget() {
+      for (const block of targetBlocks) {
+        if (!block.alive) continue;
+        ctx.fillStyle = `rgb(${block.r},${block.g},${block.b})`;
+        ctx.fillRect(
+          Math.round(block.x),
+          Math.round(block.y),
+          block.w,
+          block.h
+        );
+      }
+    }
+
+    function drawPixelParticles() {
+      for (const p of pixelParticles) {
+        const alpha = Math.max(0, p.life / p.maxLife);
+        ctx.fillStyle = `rgba(${p.r},${p.g},${p.b},${alpha})`;
+        ctx.fillRect(
+          Math.round(p.x - p.size / 2),
+          Math.round(p.y - p.size / 2),
+          p.size,
+          p.size
+        );
+      }
+    }
+
+    function drawFloatingTexts() {
+      ctx.textAlign = "center";
+      ctx.textBaseline = "bottom";
+      for (const ft of floatingTexts) {
+        const alpha = Math.max(0, ft.life / 40);
+        ctx.globalAlpha = alpha;
+        const text = (ft.delta > 0 ? "+" : "") + ft.delta;
+        ctx.fillStyle = ft.delta >= 0 ? "#facc15" : "#f97373";
+        ctx.font = `${Math.round(tileSize * 1.2)}px monospace`;
+        ctx.fillText(text, ft.x, ft.y);
+        ctx.globalAlpha = 1;
+      }
+    }
+
+    function drawTrajectoryPreview() {
+      if (!isDragging) return;
+
+      const { angleRad, power } = computeShotFromDrag(dragPos);
+      let simX = launchPoint.x;
+      let simY = launchPoint.y;
+      let simVX = Math.cos(angleRad) * power;
+      let simVY = Math.sin(angleRad) * power;
+
+      const steps = 22;
+      const usedSteps = Math.floor(steps * 0.7);
+      const points = [];
+      points.push({ x: simX, y: simY });
+
+      for (let i = 0; i < usedSteps; i++) {
+        simVY += gravity;
+        simX += simVX;
+        simY += simVY;
+        if (simY > lavaY) break;
+        points.push({ x: simX, y: simY });
+      }
+
+      for (let i = 0; i < points.length - 1; i++) {
+        const t = i / (points.length - 1 || 1);
+        const alpha = 1 - t;
+        ctx.strokeStyle = `rgba(248,250,252,${0.25 + 0.55 * alpha})`;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(points[i].x, points[i].y);
+        ctx.lineTo(points[i + 1].x, points[i + 1].y);
+        ctx.stroke();
+      }
+    }
+
+    function drawOutOfAmmoOverlay() {
+      if (!outOfAmmo) return;
+      const w = width * 0.55;
+      const h = height * 0.22;
+      const x = (width - w) / 2;
+      const y = height * 0.32;
+
+      ctx.fillStyle = "rgba(15,23,42,0.9)";
+      ctx.fillRect(x, y, w, h);
+
+      ctx.strokeStyle = "rgba(248,250,252,0.4)";
+      ctx.strokeRect(x + 0.5, y + 0.5, w - 1, h - 1);
+
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillStyle = "#f97316";
+      ctx.font = `${Math.round(tileSize * 1.4)}px monospace`;
+      ctx.fillText("OUT OF AMMO", width / 2, y + h * 0.35);
+
+      ctx.fillStyle = "#e5e7eb";
+      ctx.font = `${Math.round(tileSize * 0.9)}px monospace`;
+      ctx.fillText("Buy more bombs with pixels", width / 2, y + h * 0.6);
+    }
+
+    function render() {
+      ctx.clearRect(0, 0, width, height);
+      ctx.imageSmoothingEnabled = false;
+
+      drawBackground();
+      drawGroundAndLava();
+      drawBlocks();
+      drawTarget();
+      drawLauncher();
+      drawProjectile();
+      drawPixelParticles();
+      drawFloatingTexts();
+      drawTrajectoryPreview();
+      drawOutOfAmmoOverlay();
+    }
+
+    function loop() {
+      update();
+      render();
+      requestAnimationFrame(loop);
+    }
+
+    window.addEventListener("resize", resizeCanvas);
+
+    // Init
+    loadCurrentPfp();
+    resizeCanvas();
+    loop();
+  </script>
+</body>
+</html>
