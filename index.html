@@ -647,8 +647,8 @@
   </div>
 
   <div class="instructions-panel" id="twoPlayerInstructions" style="display: none;">
-    <strong>P1 (Left)</strong>: Pull back from LEFT launcher | <strong>P2 (Right)</strong>: Pull back from RIGHT launcher<br>
-    Firing costs your pixels! Destroy opponent's pixels to win. First to 0 pixels loses!
+    <strong>Turn-based battle!</strong> Buy ammo from shop (costs your pixels), then pull back to fire.<br>
+    Highlighted player's turn. Destroy opponent's pixels to win!
   </div>
 
   <div class="bomb-shop-wrapper" id="shopWrapper">
@@ -821,14 +821,21 @@
         charName: ""
       },
       activePlayer: null,
+      currentTurn: "player1", // Track whose turn it is
       winner: null,
       gameOver: false
     };
 
     // Two-player specific settings
     const TWO_PLAYER_PFP_GRID = 32;
-    const TWO_PLAYER_PIXEL_COST = 3;
+    const TWO_PLAYER_PIXEL_COST = 3; // Base cost if no ammo purchased
     const TWO_PLAYER_SIZE_SCALE = 0.85; // 15% smaller
+
+    // Two-player inventory (shared shop, separate chambers)
+    let twoPlayerInventory = {
+      player1: { chamberQueue: [] },
+      player2: { chamberQueue: [] }
+    };
 
     // Menu toggle
     menuBtn.addEventListener("click", () => menuOverlay.classList.add("open"));
@@ -962,7 +969,7 @@
       twoPlayerHud.classList.add("visible");
       singlePlayerInstructions.style.display = "none";
       twoPlayerInstructions.style.display = "block";
-      bombShopWrapper.style.display = "none";
+      bombShopWrapper.style.display = "block"; // Show shop in two-player mode
 
       // Open character selection
       openCharacterSelect();
@@ -1225,6 +1232,22 @@
 
     function handleBulletPurchase(id) {
       const bullet = bulletDefs[id];
+
+      if (gameMode === "two") {
+        // Two-player mode: cost pixels from current player's stack
+        const currentPlayer = twoPlayerState.currentTurn;
+        const player = twoPlayerState[currentPlayer];
+        const cost = bullet.cost;
+
+        if (player.pixelCount >= cost) {
+          consumePlayerPixels(player, cost);
+          twoPlayerInventory[currentPlayer].chamberQueue.push(id);
+          updateTwoPlayerUI();
+        }
+        return;
+      }
+
+      // Single player mode
       const currentLevel = currentPfpIndex + 1;
 
       // Check if unlocked
@@ -1289,6 +1312,11 @@
     }
 
     function updateShopUI() {
+      if (gameMode === "two") {
+        updateTwoPlayerShopUI();
+        return;
+      }
+
       creditsEl.textContent = String(credits);
       scoreEl.textContent = String(score);
 
@@ -1324,6 +1352,33 @@
       }
 
       updateChamberUI();
+    }
+
+    function updateTwoPlayerShopUI() {
+      const currentPlayer = twoPlayerState.currentTurn;
+      const player = twoPlayerState[currentPlayer];
+      const playerPixels = player.pixelCount;
+
+      // Update shop buttons based on current player's pixel count
+      document.querySelectorAll(".bomb-shop button").forEach(btn => {
+        const id = btn.getAttribute("data-type");
+        const bullet = bulletDefs[id];
+        const canAfford = playerPixels >= bullet.cost;
+
+        btn.classList.remove("locked", "disabled", "selected");
+
+        if (!canAfford) {
+          btn.classList.add("disabled");
+        }
+      });
+
+      // Update owned count to show chamber contents for current player
+      const chamber = twoPlayerInventory[currentPlayer].chamberQueue;
+      document.querySelectorAll(".owned").forEach(span => {
+        const id = span.getAttribute("data-type");
+        const count = chamber.filter(bulletId => bulletId === id).length;
+        span.textContent = count;
+      });
     }
 
     function resetLevelEconomy() {
@@ -1495,14 +1550,18 @@
         }
       }
 
-      // Build pixels from P2's selected character image (original colors)
+      // Build pixels from P2's selected character image (flipped horizontally to face P1)
       const off2 = document.createElement("canvas");
       off2.width = TWO_PLAYER_PFP_GRID;
       off2.height = TWO_PLAYER_PFP_GRID;
       const offCtx2 = off2.getContext("2d");
       offCtx2.imageSmoothingEnabled = false;
       offCtx2.clearRect(0, 0, TWO_PLAYER_PFP_GRID, TWO_PLAYER_PFP_GRID);
-      offCtx2.drawImage(charSelection.p2Image, 0, 0, TWO_PLAYER_PFP_GRID, TWO_PLAYER_PFP_GRID);
+      // Flip horizontally: scale(-1, 1) and translate
+      offCtx2.save();
+      offCtx2.scale(-1, 1);
+      offCtx2.drawImage(charSelection.p2Image, -TWO_PLAYER_PFP_GRID, 0, TWO_PLAYER_PFP_GRID, TWO_PLAYER_PFP_GRID);
+      offCtx2.restore();
       const imgData2 = offCtx2.getImageData(0, 0, TWO_PLAYER_PFP_GRID, TWO_PLAYER_PFP_GRID).data;
 
       for (let y = 0; y < TWO_PLAYER_PFP_GRID; y++) {
@@ -1559,23 +1618,77 @@
       p1PixelsEl.textContent = p1.pixelCount;
       p2PixelsEl.textContent = p2.pixelCount;
 
-      // Highlight active player
+      // Highlight current turn player (not just active pulling)
       p1Card.classList.remove("active");
       p2Card.classList.remove("active");
-      if (twoPlayerState.activePlayer === "player1") {
+      if (twoPlayerState.currentTurn === "player1") {
         p1Card.classList.add("active");
-      } else if (twoPlayerState.activePlayer === "player2") {
+      } else if (twoPlayerState.currentTurn === "player2") {
         p2Card.classList.add("active");
       }
+
+      // Update chamber UI for two-player mode
+      updateTwoPlayerChamberUI();
+    }
+
+    function updateTwoPlayerChamberUI() {
+      if (!chamberSlotsEl) return;
+      chamberSlotsEl.innerHTML = "";
+
+      const currentPlayer = twoPlayerState.currentTurn;
+      const chamber = twoPlayerInventory[currentPlayer].chamberQueue;
+
+      if (chamber.length === 0) {
+        const slot = document.createElement("div");
+        slot.className = "chamber-slot";
+        slot.style.width = "14px";
+        slot.style.height = "14px";
+        slot.style.background = "#374151";
+        slot.style.opacity = "0.5";
+        slot.title = "Empty - buy ammo!";
+        chamberSlotsEl.appendChild(slot);
+        return;
+      }
+
+      chamber.forEach((id, index) => {
+        const bullet = bulletDefs[id];
+        const slot = document.createElement("div");
+        slot.className = "chamber-slot";
+        if (index === 0) slot.classList.add("next");
+
+        const base = 12;
+        const size = Math.round(base + Math.min(bullet.pixelCount / 20, 8));
+        slot.style.width = size + "px";
+        slot.style.height = size + "px";
+
+        const [r, g, b] = bullet.palette[0];
+        slot.style.background = `rgb(${r},${g},${b})`;
+        slot.title = `${bullet.name} (${bullet.pixelCount} pixels)`;
+
+        slot.addEventListener("click", () => {
+          if (index === 0) return;
+          const tmp = chamber[0];
+          chamber[0] = chamber[index];
+          chamber[index] = tmp;
+          updateTwoPlayerChamberUI();
+        });
+
+        chamberSlotsEl.appendChild(slot);
+      });
     }
 
     function resetTwoPlayerGame() {
       twoPlayerState.winner = null;
       twoPlayerState.gameOver = false;
       twoPlayerState.activePlayer = null;
+      twoPlayerState.currentTurn = "player1"; // P1 always starts
       projectiles = [];
       pixelParticles = [];
       floatingTexts = [];
+
+      // Reset inventories
+      twoPlayerInventory.player1.chamberQueue = [];
+      twoPlayerInventory.player2.chamberQueue = [];
 
       setupTwoPlayerLaunchers();
       buildTwoPlayerPixels();
@@ -1987,69 +2100,77 @@
     function pointerDownTwoPlayer(pos) {
       // Check if game is over
       if (twoPlayerState.gameOver) {
-        // Click to restart
-        resetTwoPlayerGame();
+        // Click to restart - reopen character select
+        openCharacterSelect();
         return;
       }
 
       const p1 = twoPlayerState.player1;
       const p2 = twoPlayerState.player2;
+      const currentTurn = twoPlayerState.currentTurn;
+      const currentPlayer = twoPlayerState[currentTurn];
 
-      // Check P1 arrow buttons
-      if (isPointInRect(pos.x, pos.y, p1.arrowUpBounds)) {
-        moveTwoPlayerLauncher("player1", "up");
-        return;
-      }
-      if (isPointInRect(pos.x, pos.y, p1.arrowDownBounds)) {
-        moveTwoPlayerLauncher("player1", "down");
-        return;
+      // Only allow current turn player to move their launcher
+      if (currentTurn === "player1") {
+        if (isPointInRect(pos.x, pos.y, p1.arrowUpBounds)) {
+          moveTwoPlayerLauncher("player1", "up");
+          return;
+        }
+        if (isPointInRect(pos.x, pos.y, p1.arrowDownBounds)) {
+          moveTwoPlayerLauncher("player1", "down");
+          return;
+        }
+      } else {
+        if (isPointInRect(pos.x, pos.y, p2.arrowUpBounds)) {
+          moveTwoPlayerLauncher("player2", "up");
+          return;
+        }
+        if (isPointInRect(pos.x, pos.y, p2.arrowDownBounds)) {
+          moveTwoPlayerLauncher("player2", "down");
+          return;
+        }
       }
 
-      // Check P2 arrow buttons
-      if (isPointInRect(pos.x, pos.y, p2.arrowUpBounds)) {
-        moveTwoPlayerLauncher("player2", "up");
-        return;
-      }
-      if (isPointInRect(pos.x, pos.y, p2.arrowDownBounds)) {
-        moveTwoPlayerLauncher("player2", "down");
-        return;
-      }
-
-      // If projectiles are flying, tap to detonate
+      // If projectiles are flying, tap to detonate (current player only)
       const hasActiveProjectiles = projectiles.some(p => p.active);
       if (hasActiveProjectiles) {
-        manualDetonate();
+        manualDetonateTwoPlayer();
         return;
       }
 
-      // Check which launcher was clicked (left half = P1, right half = P2)
-      const midX = width / 2;
-      const distToP1 = Math.hypot(pos.x - p1.launcher.x, pos.y - p1.launcher.y);
-      const distToP2 = Math.hypot(pos.x - p2.launcher.x, pos.y - p2.launcher.y);
+      // Only allow current turn player to start pulling
+      const launcher = currentPlayer.launcher;
+      const distToLauncher = Math.hypot(pos.x - launcher.x, pos.y - launcher.y);
 
-      // Check if near P1 launcher (left side)
-      if (pos.x < midX && (distToP1 < tileSize * 5 || pos.x <= tileSize * 8)) {
-        if (p1.pixelCount >= TWO_PLAYER_PIXEL_COST) {
-          isPullingBack = true;
-          twoPlayerState.activePlayer = "player1";
-          pullStartPos = { x: p1.launcher.x, y: p1.launcher.y };
-          pullCurrentPos = { x: pos.x, y: pos.y };
-          updateTwoPlayerUI();
+      // Check if near current player's launcher
+      const inLauncherZone = currentTurn === "player1"
+        ? (pos.x <= tileSize * 8)
+        : (pos.x >= width - tileSize * 8);
+
+      if (distToLauncher < tileSize * 5 || inLauncherZone) {
+        // Check if player has ammo in chamber
+        const chamber = twoPlayerInventory[currentTurn].chamberQueue;
+        if (chamber.length === 0) {
+          // No ammo - flash the shop
+          ammoReminderTimer = 60;
+          return;
         }
-        return;
-      }
 
-      // Check if near P2 launcher (right side)
-      if (pos.x >= midX && (distToP2 < tileSize * 5 || pos.x >= width - tileSize * 8)) {
-        if (p2.pixelCount >= TWO_PLAYER_PIXEL_COST) {
-          isPullingBack = true;
-          twoPlayerState.activePlayer = "player2";
-          pullStartPos = { x: p2.launcher.x, y: p2.launcher.y };
-          pullCurrentPos = { x: pos.x, y: pos.y };
-          updateTwoPlayerUI();
-        }
-        return;
+        isPullingBack = true;
+        twoPlayerState.activePlayer = currentTurn;
+        pullStartPos = { x: launcher.x, y: launcher.y };
+        pullCurrentPos = { x: pos.x, y: pos.y };
       }
+    }
+
+    function manualDetonateTwoPlayer() {
+      projectiles.forEach(p => {
+        if (p.active && p.bullet) {
+          p.active = false;
+          applyTwoPlayerExplosion(p.x, p.y, p.shooter, p.bullet);
+        }
+      });
+      projectiles = projectiles.filter(p => p.active);
     }
 
     function pointerMove(evt) {
@@ -2103,59 +2224,73 @@
       const pullDist = Math.hypot(dx, dy);
 
       twoPlayerState.activePlayer = null;
-      updateTwoPlayerUI();
 
-      if (pullDist < 20) return;
-
-      const player = twoPlayerState[activePlayer];
-
-      // Check if player has enough pixels
-      if (player.pixelCount < TWO_PLAYER_PIXEL_COST) return;
-
-      // Consume pixels as ammo cost
-      consumePlayerPixels(player, TWO_PLAYER_PIXEL_COST);
-
-      // Check for self-elimination
-      if (player.pixelCount === 0) {
-        const opponentKey = activePlayer === "player1" ? "player2" : "player1";
-        twoPlayerState.winner = opponentKey;
-        twoPlayerState.gameOver = true;
+      if (pullDist < 20) {
+        updateTwoPlayerUI();
         return;
       }
+
+      const player = twoPlayerState[activePlayer];
+      const chamber = twoPlayerInventory[activePlayer].chamberQueue;
+
+      // Get bullet from chamber
+      if (chamber.length === 0) {
+        updateTwoPlayerUI();
+        return;
+      }
+
+      const bulletId = chamber.shift();
+      const bullet = bulletDefs[bulletId];
 
       const clampedDist = Math.min(pullDist, MAX_PULL_DISTANCE);
       const power = (clampedDist / MAX_PULL_DISTANCE) * MAX_POWER;
       const angle = Math.atan2(dy, dx);
 
       // Fire projectile for this player
-      fireTwoPlayerProjectile(activePlayer, power, angle);
+      fireTwoPlayerProjectile(activePlayer, bullet, power, angle);
+
+      // Switch turns after firing
+      twoPlayerState.currentTurn = activePlayer === "player1" ? "player2" : "player1";
+      updateTwoPlayerUI();
     }
 
-    function fireTwoPlayerProjectile(playerKey, power, angle) {
+    function fireTwoPlayerProjectile(playerKey, bullet, power, angle) {
       const player = twoPlayerState[playerKey];
 
-      // Create a simple bullet definition for two-player mode
-      const bullet = {
-        id: "two_player",
-        name: "Shot",
-        radiusCells: 1.5,
-        pixelCount: 1,
-        isSpread: false,
-        palette: playerKey === "player1"
-          ? [[59, 130, 246], [37, 99, 235], [29, 78, 216]]
-          : [[239, 68, 68], [220, 38, 38], [185, 28, 28]]
-      };
+      if (bullet.isSpread && bullet.pixelCount > 1) {
+        // Spread shot - fire multiple projectiles
+        const spreadAngle = Math.PI / 6; // 30 degrees total spread
+        const numProjectiles = Math.min(bullet.pixelCount, 5); // Cap at 5 for spread
 
-      projectiles.push({
-        x: player.launcher.x,
-        y: player.launcher.y,
-        vx: Math.cos(angle) * power,
-        vy: Math.sin(angle) * power,
-        size: tileSize,
-        bullet: bullet,
-        active: true,
-        shooter: playerKey
-      });
+        for (let i = 0; i < numProjectiles; i++) {
+          const spreadOffset = spreadAngle * ((i / (numProjectiles - 1)) - 0.5);
+          const finalAngle = angle + spreadOffset;
+          const speedVar = 0.9 + Math.random() * 0.2;
+
+          projectiles.push({
+            x: player.launcher.x + (Math.random() - 0.5) * 4,
+            y: player.launcher.y + (Math.random() - 0.5) * 4,
+            vx: Math.cos(finalAngle) * power * speedVar,
+            vy: Math.sin(finalAngle) * power * speedVar,
+            size: tileSize * 0.8,
+            bullet: bullet,
+            active: true,
+            shooter: playerKey
+          });
+        }
+      } else {
+        // Single projectile
+        projectiles.push({
+          x: player.launcher.x,
+          y: player.launcher.y,
+          vx: Math.cos(angle) * power,
+          vy: Math.sin(angle) * power,
+          size: tileSize,
+          bullet: bullet,
+          active: true,
+          shooter: playerKey
+        });
+      }
     }
 
     // ==========================================================================
@@ -2644,6 +2779,14 @@
         ft.life--;
       }
       floatingTexts = floatingTexts.filter(ft => ft.life > 0);
+
+      // Ammo reminder for two-player mode
+      if (ammoReminderTimer > 0) {
+        ammoReminderTimer--;
+        bombShopWrapper.classList.add("highlight");
+      } else {
+        bombShopWrapper.classList.remove("highlight");
+      }
     }
 
     function updateTwoPlayerGravity(player) {
@@ -2986,8 +3129,31 @@
       drawProjectiles();
       drawParticles();
       drawFloatingTexts();
+      drawTwoPlayerTurnIndicator();
       drawTwoPlayerPullback();
       drawTwoPlayerGameOver();
+    }
+
+    function drawTwoPlayerTurnIndicator() {
+      if (twoPlayerState.gameOver) return;
+
+      const currentTurn = twoPlayerState.currentTurn;
+      const player = twoPlayerState[currentTurn];
+      const launcher = player.launcher;
+
+      // Draw glowing indicator around current player's launcher
+      const s = tileSize * 2.5;
+      ctx.strokeStyle = currentTurn === "player1" ? "#3b82f6" : "#ef4444";
+      ctx.lineWidth = 3;
+      ctx.setLineDash([5, 5]);
+      ctx.strokeRect(launcher.x - s/2, launcher.y - s/2, s, s);
+      ctx.setLineDash([]);
+
+      // Draw "YOUR TURN" text
+      ctx.fillStyle = currentTurn === "player1" ? "#60a5fa" : "#f87171";
+      ctx.font = `bold ${Math.round(tileSize * 0.8)}px monospace`;
+      ctx.textAlign = "center";
+      ctx.fillText("YOUR TURN!", launcher.x, launcher.y - tileSize * 3);
     }
 
     function drawTwoPlayerPedestals() {
