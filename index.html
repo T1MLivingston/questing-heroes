@@ -221,15 +221,11 @@
       margin-top: 2px;
     }
 
-    /* Bomb dot colors */
-    .bomb-shop button[data-type="b1"] .bomb-dot { background: #93c5fd; }
-    .bomb-shop button[data-type="b2"] .bomb-dot { background: #ddd6fe; }
-    .bomb-shop button[data-type="b3"] .bomb-dot { background: #fed7aa; }
-    .bomb-shop button[data-type="b4"] .bomb-dot { background: #5eead4; }
-    .bomb-shop button[data-type="b5"] .bomb-dot { background: #fecaca; }
-    .bomb-shop button[data-type="b6"] .bomb-dot { background: #facc15; }
-    .bomb-shop button[data-type="b7"] .bomb-dot { background: #f9a8d4; }
-    .bomb-shop button[data-type="b8"] .bomb-dot { background: #e5e7eb; }
+    /* Bomb dot colors - now only 4 types */
+    .bomb-shop button[data-type="base"] .bomb-dot { background: #93c5fd; }
+    .bomb-shop button[data-type="bomb"] .bomb-dot { background: #fed7aa; }
+    .bomb-shop button[data-type="spread"] .bomb-dot { background: #ddd6fe; }
+    .bomb-shop button[data-type="mega"] .bomb-dot { background: #fecaca; }
 
     .bomb-shop button.selected {
       border-color: #f97316;
@@ -366,7 +362,7 @@
 
   <div class="instructions-panel">
     <strong>Pull back</strong> on the launcher and <strong>release</strong> to fire!
-    No ammo? You'll fire a single pixel. Tap canvas while flying to detonate early.
+    Use arrows to move launcher. Tap canvas while flying to detonate early.
   </div>
 
   <div class="bomb-shop-wrapper" id="shopWrapper">
@@ -380,21 +376,22 @@
       <h2>How to Play</h2>
       <ul>
         <li>You start with <strong>100 pixels</strong> as currency.</li>
-        <li>Tap a pill in the shop to <strong>buy</strong> it. It goes into your chamber.</li>
+        <li>Tap a bullet in the shop to <strong>buy</strong> it. It goes into your chamber.</li>
         <li>The first item in the chamber is your <strong>next shot</strong>. Tap other slots to reorder.</li>
-        <li><strong>Pull back</strong> on the launcher (right side) and <strong>release</strong> to fire.</li>
+        <li><strong>Pull back</strong> on the launcher and <strong>release</strong> to fire.</li>
+        <li>Use the <strong>arrow buttons</strong> to move the launcher up/down.</li>
         <li>Pull further = more power. Direction follows your pull.</li>
-        <li>If chamber is empty, you fire a <strong>default 1-pixel shot</strong> for free.</li>
         <li>Tap the canvas while a shot is flying to <strong>detonate early</strong>.</li>
         <li>Destroying PFP pixels <strong>earns</strong> pixels (yellow +N).</li>
         <li>Destroying red obstacles <strong>costs</strong> pixels (red -N).</li>
-        <li><strong>Gravity</strong>: When pixels are destroyed, pixels above will fall!</li>
+        <li><strong>Later levels</strong> have moving targets!</li>
       </ul>
-      <h2 style="margin-top:12px;">Pill Types</h2>
+      <h2 style="margin-top:12px;">Bullet Types</h2>
       <ul>
-        <li><strong>Default</strong>: 1 pixel (free when no ammo)</li>
-        <li><strong>Spread pills</strong>: Fire multiple pixels in a spread pattern</li>
-        <li>Higher-tier pills fire more pixels: 10, 20, 40, 80, 160, 320, 640</li>
+        <li><strong>Base</strong>: 10 pixels (unlocked from start)</li>
+        <li><strong>Bomb</strong>: 20 pixels (unlocked from start)</li>
+        <li><strong>Spread</strong>: 50 pixels (unlocks at level 3)</li>
+        <li><strong>Mega</strong>: 100 pixels (unlocks at level 5)</li>
       </ul>
       <button id="closeMenu">Close</button>
     </div>
@@ -404,17 +401,58 @@
     // ==========================================================================
     // PIXEL PFP SLINGSHOT - Main Game Code
     // ==========================================================================
-    // Key sections:
-    // - PULL-BACK FIRING: pointerDown/pointerMove/pointerUp + drawPullback()
-    // - AMMO & PIXELCOUNT: bombDefsArray with pixelCount property
-    // - GRAVITY SYSTEM: applyGravityToTargets() called after explosions
-    // - MOBILE/TOUCH: unified pointer handlers for mouse + touch
+    // CONFIGURATION CONSTANTS - Easy to tweak!
     // ==========================================================================
 
+    // ---- LAUNCHER POSITION ----
+    // How far from the right edge the launcher zone starts (as % of width)
+    const LAUNCHER_ZONE_PERCENT = 0.20;  // Moved left (was ~0.14)
+    const LAUNCHER_ARROW_STEP = 30;      // Pixels to move per arrow click
+
+    // ---- BULLET PIXEL COUNTS (edit these to rebalance) ----
+    const BULLET_PIXELS = {
+      base: 10,    // Base bullet
+      bomb: 20,    // Bigger bomb
+      spread: 50,  // Spread shot
+      mega: 100    // Biggest weapon
+    };
+
+    // ---- BULLET UNLOCK LEVELS (edit to change progression) ----
+    const BULLET_UNLOCK_LEVELS = {
+      base: 1,     // Available from start
+      bomb: 1,     // Available from start
+      spread: 3,   // Unlocks at level 3
+      mega: 5      // Unlocks at level 5
+    };
+
+    // ---- EXPLOSION RADIUS MULTIPLIERS (edit to adjust power) ----
+    const EXPLOSION_RADIUS = {
+      base: 1.5,   // Small radius
+      bomb: 2.0,   // Medium radius
+      spread: 1.8, // Spread has moderate radius per projectile
+      mega: 2.5    // Larger radius but not overwhelming
+    };
+
+    // ---- MOVING TARGET SETTINGS ----
+    const MOVING_TARGET_START_LEVEL = 4;  // Level when targets start moving
+    const MOVING_TARGET_BASE_SPEED = 0.5; // Base speed (pixels per frame)
+    const MOVING_TARGET_SPEED_INCREMENT = 0.1; // Speed increase per level
+
+    // ---- GRAVITY SETTINGS ----
+    const GRAVITY_PROJECTILE = 0.45;
+    const GRAVITY_BLOCK = 0.35;
+    const GRAVITY_FALL_DELAY = 3;
+
+    // ---- PULL-BACK SETTINGS ----
+    const MAX_PULL_DISTANCE = 150;
+    const MAX_POWER = 26;
+
+    // ==========================================================================
+    // DOM ELEMENTS
+    // ==========================================================================
     const canvas = document.getElementById("game");
     const ctx = canvas.getContext("2d");
 
-    // DOM elements
     const levelEl = document.getElementById("level");
     const targetNameEl = document.getElementById("targetName");
     const creditsEl = document.getElementById("credits");
@@ -435,7 +473,9 @@
       if (e.target === menuOverlay) menuOverlay.classList.remove("open");
     });
 
-    // ---------- PFP list ----------
+    // ==========================================================================
+    // PFP LIST
+    // ==========================================================================
     const PFP_LIST = [
       { name: "Bat", url: "https://cdn.prod.website-files.com/64aa957da446d8dc44869f81/691be24e3333bf67710ef8d0_c_151.png" },
       { name: "Scythe", url: "https://cdn.prod.website-files.com/64aa957da446d8dc44869f81/691be24ee1e3bdf8eb1d3d97_c_7130.png" },
@@ -477,122 +517,58 @@
     let floatingTexts = [];
 
     // ==========================================================================
-    // BOMB/PILL DEFINITIONS WITH PIXEL COUNTS
+    // BULLET/WEAPON DEFINITIONS - Only 4 types!
     // ==========================================================================
-    // pixelCount progression: 1 (default), 10, 20, 40, 80, 160, 320, 640
-    // isSpread: fires pixels in a spread pattern
-    // isClickableActivation: special tap-to-activate behavior (future use)
-    // ==========================================================================
-    const bombDefsArray = [
+    const bulletDefsArray = [
       {
-        id: "b1",
-        name: "Basic",
-        cost: 1,
-        radiusCells: 1.5,
-        unlockLevel: 1,
-        pixelCount: 1,        // Base: 1 pixel
+        id: "base",
+        name: "Base",
+        cost: 3,
+        radiusCells: EXPLOSION_RADIUS.base,
+        unlockLevel: BULLET_UNLOCK_LEVELS.base,
+        pixelCount: BULLET_PIXELS.base,
         isSpread: false,
-        isClickableActivation: false,
         palette: [[147, 197, 253], [59, 130, 246], [37, 99, 235]]
       },
       {
-        id: "b2",
-        name: "Scatter",
-        cost: 5,
-        radiusCells: 2.0,
-        unlockLevel: 1,
-        pixelCount: 10,       // 10 pixels spread
-        isSpread: true,
-        isClickableActivation: false,
-        palette: [[233, 213, 255], [192, 132, 252], [168, 85, 247]]
-      },
-      {
-        id: "b3",
-        name: "Burst",
-        cost: 10,
-        radiusCells: 2.5,
-        unlockLevel: 1,
-        pixelCount: 20,       // 20 pixels spread
-        isSpread: true,
-        isClickableActivation: false,
+        id: "bomb",
+        name: "Bomb",
+        cost: 6,
+        radiusCells: EXPLOSION_RADIUS.bomb,
+        unlockLevel: BULLET_UNLOCK_LEVELS.bomb,
+        pixelCount: BULLET_PIXELS.bomb,
+        isSpread: false,
         palette: [[254, 215, 170], [251, 146, 60], [234, 88, 12]]
       },
       {
-        id: "b4",
-        name: "Cluster",
-        cost: 18,
-        radiusCells: 3.0,
-        unlockLevel: 2,
-        pixelCount: 40,       // 40 pixels spread
+        id: "spread",
+        name: "Spread",
+        cost: 12,
+        radiusCells: EXPLOSION_RADIUS.spread,
+        unlockLevel: BULLET_UNLOCK_LEVELS.spread,
+        pixelCount: BULLET_PIXELS.spread,
         isSpread: true,
-        isClickableActivation: false,
-        palette: [[45, 212, 191], [20, 184, 166], [13, 148, 136]]
+        palette: [[233, 213, 255], [192, 132, 252], [168, 85, 247]]
       },
       {
-        id: "b5",
-        name: "Heavy",
-        cost: 30,
-        radiusCells: 3.5,
-        unlockLevel: 3,
-        pixelCount: 80,       // 80 pixels spread
+        id: "mega",
+        name: "Mega",
+        cost: 25,
+        radiusCells: EXPLOSION_RADIUS.mega,
+        unlockLevel: BULLET_UNLOCK_LEVELS.mega,
+        pixelCount: BULLET_PIXELS.mega,
         isSpread: true,
-        isClickableActivation: false,
         palette: [[248, 113, 113], [239, 68, 68], [220, 38, 38]]
-      },
-      {
-        id: "b6",
-        name: "Shock",
-        cost: 50,
-        radiusCells: 4.0,
-        unlockLevel: 4,
-        pixelCount: 160,      // 160 pixels spread
-        isSpread: true,
-        isClickableActivation: false,
-        palette: [[252, 211, 77], [250, 204, 21], [202, 138, 4]]
-      },
-      {
-        id: "b7",
-        name: "Nova",
-        cost: 80,
-        radiusCells: 4.5,
-        unlockLevel: 5,
-        pixelCount: 320,      // 320 pixels spread
-        isSpread: true,
-        isClickableActivation: false,
-        palette: [[244, 114, 182], [236, 72, 153], [219, 39, 119]]
-      },
-      {
-        id: "b8",
-        name: "Omega",
-        cost: 120,
-        radiusCells: 5.0,
-        unlockLevel: 6,
-        pixelCount: 640,      // 640 pixels spread
-        isSpread: true,
-        isClickableActivation: false,
-        palette: [[248, 250, 252], [191, 219, 254], [129, 140, 248]]
       }
     ];
 
-    // Default shot when no ammo (free, 1 pixel)
-    const DEFAULT_SHOT = {
-      id: "default",
-      name: "Default",
-      cost: 0,
-      radiusCells: 1.2,
-      pixelCount: 1,
-      isSpread: false,
-      isClickableActivation: false,
-      palette: [[200, 200, 200], [150, 150, 150], [100, 100, 100]]
-    };
-
-    const bombDefs = {};
-    bombDefsArray.forEach(b => { bombDefs[b.id] = b; });
+    const bulletDefs = {};
+    bulletDefsArray.forEach(b => { bulletDefs[b.id] = b; });
 
     let inventory = {};
-    bombDefsArray.forEach(b => { inventory[b.id] = 0; });
+    bulletDefsArray.forEach(b => { inventory[b.id] = 0; });
 
-    let selectedBombId = "b1";
+    let selectedBulletId = "base";
     let chamberQueue = [];
 
     // ==========================================================================
@@ -602,7 +578,7 @@
     let height = 500;
     let tileSize = 10;
 
-    // Launcher
+    // Launcher (moved to the left)
     let launcherZoneX = 0;
     let launcherZoneWidth = 0;
     let launchTrackX = 0;
@@ -611,27 +587,27 @@
     let launchY = 0;
     const launchPoint = { x: 0, y: 0 };
 
+    // Arrow button bounds (for click detection)
+    let arrowUpBounds = { x: 0, y: 0, w: 0, h: 0 };
+    let arrowDownBounds = { x: 0, y: 0, w: 0, h: 0 };
+
     // Blocks (floor, pedestals, obstacles)
     const blocks = [];
 
-    // Projectiles (can be multiple for spread shots)
+    // Projectiles
     let projectiles = [];
 
-    // ==========================================================================
-    // PULL-BACK FIRING STATE
-    // ==========================================================================
+    // Pull-back state
     let isPullingBack = false;
     let pullStartPos = { x: 0, y: 0 };
     let pullCurrentPos = { x: 0, y: 0 };
-    const maxPullDistance = 150;
-    const maxPower = 26;
 
     // ==========================================================================
-    // GRAVITY SETTINGS (tweak these to adjust falling speed)
+    // MOVING TARGET STATE
     // ==========================================================================
-    const GRAVITY_PROJECTILE = 0.45;   // Gravity for flying projectiles
-    const GRAVITY_BLOCK = 0.35;        // Gravity for falling blocks/pixels
-    const GRAVITY_FALL_DELAY = 3;      // Frames before gravity kicks in after explosion
+    let targetMoving = false;
+    let targetVelocity = { x: 0, y: 0 };
+    let targetMoveDirection = 1; // 1 or -1 for horizontal bounce
 
     let shotsFired = 0;
     let targetsCleared = 0;
@@ -721,54 +697,53 @@
     }
 
     // ==========================================================================
-    // SHOP UI GENERATION
+    // SHOP UI GENERATION - Only 4 bullet types
     // ==========================================================================
     function generateShopUI() {
       bombShopEl.innerHTML = "";
 
-      bombDefsArray.forEach(bomb => {
+      bulletDefsArray.forEach(bullet => {
         const btn = document.createElement("button");
-        btn.setAttribute("data-type", bomb.id);
+        btn.setAttribute("data-type", bullet.id);
 
-        // Build label with special tags
         let specialTag = "";
-        if (bomb.isSpread && bomb.pixelCount > 1) {
-          specialTag = `<span class="special-tag">Spread x${bomb.pixelCount}</span>`;
-        }
-        if (bomb.isClickableActivation) {
-          specialTag += `<span class="special-tag">Tap to Activate</span>`;
+        if (bullet.isSpread) {
+          specialTag = `<span class="special-tag">Spread x${bullet.pixelCount}</span>`;
+        } else {
+          specialTag = `<span class="special-tag">${bullet.pixelCount} pixels</span>`;
         }
 
         btn.innerHTML = `
           <span class="bomb-dot"></span>
           <span class="bomb-label">
-            <span class="pill-name">${bomb.name}</span>
-            <small>Lvl ${bomb.unlockLevel} • ${bomb.cost}px</small>
-            <small>Owned: <span class="owned" data-type="${bomb.id}">0</span></small>
+            <span class="pill-name">${bullet.name}</span>
+            <small>Lvl ${bullet.unlockLevel} | ${bullet.cost}px</small>
+            <small>Owned: <span class="owned" data-type="${bullet.id}">0</span></small>
             ${specialTag}
           </span>
         `;
 
-        btn.addEventListener("click", () => handleBombPurchase(bomb.id));
+        btn.addEventListener("click", () => handleBulletPurchase(bullet.id));
         bombShopEl.appendChild(btn);
       });
     }
 
-    function handleBombPurchase(id) {
-      const bomb = bombDefs[id];
+    function handleBulletPurchase(id) {
+      const bullet = bulletDefs[id];
       const currentLevel = currentPfpIndex + 1;
 
-      if (currentLevel < bomb.unlockLevel) return;
+      // Check if unlocked
+      if (currentLevel < bullet.unlockLevel) return;
 
-      const canAfford = credits >= bomb.cost;
+      const canAfford = credits >= bullet.cost;
 
       if (canAfford) {
-        credits -= bomb.cost;
+        credits -= bullet.cost;
         inventory[id] = (inventory[id] || 0) + 1;
         chamberQueue.push(id);
       }
 
-      selectedBombId = id;
+      selectedBulletId = id;
       updateShopUI();
     }
 
@@ -780,36 +755,34 @@
       chamberSlotsEl.innerHTML = "";
 
       if (chamberQueue.length === 0) {
-        // Show empty slot indicator
         const slot = document.createElement("div");
         slot.className = "chamber-slot";
         slot.style.width = "14px";
         slot.style.height = "14px";
         slot.style.background = "#374151";
         slot.style.opacity = "0.5";
-        slot.title = "Empty - will use default shot";
+        slot.title = "Empty chamber";
         chamberSlotsEl.appendChild(slot);
         return;
       }
 
       chamberQueue.forEach((id, index) => {
-        const bomb = bombDefs[id];
+        const bullet = bulletDefs[id];
         const slot = document.createElement("div");
         slot.className = "chamber-slot";
         if (index === 0) slot.classList.add("next");
 
         const base = 12;
-        const size = Math.round(base + Math.min(bomb.pixelCount / 50, 8));
+        const size = Math.round(base + Math.min(bullet.pixelCount / 20, 8));
         slot.style.width = size + "px";
         slot.style.height = size + "px";
 
-        const [r, g, b] = bomb.palette[0];
+        const [r, g, b] = bullet.palette[0];
         slot.style.background = `rgb(${r},${g},${b})`;
-        slot.title = `${bomb.name} (x${bomb.pixelCount} pixels)`;
+        slot.title = `${bullet.name} (${bullet.pixelCount} pixels)`;
 
         slot.addEventListener("click", () => {
           if (index === 0) return;
-          // Swap with first position
           const tmp = chamberQueue[0];
           chamberQueue[0] = chamberQueue[index];
           chamberQueue[index] = tmp;
@@ -824,7 +797,6 @@
       creditsEl.textContent = String(credits);
       scoreEl.textContent = String(score);
 
-      // Update owned counts
       document.querySelectorAll(".owned").forEach(span => {
         const id = span.getAttribute("data-type");
         span.textContent = inventory[id] || 0;
@@ -832,12 +804,11 @@
 
       const currentLevel = currentPfpIndex + 1;
 
-      // Update button states
       document.querySelectorAll(".bomb-shop button").forEach(btn => {
         const id = btn.getAttribute("data-type");
-        const bomb = bombDefs[id];
-        const unlocked = currentLevel >= bomb.unlockLevel;
-        const canAfford = credits >= bomb.cost;
+        const bullet = bulletDefs[id];
+        const unlocked = currentLevel >= bullet.unlockLevel;
+        const canAfford = credits >= bullet.cost;
 
         btn.classList.remove("locked", "disabled", "selected");
 
@@ -847,12 +818,11 @@
           btn.classList.add("disabled");
         }
 
-        if (id === selectedBombId) {
+        if (id === selectedBulletId) {
           btn.classList.add("selected");
         }
       });
 
-      // Check if out of ammo
       const hasAmmo = chamberQueue.length > 0;
       if (!hasAmmo && ammoReminderTimer <= 0) {
         ammoReminderTimer = 60;
@@ -862,24 +832,23 @@
     }
 
     function resetLevelEconomy() {
-      bombDefsArray.forEach(b => { inventory[b.id] = 0; });
+      bulletDefsArray.forEach(b => { inventory[b.id] = 0; });
       chamberQueue = [];
-      selectedBombId = "b1";
+      selectedBulletId = "base";
       updateShopUI();
     }
 
     // ==========================================================================
-    // GET NEXT BOMB OR DEFAULT SHOT
+    // GET NEXT BULLET FROM QUEUE
     // ==========================================================================
-    function getNextBombFromQueue() {
+    function getNextBulletFromQueue() {
       if (chamberQueue.length === 0) {
-        // No ammo - return default shot (free, 1 pixel)
-        return DEFAULT_SHOT;
+        return null; // No ammo - can't fire
       }
       const id = chamberQueue.shift();
       inventory[id] = Math.max(0, (inventory[id] || 0) - 1);
       updateShopUI();
-      return bombDefs[id];
+      return bulletDefs[id];
     }
 
     function grantPixels(delta, cx, cy) {
@@ -892,20 +861,51 @@
     }
 
     // ==========================================================================
-    // CANVAS SETUP
+    // LAUNCHER ARROW MOVEMENT
+    // ==========================================================================
+    function moveLauncherUp() {
+      const minY = launchTrackTopY + tileSize * 2;
+      launchY = Math.max(minY, launchY - LAUNCHER_ARROW_STEP);
+      launchPoint.y = launchY;
+    }
+
+    function moveLauncherDown() {
+      const maxY = launchTrackBottomY - tileSize * 2;
+      launchY = Math.min(maxY, launchY + LAUNCHER_ARROW_STEP);
+      launchPoint.y = launchY;
+    }
+
+    // ==========================================================================
+    // CANVAS SETUP - Launcher moved to the left
     // ==========================================================================
     function setupLauncherTrack() {
+      // Launcher zone is now further left (LAUNCHER_ZONE_PERCENT controls this)
       launcherZoneWidth = Math.max(tileSize * 8, width * 0.14);
-      launcherZoneX = width - launcherZoneWidth;
+      launcherZoneX = width - width * LAUNCHER_ZONE_PERCENT;
 
-      launchTrackX = launcherZoneX + launcherZoneWidth * 0.5;
-      launchTrackTopY = tileSize * 3;
+      launchTrackX = launcherZoneX + launcherZoneWidth * 0.3;
+      launchTrackTopY = tileSize * 4;
       launchTrackBottomY = groundY - tileSize * 2;
 
       launchY = (launchTrackTopY + launchTrackBottomY) / 2;
 
       launchPoint.x = launchTrackX;
       launchPoint.y = launchY;
+
+      // Setup arrow button bounds (for click detection)
+      const arrowSize = tileSize * 3;
+      arrowUpBounds = {
+        x: launchTrackX - arrowSize / 2,
+        y: launchTrackTopY - arrowSize,
+        w: arrowSize,
+        h: arrowSize
+      };
+      arrowDownBounds = {
+        x: launchTrackX - arrowSize / 2,
+        y: launchTrackBottomY,
+        w: arrowSize,
+        h: arrowSize
+      };
     }
 
     function resizeCanvas() {
@@ -940,6 +940,18 @@
       isPullingBack = false;
       resetLevelEconomy();
       destroyPctEl.textContent = "0";
+
+      // Setup moving target for later levels
+      const currentLevel = currentPfpIndex + 1;
+      targetMoving = currentLevel >= MOVING_TARGET_START_LEVEL;
+      if (targetMoving) {
+        const speed = MOVING_TARGET_BASE_SPEED +
+          (currentLevel - MOVING_TARGET_START_LEVEL) * MOVING_TARGET_SPEED_INCREMENT;
+        targetVelocity = { x: speed, y: 0 };
+        targetMoveDirection = 1;
+      } else {
+        targetVelocity = { x: 0, y: 0 };
+      }
 
       const pedestalColor = [248, 250, 252];
       const obstacleColor = [220, 38, 38];
@@ -981,7 +993,7 @@
         }
       }
 
-      // Floor (invisible physics)
+      // Floor
       const floorCols = Math.ceil(width / tileSize) + 4;
       addRow(-tileSize * 2, floorY, floorCols, floorColor, "floor", false, true);
 
@@ -1011,7 +1023,7 @@
 
       // Red obstacles
       const obstacleStartX = targetBounds.x + targetBounds.w + tileSize * 4;
-      const pillar1X = Math.round(((obstacleStartX + (width - tileSize * 8)) / 2) / tileSize) * tileSize;
+      const pillar1X = Math.round(((obstacleStartX + (launcherZoneX - tileSize * 4)) / 2) / tileSize) * tileSize;
       addColumn(pillar1X, baseY - tileSize * 2, 6, obstacleColor, "obstacle", true, false);
       addColumn(pillar1X + tileSize * 3, baseY - tileSize * 3, 4, obstacleColor, "obstacle", true, false);
 
@@ -1048,14 +1060,19 @@
       return { x, y };
     }
 
+    function isPointInRect(px, py, rect) {
+      return px >= rect.x && px <= rect.x + rect.w &&
+             py >= rect.y && py <= rect.y + rect.h;
+    }
+
     // ==========================================================================
-    // MANUAL DETONATE (tap while flying)
+    // MANUAL DETONATE
     // ==========================================================================
     function manualDetonate() {
       projectiles.forEach(p => {
-        if (p.active && p.bomb) {
+        if (p.active && p.bullet) {
           p.active = false;
-          applyExplosion(p.x, p.y, p.bomb);
+          applyExplosion(p.x, p.y, p.bullet);
         }
       });
       projectiles = projectiles.filter(p => p.active);
@@ -1068,6 +1085,16 @@
       evt.preventDefault();
       const pos = getPointerPosition(evt);
 
+      // Check arrow buttons first
+      if (isPointInRect(pos.x, pos.y, arrowUpBounds)) {
+        moveLauncherUp();
+        return;
+      }
+      if (isPointInRect(pos.x, pos.y, arrowDownBounds)) {
+        moveLauncherDown();
+        return;
+      }
+
       // If projectiles are flying, tap to detonate
       const hasActiveProjectiles = projectiles.some(p => p.active);
       if (hasActiveProjectiles) {
@@ -1077,9 +1104,9 @@
 
       // Check if clicking near the launcher zone to start pull-back
       const distToLauncher = Math.hypot(pos.x - launchPoint.x, pos.y - launchPoint.y);
-      const inLauncherZone = pos.x >= launcherZoneX - tileSize * 2;
+      const inLauncherZone = pos.x >= launcherZoneX - tileSize * 4;
 
-      if (distToLauncher < tileSize * 4 || inLauncherZone) {
+      if (distToLauncher < tileSize * 5 || inLauncherZone) {
         isPullingBack = true;
         pullStartPos = { x: launchPoint.x, y: launchPoint.y };
         pullCurrentPos = { x: pos.x, y: pos.y };
@@ -1099,26 +1126,25 @@
       evt.preventDefault();
       isPullingBack = false;
 
-      // Calculate pull vector
       const dx = pullStartPos.x - pullCurrentPos.x;
       const dy = pullStartPos.y - pullCurrentPos.y;
       const pullDist = Math.hypot(dx, dy);
 
-      // Need minimum pull to fire
       if (pullDist < 20) return;
 
-      // Get bomb (or default if no ammo)
-      const bomb = getNextBombFromQueue();
+      // Get bullet from queue
+      const bullet = getNextBulletFromQueue();
+      if (!bullet) {
+        // No ammo - flash the shop
+        ammoReminderTimer = 60;
+        return;
+      }
 
-      // Calculate power based on pull distance
-      const clampedDist = Math.min(pullDist, maxPullDistance);
-      const power = (clampedDist / maxPullDistance) * maxPower;
-
-      // Direction is opposite of pull (slingshot style)
+      const clampedDist = Math.min(pullDist, MAX_PULL_DISTANCE);
+      const power = (clampedDist / MAX_PULL_DISTANCE) * MAX_POWER;
       const angle = Math.atan2(dy, dx);
 
-      // Fire projectile(s) based on pixelCount
-      fireProjectiles(bomb, power, angle);
+      fireProjectiles(bullet, power, angle);
 
       shotsFired++;
       shotsEl.textContent = String(shotsFired);
@@ -1127,10 +1153,10 @@
     // ==========================================================================
     // FIRE PROJECTILES (handles spread shots)
     // ==========================================================================
-    function fireProjectiles(bomb, power, angle) {
-      const count = bomb.pixelCount || 1;
+    function fireProjectiles(bullet, power, angle) {
+      const count = bullet.pixelCount || 10;
 
-      if (count === 1 || !bomb.isSpread) {
+      if (!bullet.isSpread) {
         // Single projectile
         projectiles.push({
           x: launchPoint.x,
@@ -1138,16 +1164,17 @@
           vx: Math.cos(angle) * power,
           vy: Math.sin(angle) * power,
           size: tileSize,
-          bomb: bomb,
+          bullet: bullet,
           active: true
         });
       } else {
         // Spread shot - fan pattern
-        const spreadAngle = Math.PI / 6; // 30 degrees total spread
-        const angleStep = spreadAngle / Math.max(1, count - 1);
+        const spreadAngle = Math.PI / 5; // 36 degrees total spread
+        const projectileCount = Math.min(count, 15); // Cap visual projectiles
+        const angleStep = spreadAngle / Math.max(1, projectileCount - 1);
         const startAngle = angle - spreadAngle / 2;
 
-        for (let i = 0; i < count; i++) {
+        for (let i = 0; i < projectileCount; i++) {
           const a = startAngle + angleStep * i;
           const speedVariation = 0.85 + Math.random() * 0.3;
 
@@ -1157,7 +1184,7 @@
             vx: Math.cos(a) * power * speedVariation,
             vy: Math.sin(a) * power * speedVariation,
             size: Math.max(3, tileSize * 0.6),
-            bomb: bomb,
+            bullet: bullet,
             active: true
           });
         }
@@ -1187,19 +1214,16 @@
     }
 
     // ==========================================================================
-    // GRAVITY SYSTEM - Apply to target pixels after explosion
+    // GRAVITY SYSTEM
     // ==========================================================================
     function applyGravityToTargets() {
-      // Mark pixels above destroyed areas as dynamic
       for (const block of targetBlocks) {
         if (!block.alive || block.dynamic) continue;
 
-        // Check if there's empty space below
         const belowY = block.y + block.h;
         let hasSupport = belowY >= lavaY;
 
         if (!hasSupport) {
-          // Check for any block directly below
           for (const other of targetBlocks) {
             if (!other.alive || other === block) continue;
             if (other.y === belowY &&
@@ -1212,7 +1236,6 @@
         }
 
         if (!hasSupport) {
-          // Check blocks array too
           for (const other of blocks) {
             if (!other.alive) continue;
             const otherTop = other.y;
@@ -1238,8 +1261,8 @@
     // ==========================================================================
     // EXPLOSION HANDLING
     // ==========================================================================
-    function applyExplosion(cx, cy, bomb) {
-      const radius = bomb.radiusCells * tileSize;
+    function applyExplosion(cx, cy, bullet) {
+      const radius = bullet.radiusCells * tileSize;
       const radiusSq = radius * radius;
 
       let hadAliveTarget = targetBlocks.some(b => b.alive);
@@ -1273,10 +1296,8 @@
       affectBlocks(blocks, false);
       affectBlocks(targetBlocks, true);
 
-      // Apply gravity to remaining pixels
       applyGravityToTargets();
-
-      spawnBombPixels(cx, cy, bomb);
+      spawnBulletPixels(cx, cy, bullet);
 
       if (netDelta !== 0) {
         grantPixels(netDelta, cx, cy);
@@ -1291,15 +1312,15 @@
       }
     }
 
-    function spawnBombPixels(cx, cy, bomb) {
-      const colors = bomb.palette;
-      const radius = bomb.radiusCells * tileSize;
-      const count = Math.round(20 + radius * 0.5);
+    function spawnBulletPixels(cx, cy, bullet) {
+      const colors = bullet.palette;
+      const radius = bullet.radiusCells * tileSize;
+      const count = Math.round(15 + radius * 0.4);
 
       for (let i = 0; i < count; i++) {
         const angle = Math.random() * Math.PI * 2;
-        const speed = radius * (0.02 + Math.random() * 0.05);
-        const size = Math.max(2, Math.round(tileSize * (0.3 + Math.random() * 0.5)));
+        const speed = radius * (0.02 + Math.random() * 0.04);
+        const size = Math.max(2, Math.round(tileSize * (0.3 + Math.random() * 0.4)));
         const [r, g, b] = colors[Math.floor(Math.random() * colors.length)];
 
         pixelParticles.push({
@@ -1341,9 +1362,40 @@
     }
 
     // ==========================================================================
+    // MOVING TARGET UPDATE
+    // ==========================================================================
+    function updateMovingTarget() {
+      if (!targetMoving || !targetBounds) return;
+
+      // Move the target bounds
+      targetBounds.x += targetVelocity.x * targetMoveDirection;
+
+      // Bounce off edges
+      const minX = tileSize * 2;
+      const maxX = launcherZoneX - targetBounds.w - tileSize * 6;
+
+      if (targetBounds.x <= minX) {
+        targetBounds.x = minX;
+        targetMoveDirection = 1;
+      } else if (targetBounds.x >= maxX) {
+        targetBounds.x = maxX;
+        targetMoveDirection = -1;
+      }
+
+      // Update all target block positions relative to bounds
+      for (const block of targetBlocks) {
+        if (!block.alive) continue;
+        block.x = targetBounds.x + block.gridX * pfpPixelSize;
+      }
+    }
+
+    // ==========================================================================
     // UPDATE LOOP
     // ==========================================================================
     function update() {
+      // Update moving target
+      updateMovingTarget();
+
       // Update projectiles
       for (const p of projectiles) {
         if (!p.active) continue;
@@ -1352,14 +1404,12 @@
         p.x += p.vx;
         p.y += p.vy;
 
-        // Check lava collision
         if (p.y + p.size / 2 >= lavaY) {
           p.active = false;
-          applyExplosion(p.x, p.y, p.bomb);
+          applyExplosion(p.x, p.y, p.bullet);
           continue;
         }
 
-        // Check block collisions
         const allBlocks = [
           ...blocks.filter(b => b.alive),
           ...targetBlocks.filter(b => b.alive).map(b => ({ ...b, w: b.w, h: b.h }))
@@ -1375,12 +1425,11 @@
 
           if (circleRectCollision(p, rect)) {
             p.active = false;
-            applyExplosion(p.x, p.y, p.bomb);
+            applyExplosion(p.x, p.y, p.bullet);
             break;
           }
         }
 
-        // Out of bounds
         if (p.x < -100 || p.x > width + 100 || p.y > height + 100) {
           p.active = false;
         }
@@ -1388,9 +1437,7 @@
 
       projectiles = projectiles.filter(p => p.active);
 
-      // ==========================================================================
-      // GRAVITY FOR DYNAMIC BLOCKS
-      // ==========================================================================
+      // Gravity for dynamic blocks
       for (const b of blocks) {
         if (!b.alive || !b.dynamic) continue;
 
@@ -1402,7 +1449,6 @@
         b.vy += GRAVITY_BLOCK;
         let newY = b.y + b.vy;
 
-        // Check for support below
         const supporters = [...blocks.filter(o => o.alive && o !== b), ...targetBlocks.filter(o => o.alive)];
 
         for (const s of supporters) {
@@ -1423,7 +1469,6 @@
 
         b.y = newY;
 
-        // Lava death
         if (b.y + b.size / 2 >= lavaY && b.kind !== "floor") {
           b.alive = false;
           spawnBlockShatter(b, false);
@@ -1433,9 +1478,7 @@
         }
       }
 
-      // ==========================================================================
-      // GRAVITY FOR TARGET PIXELS (falling when unsupported)
-      // ==========================================================================
+      // Gravity for target pixels
       for (const b of targetBlocks) {
         if (!b.alive || !b.dynamic) continue;
 
@@ -1447,7 +1490,6 @@
         b.vy += GRAVITY_BLOCK;
         let newY = b.y + b.vy;
 
-        // Check for support
         const supporters = [...blocks.filter(o => o.alive), ...targetBlocks.filter(o => o.alive && o !== b)];
 
         for (const s of supporters) {
@@ -1461,7 +1503,7 @@
             if (b.y + b.h <= sTop + 1 && newY + b.h >= sTop) {
               newY = sTop - b.h;
               b.vy = 0;
-              b.dynamic = false; // Stop falling when landed
+              b.dynamic = false;
               break;
             }
           }
@@ -1469,13 +1511,12 @@
 
         b.y = newY;
 
-        // Lava death - counts as destroyed (positive)
         if (b.y + b.h / 2 >= lavaY) {
           b.alive = false;
           spawnBlockShatter(b, true);
           grantPixels(1, b.x + b.w / 2, b.y);
           updateDestructionStats();
-          applyGravityToTargets(); // Check for more pixels to fall
+          applyGravityToTargets();
         }
       }
 
@@ -1543,9 +1584,9 @@
 
       // Launcher zone
       ctx.fillStyle = "rgba(15,23,42,0.95)";
-      ctx.fillRect(launcherZoneX, 0, launcherZoneWidth, groundY);
+      ctx.fillRect(launcherZoneX, 0, width - launcherZoneX, groundY);
 
-      // Launcher track
+      // Launcher track line
       ctx.beginPath();
       ctx.moveTo(launchTrackX, launchTrackTopY);
       ctx.lineTo(launchTrackX, launchTrackBottomY);
@@ -1562,7 +1603,6 @@
       ctx.fillStyle = lavaGrad;
       ctx.fillRect(0, lavaY, width, height - lavaY);
 
-      // Checker pattern
       ctx.globalAlpha = 0.3;
       ctx.fillStyle = "#fee2e2";
       for (let y = lavaY; y < height; y += tileSize) {
@@ -1575,6 +1615,9 @@
       ctx.globalAlpha = 1;
     }
 
+    // ==========================================================================
+    // DRAW LAUNCHER - Clean, no text
+    // ==========================================================================
     function drawLauncher() {
       const s = tileSize * 2;
 
@@ -1592,7 +1635,42 @@
     }
 
     // ==========================================================================
-    // DRAW PULL-BACK INDICATOR (slingshot visual)
+    // DRAW ARROW BUTTONS - Top and bottom of launcher track
+    // ==========================================================================
+    function drawArrowButtons() {
+      const arrowSize = tileSize * 1.5;
+
+      // Up arrow
+      ctx.fillStyle = "rgba(34,197,94,0.8)";
+      ctx.beginPath();
+      ctx.moveTo(launchTrackX, arrowUpBounds.y + arrowUpBounds.h * 0.2);
+      ctx.lineTo(launchTrackX - arrowSize, arrowUpBounds.y + arrowUpBounds.h * 0.8);
+      ctx.lineTo(launchTrackX + arrowSize, arrowUpBounds.y + arrowUpBounds.h * 0.8);
+      ctx.closePath();
+      ctx.fill();
+
+      // Up arrow border (hitbox indicator)
+      ctx.strokeStyle = "rgba(34,197,94,0.4)";
+      ctx.lineWidth = 2;
+      ctx.strokeRect(arrowUpBounds.x, arrowUpBounds.y, arrowUpBounds.w, arrowUpBounds.h);
+
+      // Down arrow
+      ctx.fillStyle = "rgba(34,197,94,0.8)";
+      ctx.beginPath();
+      ctx.moveTo(launchTrackX, arrowDownBounds.y + arrowDownBounds.h * 0.8);
+      ctx.lineTo(launchTrackX - arrowSize, arrowDownBounds.y + arrowDownBounds.h * 0.2);
+      ctx.lineTo(launchTrackX + arrowSize, arrowDownBounds.y + arrowDownBounds.h * 0.2);
+      ctx.closePath();
+      ctx.fill();
+
+      // Down arrow border (hitbox indicator)
+      ctx.strokeStyle = "rgba(34,197,94,0.4)";
+      ctx.lineWidth = 2;
+      ctx.strokeRect(arrowDownBounds.x, arrowDownBounds.y, arrowDownBounds.w, arrowDownBounds.h);
+    }
+
+    // ==========================================================================
+    // DRAW PULL-BACK INDICATOR
     // ==========================================================================
     function drawPullback() {
       if (!isPullingBack) return;
@@ -1603,7 +1681,7 @@
 
       if (dist < 10) return;
 
-      // Draw elastic band
+      // Elastic band
       ctx.beginPath();
       ctx.moveTo(launchPoint.x, launchPoint.y);
       ctx.lineTo(pullCurrentPos.x, pullCurrentPos.y);
@@ -1611,9 +1689,9 @@
       ctx.lineWidth = 3;
       ctx.stroke();
 
-      // Draw power indicator circle
-      const clampedDist = Math.min(dist, maxPullDistance);
-      const power = clampedDist / maxPullDistance;
+      // Power indicator
+      const clampedDist = Math.min(dist, MAX_PULL_DISTANCE);
+      const power = clampedDist / MAX_PULL_DISTANCE;
       const indicatorRadius = 8 + power * 12;
 
       ctx.beginPath();
@@ -1624,7 +1702,7 @@
       ctx.lineWidth = 2;
       ctx.stroke();
 
-      // Draw direction arrow (where shot will go)
+      // Direction arrow
       const angle = Math.atan2(dy, dx);
       const arrowLen = 30 + power * 40;
       const endX = launchPoint.x + Math.cos(angle) * arrowLen;
@@ -1648,7 +1726,7 @@
       ctx.lineTo(endX - headLen * Math.cos(angle + 0.4), endY - headLen * Math.sin(angle + 0.4));
       ctx.stroke();
 
-      // Power percentage text
+      // Power percentage
       ctx.fillStyle = "#fff";
       ctx.font = `${Math.round(tileSize * 0.9)}px monospace`;
       ctx.textAlign = "center";
@@ -1700,13 +1778,16 @@
       }
     }
 
-    function drawOutOfAmmoHint() {
-      if (chamberQueue.length > 0) return;
+    // ==========================================================================
+    // DRAW MOVING TARGET INDICATOR
+    // ==========================================================================
+    function drawMovingIndicator() {
+      if (!targetMoving) return;
 
+      ctx.fillStyle = "rgba(249,115,22,0.7)";
+      ctx.font = `${Math.round(tileSize * 0.7)}px monospace`;
       ctx.textAlign = "center";
-      ctx.fillStyle = "rgba(249,115,22,0.8)";
-      ctx.font = `${Math.round(tileSize * 0.8)}px monospace`;
-      ctx.fillText("Pull back to fire default shot", launchPoint.x, launchPoint.y + tileSize * 3);
+      ctx.fillText("MOVING TARGET!", targetBounds.x + targetBounds.w / 2, targetBounds.y - tileSize);
     }
 
     function render() {
@@ -1717,12 +1798,13 @@
       drawLava();
       drawBlocks();
       drawTarget();
+      drawMovingIndicator();
       drawLauncher();
+      drawArrowButtons();
       drawProjectiles();
       drawParticles();
       drawFloatingTexts();
       drawPullback();
-      drawOutOfAmmoHint();
     }
 
     function loop() {
