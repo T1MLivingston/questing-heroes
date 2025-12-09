@@ -65,46 +65,45 @@ Key state variables:
 - `isPullingBack` - Whether player is pulling back to fire
 - `pullStartPos` / `pullCurrentPos` - Pull-back positions for slingshot
 
-#### Pill/Bomb System
-8 pill types defined in `bombDefsArray` with pixel count progression:
+#### Bullet/Weapon System
+4 bullet types defined in `bulletDefsArray` (simplified and rebalanced):
 
 | ID | Name | Cost | Pixels | Spread | Unlock |
 |----|------|------|--------|--------|--------|
-| b1 | Basic | 1px | 1 | No | Level 1 |
-| b2 | Scatter | 5px | 10 | Yes | Level 1 |
-| b3 | Burst | 10px | 20 | Yes | Level 1 |
-| b4 | Cluster | 18px | 40 | Yes | Level 2 |
-| b5 | Heavy | 30px | 80 | Yes | Level 3 |
-| b6 | Shock | 50px | 160 | Yes | Level 4 |
-| b7 | Nova | 80px | 320 | Yes | Level 5 |
-| b8 | Omega | 120px | 640 | Yes | Level 6 |
+| base | Base | 3px | 10 | No | Level 1 |
+| bomb | Bomb | 6px | 20 | No | Level 1 |
+| spread | Spread | 12px | 50 | Yes | Level 3 |
+| mega | Mega | 25px | 100 | Yes | Level 5 |
 
-**Pill Properties:**
-- `pixelCount` - Number of projectiles fired (1, 10, 20, 40, 80, 160, 320, 640)
-- `isSpread` - Whether projectiles fan out in a spread pattern
-- `isClickableActivation` - Reserved for future tap-to-activate mechanics
-
-#### Default Shot
-When the chamber is empty, players can still fire using the **DEFAULT_SHOT**:
+**Configuration Constants** (at top of script for easy tweaking):
 ```javascript
-const DEFAULT_SHOT = {
-  id: "default",
-  name: "Default",
-  cost: 0,           // Free!
-  radiusCells: 1.2,
-  pixelCount: 1,
-  isSpread: false,
-  isClickableActivation: false,
-  palette: [[200, 200, 200], [150, 150, 150], [100, 100, 100]]
-};
+const BULLET_PIXELS = { base: 10, bomb: 20, spread: 50, mega: 100 };
+const BULLET_UNLOCK_LEVELS = { base: 1, bomb: 1, spread: 3, mega: 5 };
+const EXPLOSION_RADIUS = { base: 1.5, bomb: 2.0, spread: 1.8, mega: 2.5 };
 ```
+
+**Bullet Properties:**
+- `pixelCount` - Number of projectiles fired (10, 20, 50, 100)
+- `isSpread` - Whether projectiles fan out in a spread pattern
+- `radiusCells` - Explosion radius multiplier
 
 #### Chamber Queue System
 - Purchased pills are added to `chamberQueue`
 - First pill in queue is the next shot (shown with orange highlight)
 - Click any chamber slot to swap it with the first position
 - Visual display shows pill colors sized by pixel count
-- Empty chamber shows hint: "Pull back to fire default shot"
+- Empty chamber requires buying ammo before firing
+
+#### Launcher Position & Arrow Controls
+The launcher sits on a vertical track with arrow buttons for repositioning:
+```javascript
+const LAUNCHER_ZONE_PERCENT = 0.20;  // How far from right edge (moved left)
+const LAUNCHER_ARROW_STEP = 30;      // Pixels to move per arrow click
+```
+- **Up arrow** at top of track moves launcher up
+- **Down arrow** at bottom moves launcher down
+- Arrow hitboxes are large for mobile-friendly tapping
+- Launcher is now positioned further left for easier pull-back gestures
 
 #### Pull-Back Firing System
 The game uses a slingshot-style pull-back mechanic:
@@ -115,11 +114,8 @@ The game uses a slingshot-style pull-back mechanic:
 
 Key variables:
 ```javascript
-let isPullingBack = false;
-let pullStartPos = { x: 0, y: 0 };
-let pullCurrentPos = { x: 0, y: 0 };
-const maxPullDistance = 150;  // Max pull distance in pixels
-const maxPower = 26;          // Max projectile velocity
+const MAX_PULL_DISTANCE = 150;  // Max pull distance in pixels
+const MAX_POWER = 26;           // Max projectile velocity
 ```
 
 Visual feedback during pull-back:
@@ -135,6 +131,17 @@ const spreadAngle = Math.PI / 6;  // 30 degrees total spread
 ```
 Each projectile has slight random variations in speed and position for natural spread effect.
 
+#### Moving Targets (Later Levels)
+Starting at level 4, targets move horizontally to increase difficulty:
+```javascript
+const MOVING_TARGET_START_LEVEL = 4;    // Level when targets start moving
+const MOVING_TARGET_BASE_SPEED = 0.5;   // Base speed (pixels per frame)
+const MOVING_TARGET_SPEED_INCREMENT = 0.1; // Speed increase per level
+```
+- Target bounces left/right between screen edges
+- Speed increases with each level past the start level
+- "MOVING TARGET!" indicator shown above moving targets
+
 #### Level System
 - 12 PFP images loaded from CDN (`PFP_LIST[]`)
 - Each PFP is converted to a 32x32 pixel grid (`PFP_GRID`)
@@ -149,13 +156,15 @@ Each projectile has slight random variations in speed and position for natural s
 | `resetLevel()` | Initializes level layout and obstacles |
 | `applyExplosion()` | Handles bomb detonation and scoring |
 | `applyGravityToTargets()` | Marks unsupported pixels as dynamic (falling) |
-| `getNextBombFromQueue()` | Returns next pill or DEFAULT_SHOT if empty |
+| `getNextBulletFromQueue()` | Returns next bullet from chamber (null if empty) |
 | `fireProjectiles()` | Fires single or spread projectiles |
+| `moveLauncherUp/Down()` | Moves launcher position via arrow buttons |
+| `updateMovingTarget()` | Updates target position for moving levels |
 | `pointerDown/Move/Up()` | Unified mouse+touch input handlers |
 | `manualDetonate()` | Explodes active projectiles on tap |
+| `drawArrowButtons()` | Renders up/down arrows on launcher track |
 | `update()` | Main game loop - physics and state |
 | `render()` | Main render loop - draws all elements |
-| `drawPullback()` | Renders slingshot pull-back visuals |
 
 ## Scoring System
 
@@ -165,6 +174,11 @@ Each projectile has slight random variations in speed and position for natural s
 - **Red obstacles falling into lava**: -1 pixel (penalty)
 
 ## Input Handling
+
+### Launcher Arrow Controls
+- **Tap up arrow**: Move launcher up along track
+- **Tap down arrow**: Move launcher down along track
+- Arrow hitboxes sized for mobile-friendly tapping
 
 ### Pull-Back Firing (Primary)
 - **Touch/click near launcher**: Start pulling back
@@ -209,17 +223,19 @@ const maxPower = 26;               // Max projectile velocity
 
 ### Testing Checklist
 - [ ] Verify game loads without console errors
-- [ ] Test pill purchasing (adds to chamber)
+- [ ] Test bullet purchasing (4 types: base, bomb, spread, mega)
 - [ ] Test chamber queue reordering (click to swap)
+- [ ] Test launcher arrow buttons (up/down positioning)
 - [ ] Test pull-back firing on desktop (mouse)
 - [ ] Test pull-back firing on mobile (touch)
 - [ ] Verify spread shots fire multiple projectiles
-- [ ] Test default shot when chamber is empty
+- [ ] Verify empty chamber prevents firing (shop highlights)
 - [ ] Verify gravity: pixels fall when support removed
 - [ ] Test tap-to-detonate while projectiles flying
 - [ ] Test level progression after destroying all PFP pixels
+- [ ] Test moving targets at level 4+
+- [ ] Check bullet unlock progression (spread at L3, mega at L5)
 - [ ] Check responsive canvas sizing
-- [ ] Verify shop highlight when out of ammo
 
 ## Code Style Conventions
 
@@ -231,14 +247,37 @@ const maxPower = 26;               // Max projectile velocity
 
 ## Important Constants
 
+All key configuration is at the top of the script for easy tweaking:
+
 ```javascript
-const PFP_GRID = 32;               // PFP resolution (32x32 pixels)
-const STARTING_BANK = 100;         // Initial pixel currency
-const maxPower = 26;               // Max projectile velocity
-const maxPullDistance = 150;       // Max pull distance for power calc
-const GRAVITY_PROJECTILE = 0.45;   // Projectile gravity
-const GRAVITY_BLOCK = 0.35;        // Falling block gravity
-const GRAVITY_FALL_DELAY = 3;      // Delay before falling starts
+// Launcher position
+const LAUNCHER_ZONE_PERCENT = 0.20;  // Distance from right edge
+const LAUNCHER_ARROW_STEP = 30;      // Pixels per arrow click
+
+// Bullet pixel counts (rebalance these!)
+const BULLET_PIXELS = { base: 10, bomb: 20, spread: 50, mega: 100 };
+
+// Bullet unlock levels
+const BULLET_UNLOCK_LEVELS = { base: 1, bomb: 1, spread: 3, mega: 5 };
+
+// Explosion radius multipliers
+const EXPLOSION_RADIUS = { base: 1.5, bomb: 2.0, spread: 1.8, mega: 2.5 };
+
+// Moving target difficulty
+const MOVING_TARGET_START_LEVEL = 4;    // When moving starts
+const MOVING_TARGET_BASE_SPEED = 0.5;   // Initial speed
+const MOVING_TARGET_SPEED_INCREMENT = 0.1; // Speed increase per level
+
+// Physics
+const GRAVITY_PROJECTILE = 0.45;
+const GRAVITY_BLOCK = 0.35;
+const GRAVITY_FALL_DELAY = 3;
+const MAX_PULL_DISTANCE = 150;
+const MAX_POWER = 26;
+
+// Other
+const PFP_GRID = 32;
+const STARTING_BANK = 100;
 ```
 
 ## Known Considerations
@@ -263,12 +302,12 @@ Displays: Player name, Level, Target name, Bank, Score, Destroyed %, Shots, Cham
 ### Instructions Panel
 Shows pull-back instructions and default shot hint.
 
-### Pill Shop
-- Grid layout with 8 pill buttons (4 columns, 2 on mobile)
+### Bullet Shop
+- Grid layout with 4 bullet buttons (4 columns, 2 on mobile)
 - Each shows: name, level requirement, cost, owned count
-- Spread pills show "Spread x[count]" tag
-- Locked pills have dashed borders
-- Selected pill highlighted with orange border
+- Spread bullets show "Spread x[count]" tag
+- Locked bullets have dashed borders (unlock at higher levels)
+- Selected bullet highlighted with orange border
 - Shop wrapper pulses orange when out of ammo
 
 ### Menu Overlay
@@ -280,8 +319,8 @@ Shows pull-back instructions and default shot hint.
 
 - Add local storage for high scores and progress
 - Sound effects and background music
-- More pill types with special effects (e.g., homing, splitting)
-- Implement `isClickableActivation` for tap-to-activate pills
+- Vertical moving targets (currently only horizontal)
+- Implement `isClickableActivation` for tap-to-activate bullets
 - Multiplayer/leaderboard features
 - Custom PFP upload support
 - Trajectory preview while pulling back
