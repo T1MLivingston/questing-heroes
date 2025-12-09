@@ -224,6 +224,153 @@
       color: #f97316;
     }
 
+    .player-card .char-name {
+      font-size: 0.65rem;
+      color: #6b7280;
+    }
+
+    /* Character Selection Screen */
+    .char-select-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(2,6,23,0.95);
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 25;
+      padding: 16px;
+    }
+
+    .char-select-overlay.open {
+      display: flex;
+    }
+
+    .char-select-title {
+      font-size: 1.2rem;
+      color: #f97316;
+      margin-bottom: 8px;
+    }
+
+    .char-select-subtitle {
+      font-size: 0.8rem;
+      color: #9ca3af;
+      margin-bottom: 16px;
+    }
+
+    .char-select-container {
+      display: flex;
+      gap: 32px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .char-select-panel {
+      background: #111827;
+      border-radius: 12px;
+      padding: 16px;
+      border: 2px solid #374151;
+      min-width: 280px;
+    }
+
+    .char-select-panel.p1 {
+      border-color: #3b82f6;
+    }
+
+    .char-select-panel.p2 {
+      border-color: #ef4444;
+    }
+
+    .char-select-panel h3 {
+      font-size: 0.9rem;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+
+    .char-select-panel.p1 h3 {
+      color: #60a5fa;
+    }
+
+    .char-select-panel.p2 h3 {
+      color: #f87171;
+    }
+
+    .char-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+
+    .char-option {
+      background: #0f172a;
+      border: 2px solid #374151;
+      border-radius: 8px;
+      padding: 4px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .char-option:hover {
+      border-color: #6b7280;
+      transform: translateY(-2px);
+    }
+
+    .char-option.selected {
+      border-color: #f97316;
+      box-shadow: 0 0 0 2px rgba(249,115,22,0.4);
+    }
+
+    .char-option img {
+      width: 48px;
+      height: 48px;
+      image-rendering: pixelated;
+      border-radius: 4px;
+    }
+
+    .char-option .char-label {
+      font-size: 0.55rem;
+      color: #9ca3af;
+      text-align: center;
+      max-width: 56px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .char-select-actions {
+      margin-top: 20px;
+      display: flex;
+      gap: 12px;
+    }
+
+    .char-select-actions button {
+      padding: 10px 24px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      border: none;
+      min-height: 44px;
+    }
+
+    .char-select-actions .start-btn {
+      background: #f97316;
+      color: #fff;
+    }
+
+    .char-select-actions .start-btn:disabled {
+      background: #4b5563;
+      cursor: not-allowed;
+    }
+
+    .char-select-actions .cancel-btn {
+      background: #374151;
+      color: #e5e7eb;
+    }
+
     /* SHOP - Mobile friendly with larger touch targets */
 
     .bomb-shop-wrapper {
@@ -457,12 +604,38 @@
   <!-- Two Player HUD -->
   <div class="two-player-hud" id="twoPlayerHud">
     <div class="player-card p1" id="p1Card">
-      <div class="player-name">Player 1 (Blue)</div>
+      <div>
+        <div class="player-name">Player 1</div>
+        <div class="char-name" id="p1CharName">-</div>
+      </div>
       <div class="pixel-count">Pixels: <span class="value" id="p1Pixels">0</span></div>
     </div>
     <div class="player-card p2" id="p2Card">
-      <div class="player-name">Player 2 (Red)</div>
+      <div>
+        <div class="player-name">Player 2</div>
+        <div class="char-name" id="p2CharName">-</div>
+      </div>
       <div class="pixel-count">Pixels: <span class="value" id="p2Pixels">0</span></div>
+    </div>
+  </div>
+
+  <!-- Character Selection Overlay -->
+  <div id="charSelectOverlay" class="char-select-overlay">
+    <div class="char-select-title">Select Your Characters</div>
+    <div class="char-select-subtitle">Each player picks a PFP to battle with</div>
+    <div class="char-select-container">
+      <div class="char-select-panel p1">
+        <h3>Player 1</h3>
+        <div class="char-grid" id="p1CharGrid"></div>
+      </div>
+      <div class="char-select-panel p2">
+        <h3>Player 2</h3>
+        <div class="char-grid" id="p2CharGrid"></div>
+      </div>
+    </div>
+    <div class="char-select-actions">
+      <button class="cancel-btn" id="charSelectCancel">Cancel</button>
+      <button class="start-btn" id="charSelectStart" disabled>Start Battle!</button>
     </div>
   </div>
 
@@ -590,11 +763,30 @@
     const p2PixelsEl = document.getElementById("p2Pixels");
     const p1Card = document.getElementById("p1Card");
     const p2Card = document.getElementById("p2Card");
+    const p1CharNameEl = document.getElementById("p1CharName");
+    const p2CharNameEl = document.getElementById("p2CharName");
+
+    // Character selection elements
+    const charSelectOverlay = document.getElementById("charSelectOverlay");
+    const p1CharGrid = document.getElementById("p1CharGrid");
+    const p2CharGrid = document.getElementById("p2CharGrid");
+    const charSelectStart = document.getElementById("charSelectStart");
+    const charSelectCancel = document.getElementById("charSelectCancel");
 
     // ==========================================================================
     // GAME MODE
     // ==========================================================================
     let gameMode = "single"; // "single" or "two"
+
+    // ==========================================================================
+    // CHARACTER SELECTION STATE
+    // ==========================================================================
+    let charSelection = {
+      p1Index: null,
+      p2Index: null,
+      p1Image: null,
+      p2Image: null
+    };
 
     // ==========================================================================
     // TWO-PLAYER STATE
@@ -610,8 +802,9 @@
         launchY: 0,
         arrowUpBounds: { x: 0, y: 0, w: 0, h: 0 },
         arrowDownBounds: { x: 0, y: 0, w: 0, h: 0 },
-        color: [59, 130, 246], // Blue
-        name: "Player 1"
+        pedestal: [],
+        name: "Player 1",
+        charName: ""
       },
       player2: {
         pixels: [],
@@ -623,23 +816,127 @@
         launchY: 0,
         arrowUpBounds: { x: 0, y: 0, w: 0, h: 0 },
         arrowDownBounds: { x: 0, y: 0, w: 0, h: 0 },
-        color: [239, 68, 68], // Red
-        name: "Player 2"
+        pedestal: [],
+        name: "Player 2",
+        charName: ""
       },
-      activePlayer: null, // Which player is currently pulling back
+      activePlayer: null,
       winner: null,
       gameOver: false
     };
 
     // Two-player specific settings
     const TWO_PLAYER_PFP_GRID = 32;
-    const TWO_PLAYER_PIXEL_COST = 3; // Pixels consumed per shot
+    const TWO_PLAYER_PIXEL_COST = 3;
+    const TWO_PLAYER_SIZE_SCALE = 0.85; // 15% smaller
 
     // Menu toggle
     menuBtn.addEventListener("click", () => menuOverlay.classList.add("open"));
     closeMenuBtn.addEventListener("click", () => menuOverlay.classList.remove("open"));
     menuOverlay.addEventListener("click", (e) => {
       if (e.target === menuOverlay) menuOverlay.classList.remove("open");
+    });
+
+    // ==========================================================================
+    // CHARACTER SELECTION
+    // ==========================================================================
+    function openCharacterSelect() {
+      charSelection.p1Index = null;
+      charSelection.p2Index = null;
+      charSelection.p1Image = null;
+      charSelection.p2Image = null;
+
+      // Build character grids
+      p1CharGrid.innerHTML = "";
+      p2CharGrid.innerHTML = "";
+
+      PFP_LIST.forEach((pfp, index) => {
+        // P1 grid
+        const p1Option = document.createElement("div");
+        p1Option.className = "char-option";
+        p1Option.innerHTML = `<img src="${pfp.url}" alt="${pfp.name}"><span class="char-label">${pfp.name}</span>`;
+        p1Option.addEventListener("click", () => selectCharacter(1, index, p1Option));
+        p1CharGrid.appendChild(p1Option);
+
+        // P2 grid
+        const p2Option = document.createElement("div");
+        p2Option.className = "char-option";
+        p2Option.innerHTML = `<img src="${pfp.url}" alt="${pfp.name}"><span class="char-label">${pfp.name}</span>`;
+        p2Option.addEventListener("click", () => selectCharacter(2, index, p2Option));
+        p2CharGrid.appendChild(p2Option);
+      });
+
+      charSelectStart.disabled = true;
+      charSelectOverlay.classList.add("open");
+    }
+
+    function selectCharacter(player, index, element) {
+      const grid = player === 1 ? p1CharGrid : p2CharGrid;
+
+      // Remove previous selection
+      grid.querySelectorAll(".char-option").forEach(el => el.classList.remove("selected"));
+      element.classList.add("selected");
+
+      if (player === 1) {
+        charSelection.p1Index = index;
+      } else {
+        charSelection.p2Index = index;
+      }
+
+      // Enable start button if both selected
+      charSelectStart.disabled = (charSelection.p1Index === null || charSelection.p2Index === null);
+    }
+
+    function loadCharacterImages(callback) {
+      let loaded = 0;
+      const total = 2;
+
+      charSelection.p1Image = new Image();
+      charSelection.p1Image.crossOrigin = "anonymous";
+      charSelection.p1Image.onload = () => {
+        loaded++;
+        if (loaded === total) callback();
+      };
+      charSelection.p1Image.src = PFP_LIST[charSelection.p1Index].url;
+
+      charSelection.p2Image = new Image();
+      charSelection.p2Image.crossOrigin = "anonymous";
+      charSelection.p2Image.onload = () => {
+        loaded++;
+        if (loaded === total) callback();
+      };
+      charSelection.p2Image.src = PFP_LIST[charSelection.p2Index].url;
+    }
+
+    function startTwoPlayerGame() {
+      charSelectOverlay.classList.remove("open");
+
+      // Store character names
+      twoPlayerState.player1.charName = PFP_LIST[charSelection.p1Index].name;
+      twoPlayerState.player2.charName = PFP_LIST[charSelection.p2Index].name;
+
+      // Update HUD
+      p1CharNameEl.textContent = twoPlayerState.player1.charName;
+      p2CharNameEl.textContent = twoPlayerState.player2.charName;
+
+      // Load images then start
+      loadCharacterImages(() => {
+        resetTwoPlayerGame();
+      });
+    }
+
+    charSelectStart.addEventListener("click", startTwoPlayerGame);
+    charSelectCancel.addEventListener("click", () => {
+      charSelectOverlay.classList.remove("open");
+      // Switch back to single player
+      gameMode = "single";
+      singlePlayerBtn.classList.add("active");
+      twoPlayerBtn.classList.remove("active");
+      singlePlayerHud.style.display = "block";
+      twoPlayerHud.classList.remove("visible");
+      singlePlayerInstructions.style.display = "block";
+      twoPlayerInstructions.style.display = "none";
+      bombShopWrapper.style.display = "block";
     });
 
     // Mode toggle handlers
@@ -666,7 +963,9 @@
       singlePlayerInstructions.style.display = "none";
       twoPlayerInstructions.style.display = "block";
       bombShopWrapper.style.display = "none";
-      resizeCanvas();
+
+      // Open character selection
+      openCharacterSelect();
     });
 
     // ==========================================================================
@@ -1089,46 +1388,93 @@
 
       p1.pixels = [];
       p2.pixels = [];
+      p1.pedestal = [];
+      p2.pedestal = [];
 
-      // Calculate pixel size for two-player mode (smaller to fit both)
-      const twoPlayerPixelSize = Math.max(3, Math.floor(tileSize * 0.45));
+      // Check if character images are loaded
+      if (!charSelection.p1Image || !charSelection.p2Image) return;
+
+      // Calculate pixel size for two-player mode (15% smaller)
+      const basePixelSize = Math.max(3, Math.floor(tileSize * 0.45));
+      const twoPlayerPixelSize = Math.max(2, Math.floor(basePixelSize * TWO_PLAYER_SIZE_SCALE));
 
       // PFP dimensions
       const pfpWidth = TWO_PLAYER_PFP_GRID * twoPlayerPixelSize;
       const pfpHeight = TWO_PLAYER_PFP_GRID * twoPlayerPixelSize;
 
-      // Calculate positions - Player 1 on left third, Player 2 on right third
-      const p1CenterX = width * 0.30;
-      const p2CenterX = width * 0.70;
-      const baseY = groundY - tileSize * 2;
+      // Calculate positions - Players further apart (0.22 and 0.78)
+      const p1CenterX = width * 0.22;
+      const p2CenterX = width * 0.78;
+
+      // Pedestal settings
+      const pedestalHeight = tileSize * 3;
+      const pedestalWidth = pfpWidth + tileSize * 2;
+
+      // Base Y is above the lava, with room for pedestal
+      const pedestalTopY = groundY - pedestalHeight;
+      const baseY = pedestalTopY;
 
       const p1X = Math.round(p1CenterX - pfpWidth / 2);
       const p2X = Math.round(p2CenterX - pfpWidth / 2);
       const yTop = Math.round(baseY - pfpHeight);
 
-      // Build pixels from loaded PFP image for both players
-      if (!pfpLoaded) return;
+      // Build pedestals
+      const pedestalColor = [248, 250, 252]; // White pedestal
+      const p1PedX = Math.round(p1CenterX - pedestalWidth / 2);
+      const p2PedX = Math.round(p2CenterX - pedestalWidth / 2);
 
-      const off = document.createElement("canvas");
-      off.width = TWO_PLAYER_PFP_GRID;
-      off.height = TWO_PLAYER_PFP_GRID;
-      const offCtx = off.getContext("2d");
-      offCtx.imageSmoothingEnabled = false;
-      offCtx.clearRect(0, 0, TWO_PLAYER_PFP_GRID, TWO_PLAYER_PFP_GRID);
-      offCtx.drawImage(pfpImage, 0, 0, TWO_PLAYER_PFP_GRID, TWO_PLAYER_PFP_GRID);
+      // Create pedestal blocks for P1
+      for (let row = 0; row < Math.ceil(pedestalHeight / tileSize); row++) {
+        for (let col = 0; col < Math.ceil(pedestalWidth / tileSize); col++) {
+          p1.pedestal.push({
+            x: p1PedX + col * tileSize,
+            y: pedestalTopY + row * tileSize,
+            size: tileSize,
+            r: pedestalColor[0],
+            g: pedestalColor[1],
+            b: pedestalColor[2],
+            alive: true,
+            indestructible: true
+          });
+        }
+      }
 
-      const imgData = offCtx.getImageData(0, 0, TWO_PLAYER_PFP_GRID, TWO_PLAYER_PFP_GRID).data;
+      // Create pedestal blocks for P2
+      for (let row = 0; row < Math.ceil(pedestalHeight / tileSize); row++) {
+        for (let col = 0; col < Math.ceil(pedestalWidth / tileSize); col++) {
+          p2.pedestal.push({
+            x: p2PedX + col * tileSize,
+            y: pedestalTopY + row * tileSize,
+            size: tileSize,
+            r: pedestalColor[0],
+            g: pedestalColor[1],
+            b: pedestalColor[2],
+            alive: true,
+            indestructible: true
+          });
+        }
+      }
+
+      // Build pixels from P1's selected character image (original colors)
+      const off1 = document.createElement("canvas");
+      off1.width = TWO_PLAYER_PFP_GRID;
+      off1.height = TWO_PLAYER_PFP_GRID;
+      const offCtx1 = off1.getContext("2d");
+      offCtx1.imageSmoothingEnabled = false;
+      offCtx1.clearRect(0, 0, TWO_PLAYER_PFP_GRID, TWO_PLAYER_PFP_GRID);
+      offCtx1.drawImage(charSelection.p1Image, 0, 0, TWO_PLAYER_PFP_GRID, TWO_PLAYER_PFP_GRID);
+      const imgData1 = offCtx1.getImageData(0, 0, TWO_PLAYER_PFP_GRID, TWO_PLAYER_PFP_GRID).data;
 
       for (let y = 0; y < TWO_PLAYER_PFP_GRID; y++) {
         for (let x = 0; x < TWO_PLAYER_PFP_GRID; x++) {
           const idx = (y * TWO_PLAYER_PFP_GRID + x) * 4;
-          const r = imgData[idx];
-          const g = imgData[idx + 1];
-          const b = imgData[idx + 2];
-          const a = imgData[idx + 3];
+          const r = imgData1[idx];
+          const g = imgData1[idx + 1];
+          const b = imgData1[idx + 2];
+          const a = imgData1[idx + 3];
           if (a < 10) continue;
 
-          // Player 1 pixel (tinted blue)
+          // Player 1 pixel (original colors - no tint)
           const p1px = p1X + x * twoPlayerPixelSize;
           const p1py = yTop + y * twoPlayerPixelSize;
           p1.pixels.push({
@@ -1138,16 +1484,37 @@
             gridY: y,
             w: twoPlayerPixelSize,
             h: twoPlayerPixelSize,
-            r: Math.round(r * 0.6 + 59 * 0.4),
-            g: Math.round(g * 0.6 + 130 * 0.4),
-            b: Math.round(b * 0.6 + 246 * 0.4),
+            r: r,
+            g: g,
+            b: b,
             alive: true,
             dynamic: false,
             vy: 0,
             gravityDelay: 0
           });
+        }
+      }
 
-          // Player 2 pixel (tinted red)
+      // Build pixels from P2's selected character image (original colors)
+      const off2 = document.createElement("canvas");
+      off2.width = TWO_PLAYER_PFP_GRID;
+      off2.height = TWO_PLAYER_PFP_GRID;
+      const offCtx2 = off2.getContext("2d");
+      offCtx2.imageSmoothingEnabled = false;
+      offCtx2.clearRect(0, 0, TWO_PLAYER_PFP_GRID, TWO_PLAYER_PFP_GRID);
+      offCtx2.drawImage(charSelection.p2Image, 0, 0, TWO_PLAYER_PFP_GRID, TWO_PLAYER_PFP_GRID);
+      const imgData2 = offCtx2.getImageData(0, 0, TWO_PLAYER_PFP_GRID, TWO_PLAYER_PFP_GRID).data;
+
+      for (let y = 0; y < TWO_PLAYER_PFP_GRID; y++) {
+        for (let x = 0; x < TWO_PLAYER_PFP_GRID; x++) {
+          const idx = (y * TWO_PLAYER_PFP_GRID + x) * 4;
+          const r = imgData2[idx];
+          const g = imgData2[idx + 1];
+          const b = imgData2[idx + 2];
+          const a = imgData2[idx + 3];
+          if (a < 10) continue;
+
+          // Player 2 pixel (original colors - no tint)
           const p2px = p2X + x * twoPlayerPixelSize;
           const p2py = yTop + y * twoPlayerPixelSize;
           p2.pixels.push({
@@ -1157,9 +1524,9 @@
             gridY: y,
             w: twoPlayerPixelSize,
             h: twoPlayerPixelSize,
-            r: Math.round(r * 0.6 + 239 * 0.4),
-            g: Math.round(g * 0.6 + 68 * 0.4),
-            b: Math.round(b * 0.6 + 68 * 0.4),
+            r: r,
+            g: g,
+            b: b,
             alive: true,
             dynamic: false,
             vy: 0,
@@ -1174,6 +1541,10 @@
       // Store bounds for collision detection
       p1.bounds = { x: p1X, y: yTop, w: pfpWidth, h: pfpHeight };
       p2.bounds = { x: p2X, y: yTop, w: pfpWidth, h: pfpHeight };
+
+      // Store pedestal bounds for gravity support
+      p1.pedestalBounds = { x: p1PedX, y: pedestalTopY, w: pedestalWidth, h: pedestalHeight };
+      p2.pedestalBounds = { x: p2PedX, y: pedestalTopY, w: pedestalWidth, h: pedestalHeight };
 
       updateTwoPlayerUI();
     }
@@ -1285,11 +1656,20 @@
         const belowY = block.y + block.h;
         let hasSupport = belowY >= lavaY;
 
+        // Check if supported by pedestal
+        if (!hasSupport && player.pedestalBounds) {
+          const ped = player.pedestalBounds;
+          if (belowY >= ped.y && belowY <= ped.y + ped.h &&
+              block.x + block.w > ped.x && block.x < ped.x + ped.w) {
+            hasSupport = true;
+          }
+        }
+
         if (!hasSupport) {
           // Check if supported by another pixel
           for (const other of player.pixels) {
             if (!other.alive || other === block) continue;
-            if (other.y === belowY &&
+            if (Math.abs(other.y - belowY) < 2 &&
                 other.x < block.x + block.w &&
                 other.x + other.w > block.x) {
               hasSupport = true;
@@ -2277,23 +2657,43 @@
 
         b.vy += GRAVITY_BLOCK;
         let newY = b.y + b.vy;
+        let landed = false;
 
-        // Check for support from other pixels
-        for (const s of player.pixels) {
-          if (!s.alive || s === b) continue;
-
-          const sTop = s.y;
-          const sLeft = s.x;
-          const sRight = s.x + s.w;
+        // Check for support from pedestal
+        if (player.pedestalBounds) {
+          const ped = player.pedestalBounds;
           const bLeft = b.x;
           const bRight = b.x + b.w;
 
-          if (bRight > sLeft && bLeft < sRight) {
-            if (b.y + b.h <= sTop + 1 && newY + b.h >= sTop) {
-              newY = sTop - b.h;
+          if (bRight > ped.x && bLeft < ped.x + ped.w) {
+            if (b.y + b.h <= ped.y + 1 && newY + b.h >= ped.y) {
+              newY = ped.y - b.h;
               b.vy = 0;
               b.dynamic = false;
-              break;
+              landed = true;
+            }
+          }
+        }
+
+        // Check for support from other pixels
+        if (!landed) {
+          for (const s of player.pixels) {
+            if (!s.alive || s === b) continue;
+
+            const sTop = s.y;
+            const sLeft = s.x;
+            const sRight = s.x + s.w;
+            const bLeft = b.x;
+            const bRight = b.x + b.w;
+
+            if (bRight > sLeft && bLeft < sRight) {
+              if (b.y + b.h <= sTop + 1 && newY + b.h >= sTop) {
+                newY = sTop - b.h;
+                b.vy = 0;
+                b.dynamic = false;
+                landed = true;
+                break;
+              }
             }
           }
         }
@@ -2580,6 +2980,7 @@
     function renderTwoPlayer() {
       drawTwoPlayerBackground();
       drawLava();
+      drawTwoPlayerPedestals();
       drawTwoPlayerPixels();
       drawTwoPlayerLaunchers();
       drawProjectiles();
@@ -2587,6 +2988,29 @@
       drawFloatingTexts();
       drawTwoPlayerPullback();
       drawTwoPlayerGameOver();
+    }
+
+    function drawTwoPlayerPedestals() {
+      const p1 = twoPlayerState.player1;
+      const p2 = twoPlayerState.player2;
+
+      // Draw P1 pedestal
+      if (p1.pedestal) {
+        for (const b of p1.pedestal) {
+          if (!b.alive) continue;
+          ctx.fillStyle = `rgb(${b.r},${b.g},${b.b})`;
+          ctx.fillRect(Math.round(b.x), Math.round(b.y), b.size, b.size);
+        }
+      }
+
+      // Draw P2 pedestal
+      if (p2.pedestal) {
+        for (const b of p2.pedestal) {
+          if (!b.alive) continue;
+          ctx.fillStyle = `rgb(${b.r},${b.g},${b.b})`;
+          ctx.fillRect(Math.round(b.x), Math.round(b.y), b.size, b.size);
+        }
+      }
     }
 
     function drawTwoPlayerBackground() {
@@ -2644,17 +3068,19 @@
       }
 
       // Draw player labels above pixel fields
-      ctx.font = `${Math.round(tileSize * 0.8)}px monospace`;
+      ctx.font = `${Math.round(tileSize * 0.7)}px monospace`;
       ctx.textAlign = "center";
 
       if (p1.bounds) {
         ctx.fillStyle = "#60a5fa";
-        ctx.fillText("P1", p1.bounds.x + p1.bounds.w / 2, p1.bounds.y - tileSize);
+        const p1Label = p1.charName || "P1";
+        ctx.fillText(p1Label, p1.bounds.x + p1.bounds.w / 2, p1.bounds.y - tileSize);
       }
 
       if (p2.bounds) {
         ctx.fillStyle = "#f87171";
-        ctx.fillText("P2", p2.bounds.x + p2.bounds.w / 2, p2.bounds.y - tileSize);
+        const p2Label = p2.charName || "P2";
+        ctx.fillText(p2Label, p2.bounds.x + p2.bounds.w / 2, p2.bounds.y - tileSize);
       }
     }
 
@@ -2801,18 +3227,19 @@
       ctx.fillRect(0, 0, width, height);
 
       const winner = twoPlayerState.winner;
-      const winnerName = winner === "player1" ? "Player 1 (Blue)" : "Player 2 (Red)";
+      const winnerPlayer = twoPlayerState[winner];
+      const winnerCharName = winnerPlayer.charName || (winner === "player1" ? "Player 1" : "Player 2");
       const winnerColor = winner === "player1" ? "#60a5fa" : "#f87171";
 
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
 
       ctx.fillStyle = winnerColor;
-      ctx.font = `bold ${Math.round(tileSize * 2.5)}px monospace`;
-      ctx.fillText(`${winnerName} WINS!`, width / 2, height / 2 - tileSize * 2);
+      ctx.font = `bold ${Math.round(tileSize * 2)}px monospace`;
+      ctx.fillText(`${winnerCharName} WINS!`, width / 2, height / 2 - tileSize * 2);
 
       ctx.fillStyle = "#e5e7eb";
-      ctx.font = `${Math.round(tileSize * 1.2)}px monospace`;
+      ctx.font = `${Math.round(tileSize * 1)}px monospace`;
       ctx.fillText("Click anywhere to play again", width / 2, height / 2 + tileSize * 2);
     }
 
