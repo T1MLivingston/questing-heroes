@@ -1658,7 +1658,7 @@
         h: arrowSize
       };
 
-      // P1 quick-select buttons (to the right of launcher, facing inward)
+      // P1 quick-select buttons (on LEFT edge, like single-player style)
       const btnSize = tileSize * 1.8;
       const btnSpacing = tileSize * 0.4;
       const totalBtnHeight = bulletDefsArray.length * (btnSize + btnSpacing) - btnSpacing;
@@ -1666,7 +1666,7 @@
 
       p1.quickSelectBounds = bulletDefsArray.map((bullet, i) => ({
         id: bullet.id,
-        x: p1.launchTrackX + tileSize * 2,
+        x: tileSize * 0.5,  // Near left edge
         y: btnStartY + i * (btnSize + btnSpacing),
         w: btnSize,
         h: btnSize,
@@ -1693,11 +1693,11 @@
         h: arrowSize
       };
 
-      // P2 quick-select buttons (to the left of launcher, facing inward)
+      // P2 quick-select buttons (on RIGHT edge, like single-player style)
       const btnStartY2 = p2.launchY - totalBtnHeight / 2;
       p2.quickSelectBounds = bulletDefsArray.map((bullet, i) => ({
         id: bullet.id,
-        x: p2.launchTrackX - tileSize * 2 - btnSize,
+        x: width - tileSize * 0.5 - btnSize,  // Near right edge
         y: btnStartY2 + i * (btnSize + btnSpacing),
         w: btnSize,
         h: btnSize,
@@ -2178,6 +2178,11 @@
     }
 
     function resizeCanvas() {
+      // Store old dimensions for scaling
+      const oldWidth = width || 1;
+      const oldHeight = height || 1;
+      const oldTileSize = tileSize || 10;
+
       // Wider playfield - 90% on desktop, 98% on mobile
       const isMobile = window.innerWidth <= 768;
       const widthPercent = isMobile ? 0.98 : 0.90;
@@ -2199,21 +2204,84 @@
       groundY = lavaY;
       floorY = height - tileSize;
 
+      // Calculate scale factors
+      const scaleX = width / oldWidth;
+      const scaleY = height / oldHeight;
+      const sizeScale = tileSize / oldTileSize;
+
       // Only recalculate positions, never reset game state on resize
       if (gameMode === "single") {
         setupLauncherTrack();
         // Only do full reset if this is initial load (no targetBlocks yet)
         if (targetBlocks.length === 0) {
           resetLevel();
+        } else {
+          // Scale existing target blocks
+          for (const block of targetBlocks) {
+            block.x *= scaleX;
+            block.y *= scaleY;
+            block.w *= sizeScale;
+            block.h *= sizeScale;
+          }
+          // Scale regular blocks
+          for (const block of blocks) {
+            block.x *= scaleX;
+            block.y *= scaleY;
+            block.size *= sizeScale;
+          }
+          // Update targetBounds
+          if (targetBounds) {
+            targetBounds.x *= scaleX;
+            targetBounds.y *= scaleY;
+            targetBounds.w *= sizeScale;
+            targetBounds.h *= sizeScale;
+          }
         }
       } else {
         // Only do full reset if game hasn't started yet
         if (twoPlayerState.player1.pixels.length === 0 && !twoPlayerState.gameOver) {
           resetTwoPlayerGame();
         } else {
-          // Just recalculate launcher positions without resetting game state
+          // Scale existing two-player pixels and pedestals
+          scaleTwoPlayerPixels(scaleX, scaleY, sizeScale);
+          // Recalculate launcher positions
           setupTwoPlayerLaunchers();
         }
+      }
+    }
+
+    function scaleTwoPlayerPixels(scaleX, scaleY, sizeScale) {
+      const p1 = twoPlayerState.player1;
+      const p2 = twoPlayerState.player2;
+
+      // Scale P1 pixels
+      for (const pixel of p1.pixels) {
+        pixel.x *= scaleX;
+        pixel.y *= scaleY;
+        pixel.w *= sizeScale;
+        pixel.h *= sizeScale;
+      }
+
+      // Scale P2 pixels
+      for (const pixel of p2.pixels) {
+        pixel.x *= scaleX;
+        pixel.y *= scaleY;
+        pixel.w *= sizeScale;
+        pixel.h *= sizeScale;
+      }
+
+      // Scale P1 pedestal
+      for (const block of p1.pedestal) {
+        block.x *= scaleX;
+        block.y *= scaleY;
+        block.size *= sizeScale;
+      }
+
+      // Scale P2 pedestal
+      for (const block of p2.pedestal) {
+        block.x *= scaleX;
+        block.y *= scaleY;
+        block.size *= sizeScale;
       }
     }
 
@@ -3578,19 +3646,14 @@
       const player = twoPlayerState[currentTurn];
       const launcher = player.launcher;
 
-      // Draw glowing indicator around current player's launcher
-      const s = tileSize * 2.5;
-      ctx.strokeStyle = currentTurn === "player1" ? "#3b82f6" : "#ef4444";
-      ctx.lineWidth = 3;
-      ctx.setLineDash([5, 5]);
-      ctx.strokeRect(launcher.x - s/2, launcher.y - s/2, s, s);
-      ctx.setLineDash([]);
-
-      // Draw "YOUR TURN" text
-      ctx.fillStyle = currentTurn === "player1" ? "#60a5fa" : "#f87171";
-      ctx.font = `bold ${Math.round(tileSize * 0.8)}px monospace`;
+      // Draw "YOUR TURN" text ON the launcher block (inside the white square)
+      const s = tileSize * 2;
+      ctx.fillStyle = currentTurn === "player1" ? "#3b82f6" : "#ef4444";
+      ctx.font = `bold ${Math.round(tileSize * 0.5)}px monospace`;
       ctx.textAlign = "center";
-      ctx.fillText("YOUR TURN!", launcher.x, launcher.y - tileSize * 3);
+      ctx.textBaseline = "middle";
+      ctx.fillText("YOUR", launcher.x, launcher.y - tileSize * 0.3);
+      ctx.fillText("TURN", launcher.x, launcher.y + tileSize * 0.3);
     }
 
     function drawTwoPlayerPedestals() {
