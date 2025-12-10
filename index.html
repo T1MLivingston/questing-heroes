@@ -935,6 +935,92 @@
     const HIGH_SCORE_KEY = "pixelCrushHighScores";
     let highScores = {};
 
+    // ==========================================================================
+    // AUDIO SYSTEM - Web Audio API for sound effects
+    // ==========================================================================
+    let audioCtx = null;
+
+    function initAudio() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      return audioCtx;
+    }
+
+    function playShootSound() {
+      try {
+        const ctx = initAudio();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        osc.type = "square";
+        osc.frequency.setValueAtTime(220, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(110, ctx.currentTime + 0.1);
+
+        gain.gain.setValueAtTime(0.15, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.15);
+
+        osc.start(ctx.currentTime);
+        osc.stop(ctx.currentTime + 0.15);
+      } catch (e) { /* Audio not supported */ }
+    }
+
+    function playHitSound() {
+      try {
+        const ctx = initAudio();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        osc.type = "sawtooth";
+        osc.frequency.setValueAtTime(440, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(80, ctx.currentTime + 0.12);
+
+        gain.gain.setValueAtTime(0.2, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.12);
+
+        osc.start(ctx.currentTime);
+        osc.stop(ctx.currentTime + 0.12);
+      } catch (e) { /* Audio not supported */ }
+    }
+
+    function playExplosionSound() {
+      try {
+        const ctx = initAudio();
+
+        // Noise burst for explosion
+        const bufferSize = ctx.sampleRate * 0.2;
+        const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) {
+          data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / bufferSize, 2);
+        }
+
+        const noise = ctx.createBufferSource();
+        noise.buffer = buffer;
+
+        const gain = ctx.createGain();
+        const filter = ctx.createBiquadFilter();
+        filter.type = "lowpass";
+        filter.frequency.setValueAtTime(800, ctx.currentTime);
+        filter.frequency.exponentialRampToValueAtTime(200, ctx.currentTime + 0.2);
+
+        noise.connect(filter);
+        filter.connect(gain);
+        gain.connect(ctx.destination);
+
+        gain.gain.setValueAtTime(0.3, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.2);
+
+        noise.start(ctx.currentTime);
+      } catch (e) { /* Audio not supported */ }
+    }
+
     function loadHighScores() {
       try {
         const saved = localStorage.getItem(HIGH_SCORE_KEY);
@@ -1253,11 +1339,23 @@
     let floatingTexts = [];
 
     // ==========================================================================
-    // BULLET/WEAPON DEFINITIONS - 5 types with trajectory preview
+    // BULLET/WEAPON DEFINITIONS - 6 types with trajectory preview
     // ==========================================================================
     const bulletDefsArray = [
       {
-        id: "base",
+        id: "basic",
+        name: "Basic",
+        cost: 10,           // Cheap default shot
+        radiusCells: 1.2,
+        unlockLevel: 1,
+        pixelCount: 5,
+        isSpread: false,
+        detonatable: false,
+        showTrajectory: false,
+        palette: [[156, 163, 175], [107, 114, 128], [75, 85, 99]]  // Gray
+      },
+      {
+        id: "sniper",
         name: "Sniper",
         cost: 20,           // Long range with trajectory
         radiusCells: EXPLOSION_RADIUS.base,
@@ -1318,8 +1416,22 @@
       }
     ];
 
+    // Default bullet used when chamber is empty (free shot)
+    const defaultBullet = {
+      id: "default",
+      name: "Default",
+      cost: 0,
+      radiusCells: 1.0,
+      pixelCount: 3,
+      isSpread: false,
+      detonatable: false,
+      showTrajectory: false,
+      palette: [[156, 163, 175], [107, 114, 128], [75, 85, 99]]
+    };
+
     const bulletDefs = {};
     bulletDefsArray.forEach(b => { bulletDefs[b.id] = b; });
+    bulletDefs["default"] = defaultBullet;
 
     let inventory = {};
     bulletDefsArray.forEach(b => { inventory[b.id] = 0; });
@@ -2007,6 +2119,7 @@
     }
 
     function applyTwoPlayerExplosion(cx, cy, shooterKey, bullet) {
+      playExplosionSound();  // Play explosion sound
       const opponentKey = shooterKey === "player1" ? "player2" : "player1";
       const opponent = twoPlayerState[opponentKey];
 
@@ -2110,7 +2223,8 @@
     // ==========================================================================
     function getNextBulletFromQueue() {
       if (chamberQueue.length === 0) {
-        return null; // No ammo - can't fire
+        // Return default bullet (free shot) when chamber is empty
+        return defaultBullet;
       }
       const id = chamberQueue.shift();
       inventory[id] = Math.max(0, (inventory[id] || 0) - 1);
@@ -2572,14 +2686,7 @@
         : (pos.x >= width - tileSize * 8);
 
       if (distToLauncher < tileSize * 5 || inLauncherZone) {
-        // Check if player has ammo in chamber
-        const chamber = twoPlayerInventory[currentTurn].chamberQueue;
-        if (chamber.length === 0) {
-          // No ammo - flash the shop
-          ammoReminderTimer = 60;
-          return;
-        }
-
+        // Allow pullback even with empty chamber (will use default bullet)
         isPullingBack = true;
         twoPlayerState.activePlayer = currentTurn;
         pullStartPos = { x: launcher.x, y: launcher.y };
@@ -2626,13 +2733,8 @@
 
       if (pullDist < 20) return;
 
-      // Get bullet from queue
+      // Get bullet from queue (returns default if empty)
       const bullet = getNextBulletFromQueue();
-      if (!bullet) {
-        // No ammo - flash the shop
-        ammoReminderTimer = 60;
-        return;
-      }
 
       // Calculate effective max pull based on screen constraints
       const margin = tileSize * 2;
@@ -2666,14 +2768,14 @@
       const player = twoPlayerState[activePlayer];
       const chamber = twoPlayerInventory[activePlayer].chamberQueue;
 
-      // Get bullet from chamber
+      // Get bullet from chamber or use default
+      let bullet;
       if (chamber.length === 0) {
-        updateTwoPlayerUI();
-        return;
+        bullet = defaultBullet;  // Use free default shot
+      } else {
+        const bulletId = chamber.shift();
+        bullet = bulletDefs[bulletId];
       }
-
-      const bulletId = chamber.shift();
-      const bullet = bulletDefs[bulletId];
 
       // Calculate effective max pull based on screen constraints and launcher position
       const margin = tileSize * 2;
@@ -2699,6 +2801,7 @@
     }
 
     function fireTwoPlayerProjectile(playerKey, bullet, power, angle) {
+      playShootSound();  // Play shooting sound
       const player = twoPlayerState[playerKey];
 
       if (bullet.isSpread && bullet.pixelCount > 1) {
@@ -2741,6 +2844,7 @@
     // FIRE PROJECTILES (handles spread shots)
     // ==========================================================================
     function fireProjectiles(bullet, power, angle) {
+      playShootSound();  // Play shooting sound
       const count = bullet.pixelCount || 10;
 
       if (!bullet.isSpread) {
@@ -2849,6 +2953,7 @@
     // EXPLOSION HANDLING
     // ==========================================================================
     function applyExplosion(cx, cy, bullet) {
+      playExplosionSound();  // Play explosion sound
       const radius = bullet.radiusCells * tileSize;
       const radiusSq = radius * radius;
 
