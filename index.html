@@ -37,25 +37,38 @@
 
     canvas {
       background: #020617;
-      width: 100%;
-      max-width: 960px;
+      width: 90%;
+      max-width: 1400px;
       border-radius: 8px;
       border: 1px solid #1f2937;
       touch-action: none;
     }
 
+    /* Responsive canvas width */
+    @media (max-width: 768px) {
+      canvas {
+        width: 98%;
+      }
+    }
+
     .hud {
-      width: 100%;
-      max-width: 960px;
+      width: 90%;
+      max-width: 1400px;
       display: flex;
       flex-direction: column;
       gap: 4px;
       margin-bottom: 2px;
     }
 
+    @media (max-width: 768px) {
+      .hud {
+        width: 98%;
+      }
+    }
+
     .top-row {
       display: flex;
-      justify-content: space-between;
+      justify-content: center;
       align-items: flex-start;
       gap: 6px;
     }
@@ -63,7 +76,7 @@
     .stats-row {
       display: flex;
       flex-wrap: wrap;
-      justify-content: flex-start;
+      justify-content: center;
       gap: 8px;
       font-size: 0.7rem;
       color: #e5e7eb;
@@ -138,23 +151,6 @@
       font-size: 1rem;
     }
 
-    .menu-btn {
-      background: #111827;
-      color: #e5e7eb;
-      border: 1px solid #4b5563;
-      border-radius: 999px;
-      padding: 6px 12px;
-      font-size: 0.7rem;
-      cursor: pointer;
-      align-self: flex-start;
-      white-space: nowrap;
-      min-height: 32px;
-    }
-
-    .menu-btn:hover, .menu-btn:active {
-      background: #1f2937;
-    }
-
     /* Mode Toggle */
     .mode-toggle {
       display: flex;
@@ -187,11 +183,17 @@
     /* Two Player HUD */
     .two-player-hud {
       display: none;
-      width: 100%;
-      max-width: 960px;
+      width: 90%;
+      max-width: 1400px;
       justify-content: space-between;
       gap: 16px;
       margin-bottom: 4px;
+    }
+
+    @media (max-width: 768px) {
+      .two-player-hud {
+        width: 98%;
+      }
     }
 
     .two-player-hud.visible {
@@ -511,11 +513,17 @@
     /* SHOP - Mobile friendly with larger touch targets */
 
     .bomb-shop-wrapper {
-      width: 100%;
-      max-width: 960px;
+      width: 90%;
+      max-width: 1400px;
       margin-top: 4px;
       border-radius: 8px;
       transition: box-shadow 0.15s ease;
+    }
+
+    @media (max-width: 768px) {
+      .bomb-shop-wrapper {
+        width: 98%;
+      }
     }
 
     .bomb-shop-wrapper.highlight {
@@ -734,7 +742,6 @@
           <div id="chamberSlots" class="chamber-slots"></div>
         </div>
       </div>
-      <button id="menuButton" class="menu-btn">Menu</button>
     </div>
   </div>
 
@@ -788,12 +795,12 @@
 
   <div class="instructions-panel" id="singlePlayerInstructions">
     <strong>Pull back</strong> on the launcher and <strong>release</strong> to fire!
-    Use arrows to move launcher. Tap canvas while flying to detonate early.
+    Use arrows to move launcher. Tap canvas to detonate Bombs/Mega early.
   </div>
 
   <div class="instructions-panel" id="twoPlayerInstructions" style="display: none;">
     <strong>Turn-based battle!</strong> Buy ammo from shop (costs your pixels), then pull back to fire.<br>
-    Highlighted player's turn. Destroy opponent's pixels to win!
+    Tap to detonate Bombs/Mega. Destroy opponent's pixels to win!
   </div>
 
   <div class="bomb-shop-wrapper" id="shopWrapper">
@@ -812,17 +819,17 @@
         <li><strong>Pull back</strong> on the launcher and <strong>release</strong> to fire.</li>
         <li>Use the <strong>arrow buttons</strong> to move the launcher up/down.</li>
         <li>Pull further = more power. Direction follows your pull.</li>
-        <li>Tap the canvas while a shot is flying to <strong>detonate early</strong>.</li>
+        <li>Tap canvas to <strong>detonate Bombs/Mega early</strong> (Basic and Spread cannot be detonated).</li>
         <li>Destroying PFP pixels <strong>earns</strong> pixels (yellow +N).</li>
         <li>Destroying red obstacles <strong>costs</strong> pixels (red -N).</li>
         <li><strong>Later levels</strong> have moving targets!</li>
       </ul>
       <h2 style="margin-top:12px;">Bullet Types</h2>
       <ul>
-        <li><strong>Base</strong>: 10 pixels (unlocked from start)</li>
-        <li><strong>Bomb</strong>: 20 pixels (unlocked from start)</li>
-        <li><strong>Spread</strong>: 50 pixels (unlocks at level 3)</li>
-        <li><strong>Mega</strong>: 100 pixels (unlocks at level 5)</li>
+        <li><strong>Basic</strong>: 10 pixels - Simple shot</li>
+        <li><strong>Bomb</strong>: 20 pixels - Detonatable!</li>
+        <li><strong>Spread</strong>: 25 pixels - Multiple shots (unlocks at level 3)</li>
+        <li><strong>Mega</strong>: 40 pixels - Big explosion, Detonatable! (unlocks at level 5)</li>
       </ul>
       <button id="closeMenu">Close</button>
     </div>
@@ -891,7 +898,6 @@
     const destroyPctEl = document.getElementById("destroyPct");
     const shotsEl = document.getElementById("shots");
     const chamberSlotsEl = document.getElementById("chamberSlots");
-    const menuBtn = document.getElementById("menuButton");
     const menuOverlay = document.getElementById("menuOverlay");
     const closeMenuBtn = document.getElementById("closeMenu");
     const bombShopWrapper = document.getElementById("shopWrapper");
@@ -985,6 +991,7 @@
         launchY: 0,
         arrowUpBounds: { x: 0, y: 0, w: 0, h: 0 },
         arrowDownBounds: { x: 0, y: 0, w: 0, h: 0 },
+        quickSelectBounds: [],
         pedestal: [],
         name: "Player 1",
         charName: ""
@@ -999,6 +1006,7 @@
         launchY: 0,
         arrowUpBounds: { x: 0, y: 0, w: 0, h: 0 },
         arrowDownBounds: { x: 0, y: 0, w: 0, h: 0 },
+        quickSelectBounds: [],
         pedestal: [],
         name: "Player 2",
         charName: ""
@@ -1020,8 +1028,7 @@
       player2: { chamberQueue: [] }
     };
 
-    // Menu toggle
-    menuBtn.addEventListener("click", () => menuOverlay.classList.add("open"));
+    // Menu overlay click-to-close
     closeMenuBtn.addEventListener("click", () => menuOverlay.classList.remove("open"));
     menuOverlay.addEventListener("click", (e) => {
       if (e.target === menuOverlay) menuOverlay.classList.remove("open");
@@ -1257,6 +1264,7 @@
         unlockLevel: BULLET_UNLOCK_LEVELS.base,
         pixelCount: BULLET_PIXELS.base,
         isSpread: false,
+        detonatable: false, // Cannot be manually detonated
         palette: [[147, 197, 253], [59, 130, 246], [37, 99, 235]]
       },
       {
@@ -1267,6 +1275,7 @@
         unlockLevel: BULLET_UNLOCK_LEVELS.bomb,
         pixelCount: BULLET_PIXELS.bomb,
         isSpread: false,
+        detonatable: true,  // Can be manually detonated
         palette: [[254, 215, 170], [251, 146, 60], [234, 88, 12]]
       },
       {
@@ -1277,6 +1286,7 @@
         unlockLevel: BULLET_UNLOCK_LEVELS.spread,
         pixelCount: BULLET_PIXELS.spread,
         isSpread: true,
+        detonatable: false, // Cannot be manually detonated
         palette: [[233, 213, 255], [192, 132, 252], [168, 85, 247]]
       },
       {
@@ -1287,6 +1297,7 @@
         unlockLevel: BULLET_UNLOCK_LEVELS.mega,
         pixelCount: BULLET_PIXELS.mega,
         isSpread: true,
+        detonatable: true,  // Can be manually detonated
         palette: [[248, 113, 113], [239, 68, 68], [220, 38, 38]]
       }
     ];
@@ -1319,6 +1330,9 @@
     // Arrow button bounds (for click detection)
     let arrowUpBounds = { x: 0, y: 0, w: 0, h: 0 };
     let arrowDownBounds = { x: 0, y: 0, w: 0, h: 0 };
+
+    // Quick-select button bounds near launcher
+    let quickSelectBounds = [];
 
     // Blocks (floor, pedestals, obstacles)
     const blocks = [];
@@ -1644,6 +1658,21 @@
         h: arrowSize
       };
 
+      // P1 quick-select buttons (to the right of launcher, facing inward)
+      const btnSize = tileSize * 1.8;
+      const btnSpacing = tileSize * 0.4;
+      const totalBtnHeight = bulletDefsArray.length * (btnSize + btnSpacing) - btnSpacing;
+      const btnStartY = p1.launchY - totalBtnHeight / 2;
+
+      p1.quickSelectBounds = bulletDefsArray.map((bullet, i) => ({
+        id: bullet.id,
+        x: p1.launchTrackX + tileSize * 2,
+        y: btnStartY + i * (btnSize + btnSpacing),
+        w: btnSize,
+        h: btnSize,
+        palette: bullet.palette
+      }));
+
       // Player 2 launcher on the RIGHT side
       p2.launchTrackX = width - tileSize * 4;
       p2.launchTrackTopY = tileSize * 4;
@@ -1663,6 +1692,17 @@
         w: arrowSize,
         h: arrowSize
       };
+
+      // P2 quick-select buttons (to the left of launcher, facing inward)
+      const btnStartY2 = p2.launchY - totalBtnHeight / 2;
+      p2.quickSelectBounds = bulletDefsArray.map((bullet, i) => ({
+        id: bullet.id,
+        x: p2.launchTrackX - tileSize * 2 - btnSize,
+        y: btnStartY2 + i * (btnSize + btnSpacing),
+        w: btnSize,
+        h: btnSize,
+        palette: bullet.palette
+      }));
     }
 
     function buildTwoPlayerPixels() {
@@ -2065,6 +2105,8 @@
     function grantPixels(delta, cx, cy) {
       if (delta === 0) return;
       credits += delta;
+      // Ensure credits never go negative
+      if (credits < 0) credits = 0;
       score += delta;
       lastGain = delta;
       spawnFloatingText(cx, cy, delta);
@@ -2117,11 +2159,30 @@
         w: arrowSize,
         h: arrowSize
       };
+
+      // Setup quick-select buttons to the right of launcher track
+      const btnSize = tileSize * 2;
+      const btnSpacing = tileSize * 0.5;
+      const btnStartX = launchTrackX + tileSize * 2.5;
+      const totalBtnHeight = bulletDefsArray.length * (btnSize + btnSpacing) - btnSpacing;
+      const btnStartY = launchY - totalBtnHeight / 2;
+
+      quickSelectBounds = bulletDefsArray.map((bullet, i) => ({
+        id: bullet.id,
+        x: btnStartX,
+        y: btnStartY + i * (btnSize + btnSpacing),
+        w: btnSize,
+        h: btnSize,
+        palette: bullet.palette
+      }));
     }
 
     function resizeCanvas() {
-      const maxW = 960;
-      const screenW = Math.min(window.innerWidth - 16, maxW);
+      // Wider playfield - 90% on desktop, 98% on mobile
+      const isMobile = window.innerWidth <= 768;
+      const widthPercent = isMobile ? 0.98 : 0.90;
+      const maxW = 1400;
+      const screenW = Math.min(window.innerWidth * widthPercent - 16, maxW);
       const aspect = 16 / 9;
       const screenH = screenW / aspect;
 
@@ -2138,11 +2199,21 @@
       groundY = lavaY;
       floorY = height - tileSize;
 
+      // Only recalculate positions, never reset game state on resize
       if (gameMode === "single") {
         setupLauncherTrack();
-        resetLevel();
+        // Only do full reset if this is initial load (no targetBlocks yet)
+        if (targetBlocks.length === 0) {
+          resetLevel();
+        }
       } else {
-        resetTwoPlayerGame();
+        // Only do full reset if game hasn't started yet
+        if (twoPlayerState.player1.pixels.length === 0 && !twoPlayerState.gameOver) {
+          resetTwoPlayerGame();
+        } else {
+          // Just recalculate launcher positions without resetting game state
+          setupTwoPlayerLaunchers();
+        }
       }
     }
 
@@ -2299,8 +2370,9 @@
     // MANUAL DETONATE
     // ==========================================================================
     function manualDetonate() {
+      // Only detonate projectiles that are flagged as detonatable
       projectiles.forEach(p => {
-        if (p.active && p.bullet) {
+        if (p.active && p.bullet && p.bullet.detonatable) {
           p.active = false;
           applyExplosion(p.x, p.y, p.bullet);
         }
@@ -2328,6 +2400,14 @@
       if (isPointInRect(pos.x, pos.y, arrowDownBounds)) {
         moveLauncherDown();
         return;
+      }
+
+      // Check quick-select buttons
+      for (const btn of quickSelectBounds) {
+        if (isPointInRect(pos.x, pos.y, btn)) {
+          handleBulletPurchase(btn.id);
+          return;
+        }
       }
 
       // If projectiles are flying, tap to detonate
@@ -2382,6 +2462,15 @@
         }
       }
 
+      // Check quick-select buttons for current player only
+      const playerBounds = currentPlayer.quickSelectBounds || [];
+      for (const btn of playerBounds) {
+        if (isPointInRect(pos.x, pos.y, btn)) {
+          handleBulletPurchase(btn.id);
+          return;
+        }
+      }
+
       // If projectiles are flying, tap to detonate (current player only)
       const hasActiveProjectiles = projectiles.some(p => p.active);
       if (hasActiveProjectiles) {
@@ -2415,8 +2504,9 @@
     }
 
     function manualDetonateTwoPlayer() {
+      // Only detonate projectiles that are flagged as detonatable
       projectiles.forEach(p => {
-        if (p.active && p.bullet) {
+        if (p.active && p.bullet && p.bullet.detonatable) {
           p.active = false;
           applyTwoPlayerExplosion(p.x, p.y, p.shooter, p.bullet);
         }
@@ -2429,7 +2519,11 @@
       evt.preventDefault();
 
       const pos = getPointerPosition(evt);
-      pullCurrentPos = { x: pos.x, y: pos.y };
+      // Clamp to screen boundaries - shooter can't go off-screen
+      const margin = tileSize * 2;
+      const clampedX = Math.max(margin, Math.min(width - margin, pos.x));
+      const clampedY = Math.max(margin, Math.min(height - margin, pos.y));
+      pullCurrentPos = { x: clampedX, y: clampedY };
     }
 
     function pointerUp(evt) {
@@ -3236,6 +3330,56 @@
     }
 
     // ==========================================================================
+    // DRAW QUICK-SELECT BUTTONS - Near launcher for easy access
+    // ==========================================================================
+    function drawQuickSelectButtons() {
+      const currentLevel = currentPfpIndex + 1;
+
+      quickSelectBounds.forEach(btn => {
+        const bullet = bulletDefs[btn.id];
+        const isLocked = currentLevel < bullet.unlockLevel;
+        const canAfford = credits >= bullet.cost;
+        const isSelected = selectedBulletId === btn.id;
+        const ownedCount = inventory[btn.id] || 0;
+
+        // Button background with bullet color
+        const [r, g, b] = btn.palette[1]; // middle color from palette
+        ctx.fillStyle = isLocked ? "rgba(100,100,100,0.5)" : `rgba(${r},${g},${b},${canAfford ? 0.9 : 0.4})`;
+        ctx.fillRect(btn.x, btn.y, btn.w, btn.h);
+
+        // Border - highlight if selected
+        ctx.strokeStyle = isSelected ? "#f97316" : "rgba(255,255,255,0.3)";
+        ctx.lineWidth = isSelected ? 3 : 1;
+        ctx.strokeRect(btn.x, btn.y, btn.w, btn.h);
+
+        // Lock indicator for locked bullets
+        if (isLocked) {
+          ctx.fillStyle = "rgba(0,0,0,0.6)";
+          ctx.fillRect(btn.x, btn.y, btn.w, btn.h);
+          ctx.fillStyle = "#666";
+          ctx.font = `${Math.round(btn.h * 0.4)}px monospace`;
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
+          ctx.fillText("🔒", btn.x + btn.w/2, btn.y + btn.h/2);
+        } else {
+          // Show cost in corner
+          ctx.fillStyle = canAfford ? "#fff" : "#f87171";
+          ctx.font = `bold ${Math.round(btn.h * 0.3)}px monospace`;
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
+          ctx.fillText(bullet.cost + "px", btn.x + btn.w/2, btn.y + btn.h/2 - btn.h * 0.15);
+
+          // Show owned count below
+          if (ownedCount > 0) {
+            ctx.fillStyle = "#22c55e";
+            ctx.font = `${Math.round(btn.h * 0.25)}px monospace`;
+            ctx.fillText("×" + ownedCount, btn.x + btn.w/2, btn.y + btn.h/2 + btn.h * 0.2);
+          }
+        }
+      });
+    }
+
+    // ==========================================================================
     // DRAW PULL-BACK INDICATOR
     // ==========================================================================
     function drawPullback() {
@@ -3372,6 +3516,7 @@
       drawMovingIndicator();
       drawLauncher();
       drawArrowButtons();
+      drawQuickSelectButtons();
       drawProjectiles();
       drawParticles();
       drawFloatingTexts();
@@ -3535,6 +3680,9 @@
       // Draw P1 arrow buttons
       drawTwoPlayerArrowButtons(p1, "#3b82f6");
 
+      // Draw P1 quick-select buttons
+      drawTwoPlayerQuickSelectButtons(p1, twoPlayerState.currentTurn === "player1");
+
       // Draw P2 launcher track
       ctx.beginPath();
       ctx.moveTo(p2.launchTrackX, p2.launchTrackTopY);
@@ -3553,6 +3701,9 @@
 
       // Draw P2 arrow buttons
       drawTwoPlayerArrowButtons(p2, "#ef4444");
+
+      // Draw P2 quick-select buttons
+      drawTwoPlayerQuickSelectButtons(p2, twoPlayerState.currentTurn === "player2");
     }
 
     function drawTwoPlayerArrowButtons(player, color) {
@@ -3576,6 +3727,50 @@
       ctx.closePath();
       ctx.fill();
       ctx.globalAlpha = 1;
+    }
+
+    function drawTwoPlayerQuickSelectButtons(player, isCurrentTurn) {
+      const bounds = player.quickSelectBounds || [];
+      const currentPlayer = twoPlayerState.currentTurn;
+      const inv = twoPlayerInventory[currentPlayer];
+
+      bounds.forEach(btn => {
+        const bullet = bulletDefs[btn.id];
+        const pixelCount = player.pixelCount || 0;
+        const canAfford = pixelCount >= bullet.cost;
+        const ownedCount = inv ? (inv.chamberQueue.filter(id => id === btn.id).length) : 0;
+
+        // Button background with bullet color
+        const [r, g, b] = btn.palette[1];
+        const alpha = isCurrentTurn ? (canAfford ? 0.9 : 0.4) : 0.2;
+        ctx.fillStyle = `rgba(${r},${g},${b},${alpha})`;
+        ctx.fillRect(btn.x, btn.y, btn.w, btn.h);
+
+        // Border - highlight if affordable and current turn
+        ctx.strokeStyle = isCurrentTurn && canAfford ? "rgba(255,255,255,0.8)" : "rgba(255,255,255,0.2)";
+        ctx.lineWidth = 1;
+        ctx.strokeRect(btn.x, btn.y, btn.w, btn.h);
+
+        if (!isCurrentTurn) {
+          // Dim the buttons if not current turn
+          ctx.fillStyle = "rgba(0,0,0,0.5)";
+          ctx.fillRect(btn.x, btn.y, btn.w, btn.h);
+        } else {
+          // Show cost
+          ctx.fillStyle = canAfford ? "#fff" : "#f87171";
+          ctx.font = `bold ${Math.round(btn.h * 0.3)}px monospace`;
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
+          ctx.fillText(bullet.cost + "px", btn.x + btn.w/2, btn.y + btn.h/2 - btn.h * 0.15);
+
+          // Show owned count below
+          if (ownedCount > 0) {
+            ctx.fillStyle = "#22c55e";
+            ctx.font = `${Math.round(btn.h * 0.25)}px monospace`;
+            ctx.fillText("×" + ownedCount, btn.x + btn.w/2, btn.y + btn.h/2 + btn.h * 0.2);
+          }
+        }
+      });
     }
 
     function drawTwoPlayerPullback() {
