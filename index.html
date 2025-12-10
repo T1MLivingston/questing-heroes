@@ -118,6 +118,26 @@
       box-shadow: 0 0 0 2px rgba(249,115,22,0.9);
     }
 
+    /* Clickable level stat */
+    .stat-level:hover {
+      background: rgba(249, 115, 22, 0.2);
+      border-radius: 4px;
+    }
+
+    /* Prominent currency display */
+    .stat-bank {
+      background: linear-gradient(135deg, #1e40af 0%, #7c3aed 100%);
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      box-shadow: 0 2px 8px rgba(124, 58, 237, 0.4);
+    }
+    .stat-bank .value {
+      color: #fbbf24 !important;
+      font-size: 1rem;
+    }
+
     .menu-btn {
       background: #111827;
       color: #e5e7eb;
@@ -329,6 +349,7 @@
       height: 48px;
       image-rendering: pixelated;
       border-radius: 4px;
+      transform: scaleX(-1); /* Flip to face right (towards opponent) */
     }
 
     .char-option .char-label {
@@ -369,6 +390,102 @@
     .char-select-actions .cancel-btn {
       background: #374151;
       color: #e5e7eb;
+    }
+
+    /* Level Select Screen (1-Player) */
+    .level-select-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(2,6,23,0.95);
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 20px;
+      overflow-y: auto;
+    }
+    .level-select-overlay.open {
+      display: flex;
+    }
+    .level-select-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: #f97316;
+    }
+    .level-select-subtitle {
+      font-size: 0.8rem;
+      color: #9ca3af;
+      margin-bottom: 16px;
+    }
+    .level-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      max-width: 480px;
+    }
+    @media (max-width: 500px) {
+      .level-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    .level-card {
+      background: #0f172a;
+      border: 2px solid #374151;
+      border-radius: 8px;
+      padding: 8px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+    .level-card:hover {
+      border-color: #6b7280;
+      transform: translateY(-2px);
+    }
+    .level-card.locked {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+    .level-card .level-num {
+      font-size: 0.6rem;
+      color: #9ca3af;
+    }
+    .level-card img {
+      width: 48px;
+      height: 48px;
+      image-rendering: pixelated;
+      border-radius: 4px;
+      transform: scaleX(-1);
+    }
+    .level-card .level-name {
+      font-size: 0.55rem;
+      color: #e5e7eb;
+      text-align: center;
+      max-width: 60px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .level-card .high-score {
+      font-size: 0.5rem;
+      color: #fbbf24;
+    }
+    .level-select-close {
+      margin-top: 16px;
+      padding: 10px 24px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      background: #374151;
+      color: #e5e7eb;
+      border: none;
+      cursor: pointer;
+    }
+    .level-select-close:hover {
+      background: #4b5563;
     }
 
     /* SHOP - Mobile friendly with larger touch targets */
@@ -568,7 +685,7 @@
           Player:
           <input id="playerName" placeholder="anon" />
         </div>
-        <div class="stat">
+        <div class="stat stat-level" id="levelStat" style="cursor: pointer;" title="Click to select level">
           Level:
           <span id="level" class="value">1</span>
         </div>
@@ -576,7 +693,7 @@
           Target:
           <span id="targetName" class="value">Loading...</span>
         </div>
-        <div class="stat">
+        <div class="stat stat-bank">
           Bank:
           <span id="credits" class="value">100</span><span> px</span>
         </div>
@@ -639,6 +756,14 @@
     </div>
   </div>
 
+  <!-- Level Selection Overlay (1-Player) -->
+  <div id="levelSelectOverlay" class="level-select-overlay">
+    <div class="level-select-title">Select Level</div>
+    <div class="level-select-subtitle">Choose a target to destroy</div>
+    <div class="level-grid" id="levelGrid"></div>
+    <button class="level-select-close" id="levelSelectClose">Close</button>
+  </div>
+
   <canvas id="game"></canvas>
 
   <div class="instructions-panel" id="singlePlayerInstructions">
@@ -697,10 +822,10 @@
 
     // ---- BULLET PIXEL COUNTS (edit these to rebalance) ----
     const BULLET_PIXELS = {
-      base: 10,    // Base bullet
-      bomb: 20,    // Bigger bomb
-      spread: 50,  // Spread shot
-      mega: 100    // Biggest weapon
+      base: 10,    // Base bullet - single shot
+      bomb: 25,    // Bigger bomb - more damage
+      spread: 15,  // Spread shot - NERFED (was 50)
+      mega: 40     // Mega bomb - NERFED (was 100)
     };
 
     // ---- BULLET UNLOCK LEVELS (edit to change progression) ----
@@ -772,6 +897,44 @@
     const p2CharGrid = document.getElementById("p2CharGrid");
     const charSelectStart = document.getElementById("charSelectStart");
     const charSelectCancel = document.getElementById("charSelectCancel");
+
+    // Level selection elements (1-Player)
+    const levelSelectOverlay = document.getElementById("levelSelectOverlay");
+    const levelGrid = document.getElementById("levelGrid");
+    const levelSelectClose = document.getElementById("levelSelectClose");
+
+    // ==========================================================================
+    // HIGH SCORES (localStorage)
+    // ==========================================================================
+    const HIGH_SCORE_KEY = "pixelCrushHighScores";
+    let highScores = {};
+
+    function loadHighScores() {
+      try {
+        const saved = localStorage.getItem(HIGH_SCORE_KEY);
+        if (saved) {
+          highScores = JSON.parse(saved);
+        }
+      } catch (e) {
+        highScores = {};
+      }
+    }
+
+    function saveHighScore(levelIndex, score) {
+      const key = `level_${levelIndex}`;
+      if (!highScores[key] || score > highScores[key]) {
+        highScores[key] = score;
+        try {
+          localStorage.setItem(HIGH_SCORE_KEY, JSON.stringify(highScores));
+        } catch (e) {
+          // localStorage not available
+        }
+      }
+    }
+
+    function getHighScore(levelIndex) {
+      return highScores[`level_${levelIndex}`] || 0;
+    }
 
     // ==========================================================================
     // GAME MODE
@@ -946,6 +1109,43 @@
       bombShopWrapper.style.display = "block";
     });
 
+    // ==========================================================================
+    // LEVEL SELECTION (1-PLAYER)
+    // ==========================================================================
+    function openLevelSelect() {
+      loadHighScores();
+      levelGrid.innerHTML = "";
+
+      PFP_LIST.forEach((pfp, index) => {
+        const levelNum = index + 1;
+        const highScore = getHighScore(index);
+
+        const card = document.createElement("div");
+        card.className = "level-card";
+        card.innerHTML = `
+          <div class="level-num">Level ${levelNum}</div>
+          <img src="${pfp.url}" alt="${pfp.name}">
+          <div class="level-name">${pfp.name}</div>
+          <div class="high-score">${highScore > 0 ? `Best: ${highScore}` : '-'}</div>
+        `;
+        card.addEventListener("click", () => selectLevel(index));
+        levelGrid.appendChild(card);
+      });
+
+      levelSelectOverlay.classList.add("open");
+    }
+
+    function selectLevel(index) {
+      levelSelectOverlay.classList.remove("open");
+      currentPfpIndex = index;
+      loadCurrentPfp();
+      resetLevel();
+    }
+
+    levelSelectClose.addEventListener("click", () => {
+      levelSelectOverlay.classList.remove("open");
+    });
+
     // Mode toggle handlers
     singlePlayerBtn.addEventListener("click", () => {
       if (gameMode === "single") return;
@@ -1024,8 +1224,8 @@
     const bulletDefsArray = [
       {
         id: "base",
-        name: "Base",
-        cost: 3,
+        name: "Basic",
+        cost: 10,           // Minimum cost is 10
         radiusCells: EXPLOSION_RADIUS.base,
         unlockLevel: BULLET_UNLOCK_LEVELS.base,
         pixelCount: BULLET_PIXELS.base,
@@ -1035,7 +1235,7 @@
       {
         id: "bomb",
         name: "Bomb",
-        cost: 6,
+        cost: 20,           // Updated: was 6
         radiusCells: EXPLOSION_RADIUS.bomb,
         unlockLevel: BULLET_UNLOCK_LEVELS.bomb,
         pixelCount: BULLET_PIXELS.bomb,
@@ -1045,7 +1245,7 @@
       {
         id: "spread",
         name: "Spread",
-        cost: 12,
+        cost: 25,           // Updated: was 12
         radiusCells: EXPLOSION_RADIUS.spread,
         unlockLevel: BULLET_UNLOCK_LEVELS.spread,
         pixelCount: BULLET_PIXELS.spread,
@@ -1055,7 +1255,7 @@
       {
         id: "mega",
         name: "Mega",
-        cost: 25,
+        cost: 40,           // Updated: was 25
         radiusCells: EXPLOSION_RADIUS.mega,
         unlockLevel: BULLET_UNLOCK_LEVELS.mega,
         pixelCount: BULLET_PIXELS.mega,
@@ -1109,7 +1309,8 @@
     // ==========================================================================
     let targetMoving = false;
     let targetVelocity = { x: 0, y: 0 };
-    let targetMoveDirection = 1; // 1 or -1 for horizontal bounce
+    let targetMoveDirection = 1; // 1 or -1 for vertical bounce (up/down)
+    let pedestalBlocks = []; // Track pedestal blocks for moving with target
 
     let shotsFired = 0;
     let targetsCleared = 0;
@@ -1695,11 +1896,11 @@
     }
 
     function consumePlayerPixels(player, count) {
-      // Remove pixels from bottom-up
+      // Remove pixels from TOP-down (changed from bottom-up)
       let removed = 0;
       const sortedByY = player.pixels
         .filter(p => p.alive)
-        .sort((a, b) => b.y - a.y); // Sort by Y descending (bottom first)
+        .sort((a, b) => a.y - b.y); // Sort by Y ascending (top first)
 
       for (const pixel of sortedByY) {
         if (removed >= count) break;
@@ -1710,6 +1911,14 @@
 
       player.pixelCount = player.pixels.filter(p => p.alive).length;
       updateTwoPlayerUI();
+
+      // Check for instant loss: if player consumes all their own pixels, they lose
+      if (player.pixelCount === 0) {
+        const loserKey = player === twoPlayerState.player1 ? "player1" : "player2";
+        const winnerKey = loserKey === "player1" ? "player2" : "player1";
+        twoPlayerState.winner = winnerKey;
+        twoPlayerState.gameOver = true;
+      }
 
       return removed;
     }
@@ -1920,14 +2129,15 @@
       resetLevelEconomy();
       destroyPctEl.textContent = "0";
 
-      // Setup moving target for later levels
+      // Setup moving target for later levels (now vertical movement)
       const currentLevel = currentPfpIndex + 1;
       targetMoving = currentLevel >= MOVING_TARGET_START_LEVEL;
+      pedestalBlocks = []; // Clear pedestal blocks
       if (targetMoving) {
         const speed = MOVING_TARGET_BASE_SPEED +
           (currentLevel - MOVING_TARGET_START_LEVEL) * MOVING_TARGET_SPEED_INCREMENT;
-        targetVelocity = { x: speed, y: 0 };
-        targetMoveDirection = 1;
+        targetVelocity = { x: 0, y: speed }; // Vertical movement
+        targetMoveDirection = -1; // Start moving up
       } else {
         targetVelocity = { x: 0, y: 0 };
       }
@@ -1939,7 +2149,7 @@
       function addRow(xLeft, y, cols, color, kind, dynamic = false, indestructible = false) {
         const [r, g, b] = color;
         for (let c = 0; c < cols; c++) {
-          blocks.push({
+          const block = {
             x: xLeft + c * tileSize,
             y,
             size: tileSize,
@@ -1949,15 +2159,22 @@
             vy: 0,
             kind,
             indestructible,
-            gravityDelay: 0
-          });
+            gravityDelay: 0,
+            offsetX: xLeft + c * tileSize - targetBounds.x, // Offset from target for syncing
+            offsetY: y - targetBounds.y
+          };
+          blocks.push(block);
+          // Track pedestal blocks for moving with target
+          if (kind.startsWith("pedestal")) {
+            pedestalBlocks.push(block);
+          }
         }
       }
 
       function addColumn(x, yTop, rows, color, kind, dynamic = false, indestructible = false) {
         const [r, g, b] = color;
         for (let rIdx = 0; rIdx < rows; rIdx++) {
-          blocks.push({
+          const block = {
             x,
             y: yTop + rIdx * tileSize,
             size: tileSize,
@@ -1967,8 +2184,15 @@
             vy: 0,
             kind,
             indestructible,
-            gravityDelay: 0
-          });
+            gravityDelay: 0,
+            offsetX: x - targetBounds.x, // Offset from target for syncing
+            offsetY: yTop + rIdx * tileSize - targetBounds.y
+          };
+          blocks.push(block);
+          // Track pedestal blocks for moving with target
+          if (kind.startsWith("pedestal")) {
+            pedestalBlocks.push(block);
+          }
         }
       }
 
@@ -2452,6 +2676,8 @@
       if (hadAliveTarget && !stillAlive) {
         targetsCleared++;
         levelAdvanceTimer = 60;
+        // Save high score for this level
+        saveHighScore(currentPfpIndex, score);
       }
     }
 
@@ -2510,25 +2736,33 @@
     function updateMovingTarget() {
       if (!targetMoving || !targetBounds) return;
 
-      // Move the target bounds
-      targetBounds.x += targetVelocity.x * targetMoveDirection;
+      // Move the target bounds (vertical movement)
+      targetBounds.y += targetVelocity.y * targetMoveDirection;
 
-      // Bounce off edges
-      const minX = tileSize * 2;
-      const maxX = launcherZoneX - targetBounds.w - tileSize * 6;
+      // Bounce off top/bottom edges (vertical)
+      const minY = tileSize * 2;
+      const maxY = groundY - targetBounds.h - tileSize * 4;
 
-      if (targetBounds.x <= minX) {
-        targetBounds.x = minX;
-        targetMoveDirection = 1;
-      } else if (targetBounds.x >= maxX) {
-        targetBounds.x = maxX;
-        targetMoveDirection = -1;
+      if (targetBounds.y <= minY) {
+        targetBounds.y = minY;
+        targetMoveDirection = 1; // Start moving down
+      } else if (targetBounds.y >= maxY) {
+        targetBounds.y = maxY;
+        targetMoveDirection = -1; // Start moving up
       }
 
       // Update all target block positions relative to bounds
       for (const block of targetBlocks) {
         if (!block.alive) continue;
         block.x = targetBounds.x + block.gridX * pfpPixelSize;
+        block.y = targetBounds.y + block.gridY * pfpPixelSize;
+      }
+
+      // Update pedestal blocks to move with target (synced movement)
+      for (const block of pedestalBlocks) {
+        if (!block.alive) continue;
+        block.x = targetBounds.x + block.offsetX;
+        block.y = targetBounds.y + block.offsetY;
       }
     }
 
@@ -3419,6 +3653,19 @@
     // INITIALIZATION
     // ==========================================================================
     window.addEventListener("resize", resizeCanvas);
+
+    // Level stat click handler (1-Player level select)
+    const levelStat = document.getElementById("levelStat");
+    if (levelStat) {
+      levelStat.addEventListener("click", () => {
+        if (gameMode === "single") {
+          openLevelSelect();
+        }
+      });
+    }
+
+    // Load high scores from localStorage
+    loadHighScores();
 
     generateShopUI();
     loadCurrentPfp();
