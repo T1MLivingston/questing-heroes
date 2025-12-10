@@ -844,7 +844,7 @@
 
     // ---- LAUNCHER POSITION ----
     // How far from the right edge the launcher zone starts (as % of width)
-    const LAUNCHER_ZONE_PERCENT = 0.20;  // Moved left (was ~0.14)
+    const LAUNCHER_ZONE_PERCENT = 0.25;  // Wider shooting lane
     const LAUNCHER_ARROW_STEP = 30;      // Pixels to move per arrow click
 
     // ---- BULLET PIXEL COUNTS (edit these to rebalance) ----
@@ -882,8 +882,8 @@
     const GRAVITY_FALL_DELAY = 3;
 
     // ---- PULL-BACK SETTINGS ----
-    const MAX_PULL_DISTANCE = 150;
-    const MAX_POWER = 26;
+    const MAX_PULL_DISTANCE = 200;  // Increased for longer pulls
+    const MAX_POWER = 32;           // Increased for longer range shots
 
     // ==========================================================================
     // DOM ELEMENTS
@@ -1658,7 +1658,7 @@
         h: arrowSize
       };
 
-      // P1 quick-select buttons (to the right of launcher, facing inward)
+      // P1 quick-select buttons (on LEFT edge, like single-player style)
       const btnSize = tileSize * 1.8;
       const btnSpacing = tileSize * 0.4;
       const totalBtnHeight = bulletDefsArray.length * (btnSize + btnSpacing) - btnSpacing;
@@ -1666,7 +1666,7 @@
 
       p1.quickSelectBounds = bulletDefsArray.map((bullet, i) => ({
         id: bullet.id,
-        x: p1.launchTrackX + tileSize * 2,
+        x: tileSize * 0.5,  // Near left edge
         y: btnStartY + i * (btnSize + btnSpacing),
         w: btnSize,
         h: btnSize,
@@ -1693,11 +1693,11 @@
         h: arrowSize
       };
 
-      // P2 quick-select buttons (to the left of launcher, facing inward)
+      // P2 quick-select buttons (on RIGHT edge, like single-player style)
       const btnStartY2 = p2.launchY - totalBtnHeight / 2;
       p2.quickSelectBounds = bulletDefsArray.map((bullet, i) => ({
         id: bullet.id,
-        x: p2.launchTrackX - tileSize * 2 - btnSize,
+        x: width - tileSize * 0.5 - btnSize,  // Near right edge
         y: btnStartY2 + i * (btnSize + btnSpacing),
         w: btnSize,
         h: btnSize,
@@ -2178,12 +2178,17 @@
     }
 
     function resizeCanvas() {
+      // Store old dimensions for scaling
+      const oldWidth = width || 1;
+      const oldHeight = height || 1;
+      const oldTileSize = tileSize || 10;
+
       // Wider playfield - 90% on desktop, 98% on mobile
       const isMobile = window.innerWidth <= 768;
       const widthPercent = isMobile ? 0.98 : 0.90;
       const maxW = 1400;
       const screenW = Math.min(window.innerWidth * widthPercent - 16, maxW);
-      const aspect = 16 / 9;
+      const aspect = 2.2;  // More elongated horizontally (was 16/9 = 1.78)
       const screenH = screenW / aspect;
 
       canvas.width = screenW;
@@ -2192,12 +2197,17 @@
       width = canvas.width;
       height = canvas.height;
 
-      tileSize = Math.max(6, Math.round(height / 34));
-      pfpPixelSize = Math.max(3, Math.floor(tileSize * 0.55));
+      tileSize = Math.max(6, Math.round(height / 30));  // Adjusted for new aspect
+      pfpPixelSize = Math.max(3, Math.floor(tileSize * 0.45));  // Smaller targets (was 0.55)
 
       lavaY = height - tileSize * 4;
       groundY = lavaY;
       floorY = height - tileSize;
+
+      // Calculate scale factors
+      const scaleX = width / oldWidth;
+      const scaleY = height / oldHeight;
+      const sizeScale = tileSize / oldTileSize;
 
       // Only recalculate positions, never reset game state on resize
       if (gameMode === "single") {
@@ -2205,15 +2215,73 @@
         // Only do full reset if this is initial load (no targetBlocks yet)
         if (targetBlocks.length === 0) {
           resetLevel();
+        } else {
+          // Scale existing target blocks
+          for (const block of targetBlocks) {
+            block.x *= scaleX;
+            block.y *= scaleY;
+            block.w *= sizeScale;
+            block.h *= sizeScale;
+          }
+          // Scale regular blocks
+          for (const block of blocks) {
+            block.x *= scaleX;
+            block.y *= scaleY;
+            block.size *= sizeScale;
+          }
+          // Update targetBounds
+          if (targetBounds) {
+            targetBounds.x *= scaleX;
+            targetBounds.y *= scaleY;
+            targetBounds.w *= sizeScale;
+            targetBounds.h *= sizeScale;
+          }
         }
       } else {
         // Only do full reset if game hasn't started yet
         if (twoPlayerState.player1.pixels.length === 0 && !twoPlayerState.gameOver) {
           resetTwoPlayerGame();
         } else {
-          // Just recalculate launcher positions without resetting game state
+          // Scale existing two-player pixels and pedestals
+          scaleTwoPlayerPixels(scaleX, scaleY, sizeScale);
+          // Recalculate launcher positions
           setupTwoPlayerLaunchers();
         }
+      }
+    }
+
+    function scaleTwoPlayerPixels(scaleX, scaleY, sizeScale) {
+      const p1 = twoPlayerState.player1;
+      const p2 = twoPlayerState.player2;
+
+      // Scale P1 pixels
+      for (const pixel of p1.pixels) {
+        pixel.x *= scaleX;
+        pixel.y *= scaleY;
+        pixel.w *= sizeScale;
+        pixel.h *= sizeScale;
+      }
+
+      // Scale P2 pixels
+      for (const pixel of p2.pixels) {
+        pixel.x *= scaleX;
+        pixel.y *= scaleY;
+        pixel.w *= sizeScale;
+        pixel.h *= sizeScale;
+      }
+
+      // Scale P1 pedestal
+      for (const block of p1.pedestal) {
+        block.x *= scaleX;
+        block.y *= scaleY;
+        block.size *= sizeScale;
+      }
+
+      // Scale P2 pedestal
+      for (const block of p2.pedestal) {
+        block.x *= scaleX;
+        block.y *= scaleY;
+        block.size *= sizeScale;
       }
     }
 
@@ -2550,8 +2618,12 @@
         return;
       }
 
-      const clampedDist = Math.min(pullDist, MAX_PULL_DISTANCE);
-      const power = (clampedDist / MAX_PULL_DISTANCE) * MAX_POWER;
+      // Calculate effective max pull based on screen constraints
+      const margin = tileSize * 2;
+      const effectiveMaxPull = Math.min(MAX_PULL_DISTANCE, launchPoint.x - margin);
+      const clampedDist = Math.min(pullDist, effectiveMaxPull);
+      // Normalize so max achievable pull = 100% power
+      const power = (clampedDist / Math.max(60, effectiveMaxPull)) * MAX_POWER;
       const angle = Math.atan2(dy, dx);
 
       fireProjectiles(bullet, power, angle);
@@ -2587,8 +2659,19 @@
       const bulletId = chamber.shift();
       const bullet = bulletDefs[bulletId];
 
-      const clampedDist = Math.min(pullDist, MAX_PULL_DISTANCE);
-      const power = (clampedDist / MAX_PULL_DISTANCE) * MAX_POWER;
+      // Calculate effective max pull based on screen constraints and launcher position
+      const margin = tileSize * 2;
+      let effectiveMaxPull;
+      if (activePlayer === "player1") {
+        // P1 on left, pulls left (to edge)
+        effectiveMaxPull = Math.min(MAX_PULL_DISTANCE, player.launcher.x - margin);
+      } else {
+        // P2 on right, pulls right (to edge)
+        effectiveMaxPull = Math.min(MAX_PULL_DISTANCE, width - player.launcher.x - margin);
+      }
+      const clampedDist = Math.min(pullDist, effectiveMaxPull);
+      // Normalize so max achievable pull = 100% power
+      const power = (clampedDist / Math.max(60, effectiveMaxPull)) * MAX_POWER;
       const angle = Math.atan2(dy, dx);
 
       // Fire projectile for this player
@@ -2903,6 +2986,11 @@
       for (const p of projectiles) {
         if (!p.active) continue;
 
+        // Add current position to trail before moving
+        if (!p.trail) p.trail = [];
+        p.trail.push({ x: p.x, y: p.y });
+        if (p.trail.length > 8) p.trail.shift();  // Keep last 8 positions
+
         p.vy += GRAVITY_PROJECTILE;
         p.x += p.vx;
         p.y += p.vy;
@@ -3071,6 +3159,11 @@
       // Update projectiles
       for (const p of projectiles) {
         if (!p.active) continue;
+
+        // Add current position to trail before moving
+        if (!p.trail) p.trail = [];
+        p.trail.push({ x: p.x, y: p.y });
+        if (p.trail.length > 8) p.trail.shift();  // Keep last 8 positions
 
         p.vy += GRAVITY_PROJECTILE;
         p.x += p.vx;
@@ -3300,7 +3393,7 @@
     function drawArrowButtons() {
       const arrowSize = tileSize * 1.5;
 
-      // Up arrow
+      // Up arrow (triangle only, no square border)
       ctx.fillStyle = "rgba(34,197,94,0.8)";
       ctx.beginPath();
       ctx.moveTo(launchTrackX, arrowUpBounds.y + arrowUpBounds.h * 0.2);
@@ -3309,12 +3402,7 @@
       ctx.closePath();
       ctx.fill();
 
-      // Up arrow border (hitbox indicator)
-      ctx.strokeStyle = "rgba(34,197,94,0.4)";
-      ctx.lineWidth = 2;
-      ctx.strokeRect(arrowUpBounds.x, arrowUpBounds.y, arrowUpBounds.w, arrowUpBounds.h);
-
-      // Down arrow
+      // Down arrow (triangle only, no square border)
       ctx.fillStyle = "rgba(34,197,94,0.8)";
       ctx.beginPath();
       ctx.moveTo(launchTrackX, arrowDownBounds.y + arrowDownBounds.h * 0.8);
@@ -3322,11 +3410,6 @@
       ctx.lineTo(launchTrackX + arrowSize, arrowDownBounds.y + arrowDownBounds.h * 0.2);
       ctx.closePath();
       ctx.fill();
-
-      // Down arrow border (hitbox indicator)
-      ctx.strokeStyle = "rgba(34,197,94,0.4)";
-      ctx.lineWidth = 2;
-      ctx.strokeRect(arrowDownBounds.x, arrowDownBounds.y, arrowDownBounds.w, arrowDownBounds.h);
     }
 
     // ==========================================================================
@@ -3399,9 +3482,12 @@
       ctx.lineWidth = 3;
       ctx.stroke();
 
-      // Power indicator
-      const clampedDist = Math.min(dist, MAX_PULL_DISTANCE);
-      const power = clampedDist / MAX_PULL_DISTANCE;
+      // Calculate effective max pull based on screen constraints
+      const margin = tileSize * 2;
+      const effectiveMaxPull = Math.min(MAX_PULL_DISTANCE, launchPoint.x - margin);
+      const clampedDist = Math.min(dist, effectiveMaxPull);
+      // Power normalized to achievable max
+      const power = clampedDist / Math.max(60, effectiveMaxPull);
       const indicatorRadius = 8 + power * 12;
 
       ctx.beginPath();
@@ -3446,6 +3532,19 @@
     function drawProjectiles() {
       for (const p of projectiles) {
         if (!p.active) continue;
+
+        // Draw trail (if exists)
+        if (p.trail && p.trail.length > 0) {
+          for (let i = 0; i < p.trail.length; i++) {
+            const t = p.trail[i];
+            const alpha = (i / p.trail.length) * 0.6;
+            const trailSize = p.size * (0.3 + (i / p.trail.length) * 0.5);
+            ctx.fillStyle = `rgba(250, 204, 21, ${alpha})`;
+            ctx.fillRect(t.x - trailSize/2, t.y - trailSize/2, trailSize, trailSize);
+          }
+        }
+
+        // Draw main projectile
         ctx.fillStyle = "#facc15";
         ctx.fillRect(p.x - p.size/2, p.y - p.size/2, p.size, p.size);
       }
@@ -3547,19 +3646,14 @@
       const player = twoPlayerState[currentTurn];
       const launcher = player.launcher;
 
-      // Draw glowing indicator around current player's launcher
-      const s = tileSize * 2.5;
-      ctx.strokeStyle = currentTurn === "player1" ? "#3b82f6" : "#ef4444";
-      ctx.lineWidth = 3;
-      ctx.setLineDash([5, 5]);
-      ctx.strokeRect(launcher.x - s/2, launcher.y - s/2, s, s);
-      ctx.setLineDash([]);
-
-      // Draw "YOUR TURN" text
-      ctx.fillStyle = currentTurn === "player1" ? "#60a5fa" : "#f87171";
-      ctx.font = `bold ${Math.round(tileSize * 0.8)}px monospace`;
+      // Draw "YOUR TURN" text ON the launcher block (inside the white square)
+      const s = tileSize * 2;
+      ctx.fillStyle = currentTurn === "player1" ? "#3b82f6" : "#ef4444";
+      ctx.font = `bold ${Math.round(tileSize * 0.5)}px monospace`;
       ctx.textAlign = "center";
-      ctx.fillText("YOUR TURN!", launcher.x, launcher.y - tileSize * 3);
+      ctx.textBaseline = "middle";
+      ctx.fillText("YOUR", launcher.x, launcher.y - tileSize * 0.3);
+      ctx.fillText("TURN", launcher.x, launcher.y + tileSize * 0.3);
     }
 
     function drawTwoPlayerPedestals() {
@@ -3793,9 +3887,17 @@
       ctx.lineWidth = 3;
       ctx.stroke();
 
-      // Power indicator
-      const clampedDist = Math.min(dist, MAX_PULL_DISTANCE);
-      const power = clampedDist / MAX_PULL_DISTANCE;
+      // Calculate effective max pull based on screen constraints and launcher position
+      const margin = tileSize * 2;
+      let effectiveMaxPull;
+      if (twoPlayerState.activePlayer === "player1") {
+        effectiveMaxPull = Math.min(MAX_PULL_DISTANCE, player.launcher.x - margin);
+      } else {
+        effectiveMaxPull = Math.min(MAX_PULL_DISTANCE, width - player.launcher.x - margin);
+      }
+      const clampedDist = Math.min(dist, effectiveMaxPull);
+      // Power normalized to achievable max
+      const power = clampedDist / Math.max(60, effectiveMaxPull);
       const indicatorRadius = 8 + power * 12;
 
       ctx.beginPath();
