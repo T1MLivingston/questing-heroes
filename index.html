@@ -319,7 +319,7 @@
 
     .char-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(3, 1fr);
       gap: 8px;
     }
 
@@ -1253,51 +1253,67 @@
     let floatingTexts = [];
 
     // ==========================================================================
-    // BULLET/WEAPON DEFINITIONS - Only 4 types!
+    // BULLET/WEAPON DEFINITIONS - 5 types with trajectory preview
     // ==========================================================================
     const bulletDefsArray = [
       {
         id: "base",
-        name: "Basic",
-        cost: 10,           // Minimum cost is 10
+        name: "Sniper",
+        cost: 20,           // Long range with trajectory
         radiusCells: EXPLOSION_RADIUS.base,
         unlockLevel: BULLET_UNLOCK_LEVELS.base,
         pixelCount: BULLET_PIXELS.base,
         isSpread: false,
-        detonatable: false, // Cannot be manually detonated
+        detonatable: false,
+        showTrajectory: true,  // Shows halfway trajectory preview
         palette: [[147, 197, 253], [59, 130, 246], [37, 99, 235]]
       },
       {
         id: "bomb",
         name: "Bomb",
-        cost: 20,           // Updated: was 6
+        cost: 41,           // Detonatable bomb
         radiusCells: EXPLOSION_RADIUS.bomb,
         unlockLevel: BULLET_UNLOCK_LEVELS.bomb,
         pixelCount: BULLET_PIXELS.bomb,
         isSpread: false,
-        detonatable: true,  // Can be manually detonated
+        detonatable: true,
+        showTrajectory: false,
         palette: [[254, 215, 170], [251, 146, 60], [234, 88, 12]]
+      },
+      {
+        id: "guided",
+        name: "Guided",
+        cost: 61,           // Bomb with trajectory preview
+        radiusCells: EXPLOSION_RADIUS.spread,
+        unlockLevel: BULLET_UNLOCK_LEVELS.spread,
+        pixelCount: BULLET_PIXELS.spread,
+        isSpread: false,
+        detonatable: true,
+        showTrajectory: true,  // Shows halfway trajectory preview
+        palette: [[134, 239, 172], [34, 197, 94], [22, 163, 74]]
       },
       {
         id: "spread",
         name: "Spread",
-        cost: 25,           // Updated: was 12
+        cost: 80,           // Spread pattern
         radiusCells: EXPLOSION_RADIUS.spread,
         unlockLevel: BULLET_UNLOCK_LEVELS.spread,
         pixelCount: BULLET_PIXELS.spread,
         isSpread: true,
-        detonatable: false, // Cannot be manually detonated
+        detonatable: false,
+        showTrajectory: false,
         palette: [[233, 213, 255], [192, 132, 252], [168, 85, 247]]
       },
       {
         id: "mega",
         name: "Mega",
-        cost: 40,           // Updated: was 25
+        cost: 100,          // Ultimate spread + detonatable
         radiusCells: EXPLOSION_RADIUS.mega,
         unlockLevel: BULLET_UNLOCK_LEVELS.mega,
         pixelCount: BULLET_PIXELS.mega,
         isSpread: true,
-        detonatable: true,  // Can be manually detonated
+        detonatable: true,
+        showTrajectory: false,
         palette: [[248, 113, 113], [239, 68, 68], [220, 38, 38]]
       }
     ];
@@ -3522,6 +3538,46 @@
       ctx.lineTo(endX - headLen * Math.cos(angle + 0.4), endY - headLen * Math.sin(angle + 0.4));
       ctx.stroke();
 
+      // Trajectory preview for bullets with showTrajectory
+      const nextBullet = chamberQueue.length > 0 ? bulletDefs[chamberQueue[0]] : null;
+      if (nextBullet && nextBullet.showTrajectory && power > 0.1) {
+        const velocity = power * MAX_POWER;
+        const vx = Math.cos(angle) * velocity;
+        const vy = Math.sin(angle) * velocity;
+
+        // Simulate trajectory for halfway point
+        ctx.beginPath();
+        ctx.setLineDash([3, 6]);
+        ctx.strokeStyle = "rgba(34, 197, 94, 0.5)";
+        ctx.lineWidth = 2;
+
+        let px = launchPoint.x;
+        let py = launchPoint.y;
+        let pvx = vx;
+        let pvy = vy;
+
+        ctx.moveTo(px, py);
+
+        // Simulate 30 frames (about half trajectory)
+        for (let i = 0; i < 30; i++) {
+          pvy += GRAVITY_PROJECTILE;
+          px += pvx;
+          py += pvy;
+
+          if (py > lavaY || px < 0 || px > width) break;
+          ctx.lineTo(px, py);
+        }
+
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        // Draw endpoint marker
+        ctx.beginPath();
+        ctx.arc(px, py, 6, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(34, 197, 94, 0.6)";
+        ctx.fill();
+      }
+
       // Power percentage
       ctx.fillStyle = "#fff";
       ctx.font = `${Math.round(tileSize * 0.9)}px monospace`;
@@ -3932,6 +3988,48 @@
       ctx.lineTo(endX - headLen * Math.cos(angle + 0.4), endY - headLen * Math.sin(angle + 0.4));
       ctx.stroke();
 
+      // Trajectory preview for bullets with showTrajectory
+      const currentPlayer = twoPlayerState.activePlayer;
+      const chamber = twoPlayerInventory[currentPlayer]?.chamberQueue;
+      const nextBullet = chamber && chamber.length > 0 ? bulletDefs[chamber[0]] : null;
+      if (nextBullet && nextBullet.showTrajectory && power > 0.1) {
+        const velocity = power * MAX_POWER;
+        const vx = Math.cos(angle) * velocity;
+        const vy = Math.sin(angle) * velocity;
+
+        // Simulate trajectory for halfway point
+        ctx.beginPath();
+        ctx.setLineDash([3, 6]);
+        ctx.strokeStyle = "rgba(34, 197, 94, 0.5)";
+        ctx.lineWidth = 2;
+
+        let px = player.launcher.x;
+        let py = player.launcher.y;
+        let pvx = vx;
+        let pvy = vy;
+
+        ctx.moveTo(px, py);
+
+        // Simulate 30 frames (about half trajectory)
+        for (let i = 0; i < 30; i++) {
+          pvy += GRAVITY_PROJECTILE;
+          px += pvx;
+          py += pvy;
+
+          if (py > lavaY || px < 0 || px > width) break;
+          ctx.lineTo(px, py);
+        }
+
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        // Draw endpoint marker
+        ctx.beginPath();
+        ctx.arc(px, py, 6, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(34, 197, 94, 0.6)";
+        ctx.fill();
+      }
+
       // Power percentage
       ctx.fillStyle = "#fff";
       ctx.font = `${Math.round(tileSize * 0.9)}px monospace`;
@@ -3991,7 +4089,10 @@
     // Load high scores from localStorage
     loadHighScores();
 
+    // Ensure credits start at STARTING_BANK
+    credits = STARTING_BANK;
     generateShopUI();
+    updateShopUI();  // Explicitly update UI to show correct credits
     loadCurrentPfp();
     resizeCanvas();
     loop();
