@@ -349,7 +349,27 @@
       height: 48px;
       image-rendering: pixelated;
       border-radius: 4px;
-      transform: scaleX(-1); /* Flip to face right (towards opponent) */
+    }
+
+    /* P2 selector images flipped to face right (towards P1) */
+    .char-select-panel.p2 .char-option img {
+      transform: scaleX(-1);
+    }
+
+    /* Team-based character backgrounds */
+    .char-option.team-migos {
+      background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+      border-color: #60a5fa;
+    }
+    .char-option.team-migos:hover {
+      border-color: #93c5fd;
+    }
+    .char-option.team-cloaks {
+      background: linear-gradient(135deg, #374151 0%, #6b7280 100%);
+      border-color: #9ca3af;
+    }
+    .char-option.team-cloaks:hover {
+      border-color: #d1d5db;
     }
 
     .char-option .char-label {
@@ -742,11 +762,11 @@
     <div class="char-select-subtitle">Each player picks a PFP to battle with</div>
     <div class="char-select-container">
       <div class="char-select-panel p1">
-        <h3>Player 1</h3>
+        <h3>Player 1 - Migos</h3>
         <div class="char-grid" id="p1CharGrid"></div>
       </div>
       <div class="char-select-panel p2">
-        <h3>Player 2</h3>
+        <h3>Player 2 - Cloaks</h3>
         <div class="char-grid" id="p2CharGrid"></div>
       </div>
     </div>
@@ -1016,24 +1036,28 @@
       charSelection.p1Image = null;
       charSelection.p2Image = null;
 
-      // Build character grids
+      // Build character grids - P1 gets Migos (blue), P2 gets Cloaks (gray)
       p1CharGrid.innerHTML = "";
       p2CharGrid.innerHTML = "";
 
       PFP_LIST.forEach((pfp, index) => {
-        // P1 grid
-        const p1Option = document.createElement("div");
-        p1Option.className = "char-option";
-        p1Option.innerHTML = `<img src="${pfp.url}" alt="${pfp.name}"><span class="char-label">${pfp.name}</span>`;
-        p1Option.addEventListener("click", () => selectCharacter(1, index, p1Option));
-        p1CharGrid.appendChild(p1Option);
+        // P1 grid - only Migos team (blue background)
+        if (pfp.team === "migos") {
+          const p1Option = document.createElement("div");
+          p1Option.className = "char-option team-migos";
+          p1Option.innerHTML = `<img src="${pfp.url}" alt="${pfp.name}"><span class="char-label">${pfp.name}</span>`;
+          p1Option.addEventListener("click", () => selectCharacter(1, index, p1Option));
+          p1CharGrid.appendChild(p1Option);
+        }
 
-        // P2 grid
-        const p2Option = document.createElement("div");
-        p2Option.className = "char-option";
-        p2Option.innerHTML = `<img src="${pfp.url}" alt="${pfp.name}"><span class="char-label">${pfp.name}</span>`;
-        p2Option.addEventListener("click", () => selectCharacter(2, index, p2Option));
-        p2CharGrid.appendChild(p2Option);
+        // P2 grid - only Cloaks team (gray background)
+        if (pfp.team === "cloaks") {
+          const p2Option = document.createElement("div");
+          p2Option.className = "char-option team-cloaks";
+          p2Option.innerHTML = `<img src="${pfp.url}" alt="${pfp.name}"><span class="char-label">${pfp.name}</span>`;
+          p2Option.addEventListener("click", () => selectCharacter(2, index, p2Option));
+          p2CharGrid.appendChild(p2Option);
+        }
       });
 
       charSelectStart.disabled = true;
@@ -1178,19 +1202,22 @@
     // ==========================================================================
     // PFP LIST
     // ==========================================================================
+    // Team assignments: migos (P1, blue) and cloaks (P2, gray)
     const PFP_LIST = [
-      { name: "Bat", url: "https://cdn.prod.website-files.com/64aa957da446d8dc44869f81/691be24e3333bf67710ef8d0_c_151.png" },
-      { name: "Scythe", url: "https://cdn.prod.website-files.com/64aa957da446d8dc44869f81/691be24ee1e3bdf8eb1d3d97_c_7130.png" },
-      { name: "Archer - Eyepatch", url: "https://cdn.prod.website-files.com/64aa957da446d8dc44869f81/691be24e962d34eb4472da90_c_11292.png" },
-      { name: "Cheetah", url: "https://cdn.prod.website-files.com/64aa957da446d8dc44869f81/691be24e0afc9c0f75ff097c_c_16564.png" },
-      { name: "Archer - Fire", url: "https://cdn.prod.website-files.com/64aa957da446d8dc44869f81/691be24eea51a7384061698b_c_19431.png" },
-      { name: "Forest Wolf", url: "https://cdn.prod.website-files.com/64aa957da446d8dc44869f81/691be24ee3a8c903c6bf3ab0_c_1887.png" },
-      { name: "White Shag", url: "https://cdn.prod.website-files.com/64aa957da446d8dc44869f81/691be24ee043e99baed366a1_n_17763.png" },
-      { name: "Pigtails", url: "https://cdn.prod.website-files.com/64aa957da446d8dc44869f81/691be24e7e99d28670266a13_N_2818.png" },
-      { name: "Ginger", url: "https://cdn.prod.website-files.com/64aa957da446d8dc44869f81/691be24eafcfe74681d63ca1_n_6672.png" },
-      { name: "Croc", url: "https://cdn.prod.website-files.com/64aa957da446d8dc44869f81/691be24e19872724aa3ba4ad_N_9770.png" },
-      { name: "Snowman", url: "https://cdn.prod.website-files.com/64aa957da446d8dc44869f81/691be24ec00212b1b303ce07_N_19130.png" },
-      { name: "Frog", url: "https://cdn.prod.website-files.com/64aa957da446d8dc44869f81/691be24edcb42d79f6aef702_n_2869.png" }
+      // Cloaks team (P2 only - gray background)
+      { name: "Bat", url: "https://cdn.prod.website-files.com/64aa957da446d8dc44869f81/691be24e3333bf67710ef8d0_c_151.png", team: "cloaks" },
+      { name: "Scythe", url: "https://cdn.prod.website-files.com/64aa957da446d8dc44869f81/691be24ee1e3bdf8eb1d3d97_c_7130.png", team: "cloaks" },
+      { name: "Archer - Eyepatch", url: "https://cdn.prod.website-files.com/64aa957da446d8dc44869f81/691be24e962d34eb4472da90_c_11292.png", team: "cloaks" },
+      { name: "Cheetah", url: "https://cdn.prod.website-files.com/64aa957da446d8dc44869f81/691be24e0afc9c0f75ff097c_c_16564.png", team: "cloaks" },
+      { name: "Archer - Fire", url: "https://cdn.prod.website-files.com/64aa957da446d8dc44869f81/691be24eea51a7384061698b_c_19431.png", team: "cloaks" },
+      { name: "Forest Wolf", url: "https://cdn.prod.website-files.com/64aa957da446d8dc44869f81/691be24ee3a8c903c6bf3ab0_c_1887.png", team: "cloaks" },
+      // Migos team (P1 only - blue background)
+      { name: "White Shag", url: "https://cdn.prod.website-files.com/64aa957da446d8dc44869f81/691be24ee043e99baed366a1_n_17763.png", team: "migos" },
+      { name: "Pigtails", url: "https://cdn.prod.website-files.com/64aa957da446d8dc44869f81/691be24e7e99d28670266a13_N_2818.png", team: "migos" },
+      { name: "Ginger", url: "https://cdn.prod.website-files.com/64aa957da446d8dc44869f81/691be24eafcfe74681d63ca1_n_6672.png", team: "migos" },
+      { name: "Croc", url: "https://cdn.prod.website-files.com/64aa957da446d8dc44869f81/691be24e19872724aa3ba4ad_N_9770.png", team: "migos" },
+      { name: "Snowman", url: "https://cdn.prod.website-files.com/64aa957da446d8dc44869f81/691be24ec00212b1b303ce07_N_19130.png", team: "migos" },
+      { name: "Frog", url: "https://cdn.prod.website-files.com/64aa957da446d8dc44869f81/691be24edcb42d79f6aef702_n_2869.png", team: "migos" }
     ];
 
     let currentPfpIndex = 0;
@@ -1711,7 +1738,7 @@
         }
       }
 
-      // Build pixels from P1's selected character image (original colors)
+      // Build pixels from P1's selected character image (faces LEFT towards right side)
       const off1 = document.createElement("canvas");
       off1.width = TWO_PLAYER_PFP_GRID;
       off1.height = TWO_PLAYER_PFP_GRID;
@@ -2159,13 +2186,13 @@
             vy: 0,
             kind,
             indestructible,
-            gravityDelay: 0,
-            offsetX: xLeft + c * tileSize - targetBounds.x, // Offset from target for syncing
-            offsetY: y - targetBounds.y
+            gravityDelay: 0
           };
           blocks.push(block);
-          // Track pedestal blocks for moving with target
-          if (kind.startsWith("pedestal")) {
+          // Track pedestal blocks for moving with target (only calc offset for pedestals)
+          if (kind.startsWith("pedestal") && targetBounds) {
+            block.offsetX = block.x - targetBounds.x;
+            block.offsetY = block.y - targetBounds.y;
             pedestalBlocks.push(block);
           }
         }
@@ -2184,13 +2211,13 @@
             vy: 0,
             kind,
             indestructible,
-            gravityDelay: 0,
-            offsetX: x - targetBounds.x, // Offset from target for syncing
-            offsetY: yTop + rIdx * tileSize - targetBounds.y
+            gravityDelay: 0
           };
           blocks.push(block);
-          // Track pedestal blocks for moving with target
-          if (kind.startsWith("pedestal")) {
+          // Track pedestal blocks for moving with target (only calc offset for pedestals)
+          if (kind.startsWith("pedestal") && targetBounds) {
+            block.offsetX = block.x - targetBounds.x;
+            block.offsetY = block.y - targetBounds.y;
             pedestalBlocks.push(block);
           }
         }
