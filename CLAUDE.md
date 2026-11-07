@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-Questing Heroes is a browser-based, turn-based fantasy strategy game built with vanilla HTML, CSS and JavaScript. The player picks one of 8 factions and one of 24 heroes, explores a fog-covered map, grows a town, recruits an army and fights tactical battles on a hex grid. The goal is to recover the Seven Relics, hidden in guarded lairs and hunted by rival AI heroes, and deliver them to the town's Reliquary before the end of Month 4 (day 112).
+Questing Heroes is a browser-based, turn-based fantasy strategy game built with vanilla HTML, CSS and JavaScript. The player picks a map (Wheel & Spoke or Twin Ridges, in three sizes), one of 8 factions and one of 33 heroes (4 per faction, 5 for Beasts; placeholder heroes are marked `blank`), explores a fog-covered map, grows a town, recruits an army and fights tactical battles on a hex grid. The goal is to recover the Seven Relics, hidden in guarded lairs and hunted by rival AI heroes, and deliver them to the town's Reliquary before the day limit (4, 5 or 6 months by map size).
 
 This is a **private, personal project**. See `LEGAL.md` before publishing anything.
 
@@ -32,24 +32,24 @@ The script in `index.html` is split into sections marked with `/* ===== ... ====
 
 | Section | What it holds |
 |---------|---------------|
-| DATA | `FAC` (8 factions), `U` (units, neutrals and generated `_u` upgrades), `SP` (spells), `SK` (skills), `HEROES` (24 heroes), `RELICS` (7), `MINE` |
+| DATA | `FAC` (8 factions), `U` (units, neutrals and generated `_u` upgrades), `SP` (spells), `SK` (skills), `HEROES` (33, including placeholders), `ITEMS` (16 artifacts), `START_KIT` (each hero's starting skill and artifact), `RELICS` (7), `MINE` |
 | ART | Procedural drawing: `drawRes`, `drawStat`, `drawFig`, `drawGlyph`, `drawUnit`, `drawHeroPortrait`, `drawCrest`, `iconURL` cache |
-| MAP | `genWorld` (seeded map generator with crag ridges and guarded passes), `newGame`, `mkHero`, `mkRival`, terrain prerender, camera, `drawMap`, pathfinding (`astar`, `planTo`) |
+| MAP | `MAP_SIZES`, `MAP_TYPES`, `genMap` → `genWheel` or `genRidges`, `makeIsland`/`isleDocks` (pirate islands), `newGame`, `mkHero`, `mkRival`, terrain prerender, camera, `drawMap`, pathfinding (`astar`, `planTo`) |
 | UI | `renderUI` (top bar, hero card, army), `showModal`, toasts, unit cards |
 | Adventure actions | `walk`, `fightPreview`, `gainRelic`, `visit`, `arriveTown`, `endDay`, `addRumour`, `addXP` |
 | Rival heroes | `rivalsTurn`, `rivalTarget`, `rivalInteract`, `autoResolve`, `growRival` |
-| Town screen | `townBuildings`, `townHTML`, `openTown` |
-| BATTLE | Hex grid helpers, stat functions (`sAtk`, `sDef`, `sSpd`, `sMorale`), `battleLoop`, `playerTurn`, `aiTurn`, `castSpell`, `endBattle`, `drawBattle` |
-| START | `pickFaction`, `pickHero` |
+| Town screen | `FAC_SPELLS`, `townBuildings`, `townAdvice` (the Suggested step), `townTabs`, `townHTML`, `drawTownView` (clickable picture of the town), `openTown` |
+| BATTLE | `drawBattleHero` (hero beside the field; click to open the spellbook), hex grid helpers, stat functions (`sAtk`, `sDef`, `sSpd`, `sMorale`), `battleLoop`, `playerTurn`, `aiTurn`, `castSpell`, `endBattle`, `drawBattle` |
+| START | `pickMap` (with `mapPreviewURL`), `pickFaction`, `pickHero` |
 | Save and boot | `localStorage` save under `questing-heroes-v3`, `title`, `boot` |
 
 ### Game state
 
 Everything lives in one object, `S`, so it can be saved as JSON:
 
-- `S.fac`: chosen faction key
-- `S.heroes[]` and `S.cur`: the player's heroes (up to 3) and the selected one; read it with `HERO()`. Each has id, name, stats (`atk`, `def`, `pow`, `lore`), `mana`, `mp`, `skills`, `spells`, `mount` (`foot`, `horse` or `hooves`), `boat`, `relics` (carried relic indices), `army` (up to 7 stacks of `{k, n}`)
-- Use `hst(h, 'atk')` for a stat including carried-relic bonuses
+- `S.fac`: chosen faction key; `S.W`, `S.H`, `S.mapType`, `S.size`, `S.limit`: map setup (W and H are globals set from these on load)
+- `S.heroes[]` and `S.cur`: the player's heroes (up to 3) and the selected one; read it with `HERO()`. Each has id, name, stats (`atk`, `def`, `pow`, `lore`), `mana`, `mp`, `skills`, `spells`, `mount` (`foot`, `horse` or `hooves`), `boat`, `book` (has a spellbook), `items` (artifact keys), `relics` (carried relic indices), `army` (up to 7 stacks of `{k, n}`)
+- Use `hst(h, 'atk')` for a stat including relic and artifact bonuses; `gear(h, k)` sums artifact effects
 - `S.rivals[]`: AI heroes with `fac`, position, stats, `army`, `relics`
 - `S.rumours[]`, `S.delivered[]`: rumour circles and relics already in the Reliquary
 - `S.town`: `built` buildings, `pool` of recruits, `garrison`, `builtToday`
@@ -65,7 +65,9 @@ Everything lives in one object, `S`, so it can be saved as JSON:
 
 ### Map rules
 
-- Two crag ridges cross the map. The road crosses each through one gap held by a strong `guard` neutral. `genWorld` checks that each guard really seals its ridge.
+- Wheel & Spoke: homes sit on a ring, spoke roads lead to a walled hub (the Glass Lair) entered through one straight guarded gateway per spoke, and a ring road joins the homes. Rival homes are `camp` objects.
+- Pirate homes (player or rival) become islands: a ring of water with a dock on each side.
+- Twin Ridges: two crag ridges cross the map. The road crosses each through one gap held by a strong `guard` neutral. `genWorld` checks that each guard really seals its ridge.
 - Diagonal moves can't cut corners: both orthogonal neighbours must be passable.
 - Relic lairs are `relic` objects (`r` = relic index). Relics a hero drops on defeat become a `drop` object.
 
@@ -74,6 +76,11 @@ Everything lives in one object, `S`, so it can be saved as JSON:
 - Tables near the top of ART: `ART_PORTRAITS` (hero ids with `portraits/heroes/<id>_64|128.png`), `ART_MAP` (heroes with an 8-direction `heroes/<id>/map/<id>_map_sheet.png`, 48×48 frames, rows S, SW, W, NW, N, NE, E, SE) and `ART_UNITS` (game unit key → `units/rangers/<name>/<name>_sheet.png`, 64×64 frames, rows idle, move, attack, hit, death).
 - `tinted()` recolours team pixels from the paired `team_masks/` file to the faction colour. Pixel reads fail on `file://`, so serve the folder (`python3 -m http.server`) to see team colours; otherwise the original colours show.
 - Add new art by dropping files in the same layout and adding the id to the matching table. `assets/manifest.json` is the art pack's full registry.
+
+### Spells and spellbooks
+
+- Magic heroes (and anyone who starts with a spell) carry a spellbook; others buy one for 500 gold at the Lantern Library.
+- `FAC_SPELLS` lists what each banner's mages teach: the Lantern Library teaches the first two, the Star Archive the rest. Wayshrines are set to spells from the same list.
 
 ### Travel
 
@@ -93,6 +100,7 @@ Debug handle in the browser console: `window.__qh` exposes the state and a few f
 
 ### Testing Checklist
 - [ ] Loads without console errors
+- [ ] Map setup: both map types and all three sizes generate, previews draw, every relic is reachable
 - [ ] Faction picker and hero picker work for all 8 factions
 - [ ] Map walking, path preview (green today, amber later days), fight preview
 - [ ] Dock sells a boat, lakes become passable; Horse Fair and Stables give a horse
@@ -101,7 +109,8 @@ Debug handle in the browser console: `window.__qh` exposes the state and a few f
 - [ ] Each faction mechanic and each hero ability triggers
 - [ ] Relics: rumours appear weekly, lairs give relics, delivery to the Reliquary, win at 7
 - [ ] Rivals move at end of day, claim mines and relics, and can attack your heroes
-- [ ] Tavern hires a second hero; dwelling upgrades and army upgrades work
+- [ ] Town screen: tabs light up when something can be done, Suggested step and Take me there work, clicking buildings in the picture opens their tab
+- [ ] Tavern hires a second hero; dwelling upgrades and army upgrades work; Library sells a spellbook
 - [ ] Guarded passes block the road until beaten
 - [ ] Level-up choice, end of day income, weekly growth
 - [ ] Phone layout (about 400px wide)

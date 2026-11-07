@@ -89,6 +89,34 @@ button{font:inherit;color:inherit}
 .rl.carried img,.rl.done img,.rl.rival img{opacity:1;filter:none}
 .rl.rival span{color:var(--bad)}.rl.done span{color:var(--good)}.rl.carried span{color:var(--gilt-hi)}
 .rl span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}
+.tres{display:flex;flex-wrap:wrap;gap:6px 16px;align-items:center;font-weight:800;margin:0 0 10px;font-variant-numeric:tabular-nums}
+.tres span{display:inline-flex;align-items:center;gap:5px}.tres img{width:20px;height:20px}
+.ttabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:4px}
+.ttab{position:relative;font-family:var(--f-display);font-size:16px;padding:7px 14px;border-radius:3px;border:1px solid var(--rule);background:var(--vellum-2);color:var(--muted);cursor:pointer}
+.ttab:hover{color:var(--text)}
+.ttab.on{background:var(--team);color:#fff;border-color:var(--team)}
+.ttab.hot{color:var(--text);border-color:var(--gilt-hi);box-shadow:0 0 0 2px rgba(242,211,130,.22),0 0 14px rgba(242,211,130,.22)}
+.ttab.locked{opacity:.5}
+.ttab i{position:absolute;top:-8px;right:-8px;min-width:19px;height:19px;border-radius:10px;background:var(--gilt);color:#1a1a1a;font:800 11px/19px var(--f-body);font-style:normal;text-align:center;padding:0 5px}
+.ttab .sg{color:var(--gilt-hi);margin-left:5px}
+.ttab.on .sg{color:#fff}
+.advice{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;justify-content:space-between;margin:10px 0 12px;padding:10px 12px;border:1px solid var(--gilt);border-radius:4px;background:rgba(212,171,82,.1)}
+.advice b{color:var(--gilt-hi)}
+.tview-wrap{position:relative}
+.tview{width:100%;height:auto;display:block;border:1px solid var(--rule);border-radius:4px}
+.tv-tip{position:absolute;pointer-events:none;background:rgba(16,20,19,.94);border:1px solid var(--gilt);padding:4px 8px;font-size:13px;border-radius:3px;white-space:nowrap}
+.facts{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;margin-top:10px}
+.bcard.sugg{border-color:var(--gilt-hi);box-shadow:0 0 0 2px rgba(242,211,130,.25)}
+.bcard .ribbon{align-self:flex-start;font-size:11px;letter-spacing:.1em;text-transform:uppercase;background:var(--gilt);color:#1a1a1a;padding:1px 6px;border-radius:2px;font-weight:800}
+.bcard.flash{animation:fl 1.2s ease-out}
+@keyframes fl{from{box-shadow:0 0 0 5px var(--gilt-hi)}}
+@media (prefers-reduced-motion:reduce){.bcard.flash{animation:none}}
+.maps .pick{align-items:stretch}
+.mprev{width:100%;height:auto;border:1px solid var(--rule);border-radius:3px;image-rendering:pixelated;background:#0a0c0b}
+.pick.chosen{box-shadow:0 0 0 2px var(--gilt-hi)}
+.sizes{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}.legend i{width:12px;height:12px;display:inline-block}
 .travel{display:flex;gap:8px;align-items:center;margin-top:8px;font-size:13px}
 .travel img{width:22px;height:22px}
 /* modal */
@@ -371,6 +399,50 @@ const HEROES=[
   {id:'schmickle',name:'Schmickle',fac:'centaurs',type:'Magic',st:[0,1,2,2],ab:'Burrow Friend',ad:'Badger Brutes +2 defense and +1 speed.',sk:['meditation'],sp:['ember'],fx:{unitDef:{badger:2},unitSpd:{badger:1}}},
   {id:'elvis',name:'Elvis',fac:'merfolk',type:'Magic',st:[1,1,2,2],ab:'Siren Voice',ad:'Siren Choir charms last 1 turn longer, and your whole army has +1 morale.',sk:['command'],sp:['ember'],fx:{charmExtra:1,morale:1}},
 ];
+/* placeholder heroes fill every faction to four; rename them and give them art later */
+HEROES.push(
+  {id:'ranger4',name:'Unnamed Ranger',blank:true,fac:'rangers',type:'Might',st:[2,1,1,1],ab:'Grove Archer',ad:'Reedbows +2 shots.',sk:[],sp:[],fx:{unitShots:{reed:2}}},
+  {id:'necro4',name:'Unnamed Necromancer',blank:true,fac:'necro',type:'Magic',st:[0,1,2,2],ab:'Bone Collector',ad:'Bone Thralls +3 growth per week.',sk:[],sp:['ember'],fx:{growth:{thrall:3}}},
+  {id:'pirate4',name:'Unnamed Corsair',blank:true,fac:'pirates',type:'Might',st:[2,2,1,1],ab:'Quartermaster',ad:'Deckhands +2 defense.',sk:[],sp:[],fx:{unitDef:{deckhand:2}}},
+  {id:'elf4',name:'Unnamed Elf',blank:true,fac:'elves',type:'Might',st:[2,1,1,1],ab:'Sprite Caller',ad:'Thorn Sprites +1 speed and +4 growth per week.',sk:[],sp:[],fx:{unitSpd:{sprite:1},growth:{sprite:4}}},
+  {id:'dwarf3',name:'Unnamed Dwarf',blank:true,fac:'dwarves',type:'Might',st:[3,2,0,1],ab:'Delver Chief',ad:'Tunnel Delvers +2 attack.',sk:[],sp:[],fx:{unitAtk:{delver:2}}},
+  {id:'dwarf4',name:'Unnamed Dwarf II',blank:true,fac:'dwarves',type:'Magic',st:[1,1,2,2],ab:'Boltmaster',ad:'Bolt Throwers +3 shots.',sk:[],sp:['ember'],fx:{unitShots:{bolt:3}}},
+  {id:'mer2',name:'Unnamed Merfolk',blank:true,fac:'merfolk',type:'Might',st:[2,2,1,1],ab:'Shell Warden',ad:'Shellbacks +3 defense.',sk:[],sp:[],fx:{unitDef:{shell:3}}},
+  {id:'mer3',name:'Unnamed Merfolk II',blank:true,fac:'merfolk',type:'Might',st:[3,1,1,1],ab:'Coral Captain',ad:'Coral Spearfolk +1 damage.',sk:[],sp:[],fx:{unitDmgFlat:{coral:1}}},
+  {id:'mer4',name:'Unnamed Merfolk III',blank:true,fac:'merfolk',type:'Magic',st:[0,1,2,2],ab:'Tide Singer',ad:'Siren Choirs +1 growth per week.',sk:[],sp:['ember'],fx:{growth:{choir:1}}},
+);
+/* artifacts: names and effects from the design bible's trinket and treasure tiers */
+const ITEMS={
+  kettle:{name:'Dented Kettle Helm',slot:'Head',tier:'Trinket',fx:{def:1}},
+  whetstone:{name:'Whetstone Charm',slot:'Pack',tier:'Trinket',fx:{atk:1}},
+  candle:{name:'Candle-Stub Lantern',slot:'Pack',tier:'Trinket',fx:{lore:1}},
+  errands:{name:'Copper Ring of Errands',slot:'Ring',tier:'Trinket',fx:{mpPct:5}},
+  cloak:{name:"Patched Traveller's Cloak",slot:'Cloak',tier:'Trinket',fx:{vision:1}},
+  rabbit:{name:'Lucky Rabbit Bone',slot:'Neck',tier:'Trinket',fx:{luck:1}},
+  sash:{name:"Drummer's Sash",slot:'Body',tier:'Trinket',fx:{morale:1}},
+  cudgel:{name:'Ironwood Cudgel',slot:'Main hand',tier:'Treasure',fx:{atk:2}},
+  buckler:{name:'Boar-Hide Buckler',slot:'Off hand',tier:'Treasure',fx:{def:2}},
+  inkwell:{name:'Inkwell of Endless Notes',slot:'Pack',tier:'Treasure',fx:{lore:2}},
+  spark:{name:'Spark-in-a-Jar',slot:'Pack',tier:'Treasure',fx:{pow:2}},
+  mudboots:{name:'Mudstrider Boots',slot:'Feet',tier:'Treasure',fx:{bogFree:1}},
+  breath:{name:'Ring of Quiet Breath',slot:'Ring',tier:'Treasure',fx:{manaRegen:2}},
+  ledger:{name:"Quartermaster's Ledger",slot:'Pack',tier:'Treasure',fx:{goldDay:250}},
+  bracer:{name:"Fletcher's Bracer",slot:'Off hand',tier:'Treasure',fx:{shots:2}},
+  purse:{name:'Coin-Purse of the Tollkeeper',slot:'Neck',tier:'Treasure',fx:{costCut:10}},
+};
+const FX_TXT={atk:v=>`+${v} Attack`,def:v=>`+${v} Defense`,pow:v=>`+${v} Power`,lore:v=>`+${v} Lore`,morale:v=>`+${v} morale`,luck:v=>`+${v} luck`,mpPct:v=>`+${v}% movement`,vision:v=>`+${v} vision`,
+  bogFree:()=>'bog and heath cost normal movement',manaRegen:v=>`+${v} mana each day`,goldDay:v=>`+${v} gold each day`,shots:v=>`archers +${v} shots`,costCut:v=>`troops cost ${v}% less`};
+const itemTxt=id=>Object.entries(ITEMS[id].fx).map(([k,v])=>FX_TXT[k](v)).join(', ');
+/* every hero starts with one specific skill and one artifact */
+const START_KIT={bear:['shieldcraft','buckler'],dorothy:['meditation','breath'],oliver:['forcedmarch','errands'],ranger4:['steadyaim','bracer'],
+  engelman:['arcane','inkwell'],tempest:['deepres','spark'],grimes:['shieldcraft','candle'],rimmer:['meditation','kettle'],
+  shadow:['deepres','spark'],parker:['battleplan','cudgel'],rago:['fortune','rabbit'],necro4:['shieldcraft','kettle'],
+  rocky:['forcedmarch','sash'],monkey:['bladework','whetstone'],binx:['farsight','cloak'],boopis:['fortune','rabbit'],schmickle:['meditation','mudboots'],
+  omalley:['seamanship','ledger'],vargas:['steadyaim','bracer'],sheila:['meditation','breath'],pirate4:['command','sash'],
+  davis:['steadyaim','bracer'],love:['deepres','inkwell'],boma:['farsight','cloak'],elf4:['forcedmarch','errands'],
+  ivan:['shieldcraft','buckler'],dupengeiser:['warding','spark'],dwarf3:['bladework','cudgel'],dwarf4:['battleplan','purse'],
+  elvis:['command','sash'],mer2:['shieldcraft','kettle'],mer3:['seamanship','purse'],mer4:['meditation','breath']};
+HEROES.forEach(h=>{const k=START_KIT[h.id];if(k){h.sk=[k[0]];h.item=k[1];}});
 const HBY=Object.fromEntries(HEROES.map(h=>[h.id,h]));
 
 const RELICS=[
@@ -532,6 +604,9 @@ function drawUnit(c,k,x,y,r){
 /* hero portraits: built from the hero's faction and a seed, so every hero looks different */
 const SKINS=['#f0c8a0','#d9a87e','#b07850','#8a5a3a','#e8b890'];const HAIRS=['#2a1a10','#5a3418','#a0642a','#d8c070','#e8e4dc','#8a2a1a','#3a3a3a'];
 function drawHeroPortrait(c,s,hid){
+  if(HBY[hid].blank){const f=FAC[HBY[hid].fac];c.save();c.scale(s/64,s/64);const bg=c.createLinearGradient(0,0,0,64);bg.addColorStop(0,f.col);bg.addColorStop(1,'#141816');c.fillStyle=bg;c.fillRect(0,0,64,64);
+    c.fillStyle='rgba(10,12,11,.75)';c.beginPath();c.ellipse(32,27,11,13,0,0,7);c.fill();c.beginPath();c.moveTo(8,64);c.quadraticCurveTo(10,42,32,40);c.quadraticCurveTo(54,42,56,64);c.fill();
+    c.fillStyle=f.col2;c.font='700 20px Georgia,serif';c.textAlign='center';c.textBaseline='middle';c.fillText('?',32,28);c.restore();return;}
   const h=HBY[hid],f=FAC[h.fac],g=mulberry32(hash(hid));
   let skin=SKINS[Math.floor(g()*SKINS.length)],hair=HAIRS[Math.floor(g()*HAIRS.length)];
   if(h.fac==='necro')skin='#c8c8b8';if(h.fac==='merfolk')skin=pick2(g,['#7ac0c0','#8ad0c8','#6ab0b8']);
@@ -630,7 +705,11 @@ function unitChips(k){const u=U[k];return`<div class="scs">${sc('atk',u.atk)}${s
 function teamCol(){return S&&S.fac?FAC[S.fac].col:'#2f8f88';}
 
 /* ================= MAP ================= */
-const W=34,H=26,TS=44;
+let W=34,H=26;const TS=44;
+const MAP_SIZES={small:{W:34,H:26,rivals:2,limit:112,label:'Small'},medium:{W:44,H:34,rivals:3,limit:140,label:'Medium'},large:{W:56,H:42,rivals:4,limit:168,label:'Large'}};
+const MAP_TYPES={
+  wheel:{name:'Wheel & Spoke',desc:'Every hero starts at the end of a spoke. Spoke roads run in to a walled hub where the Glass Lair waits, and a ring road links the homes. Pirates live on their own island.'},
+  ridges:{name:'Twin Ridges',desc:'Two crag ridges split the land into three bands. Push through one guarded pass at a time toward the Glass Lair in the far corner. Pirates live on their own island.'}};
 const T={GRASS:0,DIRT:1,ROAD:2,HEATH:3,BOG:4,FOREST:5,CRAG:6,LAKE:7};
 const TCOST=[100,100,70,130,175,0,0,0];
 const TNAME=['Meadow','Dirt track','Old road','Heath','Bog','Deep forest','Crags','Lake'];
@@ -648,7 +727,8 @@ const hasSk=k=>!!(S&&S.heroes&&S.heroes[S.cur]&&HERO().skills.includes(k));
 const rivalAt=(x,y)=>S.rivals.find(r=>r.x===x&&r.y===y);
 const heroIdxAt=(x,y)=>S.heroes.findIndex(h=>h.x===x&&h.y===y);
 function carry(h,k){let v=0;for(const r of h.relics||[])v+=RELICS[r].carry[k]||0;return v;}
-const hst=(h,k)=>h[k]+carry(h,k);
+function gear(h,k){let v=0;for(const it of h.items||[])v+=ITEMS[it]?(ITEMS[it].fx[k]||0):0;return v;}
+const hst=(h,k)=>h[k]+carry(h,k)+gear(h,k);
 const delivered=i=>S.delivered.includes(i);
 
 function makeNoise(g,scale){
@@ -679,8 +759,8 @@ function astar(sx,sy,tx,ty,cost){
   return path.reverse();
 }
 
-function genWorld(seed){
-  const g=mulberry32(seed);const saveR=R;R=g;
+function genRidges(seed,opt){
+  const g=mulberry32(seed);const saveR=R;R=g;const KS=W/34,K2=KS*KS;
   const n1=makeNoise(g,6),n2=makeNoise(g,3),nf=makeNoise(g,4),nmo=makeNoise(g,5);
   const tiles=new Array(W*H);
   for(let y=0;y<H;y++)for(let x=0;x<W;x++){
@@ -720,13 +800,13 @@ function genWorld(seed){
       for(const c of cand.slice(1)){if(!leaks(gi,tr))break;const ci=idx(c.x,c.y),was=tiles[ci];tiles[ci]=T.CRAG;if(!leaks(new Set(),tr)){tiles[ci]=was;}else ridge.add(ci);}}
     if(g)gaps.push({x:g.x,y:g.y,tr});
   }}
-  const objs=[];let uid=1;
+  const objs=[],pseudo=[];let uid=1;
   const foot=(x,y)=>Math.abs(x-town.x)<=1&&y>=town.y-2&&y<=town.y;
-  const occupied=(x,y)=>objs.some(o=>o.x===x&&o.y===y)||foot(x,y);
+  const occupied=(x,y)=>objs.some(o=>o.x===x&&o.y===y)||pseudo.some(o=>o.x===x&&o.y===y)||foot(x,y);
   const add=o=>{o.id=uid++;objs.push(o);return o;};
   const dx=lair.x-town.x,dy=lair.y-town.y,len=Math.hypot(dx,dy),px=-dy/len,py=dx/len;
   function spot(t,off,rad=3,minTown=3){
-    const bx=town.x+dx*t+px*off,by=town.y+dy*t+py*off;
+    rad=Math.max(rad,Math.round(rad*KS));const bx=town.x+dx*t+px*off*KS,by=town.y+dy*t+py*off*KS;
     for(let i=0;i<300;i++){
       const x=Math.round(bx+ri(-rad,rad)),y=Math.round(by+ri(-rad,rad));
       if(x<1||y<1||x>W-2||y>H-2)continue;
@@ -738,27 +818,28 @@ function genWorld(seed){
     }
     return null;
   }
-  function neutralFor(t){
-    if(t<0.3)return R()<0.6?{k:'wight',n:ri(10,18)}:{k:'wolf',n:ri(6,10)};
-    if(t<0.55)return R()<0.5?{k:'wolf',n:ri(12,20)}:{k:'imp',n:ri(10,16)};
-    if(t<0.8)return R()<0.55?{k:'imp',n:ri(18,28)}:{k:'troll',n:ri(5,9)};
-    return R()<0.5?{k:'troll',n:ri(9,14)}:{k:'wolf',n:ri(35,50)};
-  }
+  const neutralFor=neutralAt;
   add({type:'town',x:town.x,y:town.y});
   add({type:'relic',r:6,x:lair.x,y:lair.y,k:'drake',n:3});
   gaps.forEach((g,i)=>add({type:'neutral',x:g.x,y:g.y,guard:true,...(i===0?{k:'troll',n:ri(8,10)}:{k:'troll',n:ri(15,18)})}));
+  const nR=opt.rivals.length;for(let i=0;i<nR;i++){const p=spot(0.5+0.4*i/Math.max(1,nR-1),i%2?-11:11,3);if(p)pseudo.push({x:p.x,y:p.y,fac:opt.rivals[i]});}
+  const protect=new Set(ridge),isles=[];
+  if(opt.fac==='pirates')isles.push(makeIsland(tiles,town.x,town.y-1,4+Math.round(KS),protect,objs));
+  pseudo.forEach(p=>{if(p.fac==='pirates')isles.push(makeIsland(tiles,p.x,p.y,3+Math.round(KS),protect,objs));});
+  const isleWater=new Set();isles.forEach(il=>il.water.forEach(i=>isleWater.add(i)));
   [[0.22,7],[0.3,-7],[0.5,8],[0.55,-8],[0.62,4],[0.84,-5]].forEach(([t,off],i)=>{const p=spot(t,off,3);if(p){const Rl=RELICS[i];add({type:'relic',r:i,x:p.x,y:p.y,k:Rl.k,n:ri(Rl.n[0],Rl.n[1])});}});
   for(const [ox,oy] of[[-2,-1],[-1,-2]]){add({type:'neutral',x:lair.x+ox,y:lair.y+oy,k:'troll',n:ri(10,13)});tiles[idx(lair.x+ox,lair.y+oy)]=T.GRASS;}
   const mines=[['saw',0.14,4],['orepit',0.18,-4],['gold',0.42,3],['amber',0.38,-6],['saw',0.6,6],['orepit',0.62,-5],['amber',0.78,5],['gold',0.82,-6]];
+  if(KS>1.15)mines.push(...mines.map(([k,t,off])=>[k,Math.min(0.9,t+0.06),-off]));
   for(const [k,t,off] of mines){
     const p=spot(t,off,3);if(!p)continue;add({type:'mine',k,x:p.x,y:p.y,owned:false});
     let guard=null;for(let i=0;i<20&&!guard;i++){const gx=p.x+ri(-1,1),gy=p.y+ri(-1,1);if(inb(gx,gy)&&passableT(tiles[idx(gx,gy)])&&!occupied(gx,gy)&&!(Math.abs(gx-town.x)<3&&Math.abs(gy-town.y)<4))guard={x:gx,y:gy};}
     if(guard&&t>0.15)add({type:'neutral',...guard,...neutralFor(t)});
   }
-  for(let i=0;i<11;i++){const t=0.12+R()*0.8;const p=spot(t,ri(-9,9),3);if(p)add({type:'neutral',...p,...neutralFor(t)});}
-  for(let i=0;i<18;i++){const t=0.04+R()*0.95;const p=spot(t,ri(-10,10),3,2);if(!p)continue;const k=pick(['gold','gold','timber','ore','timber','ore','amber']);
+  for(let i=0;i<Math.round(11*K2);i++){const t=0.12+R()*0.8;const p=spot(t,ri(-9,9),3);if(p)add({type:'neutral',...p,...neutralFor(t)});}
+  for(let i=0;i<Math.round(18*K2);i++){const t=0.04+R()*0.95;const p=spot(t,ri(-10,10),3,2);if(!p)continue;const k=pick(['gold','gold','timber','ore','timber','ore','amber']);
     add({type:'pile',k,x:p.x,y:p.y,n:k==='gold'?ri(5,10)*100:k==='amber'?ri(2,4):ri(4,8)});}
-  for(let i=0;i<6;i++){const p=spot(0.1+R()*0.85,ri(-9,9),3);if(p)add({type:'chest',x:p.x,y:p.y});}
+  for(let i=0;i<Math.round(6*K2);i++){const p=spot(0.1+R()*0.85,ri(-9,9),3);if(p)add({type:'chest',x:p.x,y:p.y});}
   for(let i=0;i<3;i++){const p=spot(0.2+i*0.25,ri(-8,8),3);if(p)add({type:'stone',x:p.x,y:p.y,stat:pick(['atk','def','pow','lore']),used:false});}
   [['mend',0.3],['swift',0.55],['bark',0.7]].forEach(([s,t])=>{const p=spot(t,ri(-8,8),3);if(p)add({type:'shrine',x:p.x,y:p.y,spell:s});});
   for(const t of[0.35,0.7]){const p=spot(t,ri(-7,7),3);if(p)add({type:'well',x:p.x,y:p.y,day:0});}
@@ -769,21 +850,20 @@ function genWorld(seed){
   shore.sort((a,b)=>a.d-b.d);
   const dk1=shore.find(s=>s.d>4);if(dk1)add({type:'dock',x:dk1.x,y:dk1.y});
   const dk2=shore.find(s=>s.d>14&&(!dk1||Math.hypot(s.x-dk1.x,s.y-dk1.y)>8));if(dk2)add({type:'dock',x:dk2.x,y:dk2.y});
-  // rival heroes start farther out
-  const pseudo=[spot(0.52,11,3),spot(0.55,-11,3),spot(0.88,7,2)].filter(Boolean).map(p=>({x:p.x,y:p.y}));
+  isles.forEach(il=>isleDocks(tiles,il,W/2,H/2,add,occupied));
   const rivalSpots=pseudo;
   // make every object reachable on foot from the town gate, without cutting through the ridges
   for(let guard=0;guard<80;guard++){
     const seen=new Uint8Array(W*H),st=idx(town.x,town.y),q=[st];seen[st]=1;
-    const okT=(x,y)=>inb(x,y)&&passableT(tiles[idx(x,y)])&&!foot(x,y);
+    const okT=(x,y)=>inb(x,y)&&(passableT(tiles[idx(x,y)])||isleWater.has(idx(x,y)))&&!foot(x,y);
     while(q.length){const i=q.pop(),x=i%W,y=(i/W)|0;for(let a=-1;a<=1;a++)for(let b=-1;b<=1;b++){const nx=x+a,ny=y+b;if(!okT(nx,ny))continue;const ni=idx(nx,ny);if(seen[ni])continue;if(a&&b&&(!okT(x+a,y)||!okT(x,y+b)))continue;seen[ni]=1;q.push(ni);}}
     const bad=[...objs,...pseudo].find(o=>!seen[idx(o.x,o.y)]);if(!bad)break;
     const tt=((bad.x-town.x)*(lair.x-town.x)+(bad.y-town.y)*(lair.y-town.y))/((lair.x-town.x)**2+(lair.y-town.y)**2);
     const zg=gaps.filter(g=>g.tr<tt).sort((a,b)=>b.tr-a.tr)[0]||{x:town.x,y:town.y+1};
     const edge=(x,y)=>foot(x,y)||x===0||y===0||x===W-1||y===H-1;
-    const p=astar(bad.x,bad.y,zg.x,zg.y,(x,y)=>edge(x,y)||ridge.has(idx(x,y))?Infinity:carveCost(x,y))||astar(bad.x,bad.y,town.x,town.y+1,(x,y)=>edge(x,y)?Infinity:ridge.has(idx(x,y))?6000:carveCost(x,y));
-    if(p){let prev={x:bad.x,y:bad.y};for(const c of p){const i=idx(c.x,c.y);if(!passableT(tiles[i])){tiles[i]=T.DIRT;ridge.delete(i);}
-      if(prev.x!==c.x&&prev.y!==c.y){const o1=idx(c.x,prev.y),o2=idx(prev.x,c.y);if(!(passableT(tiles[o1])&&!foot(c.x,prev.y))&&!(passableT(tiles[o2])&&!foot(prev.x,c.y))){const oc=foot(c.x,prev.y)?o2:o1;tiles[oc]=T.DIRT;ridge.delete(oc);}}
+    const p=astar(bad.x,bad.y,zg.x,zg.y,(x,y)=>edge(x,y)||ridge.has(idx(x,y))?Infinity:isleWater.has(idx(x,y))?60:carveCost(x,y))||astar(bad.x,bad.y,town.x,town.y+1,(x,y)=>edge(x,y)?Infinity:isleWater.has(idx(x,y))?60:ridge.has(idx(x,y))?6000:carveCost(x,y));
+    if(p){let prev={x:bad.x,y:bad.y};for(const c of p){const i=idx(c.x,c.y);if(!passableT(tiles[i])&&!isleWater.has(i)){tiles[i]=T.DIRT;ridge.delete(i);}
+      if(prev.x!==c.x&&prev.y!==c.y){const o1=idx(c.x,prev.y),o2=idx(prev.x,c.y);const okO=(o,x2,y2)=>(passableT(tiles[o])||isleWater.has(o))&&!foot(x2,y2);if(!okO(o1,c.x,prev.y)&&!okO(o2,prev.x,c.y)){const oc=foot(c.x,prev.y)||isleWater.has(o1)?o2:o1;if(!isleWater.has(oc)){tiles[oc]=T.DIRT;ridge.delete(oc);}}}
       if(seen[i])break;prev=c;}}
     else if(bad.type&&bad.type!=='relic'){objs.splice(objs.indexOf(bad),1);}
     else{const i=pseudo.indexOf(bad);if(i>=0)pseudo.splice(i,1);else break;}
@@ -791,42 +871,152 @@ function genWorld(seed){
   R=saveR;
   return{tiles,objs,town,uid,rivalSpots};
 }
+function neutralAt(t){
+  if(t<0.3)return R()<0.6?{k:'wight',n:ri(10,18)}:{k:'wolf',n:ri(6,10)};
+  if(t<0.55)return R()<0.5?{k:'wolf',n:ri(12,20)}:{k:'imp',n:ri(10,16)};
+  if(t<0.8)return R()<0.55?{k:'imp',n:ri(18,28)}:{k:'troll',n:ri(5,9)};
+  return R()<0.5?{k:'troll',n:ri(9,14)}:{k:'wolf',n:ri(35,50)};
+}
+/* an island: a ring of water around a home, with the inside kept dry */
+function makeIsland(tiles,cx,cy,rIn,protect,objs){const water=new Set();
+  for(let y=1;y<H-1;y++)for(let x=1;x<W-1;x++){const d=Math.hypot(x-cx,y-cy),i=idx(x,y);
+    if(d<rIn-0.3){if(tiles[i]===T.LAKE)tiles[i]=T.GRASS;}
+    else if(d<rIn+1.9){if(objs&&objs.some(o=>o.x===x&&o.y===y))continue;tiles[i]=T.LAKE;water.add(i);protect.add(i);}}
+  return{cx,cy,rIn,water};}
+function isleDocks(tiles,il,tx,ty,add,occupied){const inner=[],outer=[];
+  for(let y=1;y<H-1;y++)for(let x=1;x<W-1;x++){const i=idx(x,y);if(!passableT(tiles[i])||occupied(x,y))continue;
+    if(![[1,0],[-1,0],[0,1],[0,-1]].some(([a,b])=>il.water.has(idx(x+a,y+b))))continue;
+    (Math.hypot(x-il.cx,y-il.cy)<il.rIn?inner:outer).push({x,y,s:Math.hypot(x-tx,y-ty)});}
+  inner.sort((a,b)=>a.s-b.s);if(inner[0])add({type:'dock',x:inner[0].x,y:inner[0].y});
+  if(inner[0])outer.sort((a,b)=>Math.hypot(a.x-inner[0].x,a.y-inner[0].y)-Math.hypot(b.x-inner[0].x,b.y-inner[0].y));else outer.sort((a,b)=>a.s-b.s);
+  if(outer[0])add({type:'dock',x:outer[0].x,y:outer[0].y});}
+
+/* Wheel & Spoke: homes on a ring, spoke roads to a walled hub holding the Glass Lair */
+function genWheel(seed,opt){
+  const g=mulberry32(seed);const saveR=R;R=g;const KS=W/34,K2=KS*KS;
+  const n1=makeNoise(g,6),n2=makeNoise(g,3),nf=makeNoise(g,4),nmo=makeNoise(g,5);
+  const tiles=new Array(W*H);
+  for(let y=0;y<H;y++)for(let x=0;x<W;x++){
+    const e=0.65*n1(x,y)+0.35*n2(x,y),f=nf(x,y),m=nmo(x,y);let t=T.GRASS;
+    if(e<0.27)t=T.LAKE;else if(e>0.72)t=T.CRAG;else if(f>0.67)t=T.FOREST;else if(m<0.3)t=T.BOG;else if(m>0.68)t=T.HEATH;
+    if(x===0||y===0||x===W-1||y===H-1)t=g()<0.5?T.CRAG:T.FOREST;
+    tiles[idx(x,y)]=t;}
+  const C={x:Math.floor(W/2),y:Math.floor(H/2)},nS=1+opt.rivals.length,rx=W/2-5,ry=H/2-5,hubR=Math.max(4,Math.round(Math.min(W,H)*0.15));
+  const homes=[];for(let i=0;i<nS;i++){const a=Math.PI*1.25+i*2*Math.PI/nS;homes.push({x:clamp(Math.round(C.x+Math.cos(a)*rx),4,W-5),y:clamp(Math.round(C.y+Math.sin(a)*ry),4,H-4),fac:i?opt.rivals[i-1]:opt.fac});}
+  const town=homes[0];
+  const setT=(x,y,t)=>{if(x>0&&y>0&&x<W-1&&y<H-1)tiles[idx(x,y)]=t;};
+  for(const h of homes)for(let dy=-3;dy<=2;dy++)for(let dx=-3;dx<=3;dx++)setT(h.x+dx,h.y+dy,T.GRASS);
+  for(let y=0;y<H;y++)for(let x=0;x<W;x++)if(Math.hypot(x-C.x,y-C.y)<hubR+0.5)setT(x,y,T.GRASS);
+  const carveCost=(x,y)=>(x===0||y===0||x===W-1||y===H-1)?Infinity:(passableT(tiles[idx(x,y)])?TCOST[tiles[idx(x,y)]]:420);
+  const spokes=homes.map(h=>{const st={x:h.x,y:h.y+1};return[st,...(astar(st.x,st.y,C.x,C.y,carveCost)||[])];});
+  const ringCost=(x,y)=>{const c=carveCost(x,y);return Math.hypot(x-C.x,y-C.y)<hubR+3?c+3000:c;};
+  const rings=homes.map((h,i)=>{const b=homes[(i+1)%nS];if(nS<2)return[];return astar(h.x,h.y+1,b.x,b.y+1,ringCost)||[];});
+  const roadSet=new Set();for(const p of[...spokes,...rings])for(const q of p){tiles[idx(q.x,q.y)]=T.ROAD;roadSet.add(idx(q.x,q.y));}
+  // the hub wall: solid crags, with one straight gateway per spoke
+  const protect=new Set(),inBand=(x,y)=>{const d=Math.hypot(x-C.x,y-C.y);return d>=hubR&&d<hubR+1.4;};
+  for(let y=1;y<H-1;y++)for(let x=1;x<W-1;x++){if(!inBand(x,y))continue;const i=idx(x,y);tiles[i]=T.CRAG;protect.add(i);}
+  const gates=[];
+  for(const p of spokes){if(!p.length)continue;
+    const g0=p.reduce((b,q)=>{const d=Math.abs(Math.hypot(q.x-C.x,q.y-C.y)-(hubR+0.6));return!b||d<b.d?{q,d}:b;},null).q;
+    const dx=C.x-g0.x,dy=C.y-g0.y,st=Math.abs(dx)>=Math.abs(dy)?[Math.sign(dx),0]:[0,Math.sign(dy)];
+    if(gates.some(g=>Math.abs(g.x-g0.x)+Math.abs(g.y-g0.y)<3))continue;
+    for(const dir of[1,-1]){let x=g0.x,y=g0.y;for(let k=0;k<6;k++){const i=idx(x,y);if(!inb(x,y))break;const d=Math.hypot(x-C.x,y-C.y);
+      if(dir===1&&d<hubR-0.3)break;if(dir===-1&&d>=hubR+1.4)break;tiles[i]=T.ROAD;protect.delete(i);x+=st[0]*dir;y+=st[1]*dir;}}
+    gates.push({x:g0.x,y:g0.y});}
+  // pirates live on islands
+  const isles=[],objs=[];let uid=1;
+  homes.forEach(h=>{if(h.fac==='pirates')isles.push(makeIsland(tiles,h.x,h.y-1,4+Math.round(KS*0.6),protect,null));});
+  const isleWater=new Set();isles.forEach(il=>il.water.forEach(i=>isleWater.add(i)));
+  const foot=(x,y)=>Math.abs(x-town.x)<=1&&y>=town.y-2&&y<=town.y;
+  const occupied=(x,y)=>objs.some(o=>o.x===x&&o.y===y)||foot(x,y)||homes.some(h=>Math.abs(h.x-x)<=1&&Math.abs(h.y-y)<=1);
+  const add=o=>{o.id=uid++;objs.push(o);return o;};
+  const maxD=Math.hypot(W,H)*0.8,diff=(x,y)=>clamp(Math.hypot(x-town.x,y-town.y)/maxD,0,1);
+  function spotNear(x0,y0,rad,inHub=false){for(let i=0;i<300;i++){const x=Math.round(x0+ri(-rad,rad)),y=Math.round(y0+ri(-rad,rad));
+    if(x<1||y<1||x>W-2||y>H-2)continue;const i2=idx(x,y);if(!passableT(tiles[i2])||occupied(x,y)||protect.has(i2))continue;
+    const dC=Math.hypot(x-C.x,y-C.y);if(!inHub&&dC<hubR+1.5)continue;if(inHub&&dC>=hubR-0.5)continue;
+    if(gates.some(g=>Math.abs(g.x-x)<=1&&Math.abs(g.y-y)<=1))continue;return{x,y};}return null;}
+  const at=(a,r)=>({x:C.x+Math.cos(a)*rx*r,y:C.y+Math.sin(a)*ry*r});
+  add({type:'town',x:town.x,y:town.y});
+  homes.slice(1).forEach(h=>add({type:'camp',x:h.x,y:h.y,fac:h.fac}));
+  add({type:'relic',r:6,x:C.x,y:C.y,k:'drake',n:3});
+  {const p=spotNear(C.x,C.y,2,true);if(p)add({type:'neutral',...p,k:'troll',n:ri(8,11)});}
+  gates.forEach(gt=>add({type:'neutral',x:gt.x,y:gt.y,guard:true,k:'troll',n:ri(10,14)}));
+  const angs=homes.map((h,i)=>Math.PI*1.25+i*2*Math.PI/nS);
+  const cand=[];angs.forEach((a,i)=>{const m=a+Math.PI/nS;cand.push(at(m,0.62),at(m,0.36));if(i)cand.push(at(a,0.5));});
+  cand.sort((a,b)=>Math.hypot(a.x-town.x,a.y-town.y)-Math.hypot(b.x-town.x,b.y-town.y));
+  let ri0=0;for(const c of cand){if(ri0>5)break;const p=spotNear(c.x,c.y,2);if(!p)continue;const Rl=RELICS[ri0];add({type:'relic',r:ri0,x:p.x,y:p.y,k:Rl.k,n:ri(Rl.n[0],Rl.n[1])});ri0++;}
+  for(let tries=0;ri0<6&&tries<200;tries++){const c=at(R()*Math.PI*2,0.3+R()*0.6),p=spotNear(c.x,c.y,3);if(!p)continue;const Rl=RELICS[ri0];add({type:'relic',r:ri0,x:p.x,y:p.y,k:Rl.k,n:ri(Rl.n[0],Rl.n[1])});ri0++;}
+  for(const h of homes){for(const k of['saw','orepit']){const p=spotNear(h.x,h.y+1,4);if(p)add({type:'mine',k,x:p.x,y:p.y,owned:false});}}
+  angs.forEach((a,i)=>{const p=spotNear(at(a+Math.PI/nS,0.85).x,at(a+Math.PI/nS,0.85).y,2);if(p){const k=i%2?'amber':'gold';add({type:'mine',k,x:p.x,y:p.y,owned:false});
+    const q=spotNear(p.x,p.y,1);if(q)add({type:'neutral',...q,...neutralAt(diff(q.x,q.y))});}});
+  const rnd=()=>{const a=R()*Math.PI*2,r=0.25+R()*0.8;return at(a,r);};
+  for(let i=0;i<Math.round(11*K2);i++){const c=rnd(),p=spotNear(c.x,c.y,2);if(p&&diff(p.x,p.y)>0.12)add({type:'neutral',...p,...neutralAt(diff(p.x,p.y))});}
+  for(let i=0;i<Math.round(18*K2);i++){const c=rnd(),p=spotNear(c.x,c.y,2);if(!p)continue;const k=pick(['gold','gold','timber','ore','timber','ore','amber']);add({type:'pile',k,x:p.x,y:p.y,n:k==='gold'?ri(5,10)*100:k==='amber'?ri(2,4):ri(4,8)});}
+  for(let i=0;i<Math.round(6*K2);i++){const c=rnd(),p=spotNear(c.x,c.y,2);if(p)add({type:'chest',x:p.x,y:p.y});}
+  for(let i=0;i<3;i++){const c=rnd(),p=spotNear(c.x,c.y,2);if(p)add({type:'stone',x:p.x,y:p.y,stat:pick(['atk','def','pow','lore']),used:false});}
+  ['mend','swift','bark'].forEach(sp=>{const c=rnd(),p=spotNear(c.x,c.y,2);if(p)add({type:'shrine',x:p.x,y:p.y,spell:sp});});
+  for(let i=0;i<2;i++){const c=rnd(),p=spotNear(c.x,c.y,2);if(p)add({type:'well',x:p.x,y:p.y,day:0});}
+  {const c=at(angs[0]+Math.PI/nS,0.3),p=spotNear(c.x,c.y,2);if(p)add({type:'tower',x:p.x,y:p.y});}
+  {const p=spotNear(town.x,town.y+2,5);if(p)add({type:'fair',x:p.x,y:p.y});}
+  const shore=[];for(let y=1;y<H-1;y++)for(let x=1;x<W-1;x++){const i=idx(x,y);if(!passableT(tiles[i])||occupied(x,y)||protect.has(i))continue;if([[1,0],[-1,0],[0,1],[0,-1]].some(([a,b])=>tiles[idx(x+a,y+b)]===T.LAKE&&!isleWater.has(idx(x+a,y+b))))shore.push({x,y,d:Math.hypot(x-town.x,y-town.y)});}
+  shore.sort((a,b)=>a.d-b.d);const dk1=shore.find(q=>q.d>4);if(dk1)add({type:'dock',x:dk1.x,y:dk1.y});
+  isles.forEach(il=>isleDocks(tiles,il,C.x,C.y,add,occupied));
+  // make everything reachable from the town gate without breaking the hub wall or the island rings
+  for(let guard=0;guard<100;guard++){
+    const seen=new Uint8Array(W*H),st=idx(town.x,town.y),q=[st];seen[st]=1;
+    const okT=(x,y)=>inb(x,y)&&(passableT(tiles[idx(x,y)])||isleWater.has(idx(x,y)))&&!foot(x,y);
+    while(q.length){const i=q.pop(),x=i%W,y=(i/W)|0;for(let a=-1;a<=1;a++)for(let b=-1;b<=1;b++){const nx=x+a,ny=y+b;if(!okT(nx,ny))continue;const ni=idx(nx,ny);if(seen[ni])continue;if(a&&b&&(!okT(x+a,y)||!okT(x,y+b)))continue;seen[ni]=1;q.push(ni);}}
+    const bad=objs.find(o=>!seen[idx(o.x,o.y)]);if(!bad)break;
+    const edge=(x,y)=>foot(x,y)||x===0||y===0||x===W-1||y===H-1;
+    const p=astar(bad.x,bad.y,town.x,town.y+1,(x,y)=>edge(x,y)?Infinity:isleWater.has(idx(x,y))?60:protect.has(idx(x,y))?Infinity:carveCost(x,y));
+    if(p){let prev={x:bad.x,y:bad.y};for(const c of p){const i=idx(c.x,c.y);if(!passableT(tiles[i])&&!isleWater.has(i))tiles[i]=T.DIRT;
+      if(prev.x!==c.x&&prev.y!==c.y){const o1=idx(c.x,prev.y),o2=idx(prev.x,c.y);if(!(passableT(tiles[o1])&&!foot(c.x,prev.y))&&!(passableT(tiles[o2])&&!foot(prev.x,c.y))){const oc=foot(c.x,prev.y)||protect.has(o1)?o2:o1;if(!protect.has(oc)&&!isleWater.has(oc))tiles[oc]=T.DIRT;}}
+      if(seen[i])break;prev=c;}}
+    else if(bad.type!=='relic'&&bad.type!=='town'&&bad.type!=='camp')objs.splice(objs.indexOf(bad),1);else break;
+  }
+  R=saveR;
+  return{tiles,objs,town,uid,rivalSpots:homes.slice(1).map(h=>({x:h.x,y:h.y,fac:h.fac}))};
+}
+function genMap(seed,opt){return opt.type==='wheel'?genWheel(seed,opt):genRidges(seed,opt);}
 
 function mkHero(hid,x,y){const h=HBY[hid],f=FAC[h.fac];
   const hero={id:hid,name:h.name,x,y,lvl:1,xp:0,atk:h.st[0],def:h.st[1],pow:h.st[2],lore:h.st[3],mana:0,mp:0,spells:[...h.sp],skills:[...h.sk],
-    mount:f.travel==='hooves'?'hooves':'foot',boat:f.travel==='boat',army:[],relics:[]};
+    mount:f.travel==='hooves'?'hooves':'foot',boat:f.travel==='boat',army:[],relics:[],items:h.item?[h.item]:[],book:h.type==='Magic'||h.sp.length>0};
   if(h.type==='Magic'&&!hero.spells.length)hero.spells.push('ember');return hero;}
 function mkRival(hid,x,y){const h=HBY[hid],u=FAC[h.fac].units;
   return{id:hid,name:h.name,fac:h.fac,x,y,atk:h.st[0]+1,def:h.st[1]+1,pow:h.st[2],lore:h.st[3],relics:[],
     army:[{k:u[0],n:Math.round(300/U[u[0]].hp)},{k:u[1],n:Math.round(140/U[u[1]].hp)},{k:u[2],n:Math.round(70/U[u[2]].hp)}]};}
-function newGame(fk,hid){
-  const seed=(Math.random()*1e9)|0;const w=genWorld(seed);const f=FAC[fk];
+function newGame(fk,hid,mo={}){
+  const sz=MAP_SIZES[mo.size||'small'],type=mo.type||'wheel';W=sz.W;H=sz.H;
+  const seed=mo.seed??((Math.random()*1e9)|0);
+  const rivalFacs=FAC_ORDER.filter(k=>k!==fk).sort(()=>Math.random()-0.5).slice(0,sz.rivals);
+  const w=genMap(seed,{type,fac:fk,rivals:rivalFacs});const f=FAC[fk];
   const [t1,t2]=f.units;
-  S={v:3,seed,fac:fk,tiles:w.tiles,objs:w.objs,uid:w.uid+10,explored:new Array(W*H).fill(0),day:1,
+  S={v:3,seed,fac:fk,W,H,mapType:type,size:mo.size||'small',limit:sz.limit,tiles:w.tiles,objs:w.objs,uid:w.uid+10,explored:new Array(W*H).fill(0),day:1,
     res:{gold:5000,timber:15,ore:15,amber:4},heroes:[],cur:0,rivals:[],rumours:[],delivered:[],
     town:{x:w.town.x,y:w.town.y,name:f.town,built:{hall1:1,d1:1,d2:1},pool:{[t1]:U[t1].growth,[t2]:U[t2].growth},garrison:[],builtToday:false},
     over:false};
   const h=mkHero(hid,w.town.x,w.town.y);h.army=[{k:t1,n:Math.round(240/U[t1].hp)},{k:t2,n:Math.round(90/U[t2].hp)}];S.heroes.push(h);
   HERO().mana=maxMana();HERO().mp=maxMP();
-  const others=FAC_ORDER.filter(k=>k!==fk).sort(()=>Math.random()-0.5);
-  w.rivalSpots.forEach((p,i)=>{const rh=pick(HEROES.filter(x=>x.fac===others[i]));S.rivals.push(mkRival(rh.id,p.x,p.y));});
+  w.rivalSpots.forEach(p=>{const rh=pick(HEROES.filter(x=>x.fac===p.fac));S.rivals.push(mkRival(rh.id,p.x,p.y));});
+  {const fsp=FAC_SPELLS[fk];S.objs.filter(o=>o.type==='shrine').forEach((o,i)=>o.spell=fsp[(i+2)%fsp.length]);}
   reveal(S.town.x,S.town.y,6);reveal(HERO().x,HERO().y,vision());
   addRumour(true);
 }
 function reveal(cx,cy,r){for(let y=cy-r;y<=cy+r;y++)for(let x=cx-r;x<=cx+r;x++)if(inb(x,y)&&(x-cx)**2+(y-cy)**2<=r*r+1)S.explored[idx(x,y)]=1;}
-const vision=()=>5+(hasSk('farsight')?1:0)+(fx().vision||0)+(S&&S.delivered&&delivered(0)?1:0);
+const vision=()=>5+(hasSk('farsight')?1:0)+(fx().vision||0)+(S&&S.heroes?gear(HERO(),'vision'):0)+(S&&S.delivered&&delivered(0)?1:0);
 const maxMana=()=>Math.round(hst(HERO(),'lore')*10*(hasSk('deepres')?1.25:1));
 function maxMP(){const sp=HERO().army.length?Math.min(...HERO().army.map(a=>U[a.k].spd+((fx().unitSpd||{})[a.k]||0))):5;
-  let m=900+45*Math.min(sp,9);if(HERO().mount!=='foot')m*=1.4;if(hasSk('forcedmarch'))m*=1.1;return Math.round(m);}
+  let m=900+45*Math.min(sp,9);if(HERO().mount!=='foot')m*=1.4;if(hasSk('forcedmarch'))m*=1.1;m*=1+gear(HERO(),'mpPct')/100;return Math.round(m);}
 const xpFor=l=>Math.round(1000*l*(1+0.12*(l-1)));
-const income=()=>S.town.built.hall3?2000:S.town.built.hall2?1000:500;
+const income=()=>(S.town.built.hall3?2000:S.town.built.hall2?1000:500)+S.heroes.reduce((a,h)=>a+gear(h,'goldDay'),0);
 function dateParts(d=S.day){const m=Math.floor((d-1)/28)+1,w=Math.floor(((d-1)%28)/7)+1,dd=(d-1)%7+1;return{m,w,d:dd};}
 const LIMIT=112;
 function terrainCost(x,y){
   const t=tileAt(x,y);
   if(t===T.LAKE){const sea=carry(HERO(),'sea');if(HERO().boat)return hasSk('seamanship')||sea?45:65;if(FAC[S.fac].travel==='swim')return sea?75:110;return Infinity;}
   if(!passableT(t))return Infinity;
-  let c=TCOST[t];if((t===T.HEATH||t===T.BOG)&&fx().terrainCut)c*=fx().terrainCut;return c;
+  let c=TCOST[t];if((t===T.HEATH||t===T.BOG)&&gear(HERO(),'bogFree'))c=100;if((t===T.HEATH||t===T.BOG)&&fx().terrainCut)c*=fx().terrainCut;return c;
 }
 function stepCost(ax,ay,bx,by){const c=terrainCost(bx,by);return Math.round((ax!==bx&&ay!==by)?c*1.414:c);}
 
@@ -922,6 +1112,9 @@ function drawObj(c,o){
     else{c.fillStyle='#7a766c';c.strokeStyle='#26241f';c.fillRect(cx-19,cy-14,7,26);c.strokeRect(cx-19,cy-14,7,26);c.fillRect(cx+12,cy-14,7,26);c.strokeRect(cx+12,cy-14,7,26);c.fillRect(cx-21,cy-20,42,7);c.strokeRect(cx-21,cy-20,42,7);}
     drawRelic(c,o.r,cx,cy-(o.r===6?24:4),8);token(c,o.k,cx+(o.r===6?0:12),cy+(o.r===6?2:8),o.r===6?15:10,'#c45a43');break;
   case 'drop':drawRelic(c,o.rs[0],cx,cy,10);break;
+  case 'camp':{const col=FAC[o.fac].col;c.fillStyle='rgba(0,0,0,.35)';c.beginPath();c.ellipse(cx,cy+13,20,6,0,0,7);c.fill();
+    c.fillStyle=col;c.strokeStyle='#1a1610';c.lineWidth=1.2;c.beginPath();c.moveTo(cx-18,cy+12);c.lineTo(cx-4,cy-12);c.lineTo(cx+10,cy+12);c.closePath();c.fill();c.stroke();
+    c.fillStyle='#2b1d10';c.beginPath();c.moveTo(cx-8,cy+12);c.lineTo(cx-4,cy+2);c.lineTo(cx,cy+12);c.closePath();c.fill();flag(c,cx+13,cy+8,col);break;}
   case 'mine':{
     c.fillStyle='rgba(0,0,0,.3)';c.beginPath();c.ellipse(cx,cy+13,18,5,0,0,7);c.fill();
     if(o.k==='saw'){c.fillStyle='#7a5432';c.strokeStyle='#2a1a0c';c.fillRect(cx-12,cy-4,18,16);c.strokeRect(cx-12,cy-4,18,16);c.fillStyle='#4d3520';c.beginPath();c.moveTo(cx-15,cy-4);c.lineTo(cx-3,cy-14);c.lineTo(cx+9,cy-4);c.closePath();c.fill();drawRes(c,'timber',cx+11,cy+8,7);}
@@ -949,7 +1142,7 @@ function drawHero(c,x,y,h=HERO(),col=teamCol()){
   const mode=onLake?(h.boat||h.fac==='pirates'?'boat':'swim'):(h.mount||(h.fac==='centaurs'?'hooves':'horse'));
   c.lineWidth=1.2;
   const sheet=mode!=='boat'&&mode!=='swim'?heroSheet(h.id,col):null;
-  if(sheet){const row=Math.max(0,ART_DIRS.indexOf(h.face||'s')),fr=moving&&h===HERO()?Math.floor(performance.now()/120)%4:0;
+  if(sheet){const row=Math.max(0,ART_DIRS.indexOf(h.face||'s')),fr=moving&&!bt&&h===HERO()?Math.floor(performance.now()/120)%4:0;
     c.fillStyle='rgba(0,0,0,.4)';c.beginPath();c.ellipse(cx,cy+15,14,5,0,0,7);c.fill();c.strokeStyle=col;c.lineWidth=2;c.beginPath();c.ellipse(cx,cy+15,14,5,0,0,7);c.stroke();
     c.imageSmoothingEnabled=false;c.drawImage(sheet,fr*48,row*48,48,48,Math.round(cx-24),Math.round(cy+16-44),48,48);return;}
   if(mode==='boat'){
@@ -1049,6 +1242,7 @@ function describe(x,y){
     case 'neutral':{const[w,col]=threat(o.k,o.n);return`${o.guard?'<b>Guarded pass</b> · ':''}<b>${cnt(o.n)} ${U[o.k].pl}</b> · <span style="color:${col}">${w}</span>`;}
     case 'relic':{const Rl=RELICS[o.r];const[w,col]=threat(o.k,o.n);return`<b>${Rl.lair}</b> · guards the ${Rl.name} · ${cnt(o.n)} ${U[o.k].pl} · <span style="color:${col}">${w}</span>`;}
     case 'drop':return`<b>${o.rs.map(r=>RELICS[r].name).join(', ')}</b> · lying here, unguarded`;
+    case 'camp':return`<b>${FAC[o.fac].arch} camp</b> · where a rival hero set out from`;
     case 'mine':return`<b>${MINE[o.k].name}</b> · +${fmt(MINE[o.k].amt)} ${RESNAME[MINE[o.k].res].toLowerCase()} a day · ${o.owned===true?'yours':o.owned?`held by ${o.ownerName}`:'unclaimed'}`;
     case 'pile':return`<b>${RESNAME[o.k]}</b> · ${fmt(o.n)}`;
     case 'chest':return'<b>Weathered chest</b>';
@@ -1074,7 +1268,7 @@ function renderUI(){
   if(!S)return;
   applyTheme();
   $('#res').innerHTML=RES.map(k=>`<span title="${RESNAME[k]}"><img src="${iconURL('res',k,40)}" alt="${RESNAME[k]}">${fmt(S.res[k])}</span>`).join('');
-  const d=dateParts();$('#date').innerHTML=`Month ${d.m}, Week ${d.w}, Day ${d.d}<em>${LIMIT-S.day+1} days left</em>`;
+  const d=dateParts();$('#date').innerHTML=`Month ${d.m}, Week ${d.w}, Day ${d.d}<em>${S.limit-S.day+1} days left</em>`;
   const h=HERO(),hd=H_(),need=xpFor(h.lvl),prev=h.lvl>1?xpFor(h.lvl-1):0;
   const sw=S.heroes.length>1?`<div class="herosw">${S.heroes.map((x,i)=>`<button class="hsel${i===S.cur?' on':''}" data-hsel="${i}" title="${x.name}${x.mp>0?' (can still move)':''}"><img src="${iconURL('hero',x.id,84)}" alt="${x.name}">${x.mp>60?'<i></i>':''}</button>`).join('')}</div>`:'';
   $('#heroCard').innerHTML=sw+`<div class="hero-head"><img src="${iconURL('hero',h.id,116)}" alt=""><div><h2 style="margin:0">${h.name}</h2><div class="label">${hd.type} hero · Level ${h.lvl}</div></div></div>
@@ -1083,11 +1277,11 @@ function renderUI(){
    <div class="meter"><span>Mana</span><span>${h.mana} / ${maxMana()}</span></div><div class="bar mana"><i style="width:${maxMana()?h.mana/maxMana()*100:0}%"></i></div>
    <div class="meter"><span>Movement</span><span>${fmt(h.mp)} / ${fmt(maxMP())}</span></div><div class="bar mp"><i style="width:${h.mp/maxMP()*100}%"></i></div>
    <div class="travel"><img src="${iconURL('travel',h.boat&&tileAt(h.x,h.y)===T.LAKE?'boat':h.mount,44)}" alt=""><span>${travelName()}</span></div>
-   <div class="chips"><span class="chip team" title="${hd.ad}">★ ${hd.ab}</span>${h.skills.map(s=>`<span class="chip" title="${SK[s].desc}">${SK[s].name}</span>`).join('')}${h.spells.map(s=>`<span class="chip" title="${SP[s].desc(h.pow)}">✦ ${SP[s].name}</span>`).join('')}${h.relics.map(r=>`<span class="chip team" title="${RELICS[r].carryTxt}">◆ ${RELICS[r].name}</span>`).join('')}</div>`;
+   <div class="chips"><span class="chip team" title="${hd.ad}">★ ${hd.ab}</span>${h.skills.map(s=>`<span class="chip" title="${SK[s].desc}">${SK[s].name}</span>`).join('')}${h.spells.map(s=>`<span class="chip" title="${SP[s].desc(h.pow)}">✦ ${SP[s].name}</span>`).join('')}${(h.items||[]).map(it=>`<span class="chip" title="${ITEMS[it].slot} · ${ITEMS[it].tier}: ${itemTxt(it)}">⬖ ${ITEMS[it].name}</span>`).join('')}${h.relics.map(r=>`<span class="chip team" title="${RELICS[r].carryTxt}">◆ ${RELICS[r].name}</span>`).join('')}</div>`;
   let a='';for(let i=0;i<7;i++){const s=h.army[i];a+=s?`<button class="slot" data-slot="${i}" title="${U[s.k].name}"><img src="${iconURL('unit',s.k,64)}" alt="${U[s.k].name}"><b>${s.n}</b></button>`:'<div class="slot empty"></div>';}
   $('#army').innerHTML=a;
   $('#objective').innerHTML=`<h3>The Seven Relics · ${S.delivered.length}/7 home</h3><div class="relics">${RELICS.map((Rl,i)=>{const st=relicState(i);return`<div class="rl ${st.cls}" title="${Rl.name}: ${st.txt}"><img src="${iconURL('relic',i,56)}" alt=""><span>${st.short}</span></div>`;}).join('')}</div>
-   <p class="muted" style="margin:8px 0 0;font-size:13px">Recover all seven and carry them to the Reliquary in ${S.town.name} before the end of Month 4.${S.town.built.reliquary?'':' <b style="color:var(--text)">Build the Reliquary first.</b>'} Rumours arrive each week.</p>
+   <p class="muted" style="margin:8px 0 0;font-size:13px">Recover all seven and carry them to the Reliquary in ${S.town.name} before the end of Month ${Math.round(S.limit/28)}.${S.town.built.reliquary?'':' <b style="color:var(--text)">Build the Reliquary first.</b>'} Rumours arrive each week.</p>
    <p class="muted" style="margin:6px 0 0;font-size:13px">Faction power: <b style="color:var(--text)">${FAC[S.fac].mech}</b>. ${FAC[S.fac].mechDesc}</p>`;
 }
 function relicState(i){
@@ -1188,12 +1382,13 @@ async function visit(o){
     const v=await showModal({title:'A weathered chest',body:`<p>Under a hawthorn root lies an iron-bound chest. Share the coin among the troops, or let ${h.name} study the war journals packed beneath it.</p>`,
       buttons:[{label:`Take ${fmt(gold)} gold`,value:'g',primary:true},{label:`Gain ${fmt(xp)} experience`,value:'x'}]});
     S.objs=S.objs.filter(q=>q!==o);if(v==='g')gain('gold',gold);else await addXP(xp);
+    {const free=Object.keys(ITEMS).filter(k=>!S.heroes.some(x=>(x.items||[]).includes(k)));if(free.length&&R()<0.35){const it=pick(free);(h.items=h.items||[]).push(it);toast(`Wrapped in oilcloth: <b>${ITEMS[it].name}</b> (${itemTxt(it)}).`);}}
     const hid=S.objs.filter(q=>q.type==='relic'&&!S.explored[idx(q.x,q.y)]);if(hid.length&&R()<0.45){const q=pick(hid);reveal(q.x,q.y,2);toast(`Tucked in the lid: a map fragment showing the ${RELICS[q.r].lair}.`);}
     renderUI();return true;}
   case 'stone':if(o.used){toast('The stone is silent now.');return false;}
     o.used=true;h[o.stat]++;if(o.stat==='lore')h.mana+=10;
     await showModal({title:`Standing stone of ${STATN[o.stat]}`,body:`<p>Old runes warm under ${h.name}'s palm.</p><div class="scs">${sc(o.stat,h[o.stat],1)}</div>`,buttons:[{label:'Continue',value:1,primary:true}],dismiss:1});renderUI();return true;
-  case 'shrine':if(h.spells.includes(o.spell)){toast(`You already know ${SP[o.spell].name}.`);return false;}
+  case 'shrine':if(!h.book){toast(`${h.name} needs a spellbook to learn here. Buy one at the Lantern Library.`);return false;}if(h.spells.includes(o.spell)){toast(`You already know ${SP[o.spell].name}.`);return false;}
     h.spells.push(o.spell);await showModal({title:'Wayshrine',body:`<p>A blue flame hums inside the shrine. ${h.name} learns <b>${SP[o.spell].name}</b>: ${SP[o.spell].desc(h.pow)}</p>`,buttons:[{label:'Continue',value:1,primary:true}],dismiss:1});renderUI();return true;
   case 'well':if(o.day===S.day){toast('The Moonwell is drained until tomorrow.');return false;}
     o.day=S.day;h.mana=Math.max(h.mana,maxMana());toast('The Moonwell restores your mana.');renderUI();return false;
@@ -1215,7 +1410,7 @@ function townArrive(){
   const t=S.town,h=HERO();
   if(t.garrison.length){t.garrison=t.garrison.filter(g=>!addToArmy(g.k,g.n));toast(t.garrison.length?'Some of the garrison could not join: the army has no free slot.':'The garrison joins your army.');}
   learnLibrary();
-  if(t.built.reliquary&&h.relics.length){const got=h.relics.splice(0);for(const r of got){S.delivered.push(r);if(r===5)S.heroes.forEach(x=>{if(!x.spells.includes('starfall'))x.spells.push('starfall');});}
+  if(t.built.reliquary&&h.relics.length){const got=h.relics.splice(0);for(const r of got){S.delivered.push(r);if(r===5)S.heroes.forEach(x=>{x.book=true;if(!x.spells.includes('starfall'))x.spells.push('starfall');});}
     toast(`${got.map(r=>RELICS[r].name).join(', ')} placed in the Reliquary. ${S.delivered.length}/7 home.`);}
   else if(h.relics.length&&!t.built.reliquary)toast('Build the Reliquary to bring your relics home.');
   if(t.built.stables&&h.mount==='foot'){h.mount='horse';toast(`${h.name} takes a horse from the stables.`);}
@@ -1223,7 +1418,7 @@ function townArrive(){
   renderUI();
 }
 async function arriveTown(){townArrive();if(S.delivered.length>=7){await victory();return;}openTown();}
-function learnLibrary(){const h=HERO(),t=S.town;const add=[];if(t.built.lib1)add.push('mend','swift');if(t.built.lib2)add.push('bark','starfall');
+function learnLibrary(){const h=HERO(),t=S.town;if(!h.book)return;const add=[];if(t.built.lib1)add.push(...libSpells(1));if(t.built.lib2)add.push(...libSpells(2));
   const fresh=add.filter(s=>!h.spells.includes(s));if(fresh.length){h.spells.push(...fresh);toast(`${h.name} learns ${fresh.map(s=>SP[s].name).join(' and ')}.`);}}
 async function addXP(n){
   const h=HERO();h.xp+=n;
@@ -1241,11 +1436,11 @@ async function endDay(){
   moving=true;path=null;
   try{
     S.day++;
-    if(S.day>LIMIT){moving=false;await defeat('The fourth month has ended with the crown still broken. The Glass Drakes wake, and the land falls to their winter.');return;}
+    if(S.day>S.limit){moving=false;await defeat('Time has run out with the crown still broken. The Glass Drakes wake, and the land falls to their winter.');return;}
     const t=S.town;let msg=[`+${fmt(income())} gold`];gain('gold',income());
     let owned=0;for(const o of S.objs)if(o.type==='mine'&&o.owned===true){owned++;gain(MINE[o.k].res,MINE[o.k].amt+(delivered(4)?(MINE[o.k].res==='gold'?250:1):0));}
     if(owned)msg.push(`${owned} mine${owned>1?'s':''} paid out`);
-    const cur=S.cur;S.heroes.forEach((h,i)=>{S.cur=i;h.mp=maxMP();h.mana=Math.min(maxMana(),h.mana+Math.max(1,hst(h,'lore'))+(hasSk('meditation')?2:0));});S.cur=cur;
+    const cur=S.cur;S.heroes.forEach((h,i)=>{S.cur=i;h.mp=maxMP();h.mana=Math.min(maxMana(),h.mana+Math.max(1,hst(h,'lore'))+(hasSk('meditation')?2:0)+gear(h,'manaRegen'));});S.cur=cur;
     t.builtToday=false;
     const d=dateParts();
     if(d.d===1){
@@ -1292,7 +1487,7 @@ function rivalTarget(rv){
     if(v)c.push({o,x:o.x,y:o.y,v});}
   for(const h of S.heroes)if(armyPower(h.army,h)*1.25<pw)c.push({heroObj:h,x:h.x,y:h.y,v:20+h.relics.length*30});
   c.forEach(q=>q.s=q.v/(Math.hypot(q.x-rv.x,q.y-rv.y)+4));c.sort((a,b)=>b.s-a.s);
-  for(const q of c.slice(0,6)){if(Math.hypot(q.x-rv.x,q.y-rv.y)>24)continue;const p=astar(rv.x,rv.y,q.x,q.y,(x,y,goal)=>rivalCost(rv,x,y,goal));if(p&&p.length){q.path=p;return q;}}
+  for(const q of c.slice(0,6)){if(Math.hypot(q.x-rv.x,q.y-rv.y)>Math.max(24,(W+H)/2.2))continue;const p=astar(rv.x,rv.y,q.x,q.y,(x,y,goal)=>rivalCost(rv,x,y,goal));if(p&&p.length){q.path=p;return q;}}
   return null;}
 function autoResolve(rv,theirs){const ours=armyPower(rv.army,rv);
   if(ours>theirs){const f=Math.min(0.85,Math.pow(theirs/ours,1.4)*0.75);rv.army.forEach(a=>a.n=Math.max(1,Math.round(a.n*(1-f))));return true;}
@@ -1329,6 +1524,13 @@ async function rivalInteract(rv,tg){
   return'stop';}
 
 /* -------- town screen -------- */
+/* each banner's mages teach their own spells: the Library the first two, the Star Archive the rest */
+const FAC_SPELLS={rangers:['mend','swift','entangle','bark','starfall'],wizards:['ember','swift','chain','bark','starfall'],necro:['ember','raise','bark','squall','starfall'],
+  centaurs:['swift','mend','entangle','squall'],pirates:['squall','ember','swift','mend'],elves:['entangle','mend','swift','starfall'],dwarves:['ember','bark','geyser','mend'],merfolk:['squall','mend','chain','swift']};
+const libSpells=lvl=>{const l=FAC_SPELLS[S.fac];return lvl===1?l.slice(0,2):l.slice(2);};
+const BOOK_COST=500,HIRE_COST=2500;
+const heroHere=()=>HERO().x===S.town.x&&HERO().y===S.town.y;
+const hireable=()=>HEROES.filter(x=>x.fac===S.fac&&!S.heroes.some(y=>y.id===x.id));
 function townBuildings(){
   const f=FAC[S.fac],fk=S.fac;
   const L=[
@@ -1346,67 +1548,191 @@ function townBuildings(){
   L.push({id:'muster',name:'Muster Field',cost:{gold:1500,ore:5},req:['d1'],desc:'Every dwelling grows 50% more recruits each week.'});
   if(f.travel!=='hooves')L.push({id:'stables',name:'Stables',cost:{gold:1500,timber:5},desc:'Your hero takes a horse here: +40% movement.'});
   if(fk==='dwarves')L.push({id:'forge',name:'Great Forge',cost:{gold:2000,ore:Math.round(10*(fx().forgeCut||1))},req:['d1'],desc:'Forging: every Dwarven unit gets +1 attack and +1 defense.'});
-  L.push({id:'lib1',name:'Lantern Library',cost:{gold:2000,timber:5,ore:5},desc:'Teaches Mend and Swift Wind. Refills mana on each visit.'});
-  L.push({id:'lib2',name:'Star Archive',cost:{gold:4000,ore:5,amber:5},req:['lib1'],desc:'Teaches Bark Skin and Starfall.'});
+  L.push({id:'lib1',name:'Lantern Library',cost:{gold:2000,timber:5,ore:5},desc:`Sells spellbooks and teaches ${libSpells(1).map(x=>SP[x].name).join(' and ')}. Refills mana on each visit.`});
+  L.push({id:'lib2',name:'Star Archive',cost:{gold:4000,ore:5,amber:5},req:['lib1'],desc:`Teaches ${libSpells(2).map(x=>SP[x].name).join(', ')}.`});
   L.push({id:'market',name:'Barter Yard',cost:{gold:500,timber:5},desc:'Trade goods for gold, or gold for goods.'});
   return L;
 }
 function canAfford(cost){return Object.entries(cost).every(([k,v])=>S.res[k]>=v);}
 function pay(cost){for(const[k,v]of Object.entries(cost))S.res[k]-=v;}
-function unitCost(k,n){const u=U[k];const c={gold:u.cost*n};if(u.amber)c.amber=u.amber*n;return c;}
+function unitCost(k,n){const u=U[k];const cut=S&&S.heroes?Math.max(0,...S.heroes.map(h=>gear(h,'costCut'))):0;const c={gold:Math.round(u.cost*n*(1-cut/100))};if(u.amber)c.amber=u.amber*n;return c;}
 const recruitKey=k=>{const i=FAC[S.fac].units.indexOf(k);return i>=0&&S.town.built['u'+(i+1)]?k+'_u':k;};
 function upCost(k,n){const c={gold:Math.max(0,(U[k+'_u'].cost-U[k].cost)*n)};return c;}
-function maxAfford(k){const u=U[k];let m=Math.floor(S.res.gold/u.cost);if(u.amber)m=Math.min(m,Math.floor(S.res.amber/u.amber));return m;}
+function maxAfford(k){const c1=unitCost(k,1);let m=Math.floor(S.res.gold/Math.max(1,c1.gold));if(c1.amber)m=Math.min(m,Math.floor(S.res.amber/c1.amber));return m;}
+const costPlain=c=>Object.entries(c).filter(([,v])=>v>0).map(([k,v])=>`${fmt(v)} ${RESNAME[k].toLowerCase()}`).join(', ');
+const bAvail=b=>!S.town.built[b.id]&&!(b.req||[]).some(r=>!S.town.built[r]);
+/* the one thing worth doing next */
+function townAdvice(){
+  const t=S.town,here=heroHere(),BL=townBuildings(),h=HERO();
+  if(here&&h.relics.length&&!t.built.reliquary){return{tab:'build',id:'reliquary',text:canAfford(BL.find(b=>b.id==='reliquary').cost)&&!t.builtToday?`Build the Reliquary so ${h.name} can bring the relics home.`:`Save up for the Reliquary: ${h.name} is carrying relics.`};}
+  const rec=FAC[S.fac].units.filter((k,i)=>t.built['d'+(i+1)]&&(t.pool[k]||0)>0&&maxAfford(recruitKey(k))>0);
+  if(here&&rec.length){const k=rec[rec.length-1],rk=recruitKey(k);return{tab:'recruit',text:`Recruit ${Math.min(t.pool[k],maxAfford(rk))} ${U[rk].pl} for ${h.name}'s army.`};}
+  if(!t.builtToday){const order=['hall2','d3','reliquary','lib1','d4','hall3','tavern','u1','u2','d5','market','u3','muster','stables','forge','lib2','u4','u5'];
+    for(const id of order){const b=BL.find(x=>x.id===id);if(b&&bAvail(b)&&canAfford(b.cost))return{tab:'build',id,text:`Build the ${b.name}. ${b.desc}`};}
+    const next=order.map(id=>BL.find(x=>x.id===id)).find(b=>b&&bAvail(b));
+    if(next)return{tab:'build',id:next.id,text:`Save up for the ${next.name} (${costPlain(next.cost)}).${t.built.market?' The market can trade spare goods.':''}`};}
+  if(here&&!h.book&&t.built.lib1&&S.res.gold>=BOOK_COST)return{tab:'library',text:`Buy ${h.name} a spellbook at the Lantern Library.`};
+  if(t.built.tavern&&S.heroes.length<3&&S.res.gold>=HIRE_COST)return{tab:'tavern',text:'Hire another hero to scout and claim mines.'};
+  return{tab:'overview',text:t.builtToday?'Today’s building is done. Head out and explore.':'Nothing urgent. Head out and explore.'};
+}
+function townTabs(){
+  const t=S.town,here=heroHere(),BL=townBuildings(),fu=FAC[S.fac].units;
+  const recN=fu.reduce((a,k,i)=>a+(t.built['d'+(i+1)]&&maxAfford(recruitKey(k))>0?(t.pool[k]||0):0),0);
+  const buildN=t.builtToday?0:BL.filter(b=>bAvail(b)&&canAfford(b.cost)).length;
+  const upN=here?HERO().army.filter(a=>{const ti=fu.indexOf(a.k);return ti>=0&&t.built['u'+(ti+1)]&&canAfford(upCost(a.k,a.n));}).length:0;
+  const hireN=t.built.tavern&&S.heroes.length<3&&S.res.gold>=HIRE_COST?hireable().length:0;
+  const libN=t.built.lib1&&here&&!HERO().book&&S.res.gold>=BOOK_COST?1:0;
+  const relN=here&&t.built.reliquary?HERO().relics.length:0;
+  return[{id:'overview',label:'Town'},{id:'recruit',label:'Recruit',n:recN},{id:'build',label:'Build',n:buildN},{id:'upgrade',label:'Upgrades',n:upN},
+    {id:'market',label:'Market',locked:!t.built.market},{id:'tavern',label:'Tavern',n:hireN,locked:!t.built.tavern},{id:'library',label:'Library',n:libN,locked:!t.built.lib1},{id:'relics',label:'Reliquary',n:relN}];
+}
+let townTab='overview',townFocus=null,townSpots=[];
 function townHTML(){
-  const t=S.town,here=HERO().x===t.x&&HERO().y===t.y,BL_=townBuildings(),BY=Object.fromEntries(BL_.map(b=>[b.id,b]));
-  const bcards=BL_.map(b=>{
-    const built=!!t.built[b.id];const miss=(b.req||[]).filter(r=>!t.built[r]);
-    let act;if(built)act='<span class="tag ok">Built</span>';
-    else if(miss.length)act=`<span class="tag no">Needs ${miss.map(r=>BY[r]?BY[r].name:r).join(', ')}</span>`;
-    else act=`<button class="btn sm" data-build="${b.id}" ${t.builtToday||!canAfford(b.cost)?'disabled':''}>Build</button>`;
-    return`<div class="bcard ${built?'built':''}"><h4>${b.name}</h4><p>${b.desc}</p>${built?'':`<div class="cost">${costHTML(b.cost,S.res)}</div>`}<div>${act}</div></div>`;}).join('');
-  const gr=fx().growth||{};
-  const dw=FAC[S.fac].units.map((k,i)=>t.built['d'+(i+1)]?k:null).filter(Boolean).map(k=>{const rk=recruitKey(k),u=U[rk],av=t.pool[k]||0,mx=Math.min(av,maxAfford(rk));
-    return`<div class="bcard"><div class="rrow"><img src="${iconURL('unit',rk,104)}" alt=""><div><h4>${u.name}</h4><p>${u.desc}</p></div></div>${unitChips(rk)}
-     <div class="cost">${costHTML(unitCost(rk,1))}<span class="muted">each · ${av} available · +${U[k].growth+(gr[k]||0)}/week</span></div>
-     <div class="rctl"><input type="number" id="rc-${k}" min="0" max="${mx}" value="${mx}" aria-label="How many ${u.pl}"><button class="btn sm" data-recruit="${k}" ${mx<1?'disabled':''}>Recruit</button></div></div>`;}).join('');
-  const fu=FAC[S.fac].units;
-  const upg=here?HERO().army.map((a,i)=>{const ti=fu.indexOf(a.k);if(ti<0||!t.built['u'+(ti+1)])return'';const c=upCost(a.k,a.n);
-    return`<div class="bcard"><div class="rrow"><img src="${iconURL('unit',a.k+'_u',80)}" alt=""><div><h4>${a.n} ${U[a.k].pl} → ${U[a.k+'_u'].pl}</h4>${unitChips(a.k+'_u')}</div></div><div class="cost">${costHTML(c,S.res)}</div><div><button class="btn sm" data-upg="${i}" ${canAfford(c)?'':'disabled'}>Upgrade</button></div></div>`;}).join(''):'';
-  const hireable=HEROES.filter(x=>x.fac===S.fac&&!S.heroes.some(y=>y.id===x.id));
-  const tavern=t.built.tavern?`<section><h3>Tavern</h3>${S.heroes.length>=3?'<p class="muted">You already lead three heroes.</p>':`<div class="grid">${hireable.map(x=>`<div class="bcard"><div class="rrow"><img src="${iconURL('hero',x.id,104)}" alt="" style="border-radius:4px"><div><h4>${x.name}</h4><p>${x.type} hero · ★ ${x.ab}: ${x.ad}</p></div></div><div class="scs">${sc('atk',x.st[0])}${sc('def',x.st[1])}${sc('pow',x.st[2])}${sc('lore',x.st[3])}</div><div class="cost">${costHTML({gold:2500},S.res)}</div><div><button class="btn sm" data-hire="${x.id}" ${S.res.gold<2500?'disabled':''}>Hire</button></div></div>`).join('')}</div>`}</section>`:'';
-  const rum=S.rumours.filter(r=>S.objs.some(o=>o.type==='relic'&&o.r===r.r));
-  const board=`<section><h3>Rumour Board</h3>${rum.length?`<ul style="margin:0;padding-left:18px">${rum.map(r=>`<li><b>${RELICS[r.r].name}</b>: ${r.txt}.</li>`).join('')}</ul>`:'<p class="muted" style="margin:0">No fresh rumours. A new one arrives each week.</p>'}<p class="muted" style="margin:6px 0 0">Reliquary: ${S.delivered.length}/7 relics home${t.built.reliquary?'':' (not built yet)'}.</p></section>`;
-  const gar=t.garrison.length?`<p>Garrison waiting for ${HERO().name}: ${t.garrison.map(g=>`${g.n} ${U[g.k].pl}`).join(', ')}.</p>`:'';
-  const market=t.built.market?`<section><h3>Barter Yard</h3><div class="grid">${['timber','ore','amber'].map(k=>{const sell=k==='amber'?250:100,buy=k==='amber'?900:400;
-    return`<div class="bcard"><h4><img src="${iconURL('res',k,32)}" alt="" style="width:18px;vertical-align:-3px"> ${RESNAME[k]}</h4><div class="rctl"><button class="btn sm" data-sell="${k}" ${S.res[k]<1?'disabled':''}>Sell 1 for ${sell}</button><button class="btn sm" data-buy="${k}" ${S.res.gold<buy?'disabled':''}>Buy 1 for ${buy}</button></div></div>`;}).join('')}</div></section>`:'';
-  return`<div class="town"><p class="muted" style="margin:0">${t.builtToday?`${t.name} has already raised a building today. Construction resumes tomorrow.`:`${t.name} can raise one building per day.`} Daily income: ${fmt(income())} gold.</p>
-   <section><h3>Recruit</h3><p class="muted" style="margin-top:0">${here?`Recruits join ${HERO().name}'s army at once.`:`${HERO().name} is away. Recruits wait in the garrison until your hero returns.`}</p><div class="grid">${dw}</div>${gar}</section>
-   ${upg?`<section><h3>Upgrade your army</h3><div class="grid">${upg}</div></section>`:''}${board}${tavern}
-   <section><h3>Build</h3><div class="grid">${bcards}</div></section>${market}</div>`;
+  const t=S.town,here=heroHere(),BL_=townBuildings(),BY=Object.fromEntries(BL_.map(b=>[b.id,b])),adv=townAdvice(),h=HERO();
+  const tabs=townTabs().map(tb=>`<button class="ttab${tb.id===townTab?' on':''}${tb.n>0?' hot':''}${tb.locked?' locked':''}" data-tab="${tb.id}">${tb.label}${adv.tab===tb.id&&tb.id!=='overview'?'<span class="sg" title="Suggested">★</span>':''}${tb.n>0?`<i>${tb.n}</i>`:''}</button>`).join('');
+  const resBar=`<div class="tres">${RES.map(k=>`<span title="${RESNAME[k]}"><img src="${iconURL('res',k,40)}" alt="${RESNAME[k]}">${fmt(S.res[k])}</span>`).join('')}<span class="muted" style="font-weight:500">+${fmt(income())} gold a day · ${t.builtToday?'building done for today':'1 building a day'}</span></div>`;
+  const advice=`<div class="advice"><span><b>Suggested:</b> ${adv.text}</span>${adv.tab!==townTab||adv.id?`<button class="btn sm" data-go="${adv.tab}" data-goid="${adv.id||''}">${adv.tab==='overview'?'OK':'Take me there'}</button>`:''}</div>`;
+  const locked=(what,id)=>{const b=BY[id];const miss=(b.req||[]).filter(r=>!t.built[r]);return`<div class="bcard"><h4>${what} is not built yet</h4><p>${b.desc}</p><div class="cost">${costHTML(b.cost,S.res)}</div><div>${miss.length?`<span class="tag no">Needs ${miss.map(r=>BY[r].name).join(', ')}</span>`:`<button class="btn sm" data-build="${id}" ${t.builtToday||!canAfford(b.cost)?'disabled':''}>Build the ${b.name}</button>`}</div></div>`;};
+  let body='';
+  if(townTab==='overview'){
+    const gr={};S.heroes.forEach(x=>{for(const[k,v]of Object.entries((HBY[x.id].fx||{}).growth||{}))gr[k]=(gr[k]||0)+v;});
+    const inTown=S.heroes.filter(x=>x.x===t.x&&x.y===t.y);
+    body=`<div class="tview-wrap"><canvas class="tview" id="townView" width="960" height="300" aria-label="${t.name}: click a building"></canvas><div class="tv-tip" id="tvTip" hidden></div></div>
+      <div class="facts"><div class="bcard"><h4>Heroes in town</h4><p>${inTown.length?inTown.map(x=>x.name).join(', '):'None. Recruits wait in the garrison.'}</p></div>
+      <div class="bcard"><h4>Garrison</h4><p>${t.garrison.length?t.garrison.map(g=>`${g.n} ${U[g.k].pl}`).join(', '):'Empty'}</p></div>
+      <div class="bcard"><h4>Recruits waiting</h4><p>${FAC[S.fac].units.map((k,i)=>t.built['d'+(i+1)]&&t.pool[k]?`${t.pool[k]} ${U[recruitKey(k)].pl}`:null).filter(Boolean).join(', ')||'None until next week'}</p></div>
+      <div class="bcard"><h4>Reliquary</h4><p>${t.built.reliquary?`${S.delivered.length}/7 relics home`:'Not built'}</p></div></div>`;
+  }else if(townTab==='recruit'){
+    const gr={};S.heroes.forEach(x=>{for(const[k,v]of Object.entries((HBY[x.id].fx||{}).growth||{}))gr[k]=(gr[k]||0)+v;});
+    const dw=FAC[S.fac].units.map((k,i)=>t.built['d'+(i+1)]?k:null).filter(Boolean).map(k=>{const rk=recruitKey(k),u=U[rk],av=t.pool[k]||0,mx=Math.min(av,maxAfford(rk));
+      return`<div class="bcard${mx>0?' sugg':''}"><div class="rrow"><img src="${iconURL('unit',rk,104)}" alt=""><div><h4>${u.name}</h4><p>${u.desc}</p></div></div>${unitChips(rk)}
+       <div class="cost">${costHTML(unitCost(rk,1))}<span class="muted">each · ${av} available · +${U[k].growth+(gr[k]||0)}/week</span></div>
+       <div class="rctl"><input type="number" id="rc-${k}" min="0" max="${mx}" value="${mx}" aria-label="How many ${u.pl}"><button class="btn sm" data-recruit="${k}" ${mx<1?'disabled':''}>Recruit</button></div></div>`;}).join('');
+    body=`<p class="muted" style="margin-top:0">${here?`Recruits join ${h.name}'s army at once.`:`${h.name} is away. Recruits wait in the garrison until a hero returns.`}</p><div class="grid">${dw}</div>${t.garrison.length?`<p>Garrison: ${t.garrison.map(g=>`${g.n} ${U[g.k].pl}`).join(', ')}.</p>`:''}`;
+  }else if(townTab==='build'){
+    const list=[...BL_].sort((a,b)=>(t.built[a.id]?1:0)-(t.built[b.id]?1:0));
+    body=`<div class="grid">${list.map(b=>{const built=!!t.built[b.id];const miss=(b.req||[]).filter(r=>!t.built[r]);
+      let act;if(built)act='<span class="tag ok">Built</span>';
+      else if(miss.length)act=`<span class="tag no">Needs ${miss.map(r=>BY[r]?BY[r].name:r).join(', ')}</span>`;
+      else act=`<button class="btn sm" data-build="${b.id}" ${t.builtToday||!canAfford(b.cost)?'disabled':''}>Build</button>`;
+      const sug=adv.id===b.id&&!built;
+      return`<div class="bcard${built?' built':''}${sug?' sugg':''}" id="bc-${b.id}">${sug?'<span class="ribbon">Suggested</span>':''}<h4>${b.name}</h4><p>${b.desc}</p>${built?'':`<div class="cost">${costHTML(b.cost,S.res)}</div>`}<div>${act}</div></div>`;}).join('')}</div>`;
+  }else if(townTab==='upgrade'){
+    const fu=FAC[S.fac].units;
+    const upg=here?h.army.map((a,i)=>{const ti=fu.indexOf(a.k);if(ti<0||!t.built['u'+(ti+1)])return'';const c=upCost(a.k,a.n);
+      return`<div class="bcard${canAfford(c)?' sugg':''}"><div class="rrow"><img src="${iconURL('unit',a.k+'_u',80)}" alt=""><div><h4>${a.n} ${U[a.k].pl} → ${U[a.k+'_u'].pl}</h4>${unitChips(a.k+'_u')}</div></div><div class="cost">${costHTML(c,S.res)}</div><div><button class="btn sm" data-upg="${i}" ${canAfford(c)?'':'disabled'}>Upgrade</button></div></div>`;}).join(''):'';
+    body=upg?`<div class="grid">${upg}</div>`:`<p class="muted">${here?`Nothing to upgrade. Build a dwelling upgrade on the Build tab, then upgrade ${h.name}'s troops here.`:'A hero must be in town to upgrade troops.'}</p>`;
+  }else if(townTab==='market'){
+    body=t.built.market?`<div class="grid">${['timber','ore','amber'].map(k=>{const sell=k==='amber'?250:100,buy=k==='amber'?900:400;
+      return`<div class="bcard"><h4><img src="${iconURL('res',k,32)}" alt="" style="width:18px;vertical-align:-3px"> ${RESNAME[k]} · you have ${S.res[k]}</h4><p>Sell for ${sell} gold each, buy for ${buy}.</p>
+        <div class="rctl"><button class="btn sm" data-sell="${k}" data-n="1" ${S.res[k]<1?'disabled':''}>Sell 1</button><button class="btn sm" data-sell="${k}" data-n="5" ${S.res[k]<5?'disabled':''}>Sell 5</button>
+        <button class="btn sm" data-buy="${k}" data-n="1" ${S.res.gold<buy?'disabled':''}>Buy 1</button><button class="btn sm" data-buy="${k}" data-n="5" ${S.res.gold<buy*5?'disabled':''}>Buy 5</button></div></div>`;}).join('')}</div>`:`<div class="grid">${locked('The Barter Yard','market')}</div>`;
+  }else if(townTab==='tavern'){
+    body=!t.built.tavern?`<div class="grid">${locked('The Tavern','tavern')}</div>`:S.heroes.length>=3?'<p class="muted">You already lead three heroes.</p>':
+      `<div class="grid">${hireable().map(x=>`<div class="bcard"><div class="rrow"><img src="${iconURL('hero',x.id,104)}" alt="" style="border-radius:4px;image-rendering:pixelated"><div><h4>${x.name}</h4><p>${x.type} hero · ★ ${x.ab}: ${x.ad}</p></div></div><div class="scs">${sc('atk',x.st[0])}${sc('def',x.st[1])}${sc('pow',x.st[2])}${sc('lore',x.st[3])}</div>
+        <p>Skill: ${x.sk.map(k=>SK[k].name).join(', ')} · Artifact: ${x.item?ITEMS[x.item].name:'none'}</p><div class="cost">${costHTML({gold:HIRE_COST},S.res)}</div><div><button class="btn sm" data-hire="${x.id}" ${S.res.gold<HIRE_COST?'disabled':''}>Hire</button></div></div>`).join('')}</div>`;
+  }else if(townTab==='library'){
+    if(!t.built.lib1)body=`<div class="grid">${locked('The Lantern Library','lib1')}</div>`;
+    else{const fs=FAC_SPELLS[S.fac];
+      body=`<p class="muted" style="margin-top:0">${FAC[S.fac].arch} mages teach: ${fs.map(x=>SP[x].name).join(', ')}. The Library teaches the first two; the Star Archive teaches the rest. Heroes need a spellbook to learn or cast.</p>
+      <div class="grid">${S.heroes.filter(x=>x.x===t.x&&x.y===t.y).map(x=>`<div class="bcard"><h4>${x.name}</h4><p>${x.book?`Spellbook: ${x.spells.map(k=>SP[k].name).join(', ')||'empty'}`:'No spellbook yet.'}</p>${x.book?'':`<div class="cost">${costHTML({gold:BOOK_COST},S.res)}</div><div><button class="btn sm" data-book="${x.id}" ${S.res.gold<BOOK_COST?'disabled':''}>Buy a spellbook</button></div>`}</div>`).join('')||'<p class="muted">Bring a hero to town to buy a spellbook.</p>'}</div>
+      <div class="grid" style="margin-top:10px">${fs.map((k,i)=>`<div class="bcard${i<2||t.built.lib2?' built':''}"><h4>${SP[k].name} <span class="muted">· ${SP[k].cost} mana</span></h4><p>${SP[k].desc(hst(h,'pow'))}</p><span class="tag ${i<2||t.built.lib2?'ok':'no'}">${i<2?'Lantern Library':t.built.lib2?'Star Archive':'Needs the Star Archive'}</span></div>`).join('')}</div>`;}
+  }else if(townTab==='relics'){
+    const rum=S.rumours.filter(r=>S.objs.some(o=>o.type==='relic'&&o.r===r.r));
+    body=`${t.built.reliquary?'':`<div class="grid">${locked('The Reliquary','reliquary')}</div>`}
+      <div class="grid" style="margin-top:8px">${RELICS.map((Rl,i)=>`<div class="bcard${delivered(i)?' built':''}"><div class="rrow"><img src="${iconURL('relic',i,64)}" alt="" style="width:36px;height:36px"><div><h4>${Rl.name}</h4><p>${relicState(i).txt}</p></div></div><p>Home bonus: ${Rl.deliver}.</p></div>`).join('')}</div>
+      <h3 style="margin-top:14px">Rumour Board</h3>${rum.length?`<ul style="margin:0;padding-left:18px">${rum.map(r=>`<li><b>${RELICS[r.r].name}</b>: ${r.txt}.</li>`).join('')}</ul>`:'<p class="muted">No fresh rumours. A new one arrives each week.</p>'}`;
+  }
+  return`<div class="town">${resBar}<nav class="ttabs" aria-label="Town actions">${tabs}</nav>${advice}${body}</div>`;
+}
+/* the town itself: buildings stand in place once built; empty lots show what can go up next */
+function drawTownView(cv){
+  const c=cv.getContext('2d'),f=FAC[S.fac],t=S.town,BL=townBuildings(),BY=Object.fromEntries(BL.map(b=>[b.id,b])),now=performance.now();
+  townSpots=[];c.imageSmoothingEnabled=false;
+  const tc=shadeRGB(f.col,-0.55),sky=c.createLinearGradient(0,0,0,300);sky.addColorStop(0,'#141c26');sky.addColorStop(0.7,`rgb(${tc})`);sky.addColorStop(1,'#2b2a22');c.fillStyle=sky;c.fillRect(0,0,960,300);
+  c.fillStyle='#24331f';c.beginPath();c.moveTo(0,200);for(let x=0;x<=960;x+=60)c.lineTo(x,180-Math.sin(x/90)*22-((x/60)%2)*8);c.lineTo(960,300);c.lineTo(0,300);c.fill();
+  c.fillStyle='#3d5229';c.fillRect(0,238,960,62);c.fillStyle='#8d7a52';c.beginPath();c.moveTo(440,300);c.lineTo(468,252);c.lineTo(492,252);c.lineTo(520,300);c.fill();
+  const spot=(x,y,w,h,tab,id,label)=>townSpots.push({x,y,w,h,tab,id,label});
+  const outline='#1e1912',roof=f.col,trim=f.col2;
+  function house(x,base,w,h,wall,rf){c.fillStyle=wall;c.strokeStyle=outline;c.lineWidth=2;c.fillRect(x-w/2,base-h,w,h);c.strokeRect(x-w/2,base-h,w,h);
+    c.fillStyle=rf;c.beginPath();c.moveTo(x-w/2-6,base-h);c.lineTo(x,base-h-w*0.45);c.lineTo(x+w/2+6,base-h);c.closePath();c.fill();c.stroke();
+    c.fillStyle='#2b1d10';c.fillRect(x-7,base-20,14,20);c.fillStyle='#f2c46a';c.fillRect(x-w/2+8,base-h+12,9,9);c.fillRect(x+w/2-17,base-h+12,9,9);}
+  function lot(x,base,w,h,id){const b=BY[id];if(!b)return;const ok=bAvail(b);c.setLineDash([6,5]);c.lineWidth=2;c.strokeStyle=ok?'rgba(242,211,130,.85)':'rgba(255,255,255,.22)';c.strokeRect(x-w/2,base-h,w,h);c.setLineDash([]);
+    c.fillStyle=ok?'#f2d382':'rgba(255,255,255,.3)';c.font='800 26px "Alegreya Sans",sans-serif';c.textAlign='center';c.textBaseline='middle';c.fillText('+',x,base-h/2);
+    spot(x-w/2,base-h,w,h,'build',id,`Empty lot: ${b.name}${ok?' (can be built)':' (locked)'}`);}
+  function star(x,y){c.fillStyle='#f2d382';c.beginPath();for(let i=0;i<10;i++){const a=-Math.PI/2+i*Math.PI/5,r=i%2?3:7;c.lineTo(x+Math.cos(a)*r,y+Math.sin(a)*r);}c.fill();}
+  const fu=f.units;
+  // back row
+  const back=[['muster',170,90,40],['stables',360,80,55],['d5',590,96,80],['forge',780,70,60]];
+  for(const[id,x,w,h]of back){const base=214;if(!BY[id])continue;
+    if(!t.built[id]){lot(x,base,w,h,id);continue;}
+    if(id==='muster'){c.fillStyle='#55693a';c.fillRect(x-w/2,base-12,w,12);for(let i=0;i<4;i++){c.strokeStyle=outline;c.beginPath();c.moveTo(x-w/2+12+i*22,base-6);c.lineTo(x-w/2+12+i*22,base-40);c.stroke();c.fillStyle=roof;c.fillRect(x-w/2+12+i*22,base-40,14,9);}spot(x-w/2,base-h,w,h,'build',id,'Muster Field');}
+    else if(id==='stables'){house(x,base,w,h-10,'#7a5432','#4d3520');c.save();c.translate(x+w/2+14,base-10);drawTravelIcon(c,'horse');c.restore();spot(x-w/2,base-h-30,w+30,h+30,'build',id,'Stables');}
+    else if(id==='forge'){house(x,base,w,h,'#5a5a62','#3a3a3e');c.fillStyle='rgba(200,200,200,.35)';for(let i=0;i<3;i++){c.beginPath();c.arc(x+w/2-10+Math.sin(now/600+i)*4,base-h-30-i*14,6+i*2,0,7);c.fill();}spot(x-w/2,base-h-30,w,h+30,'build',id,'Great Forge');}
+    else{house(x,base,w,h,'#a69c84',roof);if(t.built.u5)star(x,base-h-w*0.45-6);c.save();c.translate(x,base-h-w*0.45-22);drawUnit(c,fu[4],0,0,13);c.restore();spot(x-w/2-6,base-h-60,w+12,h+60,'recruit','d5',`${f.dw[4]}: recruit ${U[fu[4]].pl}`);}
+  }
+  // front row
+  const lv=t.built.hall3?2:t.built.hall2?1:0,kh=100+lv*28;
+  c.fillStyle='#b8ae94';c.strokeStyle=outline;c.lineWidth=2;c.fillRect(430,252-kh,100,kh);c.strokeRect(430,252-kh,100,kh);for(let i=0;i<5;i++)c.fillRect(430+i*21,244-kh,12,10);
+  c.fillStyle='#2b1d10';c.beginPath();c.moveTo(466,252);c.lineTo(466,226);c.arc(480,226,14,Math.PI,0);c.lineTo(494,252);c.fill();
+  c.fillStyle='#f2c46a';for(let i=0;i<lv+2;i++){c.fillRect(452,262-kh+i*26,10,12);c.fillRect(498,262-kh+i*26,10,12);}
+  c.strokeStyle=outline;c.beginPath();c.moveTo(480,244-kh);c.lineTo(480,214-kh);c.stroke();c.fillStyle=roof;c.beginPath();c.moveTo(480,214-kh);c.quadraticCurveTo(496,212-kh+Math.sin(now/400)*3,512,218-kh);c.lineTo(480,228-kh);c.fill();
+  spot(430,214-kh,100,kh+38,'build','hall2',`${t.built.hall3?'High Seat':t.built.hall2?'Council Hall':'Moot Hall'} (+${fmt(income())} gold a day)`);
+  const front=[['d1',70,70,55],['d2',160,70,60],['lib1',255,46,130],['tavern',345,74,62],['market',620,100,46],['reliquary',720,76,70],['d3',810,72,64],['d4',900,72,70]];
+  for(const[id,x,w,h]of front){const base=252;if(!BY[id])continue;
+    if(!t.built[id]){lot(x,base,w,h,id);continue;}
+    if(id[0]==='d'){const i=+id[1]-1;house(x,base,w,h,'#a69c84',roof);if(t.built['u'+(i+1)])star(x,base-h-w*0.45-6);c.save();c.translate(x,base-h-w*0.45-22);drawUnit(c,fu[i],0,0,12);c.restore();
+      spot(x-w/2-6,base-h-58,w+12,h+58,'recruit',id,`${f.dw[i]}: recruit ${U[recruitKey(fu[i])].pl}${t.pool[fu[i]]?` (${t.pool[fu[i]]} waiting)`:''}`);}
+    else if(id==='lib1'){c.fillStyle='#8f8a7c';c.strokeStyle=outline;c.fillRect(x-w/2,base-h,w,h);c.strokeRect(x-w/2,base-h,w,h);c.fillStyle='#6f8fd8';c.beginPath();c.moveTo(x-w/2-6,base-h);c.lineTo(x,base-h-36);c.lineTo(x+w/2+6,base-h);c.fill();c.stroke();
+      const gl=0.6+0.4*Math.sin(now/500);c.fillStyle=`rgba(160,200,255,${gl})`;c.fillRect(x-6,base-h+20,12,16);c.fillRect(x-6,base-h+56,12,16);if(t.built.lib2){c.fillStyle='#e8f0ff';c.beginPath();c.arc(x,base-h-40,8,0,7);c.fill();}
+      spot(x-w/2-6,base-h-48,w+12,h+48,'library','lib1',t.built.lib2?'Lantern Library and Star Archive':'Lantern Library');}
+    else if(id==='tavern'){house(x,base,w,h,'#8b5e34','#5a3a1e');c.fillStyle='#d4ab52';c.fillRect(x+w/2,base-h+6,16,12);c.strokeStyle=outline;c.strokeRect(x+w/2,base-h+6,16,12);spot(x-w/2,base-h-36,w+20,h+36,'tavern',id,'Tavern: hire heroes');}
+    else if(id==='market'){for(let i=0;i<3;i++){const sx=x-w/2+i*34;c.fillStyle='#7a5432';c.fillRect(sx+4,base-26,26,26);c.fillStyle=i%2?trim:roof;c.beginPath();c.moveTo(sx,base-26);c.lineTo(sx+17,base-h);c.lineTo(sx+34,base-26);c.fill();c.strokeStyle=outline;c.stroke();}
+      drawRes(c,'gold',x-30,base-8,6);drawRes(c,'timber',x,base-8,6);drawRes(c,'amber',x+30,base-8,6);spot(x-w/2,base-h,w,h,'market',id,'Barter Yard: trade goods');}
+    else if(id==='reliquary'){c.fillStyle='#cfc6ae';c.strokeStyle=outline;c.fillRect(x-w/2,base-h+16,w,h-16);c.strokeRect(x-w/2,base-h+16,w,h-16);c.beginPath();c.moveTo(x-w/2-6,base-h+16);c.lineTo(x,base-h-10);c.lineTo(x+w/2+6,base-h+16);c.closePath();c.fillStyle=trim;c.fill();c.stroke();
+      for(let i=0;i<4;i++){c.fillStyle='#a69c84';c.fillRect(x-w/2+6+i*18,base-h+24,8,h-24);}
+      S.delivered.forEach((r,i)=>drawRelic(c,r,x-w/2+10+(i%4)*18,base-h+34+Math.floor(i/4)*18,5));spot(x-w/2-6,base-h-10,w+12,h+10,'relics',id,`Reliquary: ${S.delivered.length}/7 relics home`);}
+  }
+  // heroes in town stand at the gate
+  S.heroes.filter(x=>x.x===t.x&&x.y===t.y).forEach((x,i)=>{c.save();c.translate(438+i*30-TS/2,262-TS/2);const f0=x.face;x.face='s';drawHero(c,0,0,x);x.face=f0;c.restore();});
+}
+function bindTownView(body,go){
+  const cv=body.querySelector('#townView');if(!cv)return;const tip=body.querySelector('#tvTip');
+  const hit=e=>{const r=cv.getBoundingClientRect(),x=(e.clientX-r.left)*960/r.width,y=(e.clientY-r.top)*300/r.height;return{s:townSpots.slice().reverse().find(p=>x>=p.x&&x<=p.x+p.w&&y>=p.y&&y<=p.y+p.h),px:e.clientX-r.left,py:e.clientY-r.top};};
+  cv.addEventListener('pointermove',e=>{const{s:sp,px,py}=hit(e);if(sp){tip.hidden=false;tip.textContent=sp.label;tip.style.left=Math.min(px+12,cv.clientWidth-200)+'px';tip.style.top=(py+12)+'px';cv.style.cursor='pointer';}else{tip.hidden=true;cv.style.cursor='default';}});
+  cv.addEventListener('pointerleave',()=>{tip.hidden=true;});
+  cv.addEventListener('click',e=>{const{s:sp}=hit(e);if(sp)go(sp.tab,sp.id);});
+  const loop=()=>{if(!cv.isConnected)return;drawTownView(cv);requestAnimationFrame(loop);};loop();
 }
 async function openTown(){
   if(modalOpen||S.over)return;
+  townTab=townAdvice().tab==='overview'?'overview':'overview';townFocus=null;
   const p=showModal({title:`<img src="${iconURL('crest',S.fac,52)}" alt="" style="width:30px;height:35px;vertical-align:-6px;margin-right:8px">${S.town.name}`,body:townHTML(),wide:true,buttons:[{label:'Leave town',value:1,primary:true}],dismiss:1});
   const m=$('#modal'),body=m.querySelector('.body');
-  const refresh=()=>{body.innerHTML=townHTML();renderUI();};
+  const go=(tab,id)=>{townTab=tab;townFocus=id||null;refresh();};
+  const refresh=()=>{body.innerHTML=townHTML();renderUI();bindTownView(body,go);
+    if(townFocus){const el=body.querySelector('#bc-'+townFocus);if(el){el.classList.add('flash');el.scrollIntoView({block:'center',behavior:reduced?'auto':'smooth'});}townFocus=null;}};
+  bindTownView(body,go);
   body.addEventListener('click',e=>{
     const el=e.target.closest('button');if(!el||el.disabled)return;const t=S.town;
+    if(el.dataset.tab){go(el.dataset.tab);return;}
+    if(el.dataset.go){go(el.dataset.go,el.dataset.goid);return;}
     if(el.dataset.build){const b=townBuildings().find(x=>x.id===el.dataset.build);if(!b||t.builtToday||!canAfford(b.cost))return;pay(b.cost);t.built[b.id]=1;t.builtToday=true;
       if(b.unit)t.pool[b.unit]=(t.pool[b.unit]||0)+U[b.unit].growth;
-      const here=HERO().x===t.x&&HERO().y===t.y;
+      const here=heroHere();
       if(b.id.startsWith('lib')&&here){learnLibrary();if(b.id==='lib1')HERO().mana=maxMana();}
       if(b.id==='stables'&&here&&HERO().mount==='foot'){HERO().mount='horse';toast(`${HERO().name} takes a horse: +40% movement from tomorrow.`);}
       toast(`${b.name} completed.`);refresh();}
     else if(el.dataset.recruit){const bk=el.dataset.recruit,k=recruitKey(bk);const inp=body.querySelector('#rc-'+bk);let n=Math.floor(+inp.value||0);n=clamp(n,0,Math.min(t.pool[bk]||0,maxAfford(k)));if(n<1)return;
-      pay(unitCost(k,n));t.pool[bk]-=n;const here=HERO().x===t.x&&HERO().y===t.y;
+      pay(unitCost(k,n));t.pool[bk]-=n;const here=heroHere();
       if(here&&addToArmy(k,n))toast(`${n} ${U[k].pl} join the army.`);else{const g=t.garrison.find(x=>x.k===k);if(g)g.n+=n;else t.garrison.push({k,n});toast(here?`The army has no free slot. ${n} ${U[k].pl} wait in the garrison.`:`${n} ${U[k].pl} wait in the garrison.`);}
       refresh();}
     else if(el.dataset.upg){const a=HERO().army[+el.dataset.upg];if(!a)return;const c=upCost(a.k,a.n);if(!canAfford(c))return;pay(c);const uk=a.k+'_u';const ex=HERO().army.find(x=>x.k===uk);if(ex){ex.n+=a.n;HERO().army.splice(+el.dataset.upg,1);}else a.k=uk;toast(`Upgraded to ${U[uk].pl}.`);refresh();}
-    else if(el.dataset.hire){if(S.res.gold<2500||S.heroes.length>=3)return;S.res.gold-=2500;const nh=mkHero(el.dataset.hire,t.x,t.y);const t1=FAC[S.fac].units[0];nh.army=[{k:recruitKey(t1),n:Math.round(150/U[t1].hp)}];
-      if(delivered(5))nh.spells.push('starfall');const cur=S.cur;S.heroes.push(nh);S.cur=S.heroes.length-1;nh.mana=maxMana();nh.mp=maxMP();S.cur=cur;toast(`${nh.name} joins your banner and waits at the town gate.`);refresh();}
-    else if(el.dataset.sell){const k=el.dataset.sell;if(S.res[k]<1)return;S.res[k]--;S.res.gold+=k==='amber'?250:100;refresh();}
-    else if(el.dataset.buy){const k=el.dataset.buy,c=k==='amber'?900:400;if(S.res.gold<c)return;S.res.gold-=c;S.res[k]++;refresh();}
+    else if(el.dataset.hire){if(S.res.gold<HIRE_COST||S.heroes.length>=3)return;S.res.gold-=HIRE_COST;const nh=mkHero(el.dataset.hire,t.x,t.y);const t1=FAC[S.fac].units[0];nh.army=[{k:recruitKey(t1),n:Math.round(150/U[t1].hp)}];
+      if(delivered(5)){nh.book=true;nh.spells.push('starfall');}const cur=S.cur;S.heroes.push(nh);S.cur=S.heroes.length-1;nh.mana=maxMana();nh.mp=maxMP();S.cur=cur;toast(`${nh.name} joins your banner and waits at the town gate.`);refresh();}
+    else if(el.dataset.book){const x=S.heroes.find(q=>q.id===el.dataset.book);if(!x||x.book||S.res.gold<BOOK_COST)return;S.res.gold-=BOOK_COST;x.book=true;const cur=S.cur;S.cur=S.heroes.indexOf(x);learnLibrary();x.mana=maxMana();S.cur=cur;toast(`${x.name} now carries a spellbook.`);refresh();}
+    else if(el.dataset.sell){const k=el.dataset.sell,n=+el.dataset.n||1;if(S.res[k]<n)return;S.res[k]-=n;S.res.gold+=(k==='amber'?250:100)*n;refresh();}
+    else if(el.dataset.buy){const k=el.dataset.buy,n=+el.dataset.n||1,c=(k==='amber'?900:400)*n;if(S.res.gold<c)return;S.res.gold-=c;S.res[k]+=n;refresh();}
   });
   await p;save();renderUI();
 }
@@ -1422,8 +1748,9 @@ const btCv=$('#btc'),bctx=btCv.getContext('2d');
 let BL={s:30,ox:0,oy:0,w:0,h:0,dpr:1};
 function layoutBattle(){
   const r=btCv.getBoundingClientRect();BL.dpr=Math.min(2,window.devicePixelRatio||1);btCv.width=Math.max(1,r.width*BL.dpr);btCv.height=Math.max(1,r.height*BL.dpr);BL.w=r.width;BL.h=r.height;
-  const s=Math.min((r.width-8)/(Math.sqrt(3)*(BC+0.5)),(r.height-8)/(1.5*(BR-1)+2));BL.s=Math.max(8,s);
-  const gw=Math.sqrt(3)*BL.s*(BC+0.5),gh=BL.s*(1.5*(BR-1)+2);BL.ox=(r.width-gw)/2;BL.oy=(r.height-gh)/2;
+  const side=Math.max(56,Math.min(120,r.width*0.09));BL.side=side;
+  const s=Math.min((r.width-8-2*side)/(Math.sqrt(3)*(BC+0.5)),(r.height-8)/(1.5*(BR-1)+2));BL.s=Math.max(8,s);
+  const gw=Math.sqrt(3)*BL.s*(BC+0.5),gh=BL.s*(1.5*(BR-1)+2);BL.ox=side+(r.width-2*side-gw)/2;BL.oy=(r.height-gh)/2;
 }
 function hc(c,r){const w=Math.sqrt(3)*BL.s;return{x:BL.ox+w*(c+0.5*(r&1))+w/2,y:BL.oy+BL.s+r*1.5*BL.s};}
 function hexAt(x,y){let best=null,bd=Infinity;for(let r=0;r<BR;r++)for(let c=0;c<BC;c++){const p=hc(c,r),d=(p.x-x)**2+(p.y-y)**2;if(d<bd){bd=d;best={c,r};}}return bd<=(BL.s*1.05)**2?best:null;}
@@ -1436,10 +1763,10 @@ const pack=s=>S.fac==='centaurs'&&mine0(s)&&hasFriendNear(s);
 function sAtk(s){let a=s.u.atk+s.buff.atk;if(s.side===0){const f=fx();a+=hst(HERO(),'atk')+((f.unitAtk||{})[s.k]||0);if(S.fac==='dwarves'&&S.town.built.forge&&mine0(s))a++;}else if(bt&&bt.enemyHero)a+=hst(bt.enemyHero,'atk');if(tide(s))a+=2;if(pack(s))a+=2;return a;}
 function sDef(s){let d=s.u.def+s.buff.def;if(s.side===0){const f=fx();d+=hst(HERO(),'def')+((f.unitDef||{})[s.k]||0);if(S.fac==='dwarves'&&S.town.built.forge&&mine0(s))d++;if(S.fac==='rangers'&&mine0(s)&&s.stood)d+=f.rootbound||2;}else if(bt&&bt.enemyHero)d+=hst(bt.enemyHero,'def');if(s.defending)d=Math.ceil(d*1.3);return d;}
 function sSpd(s){let v=s.u.spd+s.buff.spd;if(s.side===0)v+=((fx().unitSpd||{})[s.k]||0);if(tide(s))v+=2;if(pack(s))v+=1;return Math.max(1,v);}
-function sMorale(s){if(s.side!==0)return 0;let m=(hasSk('command')?1:0)+(fx().morale||0)+s.buff.morale+carry(HERO(),'morale');if(pack(s))m+=fx().packMorale||0;return m;}
-const sLuck=s=>s.side===0?(hasSk('fortune')?1:0)+carry(HERO(),'luck'):0;
+function sMorale(s){if(s.side!==0)return 0;let m=(hasSk('command')?1:0)+(fx().morale||0)+s.buff.morale+carry(HERO(),'morale')+gear(HERO(),'morale');if(pack(s))m+=fx().packMorale||0;return m;}
+const sLuck=s=>s.side===0?(hasSk('fortune')?1:0)+carry(HERO(),'luck')+gear(HERO(),'luck'):0;
 const totalHP=s=>s.alive?(s.n-1)*s.u.hp+s.hp:0;
-function mkStack(k,n,side,c,r,slot){const u=U[k];let shots=u.shots||0;if(side===0)shots+=((fx().unitShots||{})[k]||0);
+function mkStack(k,n,side,c,r,slot){const u=U[k];let shots=u.shots||0;if(side===0&&u.shots)shots+=((fx().unitShots||{})[k]||0)+gear(HERO(),'shots');
   return{id:Math.random(),k,u,n,n0:n,hp:u.hp,side,c,r,slot,shots,retLeft:u.retal||1,acted:false,waited:false,defending:false,buff:{atk:0,def:0,spd:0,morale:0},alive:true,anim:null,rooted:0,skip:0,stood:false,movedTurn:false,movedLast:false};}
 const rowsFor=n=>n===1?[4]:Array.from({length:n},(_,i)=>Math.round(i*(BR-1)/(n-1)));
 function startBattle(o){
@@ -1558,7 +1885,7 @@ function updateBattleUI(){
   $('#btRound').textContent=`Round ${bt.round}${S.fac==='merfolk'&&bt.round%3===0?' · High Tide':''}`;
   $('#queue').innerHTML=orderPreview().slice(0,12).map(s=>`<div class="${s.side?'f':'a'}" title="${s.n} ${s.u.pl}"><img src="${iconURL('unit',s.k,64)}" alt=""></div>`).join('');
   const s=bt.active,mineTurn=s&&s.side===0&&!bt.auto&&bt.pending;
-  $('#bWait').disabled=!mineTurn||s.waited;$('#bDefend').disabled=!mineTurn;$('#bSpell').disabled=!mineTurn||bt.spellCast||!usableSpells().length;
+  $('#bWait').disabled=!mineTurn||s.waited;$('#bDefend').disabled=!mineTurn;$('#bSpell').disabled=!mineTurn||!HERO().book||bt.spellCast||!usableSpells().length;$('#bSpell').textContent=HERO().book?'Spellbook':'No spellbook';
   $('#bAuto').textContent=bt.auto?'Stop auto':'Auto';
   if(mineTurn&&!bt.targeting)setStatus(`<b>${s.n} ${s.u.pl}</b> await orders. ${sc('shots',s.u.shots?s.shots:'–')} ${sc('lore',HERO().mana)}`);
   else if(s&&s.side===1)setStatus(`${s.u.pl} act…`);
@@ -1653,7 +1980,7 @@ async function spellEffect(id,target,P){
   else if(id==='bark'){await burst(target,'#c9a26a');target.buff.def+=5;floatAt(target,'+5 defense','#e2c28a');if(fx().healMorale)target.buff.morale+=fx().healMorale;logB(`Bark Skin hardens ${nm(target)}.`);}
 }
 function openSpellbook(){
-  if(!bt||!bt.pending||bt.spellCast)return;
+  if(!bt||!bt.pending)return;if(!HERO().book){toast(`${HERO().name} has no spellbook. Buy one at the Lantern Library.`);return;}if(bt.spellCast){toast('Only one spell per round.');return;}
   const h=HERO(),echo=S.fac==='wizards'&&bt.spellsCast<(fx().echo||1);
   showModal({title:'Spellbook',body:`<p class="muted">One spell per round. ${sc('lore',h.mana)} mana · ${sc('pow',h.pow)} power${echo?' · <b style="color:var(--text)">Spell Echo ready: this spell casts twice</b>':''}</p><div class="grid">${h.spells.map(k=>{const c=spellCost(k),off=c>h.mana||(k==='geyser'&&bt.geyserUsed);return`<div class="bcard"><h4>${SP[k].name} <span class="muted">· ${c} mana</span></h4><p>${SP[k].desc(h.pow)}</p><div><button class="btn sm" data-cast="${k}" ${off?'disabled':''}>Cast</button></div></div>`;}).join('')}</div>`,
     buttons:[{label:'Close',value:null}],dismiss:null});
@@ -1692,6 +2019,19 @@ async function endBattle(){
   else if(!S.heroes.length){res(false);await defeat('Your last hero has fallen.');}
   else{heroDraw.x=HERO().x;heroDraw.y=HERO().y;path=null;centerOn(HERO().x,HERO().y,true);renderUI();save();res(false);}
 }
+/* the commanding hero stands beside the field; click them to open the spellbook */
+function drawBattleHero(c,h,col,x,y,flip,canAct){
+  const sc=Math.max(1.5,Math.min(3,BL.side/40)),now=performance.now();
+  c.save();c.fillStyle='rgba(0,0,0,.35)';c.beginPath();c.ellipse(x,y+30*sc/2,BL.side*0.38,8,0,0,7);c.fill();
+  c.strokeStyle=col;c.lineWidth=2;c.stroke();
+  const f0=h.face;h.face=flip?'w':'e';c.translate(x-TS/2*sc,y-TS/2*sc-6*sc);c.scale(sc,sc);drawHero(c,0,0,h,col);h.face=f0;c.restore();
+  c.font=`800 ${Math.max(11,BL.side*0.13)}px "Alegreya Sans",sans-serif`;c.textAlign='center';c.textBaseline='top';c.fillStyle='#f2d382';c.strokeStyle='#120f0b';c.lineWidth=3;
+  c.strokeText(h.name,x,y+20*sc);c.fillText(h.name,x,y+20*sc);
+  if(!flip){const ok=canAct&&h.book&&!bt.spellCast&&usableSpells().length;
+    c.globalAlpha=h.book?(ok?0.75+0.25*Math.sin(now/250):0.6):0.25;drawStat(c,'lore',x,y-34*sc,9+(ok?2:0));c.globalAlpha=1;
+    c.font=`700 ${Math.max(10,BL.side*0.11)}px "Alegreya Sans",sans-serif`;c.fillStyle='#a9b8ef';c.fillText(h.book?`${h.mana} mana`:'no spellbook',x,y+20*sc+16);
+    BL.heroRect={x:0,y:y-44*sc,w:BL.side,h:80*sc};}
+}
 function drawBattle(){
   if(!bt)return;
   const c=bctx;c.setTransform(BL.dpr,0,0,BL.dpr,0,0);
@@ -1714,6 +2054,8 @@ function drawBattle(){
     c.fillStyle='#6f6b60';c.strokeStyle='#26241f';c.lineWidth=1.2;c.beginPath();for(let j=0;j<7;j++){const a=rk.a+j*0.9,rr=s2*(0.6+0.25*Math.sin(j*2.1+rk.a));c.lineTo(p.x+Math.cos(a)*rr,p.y+Math.sin(a)*rr*0.75);}c.closePath();c.fill();c.stroke();}
   const now=performance.now();
   const list=bt.stacks.filter(x=>x.alive).map(x=>({x,p:x.anim||hc(x.c,x.r)})).sort((a,b)=>a.p.y-b.p.y);
+  drawBattleHero(c,HERO(),team,BL.side/2,BL.h*0.5,false,mineTurn);
+  if(bt.enemyHero)drawBattleHero(c,bt.enemyHero,FAC[bt.enemyHero.fac].col,BL.w-BL.side/2,BL.h*0.5,true,false);
   const foeCol=bt.enemyHero?FAC[bt.enemyHero.fac].col:null,spSc=Math.max(1,Math.round(BL.s*1.8/64*2)/2);
   const drawSprite=(sheet,k,row,fr,px,py,flip,alpha=1)=>{const big=unitArt(k)==='heartwood_elder',fw=big?96:64;c.save();c.globalAlpha=alpha;c.imageSmoothingEnabled=false;c.translate(Math.round(px),Math.round(py));if(flip)c.scale(-1,1);
     c.drawImage(sheet,fr*fw,row*64,fw,64,Math.round(-(big?48:32)*spSc),Math.round(-60*spSc),fw*spSc,64*spSc);c.restore();};
@@ -1765,10 +2107,12 @@ function battleHoverStatus(){
     setStatus(`${sc(shoot?'shots':'atk',shoot?'Shoot':'Attack')} ${t.n} ${t.u.pl}: <b>${lo}–${hi}</b> damage, ${killsEst(t,lo)}–${killsEst(t,hi)} killed.${back}`);
   }else updateBattleUI();
 }
-btCv.addEventListener('pointermove',e=>{if(!bt)return;const r=btCv.getBoundingClientRect();bt.mouse={x:e.clientX-r.left,y:e.clientY-r.top};bt.hover=hexAt(bt.mouse.x,bt.mouse.y);battleHoverStatus();});
+btCv.addEventListener('pointermove',e=>{if(!bt)return;const r=btCv.getBoundingClientRect();bt.mouse={x:e.clientX-r.left,y:e.clientY-r.top};
+  {const hr=BL.heroRect,on=hr&&bt.mouse.x<hr.x+hr.w&&bt.mouse.y>hr.y&&bt.mouse.y<hr.y+hr.h;btCv.style.cursor=on?'pointer':'default';if(on&&bt.pending){setStatus(HERO().book?(bt.spellCast?`${HERO().name} has already cast a spell this round.`:`Click ${HERO().name} to open the spellbook.`):`${HERO().name} has no spellbook. Buy one at the Lantern Library in town.`);bt.hover=null;$('#btCard').innerHTML='';return;}}bt.hover=hexAt(bt.mouse.x,bt.mouse.y);battleHoverStatus();});
 btCv.addEventListener('pointerleave',()=>{if(bt){bt.hover=null;battleHoverStatus();}});
 btCv.addEventListener('pointerup',e=>{
-  if(!bt||!bt.pending||bt.auto||modalOpen)return;const r=btCv.getBoundingClientRect();const x=e.clientX-r.left,y=e.clientY-r.top;bt.mouse={x,y};const h=hexAt(x,y);if(!h)return;bt.hover=h;
+  if(!bt||!bt.pending||bt.auto||modalOpen)return;const r=btCv.getBoundingClientRect();const x=e.clientX-r.left,y=e.clientY-r.top;bt.mouse={x,y};
+  {const hr=BL.heroRect;if(hr&&x<hr.x+hr.w&&y>hr.y&&y<hr.y+hr.h){openSpellbook();return;}}const h=hexAt(x,y);if(!h)return;bt.hover=h;
   if(bt.targeting){const t=stackAt(h.c,h.r),sp=SP[bt.targeting];if(t&&((sp.target==='enemy')===(t.side===1))){const k=bt.targeting;bt.targeting=null;bt.pending({type:'spell',spell:k,target:t});}return;}
   bt.pending({type:'click',c:h.c,r:h.r,x,y});
 });
@@ -1778,7 +2122,39 @@ $('#bDefend').onclick=()=>bt&&bt.pending&&bt.pending({type:'defend'});
 $('#bSpell').onclick=openSpellbook;
 $('#bAuto').onclick=()=>{if(!bt)return;bt.auto=!bt.auto;if(bt.auto&&bt.pending)bt.pending({type:'auto'});updateBattleUI();};
 
-/* ================= START: faction and hero pickers ================= */
+/* ================= START: map setup, faction and hero pickers ================= */
+/* draw a small overview of a generated map; the preview uses sample banners, so real games differ in the details */
+function mapPreviewURL(type,size,seed){
+  const sz=MAP_SIZES[size],oW=W,oH=H;W=sz.W;H=sz.H;
+  const rv=['pirates','wizards','necro','elves','dwarves'].slice(0,sz.rivals);
+  const w=genMap(seed,{type,fac:'rangers',rivals:rv});
+  const px=Math.max(4,Math.floor(300/W)),cv=document.createElement('canvas');cv.width=W*px;cv.height=H*px;const c=cv.getContext('2d');
+  const col=['#56763a','#7b6a46','#cbb27a','#6e5c50','#41553a','#2e4f28','#6b6962','#2c5a72'];
+  for(let y=0;y<H;y++)for(let x=0;x<W;x++){c.fillStyle=col[w.tiles[y*W+x]];c.fillRect(x*px,y*px,px,px);}
+  const dot=(x,y,r,fill,stroke)=>{c.fillStyle=fill;c.beginPath();c.arc(x*px+px/2,y*px+px/2,r,0,7);c.fill();if(stroke){c.strokeStyle=stroke;c.lineWidth=1.5;c.stroke();}};
+  for(const o of w.objs){
+    if(o.type==='town'){c.fillStyle=FAC.rangers.col;c.fillRect(o.x*px-px,(o.y-2)*px,px*3,px*3);c.strokeStyle='#fff';c.lineWidth=2;c.strokeRect(o.x*px-px,(o.y-2)*px,px*3,px*3);}
+    else if(o.type==='camp')dot(o.x,o.y,px*1.1,FAC[o.fac].col,'#fff');
+    else if(o.type==='relic')dot(o.x,o.y,px*(o.r===6?1.2:0.8),RELICS[o.r].col,'#1a1408');
+    else if(o.type==='neutral'&&o.guard){c.strokeStyle='#ff6a4d';c.lineWidth=2;const cx=o.x*px+px/2,cy=o.y*px+px/2;c.beginPath();c.moveTo(cx-px,cy-px);c.lineTo(cx+px,cy+px);c.moveTo(cx+px,cy-px);c.lineTo(cx-px,cy+px);c.stroke();}
+    else if(o.type==='dock'){c.fillStyle='#d9b48a';c.fillRect(o.x*px,o.y*px,px,px);}
+  }
+  W=oW;H=oH;return cv.toDataURL();
+}
+async function pickMap(){
+  let type='wheel',size='small',seed=(Math.random()*1e9)|0;
+  const html=()=>`<p class="muted" style="margin-top:0">Pick the shape of the land and how big it is. Previews use sample banners; your own banner and rivals change the details.</p>
+    <div class="picks maps">${Object.entries(MAP_TYPES).map(([k,m])=>`<button class="pick${k===type?' chosen':''}" data-map="${k}" style="--c:${k===type?'#d4ab52':'#56603a'};--c2:#f2d382">
+      <img class="mprev" src="${mapPreviewURL(k,size,seed)}" alt="Preview of ${m.name}"><h3>${m.name}${k==='wheel'?' <span class="tag ok">Main map</span>':''}</h3><p>${m.desc}</p></button>`).join('')}</div>
+    <div class="sizes" role="group" aria-label="Map size">${Object.entries(MAP_SIZES).map(([k,z])=>`<button class="btn sm${k===size?' primary':''}" data-size="${k}">${z.label} · ${z.W}×${z.H} · ${z.rivals} rivals · ${Math.round(z.limit/28)} months</button>`).join('')}
+      <button class="btn sm" data-reroll="1">New layout</button></div>
+    <div class="legend"><span><i style="background:${FAC.rangers.col}"></i>Your town</span><span><i style="background:#c0582e;border-radius:50%"></i>Rival camps</span><span><i style="background:${RELICS[0].col};border-radius:50%"></i>Relics</span><span><i style="background:${RELICS[6].col};border-radius:50%"></i>Glass Lair</span><span><b style="color:#ff6a4d">✕</b> Guarded passes</span><span><i style="background:#d9b48a"></i>Docks</span></div>`;
+  const p=showModal({title:'Choose your land',body:html(),wide:true,buttons:[{label:'Back',value:null},{label:'Next: choose your banner',value:'go',primary:true}],dismiss:null});
+  const body=$('#modal').querySelector('.body');
+  body.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+    if(b.dataset.map)type=b.dataset.map;else if(b.dataset.size)size=b.dataset.size;else if(b.dataset.reroll)seed=(Math.random()*1e9)|0;else return;body.innerHTML=html();});
+  const v=await p;return v==='go'?{type,size,seed}:null;
+}
 async function pickFaction(){
   while(true){
     const body=`<p class="muted" style="margin-top:0">Each banner plays differently. Your hero comes next.</p><div class="picks">${FAC_ORDER.map(k=>{const f=FAC[k];
@@ -1800,7 +2176,8 @@ async function pickHero(fk){
       <div class="ph hero"><img src="${iconURL('hero',h.id,128)}" alt=""><div><h3>${h.name}</h3><div class="sub">${h.type} hero</div></div></div>
       <div class="scs">${sc('atk',h.st[0])}${sc('def',h.st[1])}${sc('pow',h.st[2])}${sc('lore',h.st[3])}</div>
       <p><b>★ ${h.ab}:</b> ${h.ad}</p>
-      <p><b>Starts with:</b> ${[...h.sk.map(s=>SK[s].name),...(h.sp.length?h.sp:(h.type==='Magic'?['ember']:[])).map(s=>SP[s].name)].join(', ')}</p>
+      <p><b>Skill:</b> ${h.sk.map(s=>`${SK[s].name} (${SK[s].desc.replace(/\.$/,'')})`).join(', ')}</p>
+      <p><b>Artifact:</b> ${h.item?`${ITEMS[h.item].name} (${itemTxt(h.item)})`:'none'}${(h.sp.length||h.type==='Magic')?` · <b>Spell:</b> ${(h.sp.length?h.sp:['ember']).map(s=>SP[s].name).join(', ')}`:''}</p>${h.blank?'<p class="muted"><i>Placeholder hero: name and portrait to come.</i></p>':''}
       <p style="display:flex;gap:6px;align-items:center"><img src="${iconURL('travel',f.travel==='hooves'?'hooves':f.travel,40)}" alt="" style="width:22px;height:22px">${TRAVEL[f.travel]}</p></button>`).join('')}</div>`;
   const pr=showModal({title:`<img src="${iconURL('crest',fk,52)}" alt="" style="width:30px;height:35px;vertical-align:-6px;margin-right:8px">${f.arch}: choose your hero`,body,wide:true,buttons:[{label:'Back to banners',value:'back'}]});
   const m=$('#modal');let picked=null;
@@ -1819,8 +2196,8 @@ async function victory(){S.over=true;clearSave();const d=dateParts();
 async function defeat(why){S.over=true;clearSave();
   await showModal({title:'The quest is lost',body:`<p>${why}</p><p class="muted">Every campaign draws a new map. Claim mines early and build your upper dwellings before you push south.</p>`,buttons:[{label:'Begin a new campaign',value:1,primary:true}]});
   startNew();}
-async function startNew(){S=null;applyTheme();const{fk,hid}=await pickFaction();newGame(fk,hid);afterLoad();save();openTown();}
-function afterLoad(){S.cur=clamp(S.cur||0,0,S.heroes.length-1);renderTerrain();heroDraw.x=HERO().x;heroDraw.y=HERO().y;path=null;sizeMap();centerOn(HERO().x,HERO().y,true);renderUI();}
+async function startNew(){S=null;applyTheme();const mo=await pickMap();if(!mo){title();return;}const{fk,hid}=await pickFaction();newGame(fk,hid,mo);afterLoad();save();openTown();}
+function afterLoad(){S.heroes.forEach(x=>{if(x.book===undefined)x.book=x.spells.length>0;});W=S.W||34;H=S.H||26;S.limit=S.limit||112;S.cur=clamp(S.cur||0,0,S.heroes.length-1);renderTerrain();heroDraw.x=HERO().x;heroDraw.y=HERO().y;path=null;sizeMap();centerOn(HERO().x,HERO().y,true);renderUI();}
 
 /* -------- map input -------- */
 let drag=null;
@@ -1873,7 +2250,7 @@ function boot(data){
   title();
 }
 window.claude?.hot?.snapshot?.(()=>({save:S&&!S.over?JSON.stringify(S):null}));
-window.__qh={get S(){return S;},startBattle,endDay,walk,planTo,set path(p){path=p;},newGame,afterLoad,HEROES,FAC,RELICS,arriveTown,selectHero,openTown};
+window.__qh={pickMap,mapPreviewURL,get S(){return S;},startBattle,endDay,walk,planTo,set path(p){path=p;},newGame,afterLoad,HEROES,FAC,RELICS,arriveTown,selectHero,openTown};
 window.claude?.hot?.ready?window.claude.hot.ready(boot):boot(window.claude?.hot?.data??{});
 })();
 </script>
