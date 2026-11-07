@@ -1,3 +1,4 @@
+<meta charset="utf-8">
 <title>Questing Heroes</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -350,10 +351,10 @@ const HEROES=[
   {id:'oliver',name:'Oliver',fac:'rangers',type:'Might',st:[2,1,1,1],ab:'Trailblazer',ad:'Heath and bog cost 20% less movement.',sk:['forcedmarch'],sp:[],fx:{terrainCut:0.8}},
   {id:'engelman',name:'Engelman',fac:'wizards',type:'Magic',st:[0,1,3,2],ab:'Arcanist',ad:'Spell Echo also works on the second spell each battle.',sk:['arcane'],sp:['ember'],fx:{echo:2}},
   {id:'tempest',name:'Tempest',fac:'wizards',type:'Magic',st:[0,1,2,3],ab:'Stormborn',ad:'Chain Spark jumps to one extra enemy.',sk:['deepres'],sp:['chain'],fx:{chainExtra:1}},
-  {id:'parker',name:'Parker',fac:'wizards',type:'Might',st:[2,2,1,1],ab:'Clockmaster',ad:'Clockwork Hounds and Rune Sentinels +2 speed.',sk:['battleplan'],sp:[],fx:{unitSpd:{hound:2,sentinel:2}}},
+  {id:'parker',name:'Parker',fac:'necro',type:'Might',st:[2,2,1,1],ab:'Restless Dead',ad:'Grave Rat Swarms and Lantern Wraiths +2 speed.',sk:['battleplan'],sp:[],fx:{unitSpd:{rats:2,wraith:2}}},
   {id:'shadow',name:'Shadow',fac:'necro',type:'Magic',st:[0,1,2,2],ab:'Gravecaller',ad:'Grave Harvest raises 15% instead of 10%.',sk:[],sp:['raise'],fx:{harvest:0.15}},
-  {id:'grimes',name:'Grimes',fac:'necro',type:'Might',st:[2,2,1,1],ab:'Deathless Guard',ad:'Barrow Knights +3 defense.',sk:['shieldcraft'],sp:[],fx:{unitDef:{barrow:3}}},
-  {id:'boopus',name:'Boopus',fac:'necro',type:'Magic',st:[1,1,2,1],ab:'Rat Monarch',ad:'Grave Rat Swarms +4 growth per week and +1 speed.',sk:['fortune'],sp:['ember'],fx:{growth:{rats:4},unitSpd:{rats:1}}},
+  {id:'grimes',name:'Grimes',fac:'wizards',type:'Magic',st:[0,2,2,2],ab:'Rune Warden',ad:'Rune Sentinels +3 defense.',sk:['shieldcraft'],sp:['ember'],fx:{unitDef:{sentinel:3}}},
+  {id:'boopis',name:'Boopis',fac:'centaurs',type:'Magic',st:[1,1,2,1],ab:'Pounce',ad:'Hound Packs +4 growth per week and +1 speed.',sk:['fortune'],sp:['ember'],fx:{growth:{hounds:4},unitSpd:{hounds:1}}},
   {id:'rocky',name:'Rocky',fac:'centaurs',type:'Might',st:[3,1,1,1],ab:'Stampede',ad:'Pack Bond also gives +1 morale.',sk:['forcedmarch'],sp:[],fx:{packMorale:1}},
   {id:'monkey',name:'Monkey',fac:'centaurs',type:'Might',st:[2,2,1,1],ab:'Troublemaker',ad:'Your first stack to act each battle gets an extra turn.',sk:['bladework'],sp:[],fx:{extraFirst:true}},
   {id:'binx',name:'Binx',fac:'centaurs',type:'Magic',st:[1,1,2,2],ab:'Night Prowler',ad:'+2 vision, and you see exact enemy army sizes.',sk:['farsight'],sp:['ember'],fx:{vision:2,exact:true}},
@@ -364,10 +365,10 @@ const HEROES=[
   {id:'love',name:'Love',fac:'elves',type:'Magic',st:[0,1,2,2],ab:'Heartbloom',ad:'Healing spells also give the target +1 morale for the battle.',sk:[],sp:['mend'],fx:{healMorale:1}},
   {id:'boma',name:'Boma',fac:'elves',type:'Magic',st:[0,1,2,2],ab:'Rootweaver',ad:'Entangle lasts 1 round longer.',sk:[],sp:['entangle'],fx:{entangleExtra:1}},
   {id:'ivan',name:'Ivan',fac:'dwarves',type:'Might',st:[2,2,1,1],ab:'Master Smith',ad:'The Great Forge costs 25% less ore.',sk:['shieldcraft'],sp:[],fx:{forgeCut:0.75}},
-  {id:'rago',name:'Rago',fac:'dwarves',type:'Might',st:[3,1,1,1],ab:'Wallbreaker',ad:'Steam Rams +2 attack.',sk:['battleplan'],sp:[],fx:{unitAtk:{ram:2}}},
-  {id:'dupin',name:'Dupin Geyser',fac:'dwarves',type:'Magic',st:[1,1,2,2],ab:'Steamcaller',ad:'Once per battle, raise a scalding geyser beside an enemy.',sk:['warding'],sp:['geyser'],fx:{}},
-  {id:'rimmer',name:'Rimmer',fac:'merfolk',type:'Might',st:[2,2,1,1],ab:'Tide Knight',ad:'Seahorse Knights +2 attack and +1 speed.',sk:['bladework'],sp:[],fx:{unitAtk:{seahorse:2},unitSpd:{seahorse:1}}},
-  {id:'schmickle',name:'Schmickle',fac:'merfolk',type:'Magic',st:[0,1,2,2],ab:'Eel Whisperer',ad:'Eel Charmer shocks also give the target -2 speed.',sk:['meditation'],sp:['ember'],fx:{eelSlow:2}},
+  {id:'rago',name:'Rago',fac:'necro',type:'Magic',st:[1,1,2,2],ab:'Hex Mistress',ad:'Plague Hierophants +2 attack and +2 shots.',sk:['battleplan'],sp:['ember'],fx:{unitAtk:{hiero:2},unitShots:{hiero:2}}},
+  {id:'dupengeiser',name:'Dupengeiser',fac:'dwarves',type:'Magic',st:[1,1,2,2],ab:'Steamcaller',ad:'Once per battle, raise a scalding geyser beside an enemy.',sk:['warding'],sp:['geyser'],fx:{}},
+  {id:'rimmer',name:'Rimmer',fac:'wizards',type:'Magic',st:[1,1,2,2],ab:'Star Keeper',ad:'Star Owls +2 attack and +1 speed.',sk:['meditation'],sp:['ember'],fx:{unitAtk:{owl:2},unitSpd:{owl:1}}},
+  {id:'schmickle',name:'Schmickle',fac:'centaurs',type:'Magic',st:[0,1,2,2],ab:'Burrow Friend',ad:'Badger Brutes +2 defense and +1 speed.',sk:['meditation'],sp:['ember'],fx:{unitDef:{badger:2},unitSpd:{badger:1}}},
   {id:'elvis',name:'Elvis',fac:'merfolk',type:'Magic',st:[1,1,2,2],ab:'Siren Voice',ad:'Siren Choir charms last 1 turn longer, and your whole army has +1 morale.',sk:['command'],sp:['ember'],fx:{charmExtra:1,morale:1}},
 ];
 const HBY=Object.fromEntries(HEROES.map(h=>[h.id,h]));
@@ -574,8 +575,36 @@ function drawRelic(c,i,x,y,r){const Rl=RELICS[i];c.save();c.translate(x,y);c.sca
   if(i===6){c.beginPath();c.moveTo(0,8);c.bezierCurveTo(-11,0,-7,-10,0,-4);c.bezierCurveTo(7,-10,11,0,0,8);c.fill();c.stroke();}
   else{c.beginPath();c.moveTo(0,-9);c.lineTo(5,-2);c.lineTo(3,8);c.lineTo(-3,8);c.lineTo(-5,-2);c.closePath();c.fill();c.stroke();c.fillStyle='rgba(255,255,255,.5)';c.beginPath();c.moveTo(0,-9);c.lineTo(-5,-2);c.lineTo(-1,-1);c.closePath();c.fill();}
   c.restore();}
+/* -------- sprite art in assets/; the drawn placeholders stay as the fallback -------- */
+const ART_BASE='assets/';
+const ART_PORTRAITS=new Set(['bear','binx','dorothy','oliver','vargas','boopis','engelman','grimes','parker','rago','rimmer','tempest']);
+const ART_MAP=new Set(['bear','binx','dorothy','oliver','vargas']);
+const ART_UNITS={thorn:'thornguard',reed:'reedbow',antler:'antler_knight',moth:'moth_seer',oak:'oak_warden'};
+const ART_DIRS=['s','sw','w','nw','n','ne','e','se'];
+const dirOf=(dx,dy)=>({'0,1':'s','-1,1':'sw','-1,0':'w','-1,-1':'nw','0,-1':'n','1,-1':'ne','1,0':'e','1,1':'se'})[Math.sign(dx)+','+Math.sign(dy)]||'s';
+const artImgs={};
+function artImg(path){let a=artImgs[path];if(a)return a;a=artImgs[path]={img:new Image(),ok:false,tint:{}};a.img.onload=()=>{a.ok=true;};a.img.src=ART_BASE+path;return a;}
+function shadeRGB(hex,f){const n=parseInt(hex.slice(1),16),r=n>>16,g=n>>8&255,b=n&255,t=f<0?0:255,p=Math.abs(f);return[Math.round(r+(t-r)*p),Math.round(g+(t-g)*p),Math.round(b+(t-b)*p)];}
+/* recolour the team pixels (from the paired mask) to a faction colour; falls back to the original if pixels can't be read */
+function tinted(path,maskPath,col){
+  const a=artImg(path);if(!a.ok)return null;if(!col)return a.img;if(a.tint[col])return a.tint[col];
+  const m=artImg(maskPath);if(!m.ok)return a.img;
+  try{const w=a.img.width,h=a.img.height,cv=document.createElement('canvas');cv.width=w;cv.height=h;const c=cv.getContext('2d');c.drawImage(a.img,0,0);const d=c.getImageData(0,0,w,h);
+    const mc=document.createElement('canvas');mc.width=w;mc.height=h;const mx=mc.getContext('2d');mx.drawImage(m.img,0,0);const md=mx.getImageData(0,0,w,h).data;
+    const ramp=[shadeRGB(col,-0.55),shadeRGB(col,-0.28),shadeRGB(col,0),shadeRGB(col,0.32)];
+    for(let i=0;i<md.length;i+=4)if(md[i+3]>0&&d.data[i+3]>0){const sh=ramp[Math.min(3,Math.round(md[i]/85))];d.data[i]=sh[0];d.data[i+1]=sh[1];d.data[i+2]=sh[2];}
+    c.putImageData(d,0,0);return a.tint[col]=cv;}catch(e){return a.tint[col]=a.img;}
+}
+const unitArt=k=>{const u=U[k];return u?ART_UNITS[u.up?u.base:k]||null:null;};
+const unitSheet=(k,col)=>{const n=unitArt(k);return n?tinted(`units/rangers/${n}/${n}_sheet.png`,`team_masks/units/rangers/${n}/${n}_sheet.png`,col):null;};
+const heroSheet=(id,col)=>ART_MAP.has(id)?tinted(`heroes/${id}/map/${id}_map_sheet.png`,`team_masks/heroes/${id}/map/${id}_map_sheet.png`,col):null;
+function preloadArt(){for(const id of ART_MAP){artImg(`heroes/${id}/map/${id}_map_sheet.png`);artImg(`team_masks/heroes/${id}/map/${id}_map_sheet.png`);}
+  for(const n of Object.values(ART_UNITS)){artImg(`units/rangers/${n}/${n}_sheet.png`);artImg(`team_masks/units/rangers/${n}/${n}_sheet.png`);}}
+function drawCrown(c,x,y,s){c.save();c.translate(x,y);c.scale(s/10,s/10);c.fillStyle='#f2d382';c.strokeStyle='#5a3a0a';c.lineWidth=1.2;c.beginPath();c.moveTo(-8,4);c.lineTo(-9,-3);c.lineTo(-4,1);c.lineTo(0,-5);c.lineTo(4,1);c.lineTo(9,-3);c.lineTo(8,4);c.closePath();c.fill();c.stroke();c.restore();}
 const iconCache={};
 function iconURL(kind,key,size=64){
+  if(kind==='hero'&&ART_PORTRAITS.has(key))return ART_BASE+`portraits/heroes/${key}_${size>80?128:64}.png`;
+  if(kind==='unit'&&unitArt(key))return ART_BASE+`portraits/units/${unitArt(key)}_64.png`;
   const id=kind+':'+key+':'+size;if(iconCache[id])return iconCache[id];
   const cv=document.createElement('canvas');cv.width=size;cv.height=kind==='crest'?Math.round(size*60/52):size;const c=cv.getContext('2d');
   if(kind==='res')drawRes(c,key,size/2,size/2,size*0.42);
@@ -919,6 +948,10 @@ function drawHero(c,x,y,h=HERO(),col=teamCol()){
   const onLake=tileAt(Math.round(x),Math.round(y))===T.LAKE;
   const mode=onLake?(h.boat||h.fac==='pirates'?'boat':'swim'):(h.mount||(h.fac==='centaurs'?'hooves':'horse'));
   c.lineWidth=1.2;
+  const sheet=mode!=='boat'&&mode!=='swim'?heroSheet(h.id,col):null;
+  if(sheet){const row=Math.max(0,ART_DIRS.indexOf(h.face||'s')),fr=moving&&h===HERO()?Math.floor(performance.now()/120)%4:0;
+    c.fillStyle='rgba(0,0,0,.4)';c.beginPath();c.ellipse(cx,cy+15,14,5,0,0,7);c.fill();c.strokeStyle=col;c.lineWidth=2;c.beginPath();c.ellipse(cx,cy+15,14,5,0,0,7);c.stroke();
+    c.imageSmoothingEnabled=false;c.drawImage(sheet,fr*48,row*48,48,48,Math.round(cx-24),Math.round(cy+16-44),48,48);return;}
   if(mode==='boat'){
     c.fillStyle='rgba(200,230,240,.35)';c.beginPath();c.ellipse(cx,cy+12,20,5,0,0,7);c.fill();
     c.fillStyle='#7a4e24';c.strokeStyle='#1d140b';c.beginPath();c.moveTo(cx-18,cy+2);c.lineTo(cx+18,cy+2);c.lineTo(cx+12,cy+12);c.lineTo(cx-12,cy+12);c.closePath();c.fill();c.stroke();
@@ -1138,7 +1171,7 @@ async function gainRelic(h,rs){
       buttons:[{label:'Continue',value:1,primary:true}],dismiss:1});}
 }
 function stepHero(n){
-  const fx0=HERO().x,fy0=HERO().y;HERO().x=n.x;HERO().y=n.y;
+  const fx0=HERO().x,fy0=HERO().y;HERO().face=dirOf(n.x-fx0,n.y-fy0);HERO().x=n.x;HERO().y=n.y;
   const sx=n.x*TS-camX,sy=n.y*TS-camY;if(sx<TS*2.5||sy<TS*2.5||sx>vw-TS*3.5||sy>vh-TS*3.5)centerOn(n.x,n.y);
   return tween(reduced?1:130,t=>{heroDraw.x=fx0+(n.x-fx0)*t;heroDraw.y=fy0+(n.y-fy0)*t;});
 }
@@ -1272,7 +1305,7 @@ async function rivalsTurn(){
       const tg=rivalTarget(rv);if(!tg)break;
       let arrived=false;
       for(let i=0;i<tg.path.length;i++){const n=tg.path[i],pv=i?tg.path[i-1]:{x:rv.x,y:rv.y};const cst=Math.round(rivalCost(rv,n.x,n.y,true)*((pv.x!==n.x&&pv.y!==n.y)?1.414:1));
-        if(cst>mp){mp=0;break;}mp-=cst;if(i===tg.path.length-1){arrived=true;break;}rv.x=n.x;rv.y=n.y;}
+        if(cst>mp){mp=0;break;}mp-=cst;if(i===tg.path.length-1){arrived=true;break;}rv.face=dirOf(n.x-rv.x,n.y-rv.y);rv.x=n.x;rv.y=n.y;}
       if(!arrived)break;
       if(await rivalInteract(rv,tg)==='stop')break;
       if(!S||S.over)return;
@@ -1418,7 +1451,7 @@ function startBattle(o){
     const er=rowsFor(k);for(let i=0;i<k;i++){const n=Math.floor(o.n/k)+(i<o.n%k?1:0);stacks.push(mkStack(o.k,n,1,BC-1,er[i],i));}}
     const obst=new Set();const no=ri(3,6);for(let i=0;i<no*4&&obst.size<no;i++){const c=ri(3,BC-4),r=ri(0,BR-1);obst.add(hk(c,r));}
     bt={stacks,obst,round:1,active:null,pending:null,targeting:null,spellCast:false,spellsCast:0,auto:false,over:false,log:[],floats:[],fx:[],resolve,obj:o,terr:tileAt(o.x,o.y),hover:null,mouse:null,
-      title:o.type==='rival'?`Battle with ${o.rival.name}'s army`:o.type==='relic'?`Battle at the ${RELICS[o.r].lair}`:o.guard?'Battle at the guarded pass':`Battle with ${U[o.k].pl}`,rocks:{},forced:null,firstDone:false,geyserUsed:false,enemyHero:o.type==='rival'?o.rival:null};
+      title:o.type==='rival'?`Battle with ${o.rival.name}'s army`:o.type==='relic'?`Battle at the ${RELICS[o.r].lair}`:o.guard?'Battle at the guarded pass':`Battle with ${U[o.k].pl}`,rocks:{},forced:null,firstDone:false,geyserUsed:false,corpses:[],enemyHero:o.type==='rival'?o.rival:null};
     $('#battle').hidden=false;$('#btTitle').textContent=bt.title;
     layoutBattle();renderBG();
     logB(o.type==='rival'?`${o.rival.name}'s army takes the field. Round 1.`:`${fx().exact?o.n:amountWord(o.n)} ${U[o.k].pl} bar the way. Round 1.`);
@@ -1458,7 +1491,7 @@ function dmgRange(a,d,o={}){
   return[Math.max(1,Math.round(a.n*(a.u.min+flat)*m)),Math.max(1,Math.round(a.n*(a.u.max+flat)*m))];
 }
 function rollDmg(a,d,o){const[lo,hi]=dmgRange(a,d,o);let v=Math.round(lo+(R()+R())/2*(hi-lo));if(sLuck(a)&&R()<0.1){v*=2;floatAt(a,'Lucky!','#a6e08a');}return v;}
-function applyDmg(s,dmg){const before=s.n,tot=totalHP(s)-dmg;if(tot<=0){s.n=0;s.hp=0;s.alive=false;}else{s.n=Math.ceil(tot/s.u.hp);s.hp=tot-(s.n-1)*s.u.hp;}return before-s.n;}
+function applyDmg(s,dmg){const before=s.n,tot=totalHP(s)-dmg;s.act={row:3,t0:performance.now(),dur:260,n:1};if(tot<=0){s.n=0;s.hp=0;s.alive=false;if(bt&&bt.corpses)bt.corpses.push({k:s.k,side:s.side,c:s.c,r:s.r,t0:performance.now()});}else{s.n=Math.ceil(tot/s.u.hp);s.hp=tot-(s.n-1)*s.u.hp;}return before-s.n;}
 function heal(s,amt){const cap=s.n0*s.u.hp;const tot=Math.min(cap,totalHP(s)+amt);const b=s.n;s.n=Math.ceil(tot/s.u.hp);s.hp=tot-(s.n-1)*s.u.hp;return s.n-b;}
 const killsEst=(d,dm)=>{const tot=totalHP(d);if(dm>=tot)return d.n;const rem=tot-dm;return d.n-Math.ceil(rem/d.u.hp);};
 
@@ -1472,7 +1505,7 @@ async function moveTo(s,c,r,rm){
     await tween(reduced?1:dur,t=>{s.anim={x:from.x+(to.x-from.x)*t,y:from.y+(to.y-from.y)*t};});cur=to;}
   s.c=c;s.r=r;s.anim=null;s.movedTurn=true;s.stood=false;return d;
 }
-async function lunge(a,d){const p=hc(a.c,a.r),q=hc(d.c,d.r);await tween(reduced?1:110,t=>{a.anim={x:p.x+(q.x-p.x)*0.35*t,y:p.y+(q.y-p.y)*0.35*t};});await tween(reduced?1:110,t=>{a.anim={x:p.x+(q.x-p.x)*0.35*(1-t),y:p.y+(q.y-p.y)*0.35*(1-t)};});a.anim=null;}
+async function lunge(a,d){a.act={row:2,t0:performance.now(),dur:reduced?60:440,n:4};const p=hc(a.c,a.r),q=hc(d.c,d.r);await tween(reduced?1:110,t=>{a.anim={x:p.x+(q.x-p.x)*0.35*t,y:p.y+(q.y-p.y)*0.35*t};});await tween(reduced?1:110,t=>{a.anim={x:p.x+(q.x-p.x)*0.35*(1-t),y:p.y+(q.y-p.y)*0.35*(1-t)};});a.anim=null;}
 async function projectile(a,d,col){const p=hc(a.c,a.r),q=hc(d.c,d.r);const f={type:'shot',x:p.x,y:p.y,col,ang:Math.atan2(q.y-p.y,q.x-p.x)};bt.fx.push(f);
   await tween(reduced?1:Math.min(420,Math.hypot(q.x-p.x,q.y-p.y)*1.1),t=>{f.x=p.x+(q.x-p.x)*t;f.y=p.y+(q.y-p.y)*t-Math.sin(t*Math.PI)*BL.s*0.8;});bt.fx=bt.fx.filter(x=>x!==f);}
 async function burst(s,col){const p=hc(s.c,s.r);const f={type:'burst',x:p.x,y:p.y,col,t:0};bt.fx.push(f);await tween(reduced?1:380,t=>{f.t=t;});bt.fx=bt.fx.filter(x=>x!==f);}
@@ -1491,7 +1524,7 @@ async function doMelee(a,d,moved=0){
     const r2=rollDmg(d,a,{half:!!d.u.shots});const k2=applyDmg(a,r2);floatAt(a,`-${r2}`,'#ffd3c4');logB(`${nm(d)} strike back for ${r2}.${k2?` ${k2} ${a.u.pl} fall.`:''}`);}
   if(a.u.double&&a.alive&&d.alive){await sleep(reduced?0:100);await lunge(a,d);const d2=rollDmg(a,d,{});const k3=applyDmg(d,d2);floatAt(d,`-${d2}`,'#ffd3c4');logB(`${nm(a)} strike again for ${d2}.${k3?` ${k3} fall.`:''}`);}
 }
-async function doShoot(a,d){
+async function doShoot(a,d){a.act={row:2,t0:performance.now(),dur:reduced?60:440,n:4};
   const shots=(S.fac==='elves'&&mine0(a)&&!a.movedLast&&a.shots>1)?2:1;
   for(let i=0;i<shots&&d.alive;i++){
     await projectile(a,d,a.k==='imp'||a.k==='powder'?'#ff8a3c':a.k==='eel'?'#ffe066':'#efe2bb');a.shots--;
@@ -1681,12 +1714,27 @@ function drawBattle(){
     c.fillStyle='#6f6b60';c.strokeStyle='#26241f';c.lineWidth=1.2;c.beginPath();for(let j=0;j<7;j++){const a=rk.a+j*0.9,rr=s2*(0.6+0.25*Math.sin(j*2.1+rk.a));c.lineTo(p.x+Math.cos(a)*rr,p.y+Math.sin(a)*rr*0.75);}c.closePath();c.fill();c.stroke();}
   const now=performance.now();
   const list=bt.stacks.filter(x=>x.alive).map(x=>({x,p:x.anim||hc(x.c,x.r)})).sort((a,b)=>a.p.y-b.p.y);
-  for(const{x,p}of list){const r=BL.s*0.72;
+  const foeCol=bt.enemyHero?FAC[bt.enemyHero.fac].col:null,spSc=Math.max(1,Math.round(BL.s*1.8/64*2)/2);
+  const drawSprite=(sheet,k,row,fr,px,py,flip,alpha=1)=>{const big=unitArt(k)==='heartwood_elder',fw=big?96:64;c.save();c.globalAlpha=alpha;c.imageSmoothingEnabled=false;c.translate(Math.round(px),Math.round(py));if(flip)c.scale(-1,1);
+    c.drawImage(sheet,fr*fw,row*64,fw,64,Math.round(-(big?48:32)*spSc),Math.round(-60*spSc),fw*spSc,64*spSc);c.restore();};
+  for(const cp of bt.corpses){const sh=unitSheet(cp.k,cp.side?foeCol:team);if(!sh)continue;const t=now-cp.t0,p=hc(cp.c,cp.r);if(t>2600)continue;
+    drawSprite(sh,cp.k,4,Math.min(3,Math.floor(t/150)),p.x,p.y+BL.s*0.4,cp.side===1,t<1600?1:1-(t-1600)/1000);}
+  for(const{x,p}of list){const r=BL.s*0.72;const sheet=unitSheet(x.k,x.side?foeCol:team);
+    if(sheet){const fy=p.y+r*0.55;
+      c.fillStyle='rgba(0,0,0,.35)';c.beginPath();c.ellipse(p.x,fy,r*0.9,r*0.3,0,0,7);c.fill();
+      c.lineWidth=x===s?3:2;c.strokeStyle=x===s?`rgba(242,211,130,${0.7+0.3*Math.sin(now/180)})`:(x.side?'#c45a43':team);c.beginPath();c.ellipse(p.x,fy,r*0.95,r*0.33,0,0,7);c.stroke();
+      if(x===hovT){c.strokeStyle='#fff3c9';c.lineWidth=2;c.beginPath();c.ellipse(p.x,fy,r*1.12,r*0.42,0,0,7);c.stroke();}
+      let row=0,fr=Math.floor(now/180)%4;
+      if(x.act&&now-x.act.t0<x.act.dur){row=x.act.row;fr=Math.min(x.act.n-1,Math.floor((now-x.act.t0)/(x.act.dur/x.act.n)));}
+      else if(x.anim){row=1;fr=Math.floor(now/110)%4;}
+      drawSprite(sheet,x.k,row,fr,p.x,fy,x.side===1);
+      if(x.u.up)drawCrown(c,p.x,fy-60*spSc-4,8);
+    }else{
     c.fillStyle='rgba(0,0,0,.35)';c.beginPath();c.ellipse(p.x,p.y+r*0.8,r,r*0.33,0,0,7);c.fill();
     c.fillStyle='#1b211e';c.beginPath();c.arc(p.x,p.y,r,0,7);c.fill();
     c.lineWidth=x===s?3:2.2;c.strokeStyle=x===s?`rgba(242,211,130,${0.7+0.3*Math.sin(now/180)})`:(x.side?'#c45a43':team);c.stroke();
     if(x===hovT){c.strokeStyle='#fff3c9';c.lineWidth=2;c.beginPath();c.arc(p.x,p.y,r+4,0,7);c.stroke();}
-    c.save();if(x.side===1){c.translate(p.x,p.y);c.scale(-1,1);c.translate(-p.x,-p.y);}drawUnit(c,x.k,p.x,p.y,r*0.8);c.restore();
+    c.save();if(x.side===1){c.translate(p.x,p.y);c.scale(-1,1);c.translate(-p.x,-p.y);}drawUnit(c,x.k,p.x,p.y,r*0.8);c.restore();}
     const txt=String(x.n);c.font=`800 ${Math.max(10,BL.s*0.36)}px "Alegreya Sans",sans-serif`;const tw=c.measureText(txt).width+8,bh=Math.max(13,BL.s*0.44);
     c.fillStyle=x.side?'#7a2e20':team;c.fillRect(p.x+r*0.25,p.y+r*0.45,tw,bh);c.fillStyle='#fff';c.textAlign='left';c.textBaseline='middle';c.fillText(txt,p.x+r*0.25+4,p.y+r*0.45+bh/2+1);
     const icons=[];if(x.defending)icons.push('def');if(x.rooted>0)icons.push('move');if(x.skip>0)icons.push('lore');if(x.stood&&S.fac==='rangers'&&mine0(x))icons.push('def');
@@ -1820,7 +1868,7 @@ async function title(){
   if(v==='c'&&has){S=has;afterLoad();}else startNew();
 }
 function boot(data){
-  applyTheme();sizeMap();requestAnimationFrame(frame);
+  preloadArt();applyTheme();sizeMap();requestAnimationFrame(frame);
   if(data&&data.save){try{S=JSON.parse(data.save);afterLoad();return;}catch(e){}}
   title();
 }

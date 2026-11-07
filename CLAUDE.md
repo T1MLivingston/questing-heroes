@@ -10,7 +10,7 @@ This is a **private, personal project**. See `LEGAL.md` before publishing anythi
 
 - **Frontend**: Single HTML file with inline CSS and JavaScript
 - **Rendering**: HTML5 Canvas 2D API (map and battlefield), DOM for panels and dialogs
-- **Art**: All placeholder art is drawn in code (no image files)
+- **Art**: Sprite PNGs in `assets/` where they exist (Rangers units, 5 hero map sprites, 12 hero portraits); everything else is still drawn in code, and the drawn version is the fallback for any missing image
 - **Fonts**: IM Fell English SC and Alegreya Sans from Google Fonts (SIL Open Font License)
 - **No build tools**: open `index.html` in a browser to play
 
@@ -22,6 +22,7 @@ questing-heroes/
 ├── CLAUDE.md     # This file
 ├── LEGAL.md      # Originality notes, third-party notices, pre-publish checklist
 ├── LICENSE       # All rights reserved (personal project)
+├── assets/       # Sprite art: units/, heroes/, portraits/, team_masks/, manifest.json, palette/
 └── .gitignore
 ```
 
@@ -67,6 +68,12 @@ Everything lives in one object, `S`, so it can be saved as JSON:
 - Two crag ridges cross the map. The road crosses each through one gap held by a strong `guard` neutral. `genWorld` checks that each guard really seals its ridge.
 - Diagonal moves can't cut corners: both orthogonal neighbours must be passable.
 - Relic lairs are `relic` objects (`r` = relic index). Relics a hero drops on defeat become a `drop` object.
+
+### Sprite art
+
+- Tables near the top of ART: `ART_PORTRAITS` (hero ids with `portraits/heroes/<id>_64|128.png`), `ART_MAP` (heroes with an 8-direction `heroes/<id>/map/<id>_map_sheet.png`, 48×48 frames, rows S, SW, W, NW, N, NE, E, SE) and `ART_UNITS` (game unit key → `units/rangers/<name>/<name>_sheet.png`, 64×64 frames, rows idle, move, attack, hit, death).
+- `tinted()` recolours team pixels from the paired `team_masks/` file to the faction colour. Pixel reads fail on `file://`, so serve the folder (`python3 -m http.server`) to see team colours; otherwise the original colours show.
+- Add new art by dropping files in the same layout and adding the id to the matching table. `assets/manifest.json` is the art pack's full registry.
 
 ### Travel
 
