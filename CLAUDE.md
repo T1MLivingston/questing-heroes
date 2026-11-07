@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-Questing Heroes is a browser-based, turn-based fantasy strategy game built with vanilla HTML, CSS and JavaScript. The player picks a map (Wheel & Spoke or Twin Ridges, in three sizes), one of 8 factions and one of 33 heroes (4 per faction, 5 for Beasts; placeholder heroes are marked `blank`), explores a fog-covered map, grows a town, recruits an army and fights tactical battles on a hex grid. The goal is to recover the Seven Relics, hidden in guarded lairs and hunted by rival AI heroes, and deliver them to the town's Reliquary before the day limit (4, 5 or 6 months by map size).
+Questing Heroes is a browser-based, turn-based fantasy strategy game built with vanilla HTML, CSS and JavaScript. The player picks a map (Wheel & Spoke or Twin Ridges, in three sizes), one of 8 factions and one of 32 heroes (4 per faction; the 2 still-unnamed placeholders are marked `blank`), explores a fog-covered map, grows a town, recruits an army and fights tactical battles on a hex grid. The goal is to recover the Seven Relics, hidden in guarded lairs and hunted by rival AI heroes, and deliver them to the town's Reliquary before the day limit (4, 5 or 6 months by map size).
 
 This is a **private, personal project**. See `LEGAL.md` before publishing anything.
 
@@ -39,7 +39,7 @@ The script in `index.html` is split into sections marked with `/* ===== ... ====
 
 | Section | What it holds |
 |---------|---------------|
-| DATA | `FAC` (8 factions), `U` (units, neutrals and generated `_u` upgrades), `SP` (spells), `SK` (skills), `HEROES` (33, including placeholders), `ITEMS` (31 artifacts in levels 1-5: Trinket, Treasure, Heirloom, Masterwork, Legendary), `START_KIT` (each hero's starting skill and artifact), `RELICS` (7), `MINE` (three output levels, `MINE_UP` upgrade costs, `mineOut`), `SITES` (weekly sites) |
+| DATA | `FAC` (8 factions), `U` (units, neutrals and generated `_u` upgrades), `SP` (spells), `SK` (skills), `HEROES` (32, including 2 placeholders), `ITEMS` (31 artifacts in levels 1-5: Trinket, Treasure, Heirloom, Masterwork, Legendary), `START_KIT` (each hero's starting skill and artifact), `RELICS` (7), `MINE` (three output levels, `MINE_UP` upgrade costs, `mineOut`), `SITES` (weekly sites) |
 | ART | Procedural drawing: `drawRes`, `drawStat`, `drawFig`, `drawGlyph`, `drawUnit`, `drawHeroPortrait`, `drawCrest`, `iconURL` cache |
 | MAP | `MAP_SIZES`, `MAP_TYPES`, `genMap` → `genWheel` or `genRidges`, `makeIsland`/`isleDocks` (pirate islands), `newGame`, `mkHero`, `mkRival`, terrain prerender, camera, `drawMap`, pathfinding (`astar`, `planTo`) |
 | UI | `renderUI` (top bar, hero card, army), `showModal`, toasts, unit cards |
@@ -48,7 +48,7 @@ The script in `index.html` is split into sections marked with `/* ===== ... ====
 | Town screen | `FAC_SPELLS`, `townBuildings`, `townAdvice` (the Suggested step), `townTabs`, `townHTML`, `drawTownView` (clickable picture of the town), `openTown` |
 | BATTLE | `drawBattleHero` (hero beside the field; click to open the spellbook), hex grid helpers, stat functions (`sAtk`, `sDef`, `sSpd`, `sMorale`), `battleLoop`, `playerTurn`, `aiTurn`, `castSpell`, `endBattle`, `drawBattle` |
 | START | `pickMap` (game mode, players, map type and size, with `mapPreviewURL`), `pickFaction`, `pickHero` |
-| Save and boot | `localStorage` save under `questing-heroes-v3`, `title`, `boot` |
+| Save and boot | `localStorage` save under `questing-heroes-v4`, `title`, `boot` |
 
 ### Game state
 

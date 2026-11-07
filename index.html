@@ -442,7 +442,7 @@ const HEROES=[
   {id:'shadow',name:'Shadow',fac:'necro',type:'Magic',st:[0,1,2,2],ab:'Gravecaller',ad:'Grave Harvest raises 15% instead of 10%.',sk:[],sp:['raise'],fx:{harvest:0.15}},
   {id:'grimes',name:'Grimes',fac:'wizards',type:'Magic',st:[0,2,2,2],ab:'Rune Warden',ad:'Rune Sentinels +3 defense.',sk:['shieldcraft'],sp:['ember'],fx:{unitDef:{sentinel:3}}},
   {id:'boopis',name:'Boopis',fac:'centaurs',type:'Magic',st:[1,1,2,1],ab:'Pounce',ad:'Hound Packs +4 growth per week and +1 speed.',sk:['fortune'],sp:['ember'],fx:{growth:{hounds:4},unitSpd:{hounds:1}}},
-  {id:'rocky',name:'Rocky',fac:'centaurs',type:'Might',st:[3,1,1,1],ab:'Stampede',ad:'Pack Bond also gives +1 morale.',sk:['forcedmarch'],sp:[],fx:{packMorale:1}},
+  {id:'rocky',name:'Rocky',fac:'merfolk',type:'Might',st:[3,1,1,1],ab:'Wave Rider',ad:'Seahorse Knights +2 attack and +2 speed.',sk:['forcedmarch'],sp:[],fx:{unitAtk:{seahorse:2},unitSpd:{seahorse:2}}},
   {id:'monkey',name:'Monkey',fac:'centaurs',type:'Might',st:[2,2,1,1],ab:'Troublemaker',ad:'Your first stack to act each battle gets an extra turn.',sk:['bladework'],sp:[],fx:{extraFirst:true}},
   {id:'binx',name:'Binx',fac:'centaurs',type:'Magic',st:[1,1,2,2],ab:'Night Prowler',ad:'+2 vision, and you see exact enemy army sizes.',sk:['farsight'],sp:['ember'],fx:{vision:2,exact:true}},
   {id:'omalley',name:"O'Malley",fac:'pirates',type:'Might',st:[2,2,1,1],ab:'Scourge of the Coast',ad:'Plunder pays 50% more.',sk:['seamanship'],sp:[],fx:{plunder:1.5}},
@@ -450,25 +450,26 @@ const HEROES=[
   {id:'sheila',name:'Sheila',fac:'pirates',type:'Magic',st:[0,1,2,2],ab:'Weatherwise',ad:'Squall costs half.',sk:[],sp:['squall'],fx:{squallHalf:true}},
   {id:'davis',name:'Davis',fac:'elves',type:'Might',st:[2,1,1,1],ab:'Master Archer',ad:'Longbow Rangers +1 damage and +4 shots.',sk:['steadyaim'],sp:[],fx:{unitDmgFlat:{longbow:1},unitShots:{longbow:4}}},
   {id:'love',name:'Love',fac:'elves',type:'Magic',st:[0,1,2,2],ab:'Heartbloom',ad:'Healing spells also give the target +1 morale for the battle.',sk:[],sp:['mend'],fx:{healMorale:1}},
-  {id:'boma',name:'Boma',fac:'elves',type:'Magic',st:[0,1,2,2],ab:'Rootweaver',ad:'Entangle lasts 1 round longer.',sk:[],sp:['entangle'],fx:{entangleExtra:1}},
   {id:'ivan',name:'Ivan',fac:'dwarves',type:'Might',st:[2,2,1,1],ab:'Master Smith',ad:'The Great Forge costs 25% less ore.',sk:['shieldcraft'],sp:[],fx:{forgeCut:0.75}},
   {id:'rago',name:'Rago',fac:'necro',type:'Magic',st:[1,1,2,2],ab:'Hex Mistress',ad:'Plague Hierophants +2 attack and +2 shots.',sk:['battleplan'],sp:['ember'],fx:{unitAtk:{hiero:2},unitShots:{hiero:2}}},
   {id:'dupengeiser',name:'Dupengeiser',fac:'dwarves',type:'Magic',st:[1,1,2,2],ab:'Steamcaller',ad:'Once per battle, raise a scalding geyser beside an enemy.',sk:['warding'],sp:['geyser'],fx:{}},
   {id:'rimmer',name:'Rimmer',fac:'wizards',type:'Magic',st:[1,1,2,2],ab:'Star Keeper',ad:'Star Owls +2 attack and +1 speed.',sk:['meditation'],sp:['ember'],fx:{unitAtk:{owl:2},unitSpd:{owl:1}}},
-  {id:'schmickle',name:'Schmickle',fac:'centaurs',type:'Magic',st:[0,1,2,2],ab:'Burrow Friend',ad:'Badger Brutes +2 defense and +1 speed.',sk:['meditation'],sp:['ember'],fx:{unitDef:{badger:2},unitSpd:{badger:1}}},
+  {id:'schmickle',name:'Schmickle',fac:'centaurs',type:'Might',st:[2,2,1,1],ab:'Burrow Friend',ad:'Badger Brutes +2 defense and +1 speed.',sk:['shieldcraft'],sp:[],fx:{unitDef:{badger:2},unitSpd:{badger:1}}},
   {id:'elvis',name:'Elvis',fac:'merfolk',type:'Magic',st:[1,1,2,2],ab:'Siren Voice',ad:'Siren Choir charms last 1 turn longer, and your whole army has +1 morale.',sk:['command'],sp:['ember'],fx:{charmExtra:1,morale:1}},
 ];
 /* placeholder heroes fill every faction to four; rename them and give them art later */
 HEROES.push(
-  {id:'ranger4',name:'Unnamed Ranger',blank:true,fac:'rangers',type:'Might',st:[2,1,1,1],ab:'Grove Archer',ad:'Reedbows +2 shots.',sk:[],sp:[],fx:{unitShots:{reed:2}}},
-  {id:'necro4',name:'Unnamed Necromancer',blank:true,fac:'necro',type:'Magic',st:[0,1,2,2],ab:'Bone Collector',ad:'Bone Thralls +3 growth per week.',sk:[],sp:['ember'],fx:{growth:{thrall:3}}},
-  {id:'pirate4',name:'Unnamed Corsair',blank:true,fac:'pirates',type:'Might',st:[2,2,1,1],ab:'Quartermaster',ad:'Deckhands +2 defense.',sk:[],sp:[],fx:{unitDef:{deckhand:2}}},
-  {id:'elf4',name:'Unnamed Elf',blank:true,fac:'elves',type:'Might',st:[2,1,1,1],ab:'Sprite Caller',ad:'Thorn Sprites +1 speed and +4 growth per week.',sk:[],sp:[],fx:{unitSpd:{sprite:1},growth:{sprite:4}}},
-  {id:'dwarf3',name:'Unnamed Dwarf',blank:true,fac:'dwarves',type:'Might',st:[3,2,0,1],ab:'Delver Chief',ad:'Tunnel Delvers +2 attack.',sk:[],sp:[],fx:{unitAtk:{delver:2}}},
-  {id:'dwarf4',name:'Unnamed Dwarf II',blank:true,fac:'dwarves',type:'Magic',st:[1,1,2,2],ab:'Boltmaster',ad:'Bolt Throwers +3 shots.',sk:[],sp:['ember'],fx:{unitShots:{bolt:3}}},
+  {id:'necro4',name:'Unnamed Necromancer',blank:true,fac:'necro',type:'Might',st:[2,2,1,1],ab:'Bone Collector',ad:'Bone Thralls +3 growth per week.',sk:[],sp:[],fx:{growth:{thrall:3}}},
   {id:'mer2',name:'Unnamed Merfolk',blank:true,fac:'merfolk',type:'Might',st:[2,2,1,1],ab:'Shell Warden',ad:'Shellbacks +3 defense.',sk:[],sp:[],fx:{unitDef:{shell:3}}},
-  {id:'mer3',name:'Unnamed Merfolk II',blank:true,fac:'merfolk',type:'Might',st:[3,1,1,1],ab:'Coral Captain',ad:'Coral Spearfolk +1 damage.',sk:[],sp:[],fx:{unitDmgFlat:{coral:1}}},
-  {id:'mer4',name:'Unnamed Merfolk III',blank:true,fac:'merfolk',type:'Magic',st:[0,1,2,2],ab:'Tide Singer',ad:'Siren Choirs +1 growth per week.',sk:[],sp:['ember'],fx:{growth:{choir:1}}},
+);
+HEROES.push(
+  {id:'battaglia',name:'Battaglia',fac:'rangers',type:'Might',st:[3,2,0,1],ab:'Champion of the Vale',ad:'Antler Knights +2 attack and +2 defense.',sk:[],sp:[],fx:{unitAtk:{antler:2},unitDef:{antler:2}}},
+  {id:'lawrence',name:'Lawrence',fac:'pirates',type:'Magic',st:[0,1,2,2],ab:"Ship's Surgeon",ad:'Mend heals 40% more, and Deckhands +2 growth per week.',sk:[],sp:['mend'],fx:{mendPct:1.4,growth:{deckhand:2}}},
+  {id:'michael',name:'Michael',fac:'elves',type:'Might',st:[2,2,1,1],ab:'Glade Guard',ad:'Dryad Wardens +2 attack and +2 defense.',sk:[],sp:[],fx:{unitAtk:{dryad:2},unitDef:{dryad:2}}},
+  {id:'livingston',name:'Livingston',fac:'elves',type:'Magic',st:[0,1,2,2],ab:'Rootweaver',ad:'Entangle lasts 1 round longer.',sk:[],sp:['entangle'],fx:{entangleExtra:1}},
+  {id:'slack',name:'Slack',fac:'dwarves',type:'Might',st:[2,1,2,1],ab:'Hammer and Hex',ad:'Tunnel Delvers +2 attack, and Ember Dart deals 50% more. Starts with a spellbook.',sk:[],sp:['ember'],fx:{unitAtk:{delver:2},emberPct:1.5}},
+  {id:'perry',name:'Perry',fac:'dwarves',type:'Magic',st:[1,1,2,2],ab:'Ember Speaker',ad:'Firebrand Smiths +2 attack.',sk:[],sp:['ember'],fx:{unitAtk:{smith:2}}},
+  {id:'letchworth',name:'Letchworth',fac:'merfolk',type:'Magic',st:[0,1,2,2],ab:'Eel Keeper',ad:'Eel Charmers +2 shots and +1 damage.',sk:[],sp:['squall'],fx:{unitShots:{eel:2},unitDmgFlat:{eel:1}}},
 );
 /* artifacts: names and effects from the design bible's trinket and treasure tiers */
 const ITEMS={
@@ -514,14 +515,14 @@ const FX_TXT={atk:v=>`+${v} Attack`,def:v=>`+${v} Defense`,pow:v=>`+${v} Power`,
   bogFree:()=>'bog and heath cost normal movement',manaRegen:v=>`+${v} mana each day`,goldDay:v=>`+${v} gold each day`,shots:v=>`archers +${v} shots`,costCut:v=>`troops cost ${v}% less`};
 const itemTxt=id=>Object.entries(ITEMS[id].fx).map(([k,v])=>FX_TXT[k](v)).join(', ');
 /* every hero starts with one specific skill and one artifact */
-const START_KIT={bear:['shieldcraft','buckler'],dorothy:['meditation','breath'],oliver:['forcedmarch','errands'],ranger4:['steadyaim','bracer'],
+const START_KIT={bear:['shieldcraft','buckler'],dorothy:['meditation','breath'],oliver:['forcedmarch','errands'],battaglia:['bladework','cudgel'],
   engelman:['arcane','inkwell'],tempest:['deepres','spark'],grimes:['shieldcraft','candle'],rimmer:['meditation','kettle'],
   shadow:['deepres','spark'],parker:['battleplan','cudgel'],rago:['fortune','rabbit'],necro4:['shieldcraft','kettle'],
-  rocky:['forcedmarch','sash'],monkey:['bladework','whetstone'],binx:['farsight','cloak'],boopis:['fortune','rabbit'],schmickle:['meditation','mudboots'],
-  omalley:['seamanship','ledger'],vargas:['steadyaim','bracer'],sheila:['meditation','breath'],pirate4:['command','sash'],
-  davis:['steadyaim','bracer'],love:['deepres','inkwell'],boma:['farsight','cloak'],elf4:['forcedmarch','errands'],
-  ivan:['shieldcraft','buckler'],dupengeiser:['warding','spark'],dwarf3:['bladework','cudgel'],dwarf4:['battleplan','purse'],
-  elvis:['command','sash'],mer2:['shieldcraft','kettle'],mer3:['seamanship','purse'],mer4:['meditation','breath']};
+  monkey:['bladework','whetstone'],binx:['farsight','cloak'],boopis:['fortune','rabbit'],schmickle:['shieldcraft','mudboots'],
+  omalley:['seamanship','ledger'],vargas:['steadyaim','bracer'],sheila:['meditation','breath'],lawrence:['command','sash'],
+  davis:['steadyaim','bracer'],love:['deepres','inkwell'],livingston:['farsight','cloak'],michael:['forcedmarch','errands'],
+  ivan:['shieldcraft','buckler'],dupengeiser:['warding','spark'],slack:['bladework','whetstone'],perry:['battleplan','purse'],
+  elvis:['command','sash'],mer2:['shieldcraft','kettle'],rocky:['forcedmarch','sash'],letchworth:['meditation','breath']};
 HEROES.forEach(h=>{const k=START_KIT[h.id];if(k){h.sk=[k[0]];h.item=k[1];}});
 const HBY=Object.fromEntries(HEROES.map(h=>[h.id,h]));
 
@@ -2207,7 +2208,7 @@ async function castSpell(id,target){
 }
 async function spellEffect(id,target,P){
   const ward=1;
-  if(id==='ember'){await burst(target,'#ff8a3c');const dm=Math.round((15+10*P)*ward),k=applyDmg(target,dm);floatAt(target,`-${dm}`,'#ffb48a');logB(`Ember Dart burns ${nm(target)} for ${dm}.${k?` ${k} fall.`:''}`);}
+  if(id==='ember'){await burst(target,'#ff8a3c');const dm=Math.round((15+10*P)*ward*(fx().emberPct||1)),k=applyDmg(target,dm);floatAt(target,`-${dm}`,'#ffb48a');logB(`Ember Dart burns ${nm(target)} for ${dm}.${k?` ${k} fall.`:''}`);}
   else if(id==='chain'){await burst(target,'#ffe066');const dm=12+8*P;applyDmg(target,dm);floatAt(target,`-${dm}`,'#ffe066');let from=target;const hit=new Set([target]);
     for(let j=0;j<1+(fx().chainExtra||0);j++){const nx=bt.stacks.filter(s=>s.alive&&s.side===1&&!hit.has(s)).sort((a,b)=>hdist(from.c,from.r,a.c,a.r)-hdist(from.c,from.r,b.c,b.r))[0];if(!nx)break;hit.add(nx);await burst(nx,'#ffe066');const d2=Math.round(dm/2);applyDmg(nx,d2);floatAt(nx,`-${d2}`,'#ffe066');from=nx;}
     logB(`Chain Spark arcs through ${hit.size} stacks.`);}
@@ -2435,7 +2436,7 @@ async function pickHero(fk,opt={}){
 }
 
 /* -------- end states, save -------- */
-const SAVEKEY='questing-heroes-v3';
+const SAVEKEY='questing-heroes-v4';
 function save(){try{if(S&&!S.over){stashPlayer();}if(S&&!S.over)localStorage.setItem(SAVEKEY,JSON.stringify(S));}catch(e){}}
 function clearSave(){try{localStorage.removeItem(SAVEKEY);}catch(e){}}
 function loadSave(){try{const s=localStorage.getItem(SAVEKEY);return s?JSON.parse(s):null;}catch(e){return null;}}

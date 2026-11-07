@@ -30,10 +30,11 @@ The generated source images (high-res magenta PNGs) are kept outside this repo.
 
 ## Real names
 
-The 24 heroes are named after people (and possibly pets) from the author's life: Dorothy, Binx, Monkey, Schmickle, Bear, O'Malley, Grimes, Vargas, Rimmer, Parker, Davis, Love, Engelman, Rago, Tempest, Boma, Sheila, Shadow, Boopus, Dupin Geyser, Ivan, Oliver, Elvis and Rocky.
+The heroes are named after people (and possibly pets) from the author's life: Bear, Dorothy, Oliver, Battaglia, Engelman, Tempest, Grimes, Rimmer, Parker, Shadow, Rago, Binx, Boopis, Monkey, Schmickle, O'Malley, Vargas, Sheila, Lawrence, Davis, Love, Michael, Livingston, Ivan, Dupengeiser, Slack, Perry, Rocky, Elvis and Letchworth. Two slots (one Necromancer, one Merfolk) are still placeholders.
 
 - Fine for a private game. Before any public release, get each person's OK to use their name, or switch to invented names.
 - Some names match well-known people or fictional characters. A name alone is fine. Don't add likenesses, catchphrases, songs, costumes or other traits that point to a famous person or character.
+- Battaglia is described as a classic square-jawed champion. Keep his look original: no emblem, costume, colour scheme or pose borrowed from any comic-book hero.
 - Watch Binx in particular: a black cat named Binx is a well-known film character. The current panther-like design with a team collar is its own, but keep it away from that film's look and story before any release, or rename the hero.
 
 ## Before going public: checklist
