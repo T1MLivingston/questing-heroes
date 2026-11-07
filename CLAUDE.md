@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-Questing Heroes is a browser-based, turn-based fantasy strategy game built with vanilla HTML, CSS and JavaScript. The player picks one of 8 factions and one of 24 heroes, explores a fog-covered map, grows a town, recruits an army and fights tactical battles on a hex grid. The goal is to break the Glass Lair in the far south-east before the end of Month 3.
+Questing Heroes is a browser-based, turn-based fantasy strategy game built with vanilla HTML, CSS and JavaScript. The player picks one of 8 factions and one of 24 heroes, explores a fog-covered map, grows a town, recruits an army and fights tactical battles on a hex grid. The goal is to recover the Seven Relics, hidden in guarded lairs and hunted by rival AI heroes, and deliver them to the town's Reliquary before the end of Month 4 (day 112).
 
 This is a **private, personal project**. See `LEGAL.md` before publishing anything.
 
@@ -31,32 +31,42 @@ The script in `index.html` is split into sections marked with `/* ===== ... ====
 
 | Section | What it holds |
 |---------|---------------|
-| DATA | `FAC` (8 factions), `U` (units and neutrals), `SP` (spells), `SK` (skills), `HEROES` (24 heroes), `MINE` |
+| DATA | `FAC` (8 factions), `U` (units, neutrals and generated `_u` upgrades), `SP` (spells), `SK` (skills), `HEROES` (24 heroes), `RELICS` (7), `MINE` |
 | ART | Procedural drawing: `drawRes`, `drawStat`, `drawFig`, `drawGlyph`, `drawUnit`, `drawHeroPortrait`, `drawCrest`, `iconURL` cache |
-| MAP | `genWorld` (seeded map generator), `newGame`, terrain prerender, camera, `drawMap`, pathfinding (`astar`, `planTo`) |
+| MAP | `genWorld` (seeded map generator with crag ridges and guarded passes), `newGame`, `mkHero`, `mkRival`, terrain prerender, camera, `drawMap`, pathfinding (`astar`, `planTo`) |
 | UI | `renderUI` (top bar, hero card, army), `showModal`, toasts, unit cards |
-| Adventure actions | `walk`, `fightPreview`, `visit`, `endDay`, `addXP` |
+| Adventure actions | `walk`, `fightPreview`, `gainRelic`, `visit`, `arriveTown`, `endDay`, `addRumour`, `addXP` |
+| Rival heroes | `rivalsTurn`, `rivalTarget`, `rivalInteract`, `autoResolve`, `growRival` |
 | Town screen | `townBuildings`, `townHTML`, `openTown` |
 | BATTLE | Hex grid helpers, stat functions (`sAtk`, `sDef`, `sSpd`, `sMorale`), `battleLoop`, `playerTurn`, `aiTurn`, `castSpell`, `endBattle`, `drawBattle` |
 | START | `pickFaction`, `pickHero` |
-| Save and boot | `localStorage` save under `questing-heroes-v2`, `title`, `boot` |
+| Save and boot | `localStorage` save under `questing-heroes-v3`, `title`, `boot` |
 
 ### Game state
 
 Everything lives in one object, `S`, so it can be saved as JSON:
 
 - `S.fac`: chosen faction key
-- `S.hero`: id, name, stats (`atk`, `def`, `pow`, `lore`), `mana`, `mp`, `skills`, `spells`, `mount` (`foot`, `horse` or `hooves`), `boat`, `army` (up to 7 stacks of `{k, n}`)
+- `S.heroes[]` and `S.cur`: the player's heroes (up to 3) and the selected one; read it with `HERO()`. Each has id, name, stats (`atk`, `def`, `pow`, `lore`), `mana`, `mp`, `skills`, `spells`, `mount` (`foot`, `horse` or `hooves`), `boat`, `relics` (carried relic indices), `army` (up to 7 stacks of `{k, n}`)
+- Use `hst(h, 'atk')` for a stat including carried-relic bonuses
+- `S.rivals[]`: AI heroes with `fac`, position, stats, `army`, `relics`
+- `S.rumours[]`, `S.delivered[]`: rumour circles and relics already in the Reliquary
 - `S.town`: `built` buildings, `pool` of recruits, `garrison`, `builtToday`
 - `S.tiles`, `S.explored`, `S.objs`: the map
 - `S.res`: gold, timber, ore, amber
-- `S.day`: day counter; 28 days to a month, and the game ends after day 84
+- `S.day`: day counter; 28 days to a month, and the game ends after day 112 (`LIMIT`)
 
 ### Faction and hero data
 
 - Each faction in `FAC` has 5 units (tiers 1 to 5), dwelling names, a colour palette, a signature mechanic and a travel mode.
 - Each hero in `HEROES` has base stats `st: [atk, def, pow, lore]`, starting skills `sk`, starting spells `sp` and a signature ability. The ability is data in `fx` (for example `unitAtk`, `unitSpd`, `growth`, `harvest`, `echo`), read by the battle and map code via `fx()`.
 - Faction mechanics are checked by faction key in the battle stat functions and `endBattle`.
+
+### Map rules
+
+- Two crag ridges cross the map. The road crosses each through one gap held by a strong `guard` neutral. `genWorld` checks that each guard really seals its ridge.
+- Diagonal moves can't cut corners: both orthogonal neighbours must be passable.
+- Relic lairs are `relic` objects (`r` = relic index). Relics a hero drops on defeat become a `drop` object.
 
 ### Travel
 
@@ -82,6 +92,10 @@ Debug handle in the browser console: `window.__qh` exposes the state and a few f
 - [ ] Town: build one building per day, recruit, garrison merges on return
 - [ ] Battle: move, melee, shoot, wait, defend, spellbook, auto, retaliation
 - [ ] Each faction mechanic and each hero ability triggers
+- [ ] Relics: rumours appear weekly, lairs give relics, delivery to the Reliquary, win at 7
+- [ ] Rivals move at end of day, claim mines and relics, and can attack your heroes
+- [ ] Tavern hires a second hero; dwelling upgrades and army upgrades work
+- [ ] Guarded passes block the road until beaten
 - [ ] Level-up choice, end of day income, weekly growth
 - [ ] Phone layout (about 400px wide)
 
