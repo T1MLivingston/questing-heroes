@@ -489,6 +489,27 @@ const ITEMS={
   bracer:{name:"Fletcher's Bracer",slot:'Off hand',tier:'Treasure',fx:{shots:2}},
   purse:{name:'Coin-Purse of the Tollkeeper',slot:'Neck',tier:'Treasure',fx:{costCut:10}},
 };
+/* artifacts come in five levels; levels 3-5 are found on the map, guarded */
+const ITEM_TIERS=['','Trinket','Treasure','Heirloom','Masterwork','Legendary'],ITEM_COLS=['','#b9b3a4','#8cbc70','#6f9be0','#b07ae0','#f2c14e'];
+for(const it of Object.values(ITEMS))it.lvl=it.tier==='Trinket'?1:2;
+Object.assign(ITEMS,{
+  antler:{name:'Antler Crown of the Hunt',slot:'Head',lvl:3,fx:{atk:3,mpPct:5}},
+  barkmail:{name:"Warden's Bark Mail",slot:'Body',lvl:3,fx:{def:4}},
+  stormrod:{name:'Stormglass Rod',slot:'Main hand',lvl:3,fx:{pow:4}},
+  spurs:{name:'Seven-League Spurs',slot:'Feet',lvl:3,fx:{mpPct:20}},
+  banner:{name:'Banner of the First Muster',slot:'Pack',lvl:3,fx:{morale:2}},
+  twinmoon:{name:'Twin-Moon Ring',slot:'Ring',lvl:3,fx:{pow:2,lore:2}},
+  mirror:{name:'Mirror-Silk Cloak',slot:'Cloak',lvl:4,fx:{def:3,luck:1}},
+  sapling:{name:'Sapling in Amber',slot:'Pack',lvl:4,fx:{lore:2,manaRegen:3}},
+  bell:{name:'Bell of the Drowned Chapel',slot:'Neck',lvl:4,fx:{def:2,morale:2}},
+  gauntlets:{name:'Ironbark Gauntlets',slot:'Main hand',lvl:4,fx:{atk:4,def:1}},
+  crownglass:{name:'Crown of the Glass Lair',slot:'Head',lvl:5,fx:{pow:6}},
+  aegis:{name:'Heartwood Aegis',slot:'Off hand',lvl:5,fx:{def:6}},
+  oath:{name:'Blade of the Last Oath',slot:'Main hand',lvl:5,fx:{atk:6}},
+  livingmap:{name:"Cartographer's Living Map",slot:'Pack',lvl:5,fx:{vision:4,mpPct:10}},
+  mantle:{name:'Mantle of the Undying Season',slot:'Cloak',lvl:5,fx:{atk:2,def:2,pow:2,lore:2}},
+});
+for(const it of Object.values(ITEMS))it.tier=ITEM_TIERS[it.lvl];
 const FX_TXT={atk:v=>`+${v} Attack`,def:v=>`+${v} Defense`,pow:v=>`+${v} Power`,lore:v=>`+${v} Lore`,morale:v=>`+${v} morale`,luck:v=>`+${v} luck`,mpPct:v=>`+${v}% movement`,vision:v=>`+${v} vision`,
   bogFree:()=>'bog and heath cost normal movement',manaRegen:v=>`+${v} mana each day`,goldDay:v=>`+${v} gold each day`,shots:v=>`archers +${v} shots`,costCut:v=>`troops cost ${v}% less`};
 const itemTxt=id=>Object.entries(ITEMS[id].fx).map(([k,v])=>FX_TXT[k](v)).join(', ');
@@ -532,7 +553,13 @@ const altarName=()=>S&&S.mode==='grail'?'Grail Altar':'Reliquary';
 function goalMet(){if(S.mode==='conquest')return S.rivals.length===0;return(S.goal||[0,1,2,3,4,5,6]).every(i=>delivered(i));}
 const UP_PREFIX={rangers:'Elder',wizards:'Arch',necro:'Dread',centaurs:'Wild',pirates:'Veteran',elves:'Moonlit',dwarves:'Runed',merfolk:'Deep'};
 for(const fk of Object.keys(FAC))for(const k of FAC[fk].units){const b=U[k];U[k+'_u']={...b,name:`${UP_PREFIX[fk]} ${b.name}`,pl:`${UP_PREFIX[fk]} ${b.pl}`,hp:Math.round(b.hp*1.25),atk:b.atk+2,def:b.def+2,min:Math.round(b.min*1.2),max:Math.round(b.max*1.25),spd:b.spd+1,shots:b.shots?b.shots+4:0,cost:Math.round(b.cost*1.35/5)*5,up:true,base:k,desc:b.desc+' Upgraded: tougher, faster and harder-hitting.'};}
-const MINE={saw:{name:'Sawmill',res:'timber',amt:2},orepit:{name:'Ore Pit',res:'ore',amt:2},gold:{name:'Gold Seam',res:'gold',amt:1000},amber:{name:'Amber Spring',res:'amber',amt:1}};
+/* mines come in three levels; pay at the mine to raise its output */
+const MINE={saw:{name:'Sawmill',res:'timber',out:[1,2,3]},orepit:{name:'Ore Pit',res:'ore',out:[1,2,3]},gold:{name:'Gold Seam',res:'gold',out:[500,750,1000]},amber:{name:'Amber Spring',res:'amber',out:[1,2,3]}};
+const MINE_UP=[null,{gold:1500,timber:3,ore:3},{gold:3000,timber:6,ore:6,amber:2}];
+const mineOut=o=>MINE[o.k].out[(o.lvl||1)-1]+(delivered(4)?(MINE[o.k].res==='gold'?250:1):0);
+/* weekly sites refill every Monday */
+const SITES={wish:{name:'Wishing Well',give:'500-1,000 gold'},clover:{name:'Clover Meadow',give:'+1 luck for 7 days'},woodcamp:{name:"Woodcutters' Camp",give:'5 timber'},orecart:{name:'Abandoned Ore Cart',give:'5 ore'},amberhollow:{name:'Amber Hollow',give:'2 amber'}};
+const weekNo=()=>Math.floor((S.day-1)/7);
 
 /* ================= ART ================= */
 function drawRes(c,k,x,y,r){
@@ -911,7 +938,7 @@ function genRidges(seed,opt){
   if(opt.fac==='pirates')isles.push(makeIsland(tiles,town.x,town.y-1,4+Math.round(KS),protect,objs));
   pseudo.forEach(p=>{if(p.fac==='pirates')isles.push(makeIsland(tiles,p.x,p.y,3+Math.round(KS),protect,objs));});
   const isleWater=new Set();isles.forEach(il=>il.water.forEach(i=>isleWater.add(i)));
-  [[0.22,7],[0.3,-7],[0.5,8],[0.55,-8],[0.62,4],[0.84,-5]].forEach(([t,off],i)=>{const p=spot(t,off,3);if(p){const Rl=RELICS[i];add({type:'relic',r:i,x:p.x,y:p.y,k:Rl.k,n:ri(Rl.n[0],Rl.n[1])});}});
+  [[0.22,7],[0.3,-7],[0.5,8],[0.55,-8],[0.62,4],[0.84,-5]].forEach(([t,off],i)=>{const p=spot(t,off,3);if(p){const Rl=RELIC_LIST[i];add({type:'relic',r:i,x:p.x,y:p.y,k:Rl.k,n:ri(Rl.n[0],Rl.n[1])});}});
   for(const [ox,oy] of[[-2,-1],[-1,-2]]){add({type:'neutral',x:lair.x+ox,y:lair.y+oy,k:'troll',n:ri(10,13)});tiles[idx(lair.x+ox,lair.y+oy)]=T.GRASS;}
   const mines=[['saw',0.14,4],['orepit',0.18,-4],['gold',0.42,3],['amber',0.38,-6],['saw',0.6,6],['orepit',0.62,-5],['amber',0.78,5],['gold',0.82,-6]];
   if(KS>1.15)mines.push(...mines.map(([k,t,off])=>[k,Math.min(0.9,t+0.06),-off]));
@@ -1028,8 +1055,8 @@ function genWheel(seed,opt){
   const angs=homes.map((h,i)=>Math.PI*1.25+i*2*Math.PI/nS);
   const cand=[];angs.forEach((a,i)=>{const m=a+Math.PI/nS;cand.push(at(m,0.62),at(m,0.36));if(i)cand.push(at(a,0.5));});
   cand.sort((a,b)=>Math.hypot(a.x-town.x,a.y-town.y)-Math.hypot(b.x-town.x,b.y-town.y));
-  let ri0=0;for(const c of cand){if(ri0>5)break;const p=spotNear(c.x,c.y,2);if(!p)continue;const Rl=RELICS[ri0];add({type:'relic',r:ri0,x:p.x,y:p.y,k:Rl.k,n:ri(Rl.n[0],Rl.n[1])});ri0++;}
-  for(let tries=0;ri0<6&&tries<200;tries++){const c=at(R()*Math.PI*2,0.3+R()*0.6),p=spotNear(c.x,c.y,3);if(!p)continue;const Rl=RELICS[ri0];add({type:'relic',r:ri0,x:p.x,y:p.y,k:Rl.k,n:ri(Rl.n[0],Rl.n[1])});ri0++;}
+  let ri0=0;for(const c of cand){if(ri0>5)break;const p=spotNear(c.x,c.y,2);if(!p)continue;const Rl=RELIC_LIST[ri0];add({type:'relic',r:ri0,x:p.x,y:p.y,k:Rl.k,n:ri(Rl.n[0],Rl.n[1])});ri0++;}
+  for(let tries=0;ri0<6&&tries<200;tries++){const c=at(R()*Math.PI*2,0.3+R()*0.6),p=spotNear(c.x,c.y,3);if(!p)continue;const Rl=RELIC_LIST[ri0];add({type:'relic',r:ri0,x:p.x,y:p.y,k:Rl.k,n:ri(Rl.n[0],Rl.n[1])});ri0++;}
   for(const h of homes){for(const k of['saw','orepit']){const p=spotNear(h.x,h.y+1,4);if(p)add({type:'mine',k,x:p.x,y:p.y,owned:false});}}
   angs.forEach((a,i)=>{const p=spotNear(at(a+Math.PI/nS,0.85).x,at(a+Math.PI/nS,0.85).y,2);if(p){const k=i%2?'amber':'gold';add({type:'mine',k,x:p.x,y:p.y,owned:false});
     const q=spotNear(p.x,p.y,1);if(q)add({type:'neutral',...q,...neutralAt(diff(q.x,q.y))});}});
@@ -1070,6 +1097,38 @@ function mkHero(hid,x,y){const h=HBY[hid],f=FAC[h.fac];
 function mkRival(hid,x,y){const h=HBY[hid],u=FAC[h.fac].units;
   return{id:hid,name:h.name,fac:h.fac,x,y,atk:h.st[0]+1,def:h.st[1]+1,pow:h.st[2],lore:h.st[3],relics:[],
     army:[{k:u[0],n:Math.round(300/U[u[0]].hp)},{k:u[1],n:Math.round(140/U[u[1]].hp)},{k:u[2],n:Math.round(70/U[u[2]].hp)}]};}
+/* tiles reachable on foot from a base, with their walking distance */
+function reachFrom(x0,y0){const dist=new Map(),q=[[x0,y0]];dist.set(idx(x0,y0),0);
+  const ok=(x,y)=>inb(x,y)&&passableT(S.tiles[idx(x,y)])&&!townFoot(x,y);
+  for(let h=0;h<q.length;h++){const[x,y]=q[h],d=dist.get(idx(x,y));for(let a=-1;a<=1;a++)for(let b=-1;b<=1;b++){if(!a&&!b)continue;const nx=x+a,ny=y+b;if(!ok(nx,ny)||dist.has(idx(nx,ny)))continue;if(a&&b&&(!ok(x+a,y)||!ok(x,y+b)))continue;
+    const o=objAt(nx,ny);dist.set(idx(nx,ny),d+1);if(!o||o.type==='town'||o.type==='camp')q.push([nx,ny]);}}return dist;}
+function freeTile(dist,dmin,dmax,avoid=2){const c=[];for(const[i,d]of dist){if(d<dmin||d>dmax)continue;const x=i%W,y=(i/W)|0;
+  if(objAt(x,y)||townFoot(x,y)||S.objs.some(o=>Math.abs(o.x-x)<=avoid-1&&Math.abs(o.y-y)<=avoid-1&&(o.type==='town'||o.type==='neutral'&&o.guard)))continue;
+  if(x<1||y<1||x>W-2||y>H-2)continue;c.push({x,y});}return c.length?pick(c):null;}
+function furnishMap(bases){
+  const KS=W/34;let uid=S.uid;const add=o=>{o.id=uid++;S.objs.push(o);};
+  // every base gets a sawmill, ore pit, amber spring and gold seam within a short walk
+  for(const b of bases){const dist=reachFrom(b.x,b.y+1);
+    for(const[k,lo,hi]of[['saw',2,6],['orepit',2,6],['amber',4,9],['gold',5,10]]){
+      const near=S.objs.some(o=>o.type==='mine'&&o.k===k&&dist.has(idx(o.x,o.y))&&dist.get(idx(o.x,o.y))<=hi+2);if(near)continue;
+      const p=freeTile(dist,lo,hi)||freeTile(dist,lo,hi+6)||freeTile(dist,1,hi+12,1);if(p)add({type:'mine',k,x:p.x,y:p.y,owned:false,lvl:1});}}
+  // mines differ: some start richer than others
+  const home=bases[0],maxD=Math.hypot(W,H);
+  for(const o of S.objs)if(o.type==='mine'&&!o.lvl){const far=Math.hypot(o.x-home.x,o.y-home.y)/maxD;o.lvl=1+(R()<0.45?1:0)+(far>0.45&&R()<0.4?1:0);}
+  // weekly sites and artifacts, spread by distance from your town
+  const dist=reachFrom(home.x,home.y+1);let md=0;for(const d of dist.values())md=Math.max(md,d);
+  const band=(a,b)=>[Math.round(md*a),Math.round(md*b)];
+  const sites=[['wish',2,0.1,0.5],['clover',2,0.15,0.7],['woodcamp',1,0.1,0.45],['orecart',1,0.1,0.45],['amberhollow',1,0.3,0.8]];
+  for(const[k,n,a,b]of sites)for(let i=0;i<Math.max(1,Math.round(n*KS*KS));i++){const p=freeTile(dist,...band(a,b));if(p)add({type:'site',k,x:p.x,y:p.y,week:-1});}
+  const owned=new Set(S.heroes.flatMap(h=>h.items||[]));
+  const byLvl=l=>Object.keys(ITEMS).filter(k=>ITEMS[k].lvl===l&&!owned.has(k)&&!S.objs.some(o=>o.type==='artifact'&&o.item===k));
+  const plan=[[1,3,0.08,0.35],[2,3,0.2,0.5],[3,2,0.4,0.7],[4,1,0.6,0.9],[5,1,0.8,1]];
+  for(const[l,n,a,b]of plan)for(let i=0;i<Math.max(1,Math.round(n*KS));i++){const pool=byLvl(l);if(!pool.length)break;const p=freeTile(dist,...band(a,b),3);if(!p)continue;
+    add({type:'artifact',item:pick(pool),x:p.x,y:p.y});
+    if(l>=3){const g=[[1,0],[-1,0],[0,1],[0,-1]].map(([dx,dy])=>({x:p.x+dx,y:p.y+dy})).find(q=>inb(q.x,q.y)&&passableT(S.tiles[idx(q.x,q.y)])&&!objAt(q.x,q.y)&&!townFoot(q.x,q.y));
+      if(g)add({type:'neutral',x:g.x,y:g.y,...(l===3?{k:'troll',n:ri(5,8)}:l===4?{k:'imp',n:ri(30,40)}:{k:'troll',n:ri(14,18)})});}}
+  S.uid=uid;
+}
 function newGame(fk,hid,mo={}){
   const sz=MAP_SIZES[mo.size||'small'],type=mo.type||'wheel';W=sz.W;H=sz.H;
   const seed=mo.seed??((Math.random()*1e9)|0);
@@ -1106,6 +1165,7 @@ function newGame(fk,hid,mo={}){
     loadPlayer(0);
   }
   rebuildFoot();
+  {const bases=[{x:S.town.x,y:S.town.y},...(S.players?S.players.slice(1).map(q=>({x:q.town.x,y:q.town.y})):S.rivals.map(r=>({x:r.x,y:r.y})))];furnishMap(bases);}
 }
 function reveal(cx,cy,r){for(let y=cy-r;y<=cy+r;y++)for(let x=cx-r;x<=cx+r;x++)if(inb(x,y)&&(x-cx)**2+(y-cy)**2<=r*r+1)S.explored[idx(x,y)]=1;}
 const vision=()=>5+(hasSk('farsight')?1:0)+(fx().vision||0)+(S&&S.heroes?gear(HERO(),'vision'):0)+(S&&S.delivered&&delivered(0)?1:0);
@@ -1226,8 +1286,21 @@ function drawObj(c,o){
     else if(o.k==='amber'){for(const [dx,h] of[[-8,14],[0,22],[8,16]]){c.fillStyle='#e0871f';c.strokeStyle='#5a2c05';c.beginPath();c.moveTo(cx+dx-5,cy+12);c.lineTo(cx+dx,cy+12-h);c.lineTo(cx+dx+5,cy+12);c.closePath();c.fill();c.stroke();}}
     else{c.fillStyle='#6b665c';c.strokeStyle='#2a2823';c.beginPath();c.moveTo(cx-18,cy+12);c.quadraticCurveTo(cx,cy-22,cx+18,cy+12);c.closePath();c.fill();c.stroke();c.fillStyle='#14110c';c.beginPath();c.arc(cx,cy+12,8,Math.PI,0);c.fill();
       if(o.k==='gold'){c.fillStyle='#f2c94c';for(const [a,b] of[[-10,4],[9,2],[-4,-6],[5,-4]])c.fillRect(cx+a-1.5,cy+b-1.5,3,3);}else drawRes(c,'ore',cx+12,cy+9,6);}
+    for(let i=0;i<(o.lvl||1);i++){c.fillStyle='#f2d382';c.strokeStyle='#120f0b';c.lineWidth=1;c.fillRect(cx-9+i*7,cy+15,5,5);c.strokeRect(cx-9+i*7,cy+15,5,5);}
     if(o.owned)flag(c,cx+12,cy-6,ownerCol(o.owned));break;}
   case 'pile':drawRes(c,o.k,cx,cy+2,11);break;
+  case 'site':{const spent=o.week===weekNo();c.globalAlpha=spent?0.55:1;c.fillStyle='rgba(0,0,0,.3)';c.beginPath();c.ellipse(cx,cy+12,16,5,0,0,7);c.fill();c.strokeStyle='#26241f';c.lineWidth=1.2;
+    if(o.k==='wish'){c.fillStyle='#8a867a';c.beginPath();c.ellipse(cx,cy+5,12,6,0,0,7);c.fill();c.stroke();c.fillStyle=spent?'#2c3a4a':'#5f9fd0';c.beginPath();c.ellipse(cx,cy+4,8,3.5,0,0,7);c.fill();
+      c.fillStyle='#6b4a2e';c.fillRect(cx-11,cy-14,3,18);c.fillRect(cx+8,cy-14,3,18);c.fillStyle='#8b3a2a';c.beginPath();c.moveTo(cx-15,cy-12);c.lineTo(cx,cy-22);c.lineTo(cx+15,cy-12);c.closePath();c.fill();c.stroke();if(!spent){c.fillStyle='#f2c94c';c.fillRect(cx-2,cy-4,3,3);}}
+    else if(o.k==='clover'){c.fillStyle='#4f8a3a';c.beginPath();c.ellipse(cx,cy+6,15,7,0,0,7);c.fill();for(const [dx,dy] of[[-4,-4],[4,-4],[-4,4],[4,4]]){c.fillStyle='#6cc25a';c.beginPath();c.arc(cx+dx,cy-4+dy,4.5,0,7);c.fill();c.stroke();}c.strokeStyle='#2e5a22';c.beginPath();c.moveTo(cx,cy-4);c.lineTo(cx+3,cy+8);c.stroke();}
+    else if(o.k==='woodcamp'){drawRes(c,'timber',cx-6,cy+4,9);c.fillStyle='#8a8a92';c.beginPath();c.moveTo(cx+8,cy-10);c.lineTo(cx+15,cy-6);c.lineTo(cx+10,cy-2);c.closePath();c.fill();c.strokeStyle='#5a3a1e';c.lineWidth=2;c.beginPath();c.moveTo(cx+10,cy-6);c.lineTo(cx+4,cy+6);c.stroke();}
+    else if(o.k==='orecart'){c.fillStyle='#5a4a3a';c.fillRect(cx-13,cy-6,26,12);c.strokeRect(cx-13,cy-6,26,12);drawRes(c,'ore',cx,cy-8,7);c.fillStyle='#2a2823';c.beginPath();c.arc(cx-8,cy+8,4,0,7);c.arc(cx+8,cy+8,4,0,7);c.fill();}
+    else if(o.k==='amberhollow'){c.fillStyle='#5d3b1d';c.fillRect(cx-3,cy-6,6,18);c.fillStyle='#3f6b3a';c.beginPath();c.arc(cx,cy-12,11,0,7);c.fill();c.stroke();if(!spent){drawRes(c,'amber',cx+7,cy+2,5);drawRes(c,'amber',cx-6,cy-4,4);}}
+    c.globalAlpha=1;break;}
+  case 'artifact':{const col=ITEM_COLS[ITEMS[o.item].lvl],t=performance.now()/400;const g=c.createRadialGradient(cx,cy-2,1,cx,cy-2,16);g.addColorStop(0,col);g.addColorStop(1,'rgba(0,0,0,0)');c.fillStyle=g;c.beginPath();c.arc(cx,cy-2,16,0,7);c.fill();
+    c.fillStyle='#8a867a';c.strokeStyle='#26241f';c.lineWidth=1.2;c.fillRect(cx-9,cy+4,18,8);c.strokeRect(cx-9,cy+4,18,8);
+    c.fillStyle=col;c.beginPath();c.moveTo(cx,cy-12+Math.sin(t)*2);c.lineTo(cx+6,cy-3);c.lineTo(cx,cy+3);c.lineTo(cx-6,cy-3);c.closePath();c.fill();c.stroke();
+    c.fillStyle='#120f0b';c.font='700 9px "Pixelify Sans",monospace';c.textAlign='center';c.textBaseline='middle';c.fillText(String(ITEMS[o.item].lvl),cx,cy+8);break;}
   case 'chest':c.fillStyle='#7a4e24';c.strokeStyle='#2a170a';c.beginPath();c.roundRect(cx-11,cy-6,22,15,3);c.fill();c.stroke();c.fillStyle='#d4ab52';c.fillRect(cx-11,cy-1,22,3);c.fillRect(cx-2,cy-2,4,6);break;
   case 'stone':c.fillStyle='#7f7c74';c.strokeStyle='#26241f';c.beginPath();c.moveTo(cx-7,cy+13);c.lineTo(cx-8,cy-8);c.lineTo(cx-1,cy-16);c.lineTo(cx+7,cy-9);c.lineTo(cx+8,cy+13);c.closePath();c.fill();c.stroke();
     if(!o.used){c.save();c.translate(cx,cy-2);drawStat(c,o.stat,0,0,6);c.restore();}break;
@@ -1349,9 +1422,11 @@ function describe(x,y){
     case 'relic':{const Rl=RELICS[o.r];const[w,col]=threat(o.k,o.n);return`<b>${Rl.lair}</b> · guards the ${Rl.name} · ${cnt(o.n)} ${U[o.k].pl} · <span style="color:${col}">${w}</span>`;}
     case 'drop':return`<b>${o.rs.map(r=>RELICS[r].name).join(', ')}</b> · lying here, unguarded`;
     case 'camp':return`<b>${FAC[o.fac].arch} camp</b> · where a rival hero set out from`;
-    case 'mine':return`<b>${MINE[o.k].name}</b> · +${fmt(MINE[o.k].amt)} ${RESNAME[MINE[o.k].res].toLowerCase()} a day · ${o.owned===ME()?'yours':o.owned?`held by ${o.ownerName}`:'unclaimed'}`;
+    case 'mine':return`<b>${MINE[o.k].name}</b> (level ${o.lvl||1}) · +${fmt(mineOut(o))} ${RESNAME[MINE[o.k].res].toLowerCase()} a day · ${o.owned===ME()?'yours':o.owned?`held by ${o.ownerName}`:'unclaimed'}`;
     case 'pile':return`<b>${RESNAME[o.k]}</b> · ${fmt(o.n)}`;
     case 'chest':return'<b>Weathered chest</b>';
+    case 'site':return`<b>${SITES[o.k].name}</b> · ${o.week===weekNo()?'spent until next week':`once a week: ${SITES[o.k].give}`}`;
+    case 'artifact':{const it=ITEMS[o.item];return`<b style="color:${ITEM_COLS[it.lvl]}">${it.name}</b> · level ${it.lvl} ${it.tier} · ${itemTxt(o.item)}`;}
     case 'stone':return`<b>Standing stone of ${STATN[o.stat]}</b> · ${o.used?'spent':'+1 '+STATN[o.stat]}`;
     case 'shrine':return`<b>Wayshrine</b> · teaches ${SP[o.spell].name}`;
     case 'well':return`<b>Moonwell</b> · ${o.day===S.day?'drained until tomorrow':'restores mana'}`;
@@ -1453,7 +1528,7 @@ async function walk(){
       break;
     }
     HERO().mp-=cost;await stepHero(n);reveal(n.x,n.y,vision());path.shift();renderUI();
-    if(o){const stop=await visit(o);if(stop){path=null;break;}}
+    if(o){const stop=await visit(o,!path.length);if(stop){path=null;break;}}
   }
   if(path&&!path.length)path=null;
   moving=false;renderUI();save();
@@ -1488,18 +1563,32 @@ function stepHero(n){
 }
 function tween(dur,f){return new Promise(res=>{const t0=performance.now();const step=now=>{const t=Math.min(1,(now-t0)/Math.max(1,dur));f(t);if(t<1)requestAnimationFrame(step);else res();};requestAnimationFrame(step);});}
 function gain(k,n){S.res[k]+=n;}
-async function visit(o){
+async function visit(o,last=true){
   const h=HERO();
   switch(o.type){
   case 'town':await arriveTown();return true;
   case 'drop':S.objs=S.objs.filter(q=>q!==o);await gainRelic(h,o.rs);return true;
   case 'pile':gain(o.k,o.n);S.objs=S.objs.filter(q=>q!==o);toast(`Picked up ${fmt(o.n)} ${RESNAME[o.k].toLowerCase()}.`);renderUI();return false;
-  case 'mine':if(o.owned!==ME()){o.owned=ME();o.ownerName=h.name;const m=MINE[o.k];toast(`${m.name} claimed: +${fmt(m.amt)} ${RESNAME[m.res].toLowerCase()} each day.`);}return false;
+  case 'mine':{const m=MINE[o.k];if(o.owned!==ME()){o.owned=ME();o.ownerName=h.name;toast(`${m.name} claimed: +${fmt(mineOut(o))} ${RESNAME[m.res].toLowerCase()} each day.`);if(!last)return false;}
+    if(!last||(o.lvl||1)>=3)return false;
+    const lv=o.lvl||1,c=MINE_UP[lv],next=m.out[lv]+(delivered(4)?(m.res==='gold'?250:1):0);
+    const v=await showModal({title:`${m.name}: level ${lv}`,body:`<p>The foreman says the ${m.name.toLowerCase()} could dig deeper.</p><div class="scs" style="gap:10px;align-items:center"><span class="sc"><img src="${iconURL('res',m.res,32)}" alt="">+${fmt(mineOut(o))}/day</span> → <span class="sc"><img src="${iconURL('res',m.res,32)}" alt="">+${fmt(next)}/day</span></div><div class="cost" style="margin-top:10px">${costHTML(c,S.res)}</div>`,
+      buttons:[{label:'Not now',value:false},{label:`Upgrade to level ${lv+1}`,value:true,primary:true,disabled:!canAfford(c)}],dismiss:false});
+    if(v){pay(c);o.lvl=lv+1;toast(`${m.name} upgraded: +${fmt(mineOut(o))} ${RESNAME[m.res].toLowerCase()} a day.`);renderUI();}return true;}
+  case 'site':{const st=SITES[o.k];if(o.week===weekNo()){toast(`The ${st.name} is spent until next week.`);return false;}o.week=weekNo();
+    if(o.k==='wish'){const g=ri(5,10)*100;gain('gold',g);toast(`A coin in the Wishing Well comes back as ${fmt(g)} gold.`);}
+    else if(o.k==='clover'){h.luckUntil=S.day+6;toast(`${h.name} finds a four-leaf clover: +1 luck for 7 days.`);}
+    else if(o.k==='woodcamp'){gain('timber',5);toast("The woodcutters hand over 5 timber.");}
+    else if(o.k==='orecart'){gain('ore',5);toast('You haul 5 ore out of the old cart.');}
+    else if(o.k==='amberhollow'){gain('amber',2);toast('Two drops of amber have hardened in the hollow.');}
+    renderUI();return false;}
+  case 'artifact':{const it=ITEMS[o.item];S.objs=S.objs.filter(q=>q!==o);(h.items=h.items||[]).push(o.item);renderUI();
+    await showModal({title:`<span style="color:${ITEM_COLS[it.lvl]}">${it.name}</span>`,body:`<p>Level ${it.lvl} ${it.tier} · ${it.slot}</p><p><b>${itemTxt(o.item)}</b></p><p class="muted">${h.name} carries it from now on.</p>`,buttons:[{label:'Continue',value:1,primary:true}],dismiss:1});return true;}
   case 'chest':{const gold=ri(10,15)*100,xp=Math.round(gold*0.8);
     const v=await showModal({title:'A weathered chest',body:`<p>Under a hawthorn root lies an iron-bound chest. Share the coin among the troops, or let ${h.name} study the war journals packed beneath it.</p>`,
       buttons:[{label:`Take ${fmt(gold)} gold`,value:'g',primary:true},{label:`Gain ${fmt(xp)} experience`,value:'x'}]});
     S.objs=S.objs.filter(q=>q!==o);if(v==='g')gain('gold',gold);else await addXP(xp);
-    {const free=Object.keys(ITEMS).filter(k=>!S.heroes.some(x=>(x.items||[]).includes(k)));if(free.length&&R()<0.35){const it=pick(free);(h.items=h.items||[]).push(it);toast(`Wrapped in oilcloth: <b>${ITEMS[it].name}</b> (${itemTxt(it)}).`);}}
+    {const free=Object.keys(ITEMS).filter(k=>ITEMS[k].lvl<=2&&!S.heroes.some(x=>(x.items||[]).includes(k)));if(free.length&&R()<0.35){const it=pick(free);(h.items=h.items||[]).push(it);toast(`Wrapped in oilcloth: <b>${ITEMS[it].name}</b> (${itemTxt(it)}).`);}}
     const hid=S.objs.filter(q=>q.type==='relic'&&!S.explored[idx(q.x,q.y)]);if(hid.length&&R()<0.45){const q=pick(hid);reveal(q.x,q.y,2);toast(`Tucked in the lid: a map fragment showing the ${RELICS[q.r].lair}.`);}
     renderUI();return true;}
   case 'stone':if(o.used){toast('The stone is silent now.');return false;}
@@ -1510,12 +1599,12 @@ async function visit(o){
   case 'well':if(o.day===S.day){toast('The Moonwell is drained until tomorrow.');return false;}
     o.day=S.day;h.mana=Math.max(h.mana,maxMana());toast('The Moonwell restores your mana.');renderUI();return false;
   case 'tower':reveal(o.x,o.y,11);toast('From the watchtower you chart the land for miles.');return false;
-  case 'dock':{if(h.boat){toast('Your boat is moored and ready. Walk onto the water to sail.');return false;}
+  case 'dock':{if(!last)return false;if(h.boat){toast('Your boat is moored and ready. Walk onto the water to sail.');return false;}
     if(delivered(2)){h.boat=true;toast('The Shard of Tides earns you a free boat.');renderUI();return false;}
     const v=await showModal({title:'The dock',body:`<p>A boatwright offers a sturdy rowing boat. With it, ${h.name} can sail across lakes, which are often the shortest way through the Vale.</p><div class="travel"><img src="${iconURL('travel','boat',44)}" alt=""><span>Sailing costs 65 movement per tile, less than a meadow.</span></div>`,
       buttons:[{label:'Not now',value:false},{label:'Buy a boat for 1,000 gold',value:true,primary:true,disabled:S.res.gold<1000}],dismiss:false});
     if(v){S.res.gold-=1000;h.boat=true;toast('You have a boat. Lakes are now open to you.');renderUI();}return true;}
-  case 'fair':{if(h.mount!=='foot'){toast(h.mount==='hooves'?'Centaurs need no horse.':'You are already mounted.');return false;}
+  case 'fair':{if(!last)return false;if(h.mount!=='foot'){toast(h.mount==='hooves'?'Centaurs need no horse.':'You are already mounted.');return false;}
     const v=await showModal({title:'Horse Fair',body:`<p>Traders show off a line of sturdy riding horses.</p><div class="travel"><img src="${iconURL('travel','horse',44)}" alt=""><span>Movement ${fmt(maxMP())} → ${fmt(Math.round(maxMP()*1.4))} per day.</span></div>`,
       buttons:[{label:'Not now',value:false},{label:'Buy a horse for 800 gold',value:true,primary:true,disabled:S.res.gold<800}],dismiss:false});
     if(v){S.res.gold-=800;h.mount='horse';toast(`${h.name} rides on. +40% movement from tomorrow.`);renderUI();}return true;}
@@ -1550,7 +1639,7 @@ async function addXP(n){
 }
 function dayUpkeep(weekly){
   const t=S.town,news=[],inc=income();gain('gold',inc);const msg=[`+${fmt(inc)} gold`];
-  let owned=0;for(const o of S.objs)if(o.type==='mine'&&o.owned===ME()){owned++;gain(MINE[o.k].res,MINE[o.k].amt+(delivered(4)?(MINE[o.k].res==='gold'?250:1):0));}
+  let owned=0;for(const o of S.objs)if(o.type==='mine'&&o.owned===ME()){owned++;gain(MINE[o.k].res,mineOut(o));}
   if(owned)msg.push(`${owned} mine${owned>1?'s':''} paid out`);
   const cur=S.cur;S.heroes.forEach((h,i)=>{S.cur=i;h.mp=maxMP();h.mana=Math.min(maxMana(),h.mana+Math.max(1,hst(h,'lore'))+(hasSk('meditation')?2:0)+gear(h,'manaRegen'));});S.cur=cur;
   t.builtToday=false;
@@ -1634,7 +1723,7 @@ function rivalCost(rv,x,y,goal){
 function rivalTarget(rv){
   const pw=armyPower(rv.army,rv),c=[];
   for(const o of S.objs){let v=0;
-    if(o.type==='pile')v=6;else if(o.type==='drop')v=60;else if(o.type==='mine'&&o.owned!==rv.fac)v=o.owned===ME()?16:12;
+    if(o.type==='pile')v=6;else if(o.type==='artifact')v=8+4*ITEMS[o.item].lvl;else if(o.type==='drop')v=60;else if(o.type==='mine'&&o.owned!==rv.fac)v=o.owned===ME()?16:12;
     else if(o.type==='relic'){if(S.day>7&&stackPower(o.k,o.n)*1.5<pw)v=45;}
     else if(o.type==='neutral'&&o.guard){if(stackPower(o.k,o.n)*1.3<pw)v=14;}
     if(v)c.push({o,x:o.x,y:o.y,v});}
@@ -1668,6 +1757,7 @@ async function rivalInteract(rv,tg){
     await startBattle({type:'rival',rival:rv,x:h.x,y:h.y});return'stop';}
   const o=tg.o;
   if(o.type==='pile'){S.objs=S.objs.filter(q=>q!==o);rv.x=o.x;rv.y=o.y;return'go';}
+  if(o.type==='artifact'){S.objs=S.objs.filter(q=>q!==o);(rv.items=rv.items||[]).push(o.item);rv.x=o.x;rv.y=o.y;return'go';}
   if(o.type==='drop'){S.objs=S.objs.filter(q=>q!==o);rv.relics.push(...o.rs);rv.x=o.x;rv.y=o.y;toast(`<b>${rv.name}</b> picked up ${o.rs.map(r=>RELICS[r].name).join(', ')}.`);return'go';}
   if(o.type==='mine'){rv.x=o.x;rv.y=o.y;if(o.owned===ME())toast(`<b>${rv.name}</b> seized your ${MINE[o.k].name}.`);o.owned=rv.fac;o.ownerName=rv.name;return'go';}
   if(o.type==='relic'||o.type==='neutral'){
@@ -1918,7 +2008,7 @@ function sAtk(s){let a=s.u.atk+s.buff.atk;if(s.side===0){const f=fx();a+=hst(HER
 function sDef(s){let d=s.u.def+s.buff.def;if(s.side===0){const f=fx();d+=hst(HERO(),'def')+((f.unitDef||{})[s.k]||0);if(S.fac==='dwarves'&&S.town.built.forge&&mine0(s))d++;if(S.fac==='rangers'&&mine0(s)&&s.stood)d+=f.rootbound||2;}else if(bt&&bt.enemyHero)d+=hst(bt.enemyHero,'def');if(s.defending)d=Math.ceil(d*1.3);return d;}
 function sSpd(s){let v=s.u.spd+s.buff.spd;if(s.side===0)v+=((fx().unitSpd||{})[s.k]||0);if(tide(s))v+=2;if(pack(s))v+=1;return Math.max(1,v);}
 function sMorale(s){if(s.side!==0)return 0;let m=(hasSk('command')?1:0)+(fx().morale||0)+s.buff.morale+carry(HERO(),'morale')+gear(HERO(),'morale');if(pack(s))m+=fx().packMorale||0;return m;}
-const sLuck=s=>s.side===0?(hasSk('fortune')?1:0)+carry(HERO(),'luck')+gear(HERO(),'luck'):0;
+const sLuck=s=>s.side===0?(hasSk('fortune')?1:0)+carry(HERO(),'luck')+gear(HERO(),'luck')+((HERO().luckUntil||0)>=S.day?1:0):0;
 const totalHP=s=>s.alive?(s.n-1)*s.u.hp+s.hp:0;
 function mkStack(k,n,side,c,r,slot){const u=U[k];let shots=u.shots||0;if(side===0&&u.shots)shots+=((fx().unitShots||{})[k]||0)+gear(HERO(),'shots');
   return{id:Math.random(),k,u,n,n0:n,hp:u.hp,side,c,r,slot,shots,retLeft:u.retal||1,acted:false,waited:false,defending:false,buff:{atk:0,def:0,spd:0,morale:0},alive:true,anim:null,rooted:0,skip:0,stood:false,movedTurn:false,movedLast:false};}
