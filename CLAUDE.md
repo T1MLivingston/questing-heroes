@@ -11,7 +11,7 @@ This is a **private, personal project**. See `LEGAL.md` before publishing anythi
 - **Frontend**: Single HTML file with inline CSS and JavaScript
 - **Rendering**: HTML5 Canvas 2D API (map and battlefield), DOM for panels and dialogs
 - **Art**: Sprite PNGs in `assets/` where they exist (Rangers units, 5 hero map sprites, 12 hero portraits); everything else is still drawn in code, and the drawn version is the fallback for any missing image
-- **Fonts**: IM Fell English SC and Alegreya Sans from Google Fonts (SIL Open Font License)
+- **Fonts**: Pixelify Sans (display, numbers, canvas text) and VT323 (body) from Google Fonts (SIL Open Font License), for a big 90s pixel look
 - **No build tools**: open `index.html` in a browser to play
 
 ## File Structure
@@ -22,9 +22,16 @@ questing-heroes/
 ├── CLAUDE.md     # This file
 ├── LEGAL.md      # Originality notes, third-party notices, pre-publish checklist
 ├── LICENSE       # All rights reserved (personal project)
-├── assets/       # Sprite art: units/, heroes/, portraits/, team_masks/, manifest.json, palette/
+├── assets/       # Sprite art: units/, heroes/, portraits/, shields/ (faction crests), team_masks/, manifest.json, palette/
 └── .gitignore
 ```
+
+## Game modes
+
+`S.mode` is one of `relic` (Relic Hunt), `conquest`, `grail` (Grail Quest) or `multi` (hot-seat). `S.goal` lists the relic indices you must deliver (empty in Conquest); `goalMet()` checks the win.
+
+- Grail Quest swaps `RELICS` to `GRAILS` (`setMode`). Four keepers roam (`o.roam`, `roamKeepers` each day); the fifth sits in the Glass Lair. The town's Reliquary is called the Grail Altar.
+- Multiplayer keeps each player's kingdom in `S.players[i]` (keys in `PKEYS`) and swaps the active one into `S` with `loadPlayer`/`stashPlayer`. Other players' heroes appear in `S.rivals` with `human:true` (the AI skips them; when attacked, they defend on auto). Towns carry an `owner`; `townData(o)` returns the right banner and buildings, `ME()` is the active owner key for mines. `handoff()` shows the pass-the-device screen.
 
 ## Architecture
 
@@ -40,7 +47,7 @@ The script in `index.html` is split into sections marked with `/* ===== ... ====
 | Rival heroes | `rivalsTurn`, `rivalTarget`, `rivalInteract`, `autoResolve`, `growRival` |
 | Town screen | `FAC_SPELLS`, `townBuildings`, `townAdvice` (the Suggested step), `townTabs`, `townHTML`, `drawTownView` (clickable picture of the town), `openTown` |
 | BATTLE | `drawBattleHero` (hero beside the field; click to open the spellbook), hex grid helpers, stat functions (`sAtk`, `sDef`, `sSpd`, `sMorale`), `battleLoop`, `playerTurn`, `aiTurn`, `castSpell`, `endBattle`, `drawBattle` |
-| START | `pickMap` (with `mapPreviewURL`), `pickFaction`, `pickHero` |
+| START | `pickMap` (game mode, players, map type and size, with `mapPreviewURL`), `pickFaction`, `pickHero` |
 | Save and boot | `localStorage` save under `questing-heroes-v3`, `title`, `boot` |
 
 ### Game state

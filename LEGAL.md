@@ -15,14 +15,15 @@ This file is a practical checklist, not legal advice. If the game will be sold o
 
 | Component | Source | License | Notes |
 |-----------|--------|---------|-------|
-| IM Fell English SC font | Google Fonts | SIL Open Font License 1.1 | Loaded from fonts.googleapis.com at runtime |
-| Alegreya Sans font | Google Fonts | SIL Open Font License 1.1 | Loaded from fonts.googleapis.com at runtime |
+| Pixelify Sans font | Google Fonts | SIL Open Font License 1.1 | Loaded from fonts.googleapis.com at runtime |
+| VT323 font | Google Fonts | SIL Open Font License 1.1 | Loaded from fonts.googleapis.com at runtime |
 
 No other libraries, images or audio are included. Art made later with ChatGPT or other tools should be logged below, with the tool and its terms at the time.
 
 | Asset | Made with | Date | Terms checked |
 |-------|-----------|------|---------------|
 | Character Pack 01: 7 Vale Wardens units, 5 hero map sprites, 5 hero portraits, 7 recruit cards (`assets/units`, `assets/heroes`, `assets/portraits`) | Generated with ChatGPT image generation, then palette-snapped and cleaned (pack README, 2026-11-07) | 2026-11-07 | To do: confirm the image tool's terms allow use in a game |
+| Faction Shields: 8 shield crests (`assets/shields`) | Generated with ChatGPT image generation, palette-snapped (pack README) | 2026-11-07 | Same as above |
 | 7 hero portraits converted from Headshot Workshop 02 (Boopis, Engelman, Grimes, Parker, Rago, Rimmer, Tempest) | Same generator; resized, palette-snapped and framed by a local script | 2026-11-07 | Same as above |
 
 The generated source images (high-res magenta PNGs) are kept outside this repo.
