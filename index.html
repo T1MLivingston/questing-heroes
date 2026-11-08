@@ -1379,6 +1379,15 @@ function tinted(path,maskPath,col,lum){
 /* Pack 06/07 art: town stages, stones, sites, portals, gems, title banner */
 const BUILD_ART=new Set();// '<fac>/<building id>' once art for that building exists in assets/buildings
 const townStage=tw=>tw&&tw.built?(tw.built.hall4?4:tw.built.hall3?3:tw.built.hall2?2:1):1;
+/* packed art: the team mask sits below ('v') or beside ('h') the picture in the same file */
+function tintedPacked(path,col,dir){const a=artImg(path);if(!a.ok)return null;const key='pk:'+dir+':'+(col||'');if(a.tint[key])return a.tint[key];
+  const im=a.img,w=dir==='h'?im.width/2:im.width,h=dir==='h'?im.height:im.height/2,cv=document.createElement('canvas');cv.width=w;cv.height=h;const c=cv.getContext('2d');c.drawImage(im,0,0,w,h,0,0,w,h);
+  if(!col)return a.tint[key]=cv;
+  try{const d=c.getImageData(0,0,w,h),mc=document.createElement('canvas');mc.width=w;mc.height=h;const mx=mc.getContext('2d');mx.drawImage(im,dir==='h'?w:0,dir==='h'?0:h,w,h,0,0,w,h);const md=mx.getImageData(0,0,w,h).data;
+    const ramp=[shadeRGB(col,-0.55),shadeRGB(col,-0.28),shadeRGB(col,0),shadeRGB(col,0.32)];
+    for(let i=0;i<md.length;i+=4)if(md[i+3]>0&&d.data[i+3]>0){const L=(0.3*d.data[i]+0.59*d.data[i+1]+0.11*d.data[i+2])/255,sh=ramp[L<0.28?0:L<0.45?1:L<0.66?2:3];d.data[i]=sh[0];d.data[i+1]=sh[1];d.data[i+2]=sh[2];}
+    c.putImageData(d,0,0);}catch(e){}
+  return a.tint[key]=cv;}
 const townSprite=(fk,stage,col)=>tinted(`towns/${fk}/${stage}.png`,`team_masks/towns/${fk}/${stage}.png`,col);
 const FLOT={floating_chest:{name:'Floating chest',give:'800-1,400 gold'},salvage_crate:{name:'Salvage crate',give:'5 timber and 5 ore'},driftwood:{name:'Driftwood',give:'6 timber'},
   supply_barrel:{name:'Supply barrel',give:'500 gold and 3 ore'},pearl_shell:{name:'Giant pearl',give:'2 amber'},message_bottle:{name:'Message in a bottle',give:'a rumour, or 600 gold'},
@@ -1394,7 +1403,7 @@ const stripArt=k=>{const u=U[k];return u?ART_STRIPS[k]||ART_STRIPS[u.up?u.base:k
 const stripPath=k=>{const n=stripArt(k);return n?`units/${unitFac(k)}/${n}/${n}_strip.png`:null;};
 /* sheet rows (idle, move, attack, hit, death) and frame 0-3 mapped onto the six strip poses */
 const stripPose=(row,fr)=>row===1?1+(fr%2):row===2?(fr===1||fr===2?3:0):row===3?4:row===4?(fr<1?4:5):0;
-const unitSheet=(k,col)=>{if(ENEMY_ART[k]){const a=artImg(`enemies/${ENEMY_ART[k]}/sheet.png`);return a.ok?a.img:null;}if(!unitArt(k)){const sp=stripPath(k);if(!sp)return null;const n2=stripArt(k),im=tinted(sp,`team_masks/units/${unitFac(k)}/${n2}/${n2}_strip.png`,col,true);return im?{strip:im}:null;}const n=unitArt(k),f=unitFac(k);return n?tinted(`units/${f}/${n}/${n}_sheet.png`,`team_masks/units/${f}/${n}/${n}_sheet.png`,col):null;};
+const unitSheet=(k,col)=>{if(ENEMY_ART[k]){const a=artImg(`enemies/${ENEMY_ART[k]}/sheet.png`);return a.ok?a.img:null;}if(!unitArt(k)){const sp=stripPath(k);if(!sp)return null;const im=tintedPacked(sp,col,'v');return im?{strip:im}:null;}const n=unitArt(k),f=unitFac(k);return n?tinted(`units/${f}/${n}/${n}_sheet.png`,`team_masks/units/${f}/${n}/${n}_sheet.png`,col):null;};
 const heroSheet=(id,col)=>{if(ART_MAP.has(id))return tinted(`heroes/${id}/map/${id}_map_sheet.png`,`team_masks/heroes/${id}/map/${id}_map_sheet.png`,col);const f=HBY[id]&&HBY[id].fac;if(!f)return null;const a=artImg(`heroes/_banners/${f}_map_sheet.png`);return a.ok?a.img:null;};
 function preloadArt(){for(const g of['meadow','dirt','sand','snow','marsh','cavern','ash','ship_deck'])artImg(`battle/grounds/${g}.png`);for(const n of['split_boulder','basalt_columns','leaning_monolith','stone_arch'])artImg(`terrain/battle/${n}_battle.png`);for(const id of ART_MAP){artImg(`heroes/${id}/map/${id}_map_sheet.png`);artImg(`team_masks/heroes/${id}/map/${id}_map_sheet.png`);}
   for(const k of Object.keys(ART_STRIPS))artImg(stripPath(k));
@@ -3661,7 +3670,7 @@ function drawBattleHero(c,h,col,x,y,flip,canAct){
   const sc=Math.max(1.5,Math.min(3,BL.side/40)),now=performance.now();
   c.save();c.fillStyle='rgba(0,0,0,.35)';c.beginPath();c.ellipse(x,y+30*sc/2,BL.side*0.38,8,0,0,7);c.fill();
   c.strokeStyle=col;c.lineWidth=2;c.stroke();
-  {const bf=h.fac||(HBY[h.id]&&HBY[h.id].fac),im=bf&&tinted(`battle/heroes/${bf}.png`,`battle/heroes/${bf}_mask.png`,col,true);
+  {const bf=h.fac||(HBY[h.id]&&HBY[h.id].fac),im=bf&&tintedPacked(`battle/heroes/${bf}.png`,col,'h');
    if(im){const k=Math.min(BL.side*0.95/96,BL.h*0.32/128);c.translate(x,y+15*sc);if(flip)c.scale(-1,1);c.imageSmoothingEnabled=false;c.drawImage(im,-48*k,-124*k,96*k,128*k);c.restore();}
    else{const f0=h.face;h.face=flip?'w':'e';c.translate(x-TS/2*sc,y-TS/2*sc-6*sc);c.scale(sc,sc);drawHero(c,0,0,h,col);h.face=f0;c.restore();}}
   c.font=`800 ${Math.max(11,BL.side*0.13)}px "Alegreya SC",Georgia,serif`;c.textAlign='center';c.textBaseline='top';c.fillStyle='#f2d382';c.strokeStyle='#120f0b';c.lineWidth=3;
@@ -3823,7 +3832,7 @@ async function pickMap(opt={}){
 /* Choose your banner: a tall grid of banner cards; Details opens a full page for one banner (heroes, troops, ability), with arrows to flip between banners */
 const UNIT_TAGS=u=>[u.fly&&'Flies',u.shots&&`Shoots (${u.shots})`,u.charge&&'Charge',u.double&&'Strikes twice',u.noRetal&&'No strike-back',u.retal>1&&'Strikes back twice',u.regen&&'Regrows',u.drain&&'Drains life',u.charm&&'Charms',u.undead&&'Undead'].filter(Boolean);
 /* crisp troop picture: the first idle frame of the battle art, cropped to the figure and scaled by a whole number */
-function troopSrc(k){const st=stripPath(k);if(st&&!unitArt(k)&&!ENEMY_ART[k])return{p:st,cols:6};const n=unitArt(k);if(n)return{p:`units/${unitFac(k)}/${n}/${n}_sheet.png`,cols:4,rows:5};if(ENEMY_ART[k])return{p:`enemies/${ENEMY_ART[k]}/sheet.png`,cols:4,rows:5};return null;}
+function troopSrc(k){const st=stripPath(k);if(st&&!unitArt(k)&&!ENEMY_ART[k])return{p:st,cols:6,rows:2};const n=unitArt(k);if(n)return{p:`units/${unitFac(k)}/${n}/${n}_sheet.png`,cols:4,rows:5};if(ENEMY_ART[k])return{p:`enemies/${ENEMY_ART[k]}/sheet.png`,cols:4,rows:5};return null;}
 function paintTroopPics(root,tries=0){let left=0;
   for(const cv of root.querySelectorAll('canvas.tpc:not([data-done])')){const k=cv.dataset.u,src=troopSrc(k);if(!src){cv.dataset.done=1;continue;}const a=artImg(src.p);if(!a.ok){left++;continue;}
     const im=a.img,fw=im.width/src.cols,fh=src.rows?im.height/src.rows:im.height,t=document.createElement('canvas');t.width=fw;t.height=fh;const tc=t.getContext('2d');tc.drawImage(im,0,0,fw,fh,0,0,fw,fh);
