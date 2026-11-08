@@ -640,10 +640,10 @@ img{image-rendering:auto}
 .fheroes img{width:100%;height:auto;aspect-ratio:1}
 .hcard .hab{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-height:0;font-size:15px;line-height:1.3;align-self:stretch;text-align:center}
 /* Pack 09: framed parchment panels, pixel buttons, icons, dimmer */
-.card,.sheet,.topbar,#hmenu{border:12px solid transparent;border-image:url(assets/ui/panels/parchment.png) 12 round;background:#f1e2b8;background-clip:padding-box;image-rendering:pixelated}
+.card,.sheet,.topbar,#hmenu{border:12px solid transparent;border-image:url(assets/ui/panels/parchment.png) 12 round;background:#f1e2b8 url(assets/ui/textures/parchment_smooth.png) repeat;background-size:256px;background-clip:padding-box;image-rendering:pixelated}
 .card.team{border-image:url(assets/ui/panels/parchment.png) 12 round}
 .card{padding:4px 6px}.topbar{padding:0 6px}.sheet header{padding:8px 10px 4px}.sheet .body{padding:2px 10px 8px}.sheet footer{padding:6px 10px 8px}
-.tstrip,.rtop,.tresbot .tres{border:12px solid transparent;border-image:url(assets/ui/panels/navy.png) 12 round;background:#263b59;background-clip:padding-box}
+.tstrip,.rtop,.tresbot .tres{border:12px solid transparent;border-image:url(assets/ui/panels/navy.png) 12 round;background:#263b59 url(assets/ui/textures/navy_smooth.png) repeat;background-size:256px;background-clip:padding-box}
 .btn{border:none;border-image:url(assets/ui/buttons/normal.png) 8 12 fill / 8px 12px round;background:none;color:#fff3c8;text-shadow:0 1px 0 #000;padding:8px 14px;image-rendering:pixelated}
 .btn:hover:not(:disabled){border-image-source:url(assets/ui/buttons/hover.png);color:#fff}
 .btn:active:not(:disabled){border-image-source:url(assets/ui/buttons/pressed.png)}
@@ -762,6 +762,12 @@ img{image-rendering:auto}
 .fd-troop .fd-tags{position:absolute;left:4px;right:4px;top:4px;justify-content:center}.fd-troop .fd-tags span{background:rgba(255,246,214,.92)}
 .fd-troop>b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
 .fc-blurb{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.6em}
+
+/* Pack 12 artifact icons */
+.iic{width:32px;height:32px;image-rendering:pixelated;vertical-align:middle;margin-right:6px}
+.eqi .iic{width:44px;height:44px;margin:0 auto 2px;display:block;filter:drop-shadow(0 0 3px var(--ic))}
+.pack .eqi .iic{width:36px;height:36px}
+#hover .iic{width:24px;height:24px}
 </style>
 
 <div id="app">
@@ -948,7 +954,7 @@ const HEROES=[
   {id:'tempest',name:'Tempest',fac:'wizards',type:'Magic',st:[0,1,2,3],ab:'Stormborn',ad:'Chain Spark jumps to one extra enemy.',sk:['deepres'],sp:['chain'],fx:{chainExtra:1}},
   {id:'parker',name:'Parker',fac:'necro',type:'Might',st:[2,2,1,1],ab:'Restless Dead',ad:'Zombies and Werewolves +2 speed.',sk:['battleplan'],sp:[],fx:{unitSpd:{zombie:2,werewolf:2}}},
   {id:'shadow',name:'Shadow',fac:'necro',type:'Magic',st:[0,1,2,2],ab:'Gravecaller',ad:'Grave Harvest raises 15% instead of 10%.',sk:[],sp:['raise'],fx:{harvest:0.15}},
-  {id:'grimes',name:'Grimes',fac:'dwarves',type:'Magic',st:[0,2,2,2],ab:'Stone Warden',ad:'Gem Golems +3 defense.',sk:['shieldcraft'],sp:['ember'],fx:{unitDef:{golem:3}}},
+  {id:'grimes',name:'Grimes',fac:'dwarves',type:'Might',st:[2,2,1,1],ab:'Stone Warden',ad:'Gem Golems +3 defense.',sk:['shieldcraft'],sp:[],fx:{unitDef:{golem:3}}},
   {id:'boopis',name:'Boopis',fac:'centaurs',type:'Magic',st:[1,1,2,1],ab:'Pounce',ad:'War Rabbits +4 growth per week and +1 speed.',sk:['fortune'],sp:['ember'],fx:{growth:{rabbit:4},unitSpd:{rabbit:1}}},
   {id:'rocky',name:'Rocky',fac:'merfolk',type:'Might',st:[3,1,1,1],ab:'Wave Rider',ad:'Turtle Knights +2 attack and +2 speed.',sk:['forcedmarch'],sp:[],fx:{unitAtk:{turtle:2},unitSpd:{turtle:2}}},
   {id:'monkey',name:'Monkey',fac:'centaurs',type:'Might',st:[2,2,1,1],ab:'Troublemaker',ad:'Your first stack to act each battle gets an extra turn.',sk:['bladework'],sp:[],fx:{extraFirst:true}},
@@ -977,7 +983,7 @@ HEROES.push(
   {id:'michael',name:'Michael',fac:'elves',type:'Might',st:[2,2,1,1],ab:'Glade Guard',ad:'Grove Wardens +2 attack and +2 defense.',sk:[],sp:[],fx:{unitAtk:{dryad:2},unitDef:{dryad:2}}},
   {id:'livingston',name:'Livingston',fac:'elves',type:'Magic',st:[0,1,2,2],ab:'Rootweaver',ad:'Entangle lasts 1 round longer.',sk:[],sp:['entangle'],fx:{entangleExtra:1}},
   {id:'slack',name:'Slack',fac:'dwarves',type:'Might',st:[2,1,2,1],ab:'Hammer and Hex',ad:'Young Dwarves +2 attack, and Ember Dart deals 50% more. Starts with a spellbook.',sk:[],sp:['ember'],fx:{unitAtk:{delver:2},emberPct:1.5}},
-  {id:'perry',name:'Perry',fac:'elves',type:'Might',st:[2,1,1,1],ab:'Master Archer',ad:'Longbow Rangers +1 damage and +4 shots.',sk:['steadyaim'],sp:[],fx:{unitDmgFlat:{longbow:1},unitShots:{longbow:4}}},
+  {id:'perry',name:'Perry',fac:'elves',type:'Magic',st:[0,1,2,2],ab:'Master Archer',ad:'Longbow Rangers +1 damage and +4 shots.',sk:['steadyaim'],sp:[],fx:{unitDmgFlat:{longbow:1},unitShots:{longbow:4}}},
   {id:'letchworth',name:'Letchworth',fac:'merfolk',type:'Magic',st:[0,1,2,2],ab:'Siren Keeper',ad:'Sirens +2 shots and +1 damage.',sk:[],sp:['squall'],fx:{unitShots:{siren:2},unitDmgFlat:{siren:1}}},
 );
 /* artifacts: names and effects from the design bible's trinket and treasure tiers */
@@ -1000,6 +1006,12 @@ const ITEMS={
   purse:{name:'Coin-Purse of the Tollkeeper',slot:'Neck',tier:'Treasure',fx:{costCut:10}},
 };
 /* artifacts come in five levels; levels 3-5 are found on the map, guarded */
+/* Pack 12 artifact icons (48 px) for each item */
+const ITEM_ICON={kettle:'iron_helm',whetstone:'ember_axe',candle:'wayfarer_lantern',errands:'ember_ring',cloak:'moss_hood',rabbit:'oak_torc',sash:'ranger_vest',cudgel:'forge_hammer',
+  buckler:'warden_shield',inkwell:'sealed_grimoire',spark:'storm_ring',mudboots:'trail_boots',breath:'moon_ring',ledger:'sands_hourglass',bracer:'silk_gloves',purse:'sun_amulet',
+  antler:'vale_crown',barkmail:'sentinel_plate',stormrod:'star_staff',spurs:'wind_sandals',banner:'tide_spear',twinmoon:'moon_ring',mirror:'azure_robe',sapling:'moss_ring',
+  bell:'pearl_pendant',gauntlets:'forge_gauntlets',crownglass:'moon_circlet',aegis:'warden_shield',oath:'vale_blade',livingmap:'mariner_compass',mantle:'raven_cloak'};
+const itemIcon=k=>`<img class="iic" src="${ART_BASE}artifacts/${ITEM_ICON[k]||'sun_amulet'}.png" alt="">`;
 const ITEM_TIERS=['','Trinket','Treasure','Heirloom','Masterwork','Legendary'],ITEM_COLS=['','#b9b3a4','#8cbc70','#6f9be0','#b07ae0','#f2c14e'];
 for(const it of Object.values(ITEMS))it.lvl=it.tier==='Trinket'?1:2;
 Object.assign(ITEMS,{
@@ -1330,7 +1342,7 @@ function drawRelic(c,i,x,y,r){const Rl=RELICS[i];c.save();c.translate(x,y);c.sca
 /* -------- sprite art in assets/; the drawn placeholders stay as the fallback -------- */
 const ART_BASE='assets/';
 const ART_PORTRAITS=new Set(['bear','battaglia','dorothy','oliver','grimes','engelman','tempest','rimmer','parker','necro4','shadow','rago','monkey','schmickle','binx','boopis',
-  'omalley','vargas','sheila','lawrence','davis','michael','love','livingston','ivan','slack','dupengeiser','perry','rocky','elvis','letchworth','mer2']);
+  'omalley','vargas','sheila','lawrence','davis','sookie','michael','love','livingston','ivan','slack','dupengeiser','perry','rocky','elvis','letchworth','mer2']);
 const ART_MAP=new Set(['bear','binx','dorothy','oliver','vargas']);
 const ART_UNITS={thorn:'thornguard',reed:'reedbow',antler:'antler_knight',moth:'moth_seer',oak:'oak_warden'};
 /* Enemies, Loot & World Pack 02: neutral battle sheets (4x5 like the Rangers, no team masks), 32px map guards, enemy portraits */
@@ -1355,13 +1367,13 @@ const artImgs={};
 function artImg(path){let a=artImgs[path];if(a)return a;a=artImgs[path]={img:new Image(),ok:false,tint:{}};a.img.onload=()=>{a.ok=true;};a.img.src=ART_BASE+path;return a;}
 function shadeRGB(hex,f){const n=parseInt(hex.slice(1),16),r=n>>16,g=n>>8&255,b=n&255,t=f<0?0:255,p=Math.abs(f);return[Math.round(r+(t-r)*p),Math.round(g+(t-g)*p),Math.round(b+(t-b)*p)];}
 /* recolour the team pixels (from the paired mask) to a faction colour; falls back to the original if pixels can't be read */
-function tinted(path,maskPath,col){
+function tinted(path,maskPath,col,lum){
   const a=artImg(path);if(!a.ok)return null;if(!col)return a.img;if(a.tint[col])return a.tint[col];
   const m=artImg(maskPath);if(!m.ok)return a.img;
   try{const w=a.img.width,h=a.img.height,cv=document.createElement('canvas');cv.width=w;cv.height=h;const c=cv.getContext('2d');c.drawImage(a.img,0,0);const d=c.getImageData(0,0,w,h);
     const mc=document.createElement('canvas');mc.width=w;mc.height=h;const mx=mc.getContext('2d');mx.drawImage(m.img,0,0);const md=mx.getImageData(0,0,w,h).data;
     const ramp=[shadeRGB(col,-0.55),shadeRGB(col,-0.28),shadeRGB(col,0),shadeRGB(col,0.32)];
-    for(let i=0;i<md.length;i+=4)if(md[i+3]>0&&d.data[i+3]>0){const sh=ramp[Math.min(3,Math.round(md[i]/85))];d.data[i]=sh[0];d.data[i+1]=sh[1];d.data[i+2]=sh[2];}
+    for(let i=0;i<md.length;i+=4)if(md[i+3]>0&&d.data[i+3]>0){const L=(0.3*d.data[i]+0.59*d.data[i+1]+0.11*d.data[i+2])/255,sh=ramp[lum?(L<0.28?0:L<0.45?1:L<0.66?2:3):Math.min(3,Math.round(md[i]/85))];d.data[i]=sh[0];d.data[i+1]=sh[1];d.data[i+2]=sh[2];}
     c.putImageData(d,0,0);return a.tint[col]=cv;}catch(e){return a.tint[col]=a.img;}
 }
 /* Pack 06/07 art: town stages, stones, sites, portals, gems, title banner */
@@ -1382,8 +1394,8 @@ const stripArt=k=>{const u=U[k];return u?ART_STRIPS[k]||ART_STRIPS[u.up?u.base:k
 const stripPath=k=>{const n=stripArt(k);return n?`units/${unitFac(k)}/${n}/${n}_strip.png`:null;};
 /* sheet rows (idle, move, attack, hit, death) and frame 0-3 mapped onto the six strip poses */
 const stripPose=(row,fr)=>row===1?1+(fr%2):row===2?(fr===1||fr===2?3:0):row===3?4:row===4?(fr<1?4:5):0;
-const unitSheet=(k,col)=>{if(ENEMY_ART[k]){const a=artImg(`enemies/${ENEMY_ART[k]}/sheet.png`);return a.ok?a.img:null;}if(!unitArt(k)){const sp=stripPath(k);if(!sp)return null;const a=artImg(sp);return a.ok?{strip:a.img}:null;}const n=unitArt(k),f=unitFac(k);return n?tinted(`units/${f}/${n}/${n}_sheet.png`,`team_masks/units/${f}/${n}/${n}_sheet.png`,col):null;};
-const heroSheet=(id,col)=>ART_MAP.has(id)?tinted(`heroes/${id}/map/${id}_map_sheet.png`,`team_masks/heroes/${id}/map/${id}_map_sheet.png`,col):null;
+const unitSheet=(k,col)=>{if(ENEMY_ART[k]){const a=artImg(`enemies/${ENEMY_ART[k]}/sheet.png`);return a.ok?a.img:null;}if(!unitArt(k)){const sp=stripPath(k);if(!sp)return null;const n2=stripArt(k),im=tinted(sp,`team_masks/units/${unitFac(k)}/${n2}/${n2}_strip.png`,col,true);return im?{strip:im}:null;}const n=unitArt(k),f=unitFac(k);return n?tinted(`units/${f}/${n}/${n}_sheet.png`,`team_masks/units/${f}/${n}/${n}_sheet.png`,col):null;};
+const heroSheet=(id,col)=>{if(ART_MAP.has(id))return tinted(`heroes/${id}/map/${id}_map_sheet.png`,`team_masks/heroes/${id}/map/${id}_map_sheet.png`,col);const f=HBY[id]&&HBY[id].fac;if(!f)return null;const a=artImg(`heroes/_banners/${f}_map_sheet.png`);return a.ok?a.img:null;};
 function preloadArt(){for(const g of['meadow','dirt','sand','snow','marsh','cavern','ash','ship_deck'])artImg(`battle/grounds/${g}.png`);for(const n of['split_boulder','basalt_columns','leaning_monolith','stone_arch'])artImg(`terrain/battle/${n}_battle.png`);for(const id of ART_MAP){artImg(`heroes/${id}/map/${id}_map_sheet.png`);artImg(`team_masks/heroes/${id}/map/${id}_map_sheet.png`);}
   for(const k of Object.keys(ART_STRIPS))artImg(stripPath(k));
   for(const n of Object.values(ENEMY_ART)){artImg(`enemies/${n}/sheet.png`);artImg(`map/guards/${n}_32.png`);}
@@ -2333,13 +2345,14 @@ function drawObj(c,o){
   case 'relic':
     if(o.roam){token(c,o.k,cx,cy+2,15,'#c45a43');drawRelic(c,o.r,cx,cy-20,8);break;}
     c.fillStyle='rgba(0,0,0,.4)';c.beginPath();c.ellipse(cx,cy+14,26,8,0,0,7);c.fill();
-    if(o.r===6&&spriteAt(c,'map/sites/glass_lair_lit.png',cx,cy+TS/2+2,TS/32*0.75)){}
+    if(o.r===6&&(spriteAt(c,'map/buildings/glass_lair.png',cx,cy+TS/2+2,TS/32*0.75)||spriteAt(c,'map/sites/glass_lair_lit.png',cx,cy+TS/2+2,TS/32*0.75))){}
+    else if(o.r!==6&&spriteAt(c,`map/buildings/${['forest','forest','ruined','desert','ruined','frost'][o.r%6]}_relic_lair.png`,cx,cy+TS/2,TS/32*0.7)){}
     else if(o.r===6){for(const [dx,h,w] of[[-16,26,7],[16,22,6],[-6,32,8],[8,30,7]]){c.fillStyle='#5aa4ad';c.strokeStyle='#d9f6f8';c.beginPath();c.moveTo(cx+dx-w,cy+12);c.lineTo(cx+dx,cy+12-h);c.lineTo(cx+dx+w,cy+12);c.closePath();c.fill();c.stroke();}}
     else{c.fillStyle='#7a766c';c.strokeStyle='#26241f';c.fillRect(cx-19,cy-14,7,26);c.strokeRect(cx-19,cy-14,7,26);c.fillRect(cx+12,cy-14,7,26);c.strokeRect(cx+12,cy-14,7,26);c.fillRect(cx-21,cy-20,42,7);c.strokeRect(cx-21,cy-20,42,7);}
     drawRelic(c,o.r,cx,cy-(o.r===6?24:4),8);token(c,o.k,cx+(o.r===6?0:12),cy+(o.r===6?2:8),o.r===6?15:10,'#c45a43');break;
   case 'drop':drawRelic(c,o.rs[0],cx,cy,10);break;
   case 'camp':{const col=FAC[o.fac||o.dfac||'necro'].col,gn=(o.garrison||[]).reduce((a,g)=>a+g.n,0);
-    {const fk2=o.fac||o.dfac||'necro',sp=townSprite(fk2,o.free?Math.min(3,o.lvl||1):1,o.owned?ownerCol(o.owned):o.free?'#9a958a':FAC[fk2].col);if(sp){const k=TS/32*0.62;c.fillStyle='rgba(0,0,0,.3)';c.beginPath();c.ellipse(cx,cy+14,30,7,0,0,7);c.fill();c.imageSmoothingEnabled=false;c.drawImage(sp,Math.round(cx-64*k),Math.round(cy+TS/2-2-92*k),Math.round(128*k),Math.round(96*k));
+    {const fk2=o.fac||o.dfac||'necro',sp=townSprite(fk2,o.free?Math.min(3,o.lvl||1):1,o.owned?ownerCol(o.owned):o.free?'#9a958a':FAC[fk2].col);const csp=!o.free&&artImg(`map/buildings/camp_${fk2}.png`);if((csp&&csp.ok)||sp){const k=TS/32*0.62;c.fillStyle='rgba(0,0,0,.3)';c.beginPath();c.ellipse(cx,cy+14,30,7,0,0,7);c.fill();c.imageSmoothingEnabled=false;if(csp&&csp.ok)spriteAt(c,`map/buildings/camp_${fk2}.png`,cx,cy+TS/2-2,TS/32*0.85);else c.drawImage(sp,Math.round(cx-64*k),Math.round(cy+TS/2-2-92*k),Math.round(128*k),Math.round(96*k));
       if(o.owned)flag(c,cx+24,cy+8,ownerCol(o.owned));
       if(gn&&!S.editor){c.font='800 12px "Alegreya SC",Georgia,serif';c.textAlign='center';c.textBaseline='middle';const tt=o.owned===ME()?fmt(gn):'?',w=c.measureText(tt).width+10;c.fillStyle='rgba(12,18,48,.92)';c.fillRect(cx-w/2,cy+17,w,14);c.strokeStyle=o.owned?ownerCol(o.owned):'#c45a43';c.lineWidth=1.2;c.strokeRect(cx-w/2,cy+17,w,14);c.fillStyle='#fff';c.fillText(tt,cx,cy+24.5);}
       if(!o.free&&!S.editor)drawFire(c,'campfire',cx-26,cy+20,o.x*97+o.y*31);break;}}
@@ -2376,7 +2389,9 @@ function drawObj(c,o){
     else if(o.k==='orecart'){c.fillStyle='#5a4a3a';c.fillRect(cx-13,cy-6,26,12);c.strokeRect(cx-13,cy-6,26,12);drawRes(c,'ore',cx,cy-8,7);c.fillStyle='#2a2823';c.beginPath();c.arc(cx-8,cy+8,4,0,7);c.arc(cx+8,cy+8,4,0,7);c.fill();}
     else if(o.k==='amberhollow'){c.fillStyle='#5d3b1d';c.fillRect(cx-3,cy-6,6,18);c.fillStyle='#3f6b3a';c.beginPath();c.arc(cx,cy-12,11,0,7);c.fill();c.stroke();if(!spent){drawRes(c,'amber',cx+7,cy+2,5);drawRes(c,'amber',cx-6,cy-4,4);}}
     c.globalAlpha=1;break;}
-  case 'artifact':{const col=ITEM_COLS[ITEMS[o.item].lvl],t=performance.now()/400;const g=c.createRadialGradient(cx,cy-2,1,cx,cy-2,16);g.addColorStop(0,col);g.addColorStop(1,'rgba(0,0,0,0)');c.fillStyle=g;c.beginPath();c.arc(cx,cy-2,16,0,7);c.fill();
+  case 'artifact':{{const ia=artImg(`artifacts/${ITEM_ICON[o.item]||'sun_amulet'}.png`);if(ia.ok){const col=ITEM_COLS[ITEMS[o.item].lvl],t=performance.now()/400,g=c.createRadialGradient(cx,cy,1,cx,cy,20);g.addColorStop(0,col);g.addColorStop(1,'rgba(0,0,0,0)');c.fillStyle=g;c.beginPath();c.arc(cx,cy,20,0,7);c.fill();
+      c.fillStyle='rgba(0,0,0,.3)';c.beginPath();c.ellipse(cx,cy+13,11,4,0,0,7);c.fill();const z=Math.round(TS*0.68);c.imageSmoothingEnabled=false;c.drawImage(ia.img,Math.round(cx-z/2),Math.round(cy-z/2-3+Math.sin(t)*1.5),z,z);break;}}
+    const col=ITEM_COLS[ITEMS[o.item].lvl],t=performance.now()/400;const g=c.createRadialGradient(cx,cy-2,1,cx,cy-2,16);g.addColorStop(0,col);g.addColorStop(1,'rgba(0,0,0,0)');c.fillStyle=g;c.beginPath();c.arc(cx,cy-2,16,0,7);c.fill();
     c.fillStyle='#8a867a';c.strokeStyle='#26241f';c.lineWidth=1.2;c.fillRect(cx-9,cy+4,18,8);c.strokeRect(cx-9,cy+4,18,8);
     c.fillStyle=col;c.beginPath();c.moveTo(cx,cy-12+Math.sin(t)*2);c.lineTo(cx+6,cy-3);c.lineTo(cx,cy+3);c.lineTo(cx-6,cy-3);c.closePath();c.fill();c.stroke();
     c.fillStyle='#120f0b';c.font='700 9px "Alegreya SC",Georgia,serif';c.textAlign='center';c.textBaseline='middle';c.fillText(String(ITEMS[o.item].lvl),cx,cy+8);break;}
@@ -2414,12 +2429,13 @@ function drawObj(c,o){
   case 'spire':{const col=o.owned?ownerCol(o.owned):'#8d8a80',n=o.garrison.reduce((a,g)=>a+g.n,0);
     if(n){c.save();c.fillStyle=col;c.globalAlpha=0.13;c.fillRect(cx-TS*1.5+2,cy-TS*1.5+2,TS*3-4,TS*3-4);c.globalAlpha=0.9;c.strokeStyle=col;c.lineWidth=3;c.setLineDash([8,6]);c.strokeRect(cx-TS*1.5+2,cy-TS*1.5+2,TS*3-4,TS*3-4);c.restore();}
     c.fillStyle='rgba(0,0,0,.35)';c.beginPath();c.ellipse(cx,cy+15,17,5,0,0,7);c.fill();c.strokeStyle='#15121c';c.lineWidth=1.4;
+    if(spriteAt(c,'map/buildings/spire_tower.png',cx,cy+TS/2,TS/32*0.6)){if(o.owned){const fa=artImg(`map/flags/${flagFor(col)}.png`);if(fa.ok){const f=Math.floor(performance.now()/180)%2,z=TS/32*1.2;c.drawImage(fa.img,f*16,0,16,16,Math.round(cx-2),Math.round(cy-TS*1.25),Math.round(16*z),Math.round(16*z));}}}else{
     c.fillStyle='#a7a2b2';c.beginPath();c.moveTo(cx-12,cy+14);c.lineTo(cx-8,cy-14);c.lineTo(cx+8,cy-14);c.lineTo(cx+12,cy+14);c.closePath();c.fill();c.stroke();
     c.fillStyle='#d1ccdb';c.beginPath();c.moveTo(cx-12,cy+14);c.lineTo(cx-8,cy-14);c.lineTo(cx-3,cy-14);c.lineTo(cx-5,cy+14);c.closePath();c.fill();
     for(let i=0;i<3;i++){c.fillStyle='#a7a2b2';c.fillRect(cx-9+i*6.5,cy-19,4.5,5);c.strokeRect(cx-9+i*6.5,cy-19,4.5,5);}
     c.fillStyle=col;c.beginPath();c.moveTo(cx-10,cy-19);c.lineTo(cx,cy-38);c.lineTo(cx+10,cy-19);c.closePath();c.fill();c.stroke();
     c.fillStyle=n?'#ffd76a':'#2a2433';c.fillRect(cx-2.5,cy-8,5,8);c.fillStyle='#2a1d12';c.beginPath();c.arc(cx,cy+14,4.5,Math.PI,0);c.fill();
-    if(o.owned)flag(c,cx+1,cy-36,col);
+    if(o.owned)flag(c,cx+1,cy-36,col);}
     if(n){c.font='800 12px "Alegreya SC",Georgia,serif';c.textAlign='center';c.textBaseline='middle';const t=fmt(n),w=c.measureText(t).width+10;c.fillStyle='rgba(12,18,48,.92)';c.fillRect(cx-w/2,cy+16,w,14);c.strokeStyle=col;c.strokeRect(cx-w/2,cy+16,w,14);c.fillStyle='#fff';c.fillText(t,cx,cy+23.5);}
     break;}
   case 'dock':{const k=TS/32*0.55,wet=(a,b)=>inb(o.x+a,o.y+b)&&S.tiles[idx(o.x+a,o.y+b)]===T.LAKE;
@@ -2557,7 +2573,7 @@ function describe(x,y){
     case 'gem':return`<b>${GEMS[o.k].name}</b> · worth ${fmt(GEMS[o.k].gold)} gold`;
     case 'chest':return'<b>Weathered chest</b>';
     case 'site':return`<b>${SITES[o.k].name}</b> · ${o.week===weekNo()?'spent until next week':`once a week: ${SITES[o.k].give}`}`;
-    case 'artifact':{const it=ITEMS[o.item];return`<span class="igem" style="--ic:${ITEM_COLS[it.lvl]}">◆</span><b>${it.name}</b> · level ${it.lvl} ${it.tier} · ${itemTxt(o.item)}`;}
+    case 'artifact':{const it=ITEMS[o.item];return`${itemIcon(o.item)}<b>${it.name}</b> · level ${it.lvl} ${it.tier} · ${itemTxt(o.item)}`;}
     case 'stone':return`<b>Training stone of ${STATN[o.stat]}</b> · +1 ${STATN[o.stat]} for each hero, once${(o.usedBy||[]).includes(HERO().id)?' (this hero has trained here)':''}`;
     case 'shrine':return`<b>Wayshrine</b> · teaches ${SP[o.spell].name}`;
     case 'sage':return`<b>Sage's Library</b> · each hero may learn +2 Attack, Defense, Power or Lore${(o.used||[]).includes(HERO().id)?' (already visited)':''}`;
@@ -2639,7 +2655,7 @@ function moveStack(from,to){const a=HERO().army;if(from===to||!a[from])return;
   else{const st=a.splice(from,1)[0];a.push(st);}
   renderUI();save();}
 function openHeroSheet(){const h=HERO(),hd=H_();h.pack=h.pack||[];
-  const itemBox=(k,where)=>{const it=ITEMS[k];return`<button class="eqi" data-eq="${where}:${k}" title="${it.tier}: ${itemTxt(k)}"><span class="igem" style="--ic:${ITEM_COLS[it.lvl]}">◆</span><b>${it.name}</b><small>${itemTxt(k)}</small></button>`;};
+  const itemBox=(k,where)=>{const it=ITEMS[k];return`<button class="eqi" data-eq="${where}:${k}" title="${it.tier}: ${itemTxt(k)}" style="--ic:${ITEM_COLS[it.lvl]}">${itemIcon(k)}<b>${it.name}</b><small>${itemTxt(k)}</small></button>`;};
   const body=()=>`<div class="sheetgrid3">
     <div class="sheethero">
       <div class="shport"><img src="${iconURL('hero',h.id,128)}" alt=""></div>
@@ -2820,7 +2836,7 @@ async function visit(o,last=true,jumped=false){
     else if(o.k==='amberhollow'){gain('amber',2);toast('Two drops of amber have hardened in the hollow.');}
     renderUI();return false;}
   case 'artifact':{const it=ITEMS[o.item];S.objs=S.objs.filter(q=>q!==o);const worn=giveItem(h,o.item);renderUI();
-    await showModal({title:`<span class="igem" style="--ic:${ITEM_COLS[it.lvl]}">◆</span>${it.name}`,body:`<p>Level ${it.lvl} ${it.tier} · ${it.slot}</p>${worn?'':`<p class="muted">The ${it.slot.toLowerCase()} slot is full, so it goes in the backpack. Swap it in from the hero screen.</p>`}<p><b>${itemTxt(o.item)}</b></p><p class="muted">${h.name} carries it from now on.</p>`,buttons:[{label:'Continue',value:1,primary:true}],dismiss:1});return true;}
+    await showModal({title:`${itemIcon(o.item)}${it.name}`,body:`<p>Level ${it.lvl} ${it.tier} · ${it.slot}</p>${worn?'':`<p class="muted">The ${it.slot.toLowerCase()} slot is full, so it goes in the backpack. Swap it in from the hero screen.</p>`}<p><b>${itemTxt(o.item)}</b></p><p class="muted">${h.name} carries it from now on.</p>`,buttons:[{label:'Continue',value:1,primary:true}],dismiss:1});return true;}
   case 'chest':{const gold=ri(10,15)*100,xp=Math.round(gold*0.8);
     const v=await showModal({title:'A weathered chest',body:`<p>Under a hawthorn root lies an iron-bound chest. Share the coin among the troops, or let ${h.name} study the war journals packed beneath it.</p>`,
       buttons:[{label:`Take ${fmt(gold)} gold`,value:'g',primary:true},{label:`Gain ${fmt(xp)} experience`,value:'x'}]});
@@ -3442,7 +3458,9 @@ async function moveTo(s,c,r,rm){
 async function lunge(a,d){a.act={row:2,t0:performance.now(),dur:reduced?60:440,n:4};const p=hc(a.c,a.r),q=hc(d.c,d.r);await tween(reduced?1:110,t=>{a.anim={x:p.x+(q.x-p.x)*0.35*t,y:p.y+(q.y-p.y)*0.35*t};});await tween(reduced?1:110,t=>{a.anim={x:p.x+(q.x-p.x)*0.35*(1-t),y:p.y+(q.y-p.y)*0.35*(1-t)};});a.anim=null;}
 async function projectile(a,d,col){const p=hc(a.c,a.r),q=hc(d.c,d.r);const f={type:'shot',x:p.x,y:p.y,col,pk:PROJ_OF(a.k),t0:performance.now(),ang:Math.atan2(q.y-p.y,q.x-p.x)};bt.fx.push(f);
   await tween(reduced?1:Math.min(420,Math.hypot(q.x-p.x,q.y-p.y)*1.1),t=>{f.x=p.x+(q.x-p.x)*t;f.y=p.y+(q.y-p.y)*t-Math.sin(t*Math.PI)*BL.s*0.8;});bt.fx=bt.fx.filter(x=>x!==f);}
-async function burst(s,col){const p=hc(s.c,s.r);const f={type:'burst',x:p.x,y:p.y,col,t:0};bt.fx.push(f);await tween(reduced?1:380,t=>{f.t=t;});bt.fx=bt.fx.filter(x=>x!==f);}
+const SPELL_FX={ember:'ember_dart',chain:'chain_spark',mend:'mend',swift:'swiftness',bark:'bark_skin',entangle:'entangle',squall:'squall',starfall:'starfall',raise:'raise_bones'};
+let curSpell=null;
+async function burst(s,col){const p=hc(s.c,s.r),sp=curSpell&&SPELL_FX[curSpell];const f={type:'burst',x:p.x,y:p.y,col,t:0,sp};bt.fx.push(f);await tween(reduced?1:sp?560:380,t=>{f.t=t;});bt.fx=bt.fx.filter(x=>x!==f);}
 const nm=s=>`<b style="color:${s.side?'var(--foe)':'var(--team)'}">${s.u.pl}</b>`;
 function onHit(a,d,dm){
   if(!d.alive)return;
@@ -3568,7 +3586,8 @@ async function castSpell(id,target){
   }
   updateBattleUI();
 }
-async function spellEffect(id,target,P){
+async function spellEffect(id,target,P){curSpell=id;try{await spellEffect0(id,target,P);}finally{curSpell=null;}}
+async function spellEffect0(id,target,P){
   const ward=1;
   if(id==='ember'){await burst(target,'#ff8a3c');const dm=Math.round((15+10*P)*ward*(fx().emberPct||1)),k=applyDmg(target,dm);floatAt(target,`-${dm}`,'#ffb48a');logB(`Ember Dart burns ${nm(target)} for ${dm}.${k?` ${k} fall.`:''}`);}
   else if(id==='chain'){await burst(target,'#ffe066');const dm=12+8*P;applyDmg(target,dm);floatAt(target,`-${dm}`,'#ffe066');let from=target;const hit=new Set([target]);
@@ -3580,7 +3599,7 @@ async function spellEffect(id,target,P){
     const dm=10+6*P;const hits=[target,...bt.stacks.filter(s=>s.alive&&s.side===1&&s!==target&&spot&&hdist(s.c,s.r,spot[0],spot[1])<=1)];
     for(const h of hits){await burst(h,'#e8f4ff');applyDmg(h,dm);floatAt(h,`-${dm}`,'#e8f4ff');}logB(`A scalding geyser erupts, hitting ${hits.length} stack${hits.length>1?'s':''}.`);}
   else if(id==='raise'){const n=4+3*P;let spot=null;for(const c of[0,1,2]){for(const r of[4,3,5,2,6,1,7,0,8]){if(!blocked(c,r)){spot={c,r};break;}}if(spot)break;}
-    if(spot){const ex=bt.stacks.find(s=>s.side===0&&s.alive&&s.k==='skeleton');if(ex){ex.n+=n;ex.n0+=n;floatAt(ex,`+${n}`,'#a6e08a');}else{const ns=mkStack('skeleton',n,0,spot.c,spot.r,90);ns.acted=true;bt.stacks.push(ns);floatAt(ns,`+${n}`,'#a6e08a');}logB(`${n} Skeletons claw out of the ground.`);}}
+    if(spot){await burst(spot,'#a6e08a');const ex=bt.stacks.find(s=>s.side===0&&s.alive&&s.k==='skeleton');if(ex){ex.n+=n;ex.n0+=n;floatAt(ex,`+${n}`,'#a6e08a');}else{const ns=mkStack('skeleton',n,0,spot.c,spot.r,90);ns.acted=true;bt.stacks.push(ns);floatAt(ns,`+${n}`,'#a6e08a');}logB(`${n} Skeletons claw out of the ground.`);}}
   else if(id==='starfall'){const foes=bt.stacks.filter(f=>f.alive&&f.side===1);const dm=10+6*P;await Promise.all(foes.map(f=>burst(f,'#cfe0ff')));for(const f of foes){applyDmg(f,dm);floatAt(f,`-${dm}`,'#cfe0ff');}logB(`Starfall strikes every enemy for ${dm}.`);}
   else if(id==='mend'){await burst(target,'#a6e08a');const amt=Math.round((20+15*P)*(fx().mendPct||1));const raised=heal(target,amt);floatAt(target,`+${amt}`,'#a6e08a');if(fx().healMorale){target.buff.morale+=fx().healMorale;}logB(`Mend restores ${nm(target)}.${raised>0?` ${raised} rise again.`:''}`);}
   else if(id==='swift'){await burst(target,'#cde6ff');target.buff.spd+=3;floatAt(target,'+3 speed','#cde6ff');logB(`Swift Wind hastens ${nm(target)}.`);}
@@ -3642,7 +3661,9 @@ function drawBattleHero(c,h,col,x,y,flip,canAct){
   const sc=Math.max(1.5,Math.min(3,BL.side/40)),now=performance.now();
   c.save();c.fillStyle='rgba(0,0,0,.35)';c.beginPath();c.ellipse(x,y+30*sc/2,BL.side*0.38,8,0,0,7);c.fill();
   c.strokeStyle=col;c.lineWidth=2;c.stroke();
-  const f0=h.face;h.face=flip?'w':'e';c.translate(x-TS/2*sc,y-TS/2*sc-6*sc);c.scale(sc,sc);drawHero(c,0,0,h,col);h.face=f0;c.restore();
+  {const bf=h.fac||(HBY[h.id]&&HBY[h.id].fac),im=bf&&tinted(`battle/heroes/${bf}.png`,`battle/heroes/${bf}_mask.png`,col,true);
+   if(im){const k=Math.min(BL.side*0.95/96,BL.h*0.32/128);c.translate(x,y+15*sc);if(flip)c.scale(-1,1);c.imageSmoothingEnabled=false;c.drawImage(im,-48*k,-124*k,96*k,128*k);c.restore();}
+   else{const f0=h.face;h.face=flip?'w':'e';c.translate(x-TS/2*sc,y-TS/2*sc-6*sc);c.scale(sc,sc);drawHero(c,0,0,h,col);h.face=f0;c.restore();}}
   c.font=`800 ${Math.max(11,BL.side*0.13)}px "Alegreya SC",Georgia,serif`;c.textAlign='center';c.textBaseline='top';c.fillStyle='#f2d382';c.strokeStyle='#120f0b';c.lineWidth=3;
   c.strokeText(h.name,x,y+20*sc);c.fillText(h.name,x,y+20*sc);
   if(!flip){const ok=canAct&&h.book&&!bt.spellCast&&usableSpells().length;
@@ -3656,16 +3677,20 @@ function drawBattle(){
   if(bgCv)c.drawImage(bgCv,0,0,BL.w,BL.h);
   const s=bt.active,mineTurn=s&&s.side===0&&bt.pending&&!bt.auto,team=teamCol();
   const rm=mineTurn&&!bt.targeting?reach(s):null;
+  const HXI=k=>{const a=artImg(`battle/hex/${k}.png`);return a.ok?a.img:null;},hexImg=(k,col,r,al=1)=>{const im=HXI(k);if(!im)return false;const p=hc(col,r),w=Math.sqrt(3)*BL.s,h=2*BL.s;c.save();c.globalAlpha=al;c.imageSmoothingEnabled=false;c.drawImage(im,p.x-w/2,p.y-h/2,w,h);c.restore();return true;};
   for(let r=0;r<BR;r++)for(let col=0;col<BC;col++){const p=hc(col,r);hexPath(c,p.x,p.y,BL.s*0.97);
-    if(rm&&rm.has(hk(col,r))){c.fillStyle=team+'33';c.fill();}
+    if(rm&&rm.has(hk(col,r))&&!hexImg('move',col,r,0.75)){c.fillStyle=team+'33';c.fill();}
     c.strokeStyle='rgba(255,250,220,.10)';c.lineWidth=1;c.stroke();}
+  if(s&&s.side===0&&mineTurn)hexImg('selected',s.c,s.r);
   let attackFrom=null,hovT=null;
   if(mineTurn&&bt.hover){const{c:hc_,r:hr}=bt.hover;const t=stackAt(hc_,hr);
     if(bt.targeting){if(t&&((SP[bt.targeting].target==='enemy')===(t.side===1))){hovT=t;}}
     else if(t&&t.side===1){hovT=t;if(!canShoot(s)){attackFrom=bestAttackHex(s,t,rm,bt.mouse.x,bt.mouse.y);}}
-    else if(rm&&rm.has(hk(hc_,hr))){const p=hc(hc_,hr);hexPath(c,p.x,p.y,BL.s*0.97);c.fillStyle=team+'66';c.fill();}
+    else if(rm&&rm.has(hk(hc_,hr))){if(!hexImg('hover',hc_,hr)){const p=hc(hc_,hr);hexPath(c,p.x,p.y,BL.s*0.97);c.fillStyle=team+'66';c.fill();}}
+    else if(!t&&!(rm&&rm.has(hk(hc_,hr))))hexImg('blocked',hc_,hr,0.6);
+    if(hovT&&!bt.targeting)hexImg(canShoot(s)?'shoot':'attack',hovT.c,hovT.r);
   }
-  if(attackFrom){const p=hc(attackFrom.c,attackFrom.r);hexPath(c,p.x,p.y,BL.s*0.97);c.fillStyle='rgba(242,211,130,.35)';c.fill();
+  if(attackFrom){const p=hc(attackFrom.c,attackFrom.r);if(!hexImg('hover',attackFrom.c,attackFrom.r)){hexPath(c,p.x,p.y,BL.s*0.97);c.fillStyle='rgba(242,211,130,.35)';c.fill();}
     const q=hc(hovT.c,hovT.r);c.strokeStyle='#f2d382';c.lineWidth=3;c.beginPath();c.moveTo(p.x,p.y);c.lineTo(p.x+(q.x-p.x)*0.6,p.y+(q.y-p.y)*0.6);c.stroke();}
   for(const k of bt.obst){const p=hc(k%BC,Math.floor(k/BC));if(!bt.rocks[k])bt.rocks[k]={a:Math.random()*6,s:0.6+Math.random()*0.3,img:pick(['split_boulder','split_boulder','basalt_columns','basalt_columns','leaning_monolith','split_boulder','stone_arch'])};const rk=bt.rocks[k],s2=BL.s*rk.s;
     {const a=artImg(`terrain/battle/${rk.img}_battle.png`);if(a.ok){const im=a.img,sc2=BL.s*(rk.img==='stone_arch'?2.1:1.9)/Math.max(96,im.width);c.save();c.imageSmoothingEnabled=false;
@@ -3711,6 +3736,7 @@ function drawBattle(){
     if(f.type==='shot'&&f.pk){const pa=artImg(`projectiles/${f.pk}.png`);if(pa.ok){const fr=Math.floor((now-f.t0)/90)%3,z=Math.max(2,Math.round(BL.s/16));c.save();c.translate(f.x,f.y);c.rotate(f.pk==='rock'?(now-f.t0)/80:f.ang);c.imageSmoothingEnabled=false;c.drawImage(pa.img,fr*16,0,16,16,-8*z,-8*z,16*z,16*z);c.restore();continue;}}
     if(f.type==='shot'){c.save();c.translate(f.x,f.y);c.rotate(f.ang);c.fillStyle=f.col;c.strokeStyle=f.col;c.lineWidth=2;
       if(f.col!=='#efe2bb'){c.beginPath();c.arc(0,0,5,0,7);c.fill();}else{c.beginPath();c.moveTo(-10,0);c.lineTo(8,0);c.stroke();c.beginPath();c.moveTo(10,0);c.lineTo(4,-3);c.lineTo(4,3);c.closePath();c.fill();}c.restore();}
+    if(f.type==='burst'&&f.sp){const sa=artImg(`battle/spells/${f.sp}.png`);if(sa.ok){const im=sa.img,fw=im.width/6,fh=im.height,fr=Math.min(5,Math.floor(f.t*6)),z=Math.max(1.5,BL.s*2/64);c.save();c.imageSmoothingEnabled=false;c.drawImage(im,fr*fw,0,fw,fh,Math.round(f.x-fw*z/2),Math.round(f.y-fh*z/2-BL.s*0.2),fw*z,fh*z);c.restore();continue;}}
     if(f.type==='burst'){c.strokeStyle=f.col;c.globalAlpha=1-f.t;c.lineWidth=3;c.beginPath();c.arc(f.x,f.y,BL.s*(0.4+f.t*0.9),0,7);c.stroke();c.globalAlpha=1;}
   }
   bt.floats=bt.floats.filter(f=>now-f.t0<1100);
