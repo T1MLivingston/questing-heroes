@@ -90,6 +90,13 @@ Everything lives in one object, `S`, so it can be saved as JSON:
 - Map terrain (`assets/terrain`, see its README) is prerendered by `renderTerrainArt` at the art's native 32px per tile and scaled to `TS` when drawn. Ground is a meadow base with dual-grid corner overlays per terrain (heath = dry grass, bog = swamp, forest floor, crags = rocky, sand shores, water), cobblestone roads by neighbour connections, then props sorted by their foot: a tree per forest tile, mountains or hills on crags, flowers, reeds and boulders scattered on free tiles. Four canvases (`terrainPh`) hold the four water phases (220 ms). The old drawn terrain is used until all `TA_FILES` load. `drawFire` animates the campfire at camps and the torches at town gates.
 - Add new art by dropping files in the same layout and adding the id to the matching table. `assets/manifest.json` is the art pack's full registry.
 
+### Town growth, walls and sieges
+
+- `FAC_BUILD[fac]`: three banner-only buildings (`fb1` horde: extra weekly growth for one troop; `fb2` visit: each hero gains +1 to a stat once, on arrival; `fb3` special, checked with `facSpecial`: `mpTown`, `manaRegen`, `harvest`, `horde2`, `goldWeek`, `amberDay`, `oreDay`). Costs in `FB_COST`.
+- `WALLS`: Palisade, Stronghold (+50% growth), Bastion (+100% growth, towers). `wallLvl()`; `townDefense()` is the garrison's power times the wall bonus (plus the towers). The garrison no longer joins a hero automatically; move troops on the town screen.
+- Sieges (single player): after day 7 a rival may target your town when no hero is home and it out-powers `townDefense()`. If it wins, `S.town.taken` is set: no town income or growth, the town can't be entered, and the rival (`rv.occupy`) stays at the gate. Beat it there to free the town; after 7 days held, you lose.
+- Camps: rival camps and free towns (`camp` objects with `free:true`, placed by `furnishMap`, held by wild creatures) both have a `garrison`. Beat it (or walk into an empty one) to capture: +500 gold a day and the first two troops of its banner each week (`pool`, `manageHolding`, `firstPool`). A rival whose own camp you hold stops growing and tries to retake it; rivals also claim free towns and raid holdings.
+
 ### Map furniture
 
 - `furnishMap(bases)` runs after generation: every base (your town, rival camps, other players' towns) gets a sawmill, ore pit, amber spring and gold seam within a short walk (`reachFrom`, `freeTile`). Mines start at level 1-3, and the owner can pay at the mine to raise it (the prompt shows only when the mine is your destination).

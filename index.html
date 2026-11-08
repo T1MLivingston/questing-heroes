@@ -1615,12 +1615,12 @@ function mkRival(hid,x,y){const h=HBY[hid],u=FAC[h.fac].units;
   return{id:hid,name:h.name,fac:h.fac,x,y,atk:h.st[0]+1,def:h.st[1]+1,pow:h.st[2],lore:h.st[3],relics:[],
     army:[{k:u[0],n:Math.round(300*rvMul()/U[u[0]].hp)},{k:u[1],n:Math.round(140*rvMul()/U[u[1]].hp)},{k:u[2],n:Math.max(1,Math.round(70*rvMul()/U[u[2]].hp))}]};}
 /* tiles reachable on foot from a base, with their walking distance */
-function reachFrom(x0,y0){const dist=new Map(),q=[[x0,y0]];dist.set(idx(x0,y0),0);
-  const ok=(x,y)=>inb(x,y)&&passableT(S.tiles[idx(x,y)])&&!townFoot(x,y);
+function reachFrom(x0,y0,water){const dist=new Map(),q=[[x0,y0]];dist.set(idx(x0,y0),0);
+  const ok=(x,y)=>inb(x,y)&&(passableT(S.tiles[idx(x,y)])||(water&&S.tiles[idx(x,y)]===T.LAKE))&&!townFoot(x,y);
   for(let h=0;h<q.length;h++){const[x,y]=q[h],d=dist.get(idx(x,y));for(let a=-1;a<=1;a++)for(let b=-1;b<=1;b++){if(!a&&!b)continue;const nx=x+a,ny=y+b;if(!ok(nx,ny)||dist.has(idx(nx,ny)))continue;if(a&&b&&(!ok(x+a,y)||!ok(x,y+b)))continue;
     const o=objAt(nx,ny);dist.set(idx(nx,ny),d+1);if(!o||o.type==='town'||o.type==='camp'||o.type==='portal')q.push([nx,ny]);}
     const pj=PORT.get(idx(x,y));if(pj!==undefined&&!dist.has(pj)){dist.set(pj,d+1);q.push([pj%W,(pj/W)|0]);}}return dist;}
-function freeTile(dist,dmin,dmax,avoid=2){const c=[];for(const[i,d]of dist){if(d<dmin||d>dmax)continue;const x=i%W,y=(i/W)|0;
+function freeTile(dist,dmin,dmax,avoid=2){const c=[];for(const[i,d]of dist){if(d<dmin||d>dmax||!passableT(S.tiles[i]))continue;const x=i%W,y=(i/W)|0;
   if(objAt(x,y)||townFoot(x,y)||S.objs.some(o=>Math.abs(o.x-x)<=avoid-1&&Math.abs(o.y-y)<=avoid-1&&(o.type==='town'||o.type==='neutral'&&o.guard)))continue;
   if(x<1||y<1||x>W-2||y>H-2)continue;c.push({x,y});}return c.length?pick(c):null;}
 /* Spires sit on the road where it squeezes through a choke (blocking that tile splits the land), or else at busy crossroads.
@@ -1650,7 +1650,9 @@ function placeSpires(bases,add){
     if(best<0)break;picked.push(best);}
   for(const i of picked)add({type:'spire',x:i%W,y:(i/W)|0,owned:false,garrison:[]});
 }
-const spireFoe=o=>o&&o.type==='spire'&&o.owned&&o.owned!==ME()&&o.garrison.length>0;
+const firstPool=o=>{const u=FAC[o.fac].units;return{[u[0]]:Math.ceil(U[u[0]].growth/2),[u[1]]:Math.ceil(U[u[1]].growth/2)};};
+const campName=o=>o.free?`free ${FAC[o.fac].arch} town`:`${FAC[o.fac].arch} camp`;
+const spireFoe=o=>o&&((o.type==='spire'&&o.owned&&o.owned!==ME())||(o.type==='camp'&&o.owned!==ME()&&!S.players))&&(o.garrison||[]).length>0;
 /* a garrisoned spire holds the eight tiles around it: other banners can't walk through them until they take the spire */
 function zocFor(owner){const z=new Set();for(const o of S.objs)if(o.type==='spire'&&o.owned&&o.owned!==owner&&o.garrison.length)for(let a=-1;a<=1;a++)for(let b=-1;b<=1;b++)if((a||b)&&inb(o.x+a,o.y+b))z.add(idx(o.x+a,o.y+b));return z;}
 const zocMap=new WeakMap();
@@ -1666,7 +1668,7 @@ function furnishMap(bases){
   const home=bases[0],maxD=Math.hypot(W,H);
   for(const o of S.objs)if(o.type==='mine'&&!o.lvl){const far=Math.hypot(o.x-home.x,o.y-home.y)/maxD;o.lvl=1+(R()<0.45?1:0)+(far>0.45&&R()<0.4?1:0);}
   // weekly sites and artifacts, spread by distance from your town
-  const dist=reachFrom(home.x,home.y+1);let md=0;for(const d of dist.values())md=Math.max(md,d);
+  const dist=reachFrom(home.x,home.y+1,true);let md=0;for(const d of dist.values())md=Math.max(md,d);
   const band=(a,b)=>[Math.round(md*a),Math.round(md*b)];
   const sites=[['wish',2,0.1,0.5],['clover',2,0.15,0.7],['woodcamp',1,0.1,0.45],['orecart',1,0.1,0.45],['amberhollow',1,0.3,0.8]];
   for(const[k,n,a,b]of sites)for(let i=0;i<Math.max(1,Math.round(n*KS*KS));i++){const p=freeTile(dist,...band(a,b));if(p)add({type:'site',k,x:p.x,y:p.y,week:-1});}
@@ -1683,20 +1685,23 @@ function furnishMap(bases){
   for(const[tier,pool,a,b]of ALT)for(let i=0;i<Math.max(1,Math.round((tier===3?0.6:1)*KS));i++){const p=freeTile(dist,...band(a,b),3);if(!p)continue;add({type:'altar',x:p.x,y:p.y,tier,spell:pick(pool)});
     if(tier>1){const g=[[1,0],[-1,0],[0,1],[0,-1]].map(([dx,dy])=>({x:p.x+dx,y:p.y+dy})).find(q=>inb(q.x,q.y)&&passableT(S.tiles[idx(q.x,q.y)])&&!objAt(q.x,q.y)&&!townFoot(q.x,q.y));
       if(g)add({type:'neutral',x:g.x,y:g.y,...(tier===2?{k:'imp',n:ri(18,26)}:{k:'troll',n:ri(12,16)})});}}
+  // free towns: villages of a random banner, held by wild creatures until someone claims them
+  for(let i=0;i<(W>=56?4:W>=44?3:2);i++){const p=freeTile(dist,...band(0.3+0.12*i,0.6+0.12*i),4);if(!p)continue;const d=dist.get(idx(p.x,p.y))/Math.max(1,md);
+    const g1=neutralAt(clamp(d,0.15,1)),g2=neutralAt(clamp(d+0.1,0.15,1));add({type:'camp',free:true,fac:pick(FAC_ORDER),x:p.x,y:p.y,owned:false,garrison:[{k:g1.k,n:g1.n},{k:g2.k,n:Math.ceil(g2.n/2)}].filter((a,j,arr)=>arr.findIndex(b=>b.k===a.k)===j),pool:{}});}
   placeSpires(bases,add);
   S.uid=uid;
 }
 /* a saved editor map as a world: camps get the rival banners in order; extra camps are dropped */
 function customWorld(m,rivalFacs){const objs=JSON.parse(JSON.stringify(m.objs));
-  const camps=objs.filter(o=>o.type==='camp');camps.forEach((o,i)=>{if(i<rivalFacs.length)o.fac=rivalFacs[i];});
+  const camps=objs.filter(o=>o.type==='camp'&&!o.free);camps.forEach((o,i)=>{o.fac=i<rivalFacs.length?rivalFacs[i]:null;});
   const keep=objs.filter(o=>o.type!=='camp'||o.fac);let uid=1;keep.forEach(o=>{o.id=uid++;});
   const town=keep.find(o=>o.type==='town');
-  return{tiles:[...m.tiles],objs:keep,town:{x:town.x,y:town.y},uid,rivalSpots:keep.filter(o=>o.type==='camp').map(o=>({x:o.x,y:o.y,fac:o.fac})),underY:m.underY||0,rivers:m.rivers||null,bridges:m.bridges||null,noFurnish:m.extras===false};}
+  return{tiles:[...m.tiles],objs:keep,town:{x:town.x,y:town.y},uid,rivalSpots:keep.filter(o=>o.type==='camp'&&!o.free).map(o=>({x:o.x,y:o.y,fac:o.fac})),underY:m.underY||0,rivers:m.rivers||null,bridges:m.bridges||null,noFurnish:m.extras===false};}
 function newGame(fk,hid,mo={}){
   const cm=mo.custom?loadMaps().find(x=>x.id===mo.custom):null;if(cm)mo.size=cm.size;
   const sz=MAP_SIZES[mo.size||'small'],type=cm?'custom':mo.type||'wheel';W=cm?cm.W:sz.W;H=cm?cm.H:sz.H;
   const seed=mo.seed??((Math.random()*1e9)|0);
-  const nR=cm?cm.objs.filter(o=>o.type==='camp').length:sz.rivals;
+  const nR=cm?cm.objs.filter(o=>o.type==='camp'&&!o.free).length:sz.rivals;
   const rivalFacs=mo.players?mo.players.slice(1).map(p=>p.fk):FAC_ORDER.filter(k=>k!==fk).sort(()=>Math.random()-0.5).slice(0,nR);
   const w=cm?customWorld(cm,rivalFacs):genMap(seed,{type,fac:fk,rivals:rivalFacs});const f=FAC[fk];
   const [t1,t2]=f.units;
@@ -1707,6 +1712,7 @@ function newGame(fk,hid,mo={}){
   const h=mkHero(hid,w.town.x,w.town.y);h.army=[{k:t1,n:Math.round(240/U[t1].hp)},{k:t2,n:Math.round(90/U[t2].hp)}];S.heroes.push(h);
   HERO().mana=maxMana();HERO().mp=maxMP();
   if(!mo.players)w.rivalSpots.forEach(p=>{const rh=pick(HEROES.filter(x=>x.fac===p.fac));S.rivals.push(mkRival(rh.id,p.x,p.y));});
+  for(const o of S.objs)if(o.type==='camp'&&o.fac&&!o.free){const u=FAC[o.fac].units;o.garrison=[{k:u[0],n:Math.round(160*rvMul()/U[u[0]].hp)},{k:u[1],n:Math.round(90*rvMul()/U[u[1]].hp)}];}
   S.mode=mo.mode||'relic';setMode(S.mode);
   if(S.mode==='grail'){const rel=S.objs.filter(o=>o.type==='relic'),lair=rel.find(o=>o.r===6),rest=rel.filter(o=>o.r<4);
     S.objs=S.objs.filter(o=>o.type!=='relic');rest.forEach(o=>{const G=GRAILS[o.r];S.objs.push({...o,k:G.k,n:ri(G.n[0],G.n[1]),roam:true});});
@@ -1738,7 +1744,7 @@ const maxMana=()=>Math.round(hst(HERO(),'lore')*10*(hasSk('deepres')?1.25:1));
 function maxMP(){const sp=HERO().army.length?Math.min(...HERO().army.map(a=>U[a.k].spd+((fx().unitSpd||{})[a.k]||0))):5;
   let m=900+45*Math.min(sp,9);if(HERO().mount!=='foot')m*=1.4;if(hasSk('forcedmarch'))m*=1.1;m*=1+gear(HERO(),'mpPct')/100;return Math.round(m);}
 const xpFor=l=>Math.round(1000*l*(1+0.12*(l-1)));
-const income=()=>(S.town.built.hall3?2000:S.town.built.hall2?1000:500)+S.heroes.reduce((a,h)=>a+gear(h,'goldDay'),0);
+const income=()=>(S.town.taken?0:(S.town.built.hall3?2000:S.town.built.hall2?1000:500))+S.heroes.reduce((a,h)=>a+gear(h,'goldDay'),0)+500*S.objs.filter(o=>o.type==='camp'&&o.owned===ME()).length;
 function dateParts(d=S.day){const m=Math.floor((d-1)/28)+1,w=Math.floor(((d-1)%28)/7)+1,dd=(d-1)%7+1;return{m,w,d:dd};}
 const LIMIT=112;
 function terrainCost(x,y){
@@ -1932,7 +1938,15 @@ function drawObj(c,o){
     else{c.fillStyle='#7a766c';c.strokeStyle='#26241f';c.fillRect(cx-19,cy-14,7,26);c.strokeRect(cx-19,cy-14,7,26);c.fillRect(cx+12,cy-14,7,26);c.strokeRect(cx+12,cy-14,7,26);c.fillRect(cx-21,cy-20,42,7);c.strokeRect(cx-21,cy-20,42,7);}
     drawRelic(c,o.r,cx,cy-(o.r===6?24:4),8);token(c,o.k,cx+(o.r===6?0:12),cy+(o.r===6?2:8),o.r===6?15:10,'#c45a43');break;
   case 'drop':drawRelic(c,o.rs[0],cx,cy,10);break;
-  case 'camp':{const col=FAC[o.fac||o.dfac||'necro'].col;c.fillStyle='rgba(0,0,0,.35)';c.beginPath();c.ellipse(cx,cy+13,20,6,0,0,7);c.fill();
+  case 'camp':{const col=FAC[o.fac||o.dfac||'necro'].col,gn=(o.garrison||[]).reduce((a,g)=>a+g.n,0);
+    if(o.free){c.fillStyle='rgba(0,0,0,.35)';c.beginPath();c.ellipse(cx,cy+13,22,6,0,0,7);c.fill();c.strokeStyle='#1a1610';c.lineWidth=1.2;
+      for(const[dx,hh]of[[-9,14],[6,18]]){c.fillStyle='#cdbf9c';c.fillRect(cx+dx-7,cy+12-hh,14,hh);c.strokeRect(cx+dx-7,cy+12-hh,14,hh);c.fillStyle=o.owned?ownerCol(o.owned):col;c.beginPath();c.moveTo(cx+dx-10,cy+12-hh);c.lineTo(cx+dx,cy+2-hh);c.lineTo(cx+dx+10,cy+12-hh);c.closePath();c.fill();c.stroke();c.fillStyle='#2a1d12';c.fillRect(cx+dx-2,cy+6,4,6);}
+      c.fillStyle='#7a5432';for(let x=-20;x<=17;x+=5){c.fillRect(cx+x,cy+8,4,7);}
+      if(o.owned)flag(c,cx+18,cy+2,ownerCol(o.owned));
+      if(gn){c.font='800 12px "Alegreya SC",Georgia,serif';c.textAlign='center';c.textBaseline='middle';const tt=o.owned===ME()?fmt(gn):'?',w=c.measureText(tt).width+10;c.fillStyle='rgba(12,18,48,.92)';c.fillRect(cx-w/2,cy+17,w,14);c.strokeStyle=o.owned?ownerCol(o.owned):'#c45a43';c.strokeRect(cx-w/2,cy+17,w,14);c.fillStyle='#fff';c.fillText(tt,cx,cy+24.5);}
+      break;}
+    if(o.owned){flag(c,cx-20,cy+10,ownerCol(o.owned));}
+    if(gn&&!S.editor){c.font='800 12px "Alegreya SC",Georgia,serif';c.textAlign='center';c.textBaseline='middle';const tt=o.owned===ME()?fmt(gn):'?',w=c.measureText(tt).width+10;c.fillStyle='rgba(12,18,48,.92)';c.fillRect(cx-w/2,cy+17,w,14);c.strokeStyle=o.owned?ownerCol(o.owned):'#c45a43';c.lineWidth=1.2;c.strokeRect(cx-w/2,cy+17,w,14);c.fillStyle='#fff';c.fillText(tt,cx,cy+24.5);}c.fillStyle='rgba(0,0,0,.35)';c.beginPath();c.ellipse(cx,cy+13,20,6,0,0,7);c.fill();
     c.fillStyle=col;c.strokeStyle='#1a1610';c.lineWidth=1.2;c.beginPath();c.moveTo(cx-18,cy+12);c.lineTo(cx-4,cy-12);c.lineTo(cx+10,cy+12);c.closePath();c.fill();c.stroke();
     c.fillStyle='#2b1d10';c.beginPath();c.moveTo(cx-8,cy+12);c.lineTo(cx-4,cy+2);c.lineTo(cx,cy+12);c.closePath();c.fill();flag(c,cx+13,cy+8,col);drawFire(c,'campfire',cx-15,cy+19,o.x*97+o.y*31);break;}
   case 'mine':{
@@ -2114,7 +2128,8 @@ function describe(x,y){
     case 'neutral':{const[w,col]=threat(o.k,o.n);return`${o.guard?'<b>Guarded pass</b> · ':''}<b>${cnt(o.n)} ${U[o.k].pl}</b> · <span style="color:${col}">${w}</span>`;}
     case 'relic':{const Rl=RELICS[o.r];const[w,col]=threat(o.k,o.n);return`<b>${Rl.lair}</b> · guards the ${Rl.name} · ${cnt(o.n)} ${U[o.k].pl} · <span style="color:${col}">${w}</span>`;}
     case 'drop':return`<b>${o.rs.map(r=>RELICS[r].name).join(', ')}</b> · lying here, unguarded`;
-    case 'camp':return`<b>${FAC[o.fac].arch} camp</b> · where a rival hero set out from`;
+    case 'camp':{if(o.free&&!o.owned){const gn=(o.garrison||[]).reduce((a,g)=>a+g.n,0);return`<b>Free ${FAC[o.fac].arch} town</b> · unclaimed${gn?` · ${amountWord(gn).toLowerCase()} ${(o.garrison||[]).map(g=>U[g.k].pl).join(' and ')} hold it`:''} · capture it for +500 gold a day and ${FAC[o.fac].arch} recruits`;}
+    const gn=(o.garrison||[]).reduce((a,g)=>a+g.n,0);return o.owned===ME()?`<b>Your ${FAC[o.fac].arch} holding</b> · +500 gold a day · recruits each week${gn?` · ${gn} troops guard it`:''}`:`<b>${campName(o)}</b>${o.owned?' (taken by another banner)':''} · ${gn?`guarded by ${amountWord(gn).toLowerCase()} troops · `:''}walk in to capture it`;}
     case 'mine':return`<b>${MINE[o.k].name}</b> (level ${o.lvl||1}) · +${fmt(mineOut(o))} ${RESNAME[MINE[o.k].res].toLowerCase()} a day · ${o.owned===ME()?'yours':o.owned?`held by ${o.ownerName}`:'unclaimed'}`;
     case 'pile':return`<b>${RESNAME[o.k]}</b> · ${fmt(o.n)}`;
     case 'chest':return'<b>Weathered chest</b>';
@@ -2254,7 +2269,7 @@ async function walk(){
       const won=await startBattle(foe);
       if(!won){moving=false;path=null;if(S&&!S.over){renderUI();save();}return;}
       if(S.pendingWin){S.pendingWin=false;moving=false;await victory();return;}
-      if(!rv&&o.type!=='spire')S.objs=S.objs.filter(q=>q!==o);
+      if(!rv&&o.type!=='spire'&&o.type!=='camp')S.objs=S.objs.filter(q=>q!==o);
       path=null;await stepHero(n);reveal(n.x,n.y,vision());renderUI();
       if(o&&o.type==='relic')await gainRelic(HERO(),[o.r]);
       break;
@@ -2271,6 +2286,8 @@ async function fightPreview(o){
   let enemy,title,theirs,reward='';
   if(o.type==='rival'){const rv=o.rival;enemy=rv.army;theirs=armyPower(rv.army,rv);title=`Attack ${rv.name}?`;
     reward=`<p class="muted">${rv.name} is a rival ${FAC[rv.fac].arch} hero (${sc('atk',hst(rv,'atk'))} ${sc('def',hst(rv,'def'))}).${rv.relics.length?` Win to take: <b style="color:var(--text)">${rv.relics.map(r=>RELICS[r].name).join(', ')}</b>.`:''}</p>`;}
+  else if(o.type==='camp'){enemy=o.garrison;theirs=armyPower(o.garrison);title=`Attack the ${campName(o)}?`;
+    reward=`<p class="muted">Win to capture it: +500 gold a day and ${FAC[o.fac].arch} recruits each week.${S.rivals.some(r=>r.fac===o.fac)?` Its rival hero stops growing stronger while you hold it.`:''}</p>`;}
   else if(o.type==='spire'){enemy=o.garrison;theirs=armyPower(o.garrison);title='Storm the spire?';
     reward=`<p class="muted">Held by ${spireOwnerName(o)}. Defenders fight from the walls with +3 defense. Win to take the spire.</p>`;}
   else{enemy=[{k:o.k,n:o.n}];theirs=stackPower(o.k,o.n);
@@ -2301,10 +2318,18 @@ function stepHero(n){
 }
 function tween(dur,f){return new Promise(res=>{const t0=performance.now();const step=now=>{const t=Math.min(1,(now-t0)/Math.max(1,dur));f(t);if(t<1)requestAnimationFrame(step);else res();};requestAnimationFrame(step);});}
 function gain(k,n){S.res[k]+=n;}
+async function manageHolding(o){const f=FAC[o.fac],h=HERO();o.pool=o.pool||{};
+  const body=()=>`<p class="muted" style="margin-top:0">Captured: +500 gold a day. Its troops muster here each week.</p><div class="ugrid">${f.units.slice(0,2).map(k=>{const av=o.pool[k]||0,mx=Math.min(av,maxAfford(k));
+    return unitCard(k,{cls:mx>0?'sugg':'',foot:`<div class="cost">${costHTML(unitCost(k,1))}<span class="muted">each · ${av} here</span></div><div class="rctl"><button class="btn sm${mx>0?' primary':''}" data-hrec="${k}" ${mx<1?'disabled':''}>Recruit ${mx}</button></div>`});}).join('')}</div>`;
+  const pr=showModal({title:campName(o).replace(/^./,c=>c.toUpperCase()),body:body(),wide:true,buttons:[{label:'Garrison',value:'g'},{label:'Done',value:1,primary:true}],dismiss:1});
+  const b=$('#modal').querySelector('.body');
+  b.addEventListener('click',e=>{const el=e.target.closest('[data-hrec]');if(!el)return;const k=el.dataset.hrec,n=Math.min(o.pool[k]||0,maxAfford(k));if(n<1)return;
+    if(!addToArmy(k,n)){toast('No free army slot.');return;}pay(unitCost(k,n));o.pool[k]-=n;toast(`${n} ${U[k].pl} join ${h.name}.`);b.innerHTML=body();renderUI();});
+  const v=await pr;renderUI();save();if(v==='g')await manageSpire(o);}
 async function manageSpire(o){
   const h=HERO(),body=()=>{const col=(arr,side)=>`<div><div class="label">${side==='h'?h.name+"'s army":'Spire garrison'}</div><div class="army" style="margin-top:6px">${Array.from({length:7},(_,i)=>{const a=arr[i];return a?`<button class="slot" data-sp="${side}${i}" title="Move ${U[a.k].pl}"><img src="${iconURL('unit',a.k,64)}" alt="${U[a.k].name}"><b>${a.n}</b></button>`:'<div class="slot empty"></div>';}).join('')}</div></div>`;
     return`<p>Click a stack to move it across. A garrisoned spire holds the ground around it (the dashed square): enemy heroes can't pass through until they beat the garrison. Defenders get +3 defense.</p><div class="casualties">${col(h.army,'h')}${col(o.garrison,'g')}</div>${h.army.length<=1?'<p class="muted">A hero must keep at least one stack.</p>':''}`;};
-  const pr=showModal({title:'Spire',body:body(),buttons:[{label:'Done',value:1,primary:true}],dismiss:1});
+  const pr=showModal({title:o.type==='camp'?`${campName(o)}: garrison`:'Spire',body:body(),buttons:[{label:'Done',value:1,primary:true}],dismiss:1});
   const b=$('#modal').querySelector('.body');
   const into=(arr,a)=>{const ex=arr.find(x=>x.k===a.k);if(ex){ex.n+=a.n;return true;}if(arr.length<7){arr.push({...a});return true;}return false;};
   b.addEventListener('click',e=>{const el=e.target.closest('[data-sp]');if(!el)return;const side=el.dataset.sp[0],i=+el.dataset.sp.slice(1);
@@ -2320,6 +2345,9 @@ async function visit(o,last=true,jumped=false){
   case 'drop':S.objs=S.objs.filter(q=>q!==o);await gainRelic(h,o.rs);return true;
   case 'portal':{if(!last||jumped)return false;if(rivalAt(o.tx,o.ty)||heroIdxAt(o.tx,o.ty)>=0){toast('Someone is standing at the far end of the portal.');return true;}
     await stepHero({x:o.tx,y:o.ty});reveal(o.tx,o.ty,vision());toast(o.ty>=(S.underY||1e9)?'Through the portal: down into the underworld.':'Through the portal and back into daylight.');renderUI();return true;}
+  case 'camp':{if(S.players)return false;
+    if(o.owned!==ME()){o.owned=ME();o.ownerName=h.name;o.garrison=[];o.pool=firstPool(o);toast(`The ${campName(o)} is yours: +500 gold a day.`);renderUI();if(!last)return false;}
+    if(!last)return false;await manageHolding(o);return true;}
   case 'spire':{if(o.owned!==ME()){o.owned=ME();o.ownerName=h.name;o.garrison=[];toast('Spire claimed. Leave troops in it to hold this road.');renderUI();}
     if(!last)return false;await manageSpire(o);return true;}
   case 'pile':gain(o.k,o.n);S.objs=S.objs.filter(q=>q!==o);toast(`Picked up ${fmt(o.n)} ${RESNAME[o.k].toLowerCase()}.`);renderUI();return false;
@@ -2379,7 +2407,7 @@ async function visit(o,last=true,jumped=false){
 function addToArmy(k,n){const a=HERO().army;const s=a.find(x=>x.k===k);if(s){s.n+=n;return true;}if(a.length<7){a.push({k,n});return true;}return false;}
 function townArrive(){
   const t=S.town,h=HERO();
-  if(t.garrison.length){t.garrison=t.garrison.filter(g=>!addToArmy(g.k,g.n));toast(t.garrison.length?'Some of the garrison could not join: the army has no free slot.':'The garrison joins your army.');}
+  for(const b of FAC_BUILD[S.fac]||[])if(b.visit&&t.built[b.id]&&!(t.taught||(t.taught={}))[h.id+b.id]){t.taught[h.id+b.id]=1;h[b.visit]++;toast(`${b.name}: ${h.name} learns +1 ${STATN[b.visit]}.`);}
   learnLibrary();
   if(t.built.reliquary&&h.relics.length){const got=h.relics.splice(0);for(const r of got){S.delivered.push(r);if(r===5)S.heroes.forEach(x=>{x.book=true;if(!x.spells.includes('starfall'))x.spells.push('starfall');});}
     toast(`${got.map(r=>RELICS[r].name).join(', ')} placed in the Relic Hall. ${S.delivered.length}/7 home.`);}
@@ -2388,7 +2416,7 @@ function townArrive(){
   if(t.built.lib1&&h.mana<maxMana()){h.mana=maxMana();toast('The Lantern Library refills your mana.');}
   renderUI();
 }
-async function arriveTown(){townArrive();if(S.mode!=='conquest'&&goalMet()){await victory();return;}openTown();}
+async function arriveTown(){if(S.town.taken){toast(`${esc(S.town.taken.name)} holds ${esc(S.town.name)}.`);return;}townArrive();if(S.mode!=='conquest'&&goalMet()){await victory();return;}openTown();}
 function learnLibrary(){const h=HERO(),t=S.town;if(!h.book)return;const add=[];if(t.built.lib1)add.push(...libSpells(1));if(t.built.lib2)add.push(...libSpells(2));
   const fresh=add.filter(s=>!h.spells.includes(s));if(fresh.length){h.spells.push(...fresh);toast(`${h.name} learns ${fresh.map(s=>SP[s].name).join(' and ')}.`);}}
 async function addXP(n){
@@ -2403,12 +2431,17 @@ async function addXP(n){
   }
 }
 function dayUpkeep(weekly){
-  const t=S.town,news=[],inc=income();gain('gold',inc);const msg=[`+${fmt(inc)} gold`];
+  const t=S.town,news=[],inc=income();gain('gold',inc);const msg=[t.taken?`no income: ${esc(t.taken.name)} holds ${esc(t.name)}`:`+${fmt(inc)} gold`];
+  if(!t.taken){if(facSpecial('amberDay'))gain('amber',1);if(facSpecial('oreDay'))gain('ore',2);}
+  if(weekly)for(const o of S.objs)if(o.type==='camp'&&o.owned===ME()){const u=FAC[o.fac].units;o.pool=o.pool||{};o.pool[u[0]]=(o.pool[u[0]]||0)+Math.ceil(U[u[0]].growth/2);o.pool[u[1]]=(o.pool[u[1]]||0)+Math.ceil(U[u[1]].growth/2);}
   let owned=0;for(const o of S.objs)if(o.type==='mine'&&o.owned===ME()){owned++;gain(MINE[o.k].res,mineOut(o));}
   if(owned)msg.push(`${owned} mine${owned>1?'s':''} paid out`);
-  const cur=S.cur;S.heroes.forEach((h,i)=>{S.cur=i;h.mp=maxMP();h.mana=Math.min(maxMana(),h.mana+Math.max(1,hst(h,'lore'))+(hasSk('meditation')?2:0)+gear(h,'manaRegen'));});S.cur=cur;
+  const cur=S.cur;S.heroes.forEach((h,i)=>{S.cur=i;h.mp=maxMP();if(facSpecial('mpTown')&&h.x===t.x&&h.y===t.y)h.mp=Math.round(h.mp*1.25);h.mana=Math.min(maxMana(),h.mana+Math.max(1,hst(h,'lore'))+(hasSk('meditation')?2:0)+gear(h,'manaRegen')+(facSpecial('manaRegen')?2:0));});S.cur=cur;
   t.builtToday=false;
-  if(weekly){const d=dateParts();const mult=t.built.muster?1.5:1,gr={};S.heroes.forEach(h=>{for(const[k,v]of Object.entries((HBY[h.id].fx||{}).growth||{}))gr[k]=(gr[k]||0)+v;});
+  if(weekly&&!t.taken){const d=dateParts();const mult=(t.built.muster?1.5:1)*[1,1,1.5,2][wallLvl()],gr={};const fb=FAC_BUILD[S.fac]||[];
+    for(const b of fb)if(b.horde&&t.built[b.id]){const k=FAC[S.fac].units[b.horde[0]];gr[k]=(gr[k]||0)+b.horde[1];}
+    if(facSpecial('horde2')){const k=FAC[S.fac].units[1];gr[k]=(gr[k]||0)+2;}
+    if(facSpecial('goldWeek')){gain('gold',1500);msg.push('+1,500 gold from the cove');}S.heroes.forEach(h=>{for(const[k,v]of Object.entries((HBY[h.id].fx||{}).growth||{}))gr[k]=(gr[k]||0)+v;});
     FAC[S.fac].units.forEach((k,i)=>{if(t.built['d'+(i+1)])t.pool[k]=(t.pool[k]||0)+Math.round(U[k].growth*mult)+(gr[k]||0)+(i===0&&delivered(1)?2:0);});
     news.push(`<b>Week ${d.w} of Month ${d.m}.</b> Dwellings have new recruits. Wild creatures${S.rivals.some(r=>!r.human)?' and rivals':''} grow stronger.`);}
   news.push(`Day ${S.day}: ${msg.join(' · ')}.`);return news;
@@ -2438,6 +2471,8 @@ async function endDay(){
       for(let j=0;j<S.players.length;j++){if(S.players[j].out)continue;loadPlayer(j);const news=dayUpkeep(weekly);if(weekly){const r=addRumour(false,true);if(r)news.push(r);}S.players[j].news=news;stashPlayer();}
       loadPlayer(nextPlayer(-1));afterSwap();moving=false;await handoff();save();return;}
     dayUpkeep(weekly).forEach(m=>toast(m));if(weekly)addRumour();
+    if(S.town.taken){if(!S.rivals.some(r=>r.id===S.town.taken.id))delete S.town.taken;else{const left=7-(S.day-S.town.taken.day);
+      if(left<=0){moving=false;await defeat(`${S.town.taken.name} has held ${S.town.name} for a week. Your banner is broken.`);return;}toast(`<b>${left} day${left>1?'s':''}</b> left to retake ${esc(S.town.name)} from ${esc(S.town.taken.name)}.`);}}
     renderUI();
     await rivalsTurn();
   }finally{moving=false;}
@@ -2473,6 +2508,8 @@ function addRumour(first,quiet){
 }
 /* -------- rival heroes -------- */
 function growRival(rv){const u=FAC[rv.fac].units,wk=Math.floor((S.day-1)/7);
+  const camp=S.objs.find(o=>o.type==='camp'&&!o.free&&o.fac===rv.fac);if(camp&&camp.owned)return;
+  if(camp&&camp.garrison){const g=camp.garrison.find(a=>a.k===u[0]);if(g)g.n+=Math.ceil(U[u[0]].growth/2);else camp.garrison.push({k:u[0],n:Math.ceil(U[u[0]].growth/2)});}
   const add=(k,n)=>{n=Math.round(n*rvMul());if(n<=0)return;const s=rv.army.find(a=>a.k===k);if(s)s.n+=n;else if(rv.army.length<7)rv.army.push({k,n});};
   add(u[0],U[u[0]].growth);add(u[1],U[u[1]].growth);add(u[2],Math.round(U[u[2]].growth*0.5));if(wk>=2)add(u[3],Math.round(U[u[3]].growth*0.5));if(wk>=4)add(u[4],1);
   rv[pick(['atk','def','pow','lore'])]++;}
@@ -2480,7 +2517,8 @@ function rivalCost(rv,x,y,goal){
   const t=tileAt(x,y);let c;
   if(t===T.LAKE){if(rv.fac==='pirates')c=65;else if(rv.fac==='merfolk')c=110;else return Infinity;}
   else if(!passableT(t))return Infinity;else c=TCOST[t];
-  if(townFoot(x,y)||(objAt(x,y)||{}).type==='town')return Infinity;
+  if(townFoot(x,y))return Infinity;
+  if((objAt(x,y)||{}).type==='town'&&!(goal&&!S.players&&x===S.town.x&&y===S.town.y))return Infinity;
   if(goal)return c;
   const o=objAt(x,y);if(o&&(o.type==='neutral'||o.type==='relic'))return Infinity;
   if(o&&o.type==='spire'&&o.owned&&o.owned!==rv.fac&&o.garrison.length)return Infinity;
@@ -2496,6 +2534,10 @@ function rivalTarget(rv){
     else if(o.type==='spire'&&o.owned!==rv.fac){if(!o.garrison.length)v=o.owned?14:9;else if(armyPower(o.garrison)*1.4<pw)v=18;}
     if(v)c.push({o,x:o.x,y:o.y,v});}
   for(const h of S.heroes)if(armyPower(h.army,h)*1.25<pw)c.push({heroObj:h,x:h.x,y:h.y,v:20+h.relics.length*30});
+  // a weak town with no hero at home is a target, after the first week
+  if(!S.players&&!S.town.taken&&S.day>7&&!S.heroes.some(h=>h.x===S.town.x&&h.y===S.town.y)&&townDefense()*1.3<pw)c.push({town:true,x:S.town.x,y:S.town.y,v:28});
+  // rivals want their own camp back, and raid holdings of others
+  for(const o of S.objs)if(o.type==='camp'&&o.owned!==rv.fac&&(o.owned||o.free)&&armyPower(o.garrison||[])*1.3<pw)c.push({o,x:o.x,y:o.y,v:!o.free&&o.fac===rv.fac?40:o.free&&!o.owned?16:18});
   c.forEach(q=>q.s=q.v/(Math.hypot(q.x-rv.x,q.y-rv.y)+4));c.sort((a,b)=>b.s-a.s);
   for(const q of c.slice(0,6)){if(Math.hypot(q.x-rv.x,q.y-rv.y)>Math.max(24,(W+H)/2.2))continue;const p=astar(rv.x,rv.y,q.x,q.y,(x,y,goal)=>rivalCost(rv,x,y,goal));if(p&&p.length){q.path=p;return q;}}
   return null;}
@@ -2504,7 +2546,7 @@ function autoResolve(rv,theirs){const ours=armyPower(rv.army,rv);
   rv.army.forEach(a=>a.n=Math.max(1,Math.round(a.n*0.3)));return false;}
 async function rivalsTurn(){
   for(const rv of [...S.rivals]){
-    if(rv.human)continue;
+    if(rv.human||rv.occupy)continue;
     if(!S||S.over||!S.rivals.includes(rv))continue;
     let mp=1350;
     for(let step=0;step<4&&mp>60;step++){
@@ -2519,6 +2561,13 @@ async function rivalsTurn(){
   }
 }
 async function rivalInteract(rv,tg){
+  if(tg.town){const t=S.town;if(t.taken||S.heroes.some(h=>h.x===t.x&&h.y===t.y))return'stop';
+    const def=townDefense(),lv=wallLvl();centerOn(t.x,t.y,true);
+    if(autoResolve(rv,def)){t.garrison=[];t.taken={id:rv.id,name:rv.name,day:S.day};rv.x=t.x;rv.y=t.y;rv.occupy=true;renderUI();
+      await showModal({title:`${esc(t.name)} has fallen!`,body:`<p>The rival ${FAC[rv.fac].arch} hero <b>${esc(rv.name)}</b> broke ${lv?`through your ${WALLS[lv-1].name.toLowerCase()} and `:''}your garrison and now holds ${esc(t.name)}.</p><p>While they hold it you get no town income or recruits, and you cannot enter. <b>Defeat ${esc(rv.name)} at the gate within 7 days</b>, or the land is lost.</p>`,buttons:[{label:'To arms',value:1,primary:true}]});}
+    else{const f=Math.min(0.8,Math.pow(armyPower(rv.army,rv)/Math.max(1,def),1.4)*0.5);t.garrison.forEach(a=>a.n=Math.max(1,Math.round(a.n*(1-f))));
+      toast(`<b>${esc(rv.name)}</b> attacked ${esc(t.name)}, but ${lv?`the ${WALLS[lv-1].name.toLowerCase()} and `:''}the garrison held.`);}
+    return'stop';}
   if(tg.heroObj){const h=tg.heroObj;if(!S.heroes.includes(h))return'stop';
     S.cur=S.heroes.indexOf(h);heroDraw.x=h.x;heroDraw.y=h.y;centerOn(h.x,h.y,true);renderUI();
     await showModal({title:`${rv.name} attacks!`,body:`<p>The rival ${FAC[rv.fac].arch} hero <b>${rv.name}</b> falls on ${h.name}'s army.</p>`,buttons:[{label:'To battle',value:1,primary:true}]});
@@ -2528,6 +2577,8 @@ async function rivalInteract(rv,tg){
   if(o.type==='artifact'){S.objs=S.objs.filter(q=>q!==o);(rv.items=rv.items||[]).push(o.item);rv.x=o.x;rv.y=o.y;return'go';}
   if(o.type==='drop'){S.objs=S.objs.filter(q=>q!==o);rv.relics.push(...o.rs);rv.x=o.x;rv.y=o.y;toast(`<b>${rv.name}</b> picked up ${o.rs.map(r=>RELICS[r].name).join(', ')}.`);return'go';}
   if(o.type==='mine'){rv.x=o.x;rv.y=o.y;if(o.owned===ME())toast(`<b>${rv.name}</b> seized your ${MINE[o.k].name}.`);o.owned=rv.fac;o.ownerName=rv.name;return'go';}
+  if(o.type==='camp'){if(o.garrison&&o.garrison.length&&!autoResolve(rv,armyPower(o.garrison))){o.garrison.forEach(a=>a.n=Math.max(1,Math.round(a.n*0.7)));if(o.owned===ME())toast(`Your holding held against <b>${esc(rv.name)}</b>.`);return'stop';}
+    if(o.owned===ME())toast(`<b>${esc(rv.name)}</b> has taken back a camp from you.`);rv.x=o.x;rv.y=o.y;o.owned=!o.free&&o.fac===rv.fac?false:rv.fac;o.garrison=[];return'go';}
   if(o.type==='spire'){rv.x=o.x;rv.y=o.y;
     if(o.garrison.length){if(!autoResolve(rv,armyPower(o.garrison)*1.25)){o.garrison.forEach(a=>a.n=Math.max(1,Math.round(a.n*0.7)));if(o.owned===ME())toast(`Your spire held against <b>${rv.name}</b>.`);return'stop';}}
     if(o.owned===ME())toast(`<b>${rv.name}</b> has taken one of your spires.`);o.owned=rv.fac;o.ownerName=rv.name;o.garrison=[];return'go';}
@@ -2550,6 +2601,24 @@ const hireCost=x=>x.fac===S.fac?HIRE_COST:HIRE_COST+500;
 const hireable=()=>{const taken=new Set([...S.heroes.map(y=>y.id),...S.rivals.map(r=>r.id),...(S.players||[]).flatMap(p=>(p.heroes||[]).map(h=>h.id))]);
   const free=HEROES.filter(x=>!taken.has(x.id)&&!x.blank),g=mulberry32((S.seed^Math.imul(weekNo()+1,7919))>>>0),sh=a=>a.map(x=>[g(),x]).sort((p,q)=>p[0]-q[0]).map(x=>x[1]);
   return[...sh(free.filter(x=>x.fac===S.fac)).slice(0,2),...sh(free.filter(x=>x.fac!==S.fac)).slice(0,2)];};
+/* each banner's own buildings: a horde (more of one troop each week), one that teaches visiting heroes, and a special */
+const FAC_BUILD={
+  rangers:[{id:'fb1',name:'Bramble Warren',horde:[0,4]},{id:'fb2',name:"Hunter's Lodge",visit:'atk'},{id:'fb3',name:'Waystone Circle',special:'mpTown',desc:'Heroes who start the day in town get +25% movement that day.'}],
+  wizards:[{id:'fb1',name:'Ink Wells',horde:[0,5]},{id:'fb2',name:'Observatory',visit:'pow'},{id:'fb3',name:'Arcane Conduit',special:'manaRegen',desc:'Every hero regains 2 more mana each day.'}],
+  necro:[{id:'fb1',name:'Ossuary',horde:[0,5]},{id:'fb2',name:'Whispering Crypt',visit:'lore'},{id:'fb3',name:'Soul Vault',special:'harvest',desc:'Grave Harvest raises 5% more of the fallen.'}],
+  centaurs:[{id:'fb1',name:'Den of Plenty',horde:[0,4]},{id:'fb2',name:'Trial Grounds',visit:'atk'},{id:'fb3',name:'Great Paddock',special:'horde2',desc:'+2 of your second-tier troops each week.'}],
+  pirates:[{id:'fb1',name:'Grog Hall',horde:[0,4]},{id:'fb2',name:'Gunnery Range',visit:'atk'},{id:'fb3',name:"Smugglers' Cove",special:'goldWeek',desc:'Brings in 1,500 gold at the start of each week.'}],
+  elves:[{id:'fb1',name:'Seedling Grove',horde:[0,4]},{id:'fb2',name:'Moonlit Glade',visit:'lore'},{id:'fb3',name:'Sylvan Spring',special:'amberDay',desc:'Gives 1 amber each day.'}],
+  dwarves:[{id:'fb1',name:'Delving Halls',horde:[0,4]},{id:'fb2',name:'Runestone',visit:'def'},{id:'fb3',name:'Deep Seam',special:'oreDay',desc:'Gives 2 ore each day.'}],
+  merfolk:[{id:'fb1',name:'Spawning Pools',horde:[0,5]},{id:'fb2',name:'Coral Shrine',visit:'pow'},{id:'fb3',name:'Tide Market',special:'goldWeek',desc:'Brings in 1,500 gold at the start of each week.'}]};
+const FB_COST=[{gold:1500,timber:5},{gold:2000,ore:5},{gold:3000,timber:5,amber:5}];
+const facSpecial=k=>!!(S&&S.town&&S.town.built&&(FAC_BUILD[S.fac]||[]).some(b=>b.special===k&&S.town.built[b.id]));
+/* walls: more growth, and they defend the town when a rival attacks it */
+const WALLS=[{id:'wall1',name:'Palisade',cost:{gold:1500,timber:10},desc:'A timber wall: the garrison fights 25% harder when the town is attacked.'},
+  {id:'wall2',name:'Stronghold',cost:{gold:3000,ore:10},req:['wall1'],desc:'Stone walls: +50% troop growth each week, and the garrison fights 50% harder.'},
+  {id:'wall3',name:'Bastion',cost:{gold:5000,ore:10,amber:5},req:['wall2','hall2'],desc:'Towers on the walls: +100% troop growth each week, the garrison fights twice as hard, and the towers join the defence.'}];
+const wallLvl=()=>S.town.built.wall3?3:S.town.built.wall2?2:S.town.built.wall1?1:0;
+function townDefense(){const lv=wallLvl(),g=armyPower(S.town.garrison||[]);return g*[1,1.25,1.5,2][lv]+(lv===3?stackPower('troll',8):0);}
 function townBuildings(){
   const f=FAC[S.fac],fk=S.fac;
   const L=[
@@ -2570,6 +2639,9 @@ function townBuildings(){
   L.push({id:'lib1',name:'Lantern Library',cost:{gold:2000,timber:5,ore:5},desc:`Sells spellbooks and teaches ${libSpells(1).map(x=>SP[x].name).join(' and ')}. Refills mana on each visit.`});
   L.push({id:'lib2',name:'Star Archive',cost:{gold:4000,ore:5,amber:5},req:['lib1'],desc:`Teaches ${libSpells(2).map(x=>SP[x].name).join(', ')}.`});
   L.push({id:'market',name:'Barter Yard',cost:{gold:500,timber:5},desc:'Trade goods for gold, or gold for goods.'});
+  for(const w of WALLS)L.push({...w,wall:true});
+  (FAC_BUILD[fk]||[]).forEach((b,i)=>{const desc=b.horde?`+${b.horde[1]} ${U[f.units[b.horde[0]]].pl} each week.`:b.visit?`Each hero who visits learns +1 ${STATN[b.visit]}, once.`:b.desc;
+    L.push({id:b.id,name:b.name,cost:FB_COST[i],req:b.horde?['d'+(b.horde[0]+1)]:i===2?['hall2']:[],desc,unique:true});});
   return L;
 }
 function canAfford(cost){return Object.entries(cost).every(([k,v])=>S.res[k]>=v);}
@@ -2721,6 +2793,12 @@ function drawTownView(cv){
       for(let i=0;i<4;i++){c.fillStyle='#a69c84';c.fillRect(x-w/2+6+i*18,base-h+24,8,h-24);}
       S.delivered.forEach((r,i)=>drawRelic(c,r,x-w/2+10+(i%4)*18,base-h+34+Math.floor(i/4)*18,5));spot(x-w/2-6,base-h-10,w+12,h+10,'relics',id,`Relic Hall: ${S.delivered.length}/7 relics home`);}
   }
+  // walls, once built, run along the front
+  {const lv=wallLvl();if(lv){const y0=lv===1?262:256;c.strokeStyle='#2b2418';c.lineWidth=1.5;
+    if(lv===1){c.fillStyle='#7a5432';for(let x=10;x<950;x+=12){if(x>420&&x<540)continue;c.beginPath();c.moveTo(x,288);c.lineTo(x,y0);c.lineTo(x+5,y0-7);c.lineTo(x+10,y0);c.lineTo(x+10,288);c.closePath();c.fill();c.stroke();}}
+    else{c.fillStyle=lv===3?'#b9b2a0':'#a39c88';for(const[x0,x1]of[[0,425],[535,960]]){c.fillRect(x0,y0,x1-x0,32);c.strokeRect(x0,y0,x1-x0,32);for(let x=x0;x<x1;x+=16)c.fillRect(x,y0-7,9,7);}
+      if(lv===3)for(const tx of[60,330,630,900]){c.fillStyle='#c9c2ae';c.fillRect(tx-14,y0-34,28,66);c.strokeRect(tx-14,y0-34,28,66);c.fillStyle=FAC[S.fac].col;c.beginPath();c.moveTo(tx-18,y0-34);c.lineTo(tx,y0-56);c.lineTo(tx+18,y0-34);c.closePath();c.fill();c.stroke();}}
+    spot(0,y0-10,420,40,'build',lv===3?'wall3':lv===2?'wall3':'wall2',`${WALLS[lv-1].name}: the garrison fights ${['','25%','50%','twice as'][lv]} harder${lv>1?` · +${lv===2?50:100}% growth`:''}`);}}
   // heroes in town stand at the gate
   S.heroes.filter(x=>x.x===t.x&&x.y===t.y).forEach((x,i)=>{c.save();c.translate(438+i*30-TS/2,262-TS/2);const f0=x.face;x.face='s';drawHero(c,0,0,x);x.face=f0;c.restore();});
 }
@@ -2746,6 +2824,7 @@ document.addEventListener('click',async e=>{
 },true);
 async function openTown(){
   if(modalOpen||S.over)return;
+  if(S.town.taken){toast(`${esc(S.town.taken.name)} holds ${esc(S.town.name)}. Defeat them at the gate to take it back.`);return;}
   townTab=townAdvice().tab==='overview'?'overview':'overview';townFocus=null;
   const p=showModal({title:`<img src="${iconURL('crest',S.fac,52)}" alt="" style="width:44px;height:44px;vertical-align:-12px;margin-right:8px;image-rendering:pixelated">${esc(S.town.name)} <button class="btn sm rename" data-rename-town="1" title="Rename your town">✎ Rename</button>`,body:townHTML(),wide:true,top:true,buttons:[{label:'Leave town ▸',value:1,primary:true}],dismiss:1});
   const m=$('#modal'),body=m.querySelector('.body');
@@ -2817,16 +2896,16 @@ function startBattle(o){
   return new Promise(resolve=>{
     const stacks=[];const army=HERO().army;const rows=rowsFor(army.length),col0=hasSk('battleplan')?1:0;
     army.forEach((a,i)=>stacks.push(mkStack(a.k,a.n,0,col0,rows[i],i)));
-    if(o.type==='spire'){const ea=o.garrison;const er=rowsFor(ea.length);ea.forEach((a,i)=>stacks.push(mkStack(a.k,a.n,1,BC-1,er[i],i)));}
+    if(o.type==='spire'||o.type==='camp'){const ea=o.garrison;const er=rowsFor(ea.length);ea.forEach((a,i)=>stacks.push(mkStack(a.k,a.n,1,BC-1,er[i],i)));}
     else if(o.type==='rival'){const ea=o.rival.army;const er=rowsFor(ea.length);ea.forEach((a,i)=>stacks.push(mkStack(a.k,a.n,1,BC-1,er[i],i)));}
     else{const k=o.type==='relic'&&o.r===6?o.n:clamp(Math.round(Math.sqrt(o.n)),1,Math.min(5,o.n));
     const er=rowsFor(k);for(let i=0;i<k;i++){const n=Math.floor(o.n/k)+(i<o.n%k?1:0);stacks.push(mkStack(o.k,n,1,BC-1,er[i],i));}}
     const obst=new Set();const no=ri(3,6);for(let i=0;i<no*4&&obst.size<no;i++){const c=ri(3,BC-4),r=ri(0,BR-1);obst.add(hk(c,r));}
     bt={stacks,obst,round:1,active:null,pending:null,targeting:null,spellCast:false,spellsCast:0,auto:false,over:false,log:[],floats:[],fx:[],resolve,obj:o,terr:tileAt(o.x,o.y),hover:null,mouse:null,
-      title:o.type==='spire'?'Battle for the spire':o.type==='rival'?`Battle with ${o.rival.name}'s army`:o.type==='relic'?`Battle at the ${RELICS[o.r].lair}`:o.guard?'Battle at the guarded pass':`Battle with ${U[o.k].pl}`,rocks:{},forced:null,firstDone:false,geyserUsed:false,corpses:[],enemyHero:o.type==='rival'?o.rival:null};
+      title:o.type==='camp'?`Battle for the ${campName(o)}`:o.type==='spire'?'Battle for the spire':o.type==='rival'?`Battle with ${o.rival.name}'s army`:o.type==='relic'?`Battle at the ${RELICS[o.r].lair}`:o.guard?'Battle at the guarded pass':`Battle with ${U[o.k].pl}`,rocks:{},forced:null,firstDone:false,geyserUsed:false,corpses:[],enemyHero:o.type==='rival'?o.rival:null};
     $('#battle').hidden=false;$('#btTitle').textContent=bt.title;
     layoutBattle();renderBG();
-    logB(o.type==='spire'?'The garrison mans the walls. Round 1.':o.type==='rival'?`${o.rival.name}'s army takes the field. Round 1.`:`${fx().exact?o.n:amountWord(o.n)} ${U[o.k].pl} bar the way. Round 1.`);
+    logB(o.type==='spire'||o.type==='camp'?'The garrison stands ready. Round 1.':o.type==='rival'?`${o.rival.name}'s army takes the field. Round 1.`:`${fx().exact?o.n:amountWord(o.n)} ${U[o.k].pl} bar the way. Round 1.`);
     battleLoop();
   });
 }
@@ -3040,11 +3119,13 @@ async function endBattle(){
   const merge=l=>{const m={};for(const x of l)m[x.k]=(m[x.k]||0)+x.n;return Object.entries(m).map(([k,n])=>`<li>${n} ${U[k].pl}</li>`).join('')||'<li class="muted">None</li>';};
   const killedHP=bt.stacks.filter(s=>s.side===1).reduce((a,s)=>a+(s.n0-s.n)*s.u.hp,0);const xp=killedHP;
   let extras=[];let thralls=0,plunder=0;
-  if(won&&S.fac==='necro'){thralls=Math.max(1,Math.round(killedHP*(fx().harvest||0.10)/U.thrall.hp));extras.push(`<b>Grave Harvest:</b> ${thralls} Bone Thralls rise and join you.`);}
+  if(won&&S.fac==='necro'){thralls=Math.max(1,Math.round(killedHP*((fx().harvest||0.10)+(facSpecial('harvest')?0.05:0))/U.thrall.hp));extras.push(`<b>Grave Harvest:</b> ${thralls} Bone Thralls rise and join you.`);}
   if(won&&S.fac==='pirates'){plunder=Math.round(xp*0.6*(fx().plunder||1));extras.push(`<b>Plunder:</b> +${fmt(plunder)} gold.`);}
   const o=bt.obj,rv=o.type==='rival'?o.rival:null,h=HERO();
   if(won&&rv&&rv.relics.length)extras.push(`<b>Relics recovered:</b> ${rv.relics.map(r=>RELICS[r].name).join(', ')}.`);
   if(!won&&h.relics.length)extras.push(rv?`${rv.name} takes ${h.relics.map(r=>RELICS[r].name).join(', ')}.`:`${h.relics.map(r=>RELICS[r].name).join(', ')} ${h.relics.length>1?'fall':'falls'} to the ground where ${h.name} stood.`);
+  if(won&&o.type==='camp')extras.push(`<b>${campName(o)} captured:</b> +500 gold a day, and ${FAC[o.fac].arch} recruits there each week.`);
+  if(won&&rv&&S.town.taken&&S.town.taken.id===rv.id)extras.push(`<b>${esc(S.town.name)} is free again.</b>`);
   const body=`<p>${won?`The field is yours. ${h.name} gains ${fmt(xp)} experience.`:`${h.name}'s army is broken, and ${h.name} is lost.${S.heroes.length>1?' Your other heroes fight on.':''}`}</p>${extras.map(x=>`<p>${x}</p>`).join('')}
    <div class="casualties"><div><div class="label">Your losses</div><ul>${merge(lost(0))}</ul></div><div><div class="label">Enemy losses</div><ul>${merge(lost(1))}</ul></div></div>`;
   await showModal({title:won?'Victory':'Defeat',body,buttons:[{label:'Continue',value:1,primary:true}]});
@@ -3053,6 +3134,8 @@ async function endBattle(){
     HERO().army=army;if(thralls){if(!addToArmy('thrall',thralls)){const g=S.town.garrison.find(x=>x.k==='thrall');if(g)g.n+=thralls;else S.town.garrison.push({k:'thrall',n:thralls});}}
     if(plunder)S.res.gold+=plunder;
     if(o.type==='spire'){o.owned=ME();o.ownerName=h.name;o.garrison=[];}
+    if(o.type==='camp'){o.owned=ME();o.ownerName=h.name;o.garrison=[];o.pool=firstPool(o);}
+    if(rv&&S.town.taken&&S.town.taken.id===rv.id)delete S.town.taken;
     if(rv){const rl=rv.relics.splice(0);S.rivals=S.rivals.filter(r=>r!==rv);if(rl.length)h.relics.push(...rl);
       if(rv.human){const q=S.players[rv.owner];q.heroes=q.heroes.filter(x=>x!==rv);if(!q.heroes.length)q.out=true;}}
     if(!S.players&&S.mode==='conquest'&&!S.rivals.length)S.pendingWin=true;
@@ -3060,7 +3143,7 @@ async function endBattle(){
   }else{
     const surv=[];for(const s of bt.stacks.filter(s=>s.side===1&&s.alive)){const ex=surv.find(a=>a.k===s.k);if(ex)ex.n+=s.n;else surv.push({k:s.k,n:s.n});}
     if(rv){rv.army=surv;rv.relics.push(...h.relics);}
-    else if(o.type==='spire')o.garrison=surv;
+    else if(o.type==='spire'||o.type==='camp')o.garrison=surv;
     else{const n=surv.reduce((a,x)=>a+x.n,0);if(n)o.n=n;if(h.relics.length)S.objs.push({type:'drop',rs:[...h.relics],x:h.x,y:h.y,id:S.uid++});}
     h.relics=[];S.heroes.splice(S.cur,1);S.cur=0;
   }
@@ -3216,7 +3299,7 @@ async function pickMap(opt={}){
   body.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
     if(b.dataset.mode)mode=b.dataset.mode;else if(b.dataset.diff)diff=b.dataset.diff;else if(b.dataset.np)np=+b.dataset.np;else if(b.dataset.map)type=b.dataset.map;else if(b.dataset.size){size=b.dataset.size;np=Math.min(np,MAP_SIZES[size].rivals+1);}else if(b.dataset.reroll)seed=(Math.random()*1e9)|0;else return;body.innerHTML=html();});
   const v=await p;if(v!=='go')return null;
-  if(type.startsWith('custom:')){const id=type.slice(7),m=loadMaps().find(x=>x.id===id);if(m)return{type:'custom',custom:id,size:m.size,seed,mode,diff,nPlayers:mode==='multi'?Math.min(np,1+m.objs.filter(o=>o.type==='camp').length):1};}
+  if(type.startsWith('custom:')){const id=type.slice(7),m=loadMaps().find(x=>x.id===id);if(m)return{type:'custom',custom:id,size:m.size,seed,mode,diff,nPlayers:mode==='multi'?Math.min(np,1+m.objs.filter(o=>o.type==='camp'&&!o.free).length):1};}
   return{type,size,seed,mode,diff,nPlayers:mode==='multi'?np:1};
 }
 async function pickFaction(opt={}){
@@ -3341,7 +3424,7 @@ function frame(){if(bt)drawBattle();else drawMap();requestAnimationFrame(frame);
 const MAPKEY='questing-heroes-maps';
 function loadMaps(){try{return JSON.parse(localStorage.getItem(MAPKEY)||'[]');}catch(e){return[];}}
 function storeMaps(l){try{localStorage.setItem(MAPKEY,JSON.stringify(l));return true;}catch(e){toast('Could not save: browser storage is unavailable.');return false;}}
-const ED_OBJS=[['town','Your town','🏰'],['camp','Rival camp','⛺'],['relic','Relic lair','◆'],['lair','Glass Lair','💎'],['monster','Monster','👹'],['guard','Pass guard','🛡'],
+const ED_OBJS=[['town','Your town','🏰'],['camp','Rival camp','⛺'],['freetown','Free town','🏘'],['relic','Relic lair','◆'],['lair','Glass Lair','💎'],['monster','Monster','👹'],['guard','Pass guard','🛡'],
   ['gold','Gold seam','🪙'],['orepit','Ore pit','⛏'],['saw','Sawmill','🪵'],['amber','Amber spring','🟠'],['pile','Resources','💰'],['chest','Chest','🧰'],['artifact','Artifact','✨'],
   ['spire','Spire','🗼'],['portal','Portal pair','🌀'],['sage',"Sage's Library",'📚'],['altar','Spell altar','🔮'],['site','Weekly site','⛲'],['dock','Dock','⚓'],['fair','Horse fair','🐎'],['shrine','Wayshrine','🕯'],['erase','Erase','✖']];
 const ED_TCOL=['#5f8a3e','#8a7450','#b5a06e','#7d6b5a','#4a5f41','#2f5a2a','#77746c','#2f6385'];
@@ -3377,7 +3460,7 @@ document.addEventListener('click',e=>{const m=$('#modal');if(m.hidden||!m.queryS
   const dl=e.target.closest('[data-edel]');if(dl){storeMaps(loadMaps().filter(q=>q.id!==dl.dataset.edel));dl.closest('.edrow').remove();}});
 function edCheck(){const o=S.objs,has=t=>o.filter(q=>q.type===t);
   const rel=new Set(o.filter(q=>q.type==='relic').map(q=>q.r)),town=has('town')[0];
-  const out={town:!!town,camps:has('camp').length,relics:[0,1,2,3,4,5].filter(i=>rel.has(i)).length,lair:rel.has(6),unreach:0};
+  const out={town:!!town,camps:has('camp').filter(q=>!q.free).length,relics:[0,1,2,3,4,5].filter(i=>rel.has(i)).length,lair:rel.has(6),unreach:0};
   if(town){const port=new Map();for(const q of o)if(q.type==='portal'&&q.tx!==undefined)port.set(idx(q.x,q.y),idx(q.tx,q.ty));
     const ok=i=>S.tiles[i]<5||S.tiles[i]===T.LAKE,seen=new Uint8Array(W*H),q=[idx(town.x,town.y)];seen[q[0]]=1;
     while(q.length){const i=q.pop(),x=i%W,y=(i/W)|0;const pj=port.get(i);if(pj!==undefined&&!seen[pj]){seen[pj]=1;q.push(pj);}
@@ -3417,7 +3500,8 @@ function edApply(x,y){if(!inb(x,y))return false;const[kind,key]=ED.tool.split(':
   const add=o=>{clearAt(o.x,o.y);if(!passableT(S.tiles[idx(o.x,o.y)])&&o.type!=='dock')setTile(o.x,o.y,T.GRASS);o.id=S.uid++;S.objs.push(o);return o;};
   if(key==='town'){if(y<2||x<1||x>W-2||y>H-2)return false;S.objs=S.objs.filter(o=>o.type!=='town');for(let b=-2;b<=0;b++)for(let a=-1;a<=1;a++){clearAt(x+a,y+b);setTile(x+a,y+b,T.GRASS);}clearAt(x,y+1);setTile(x,y+1,T.ROAD);
     S.objs.push({type:'town',x,y,id:S.uid++});S.town.x=x;S.town.y=y;rebuildFoot();return true;}
-  if(key==='camp'){if(S.objs.filter(o=>o.type==='camp').length>=4){toast('Four rival camps at most.');return false;}add({type:'camp',x,y,fac:null,dfac:FAC_ORDER[(S.objs.filter(o=>o.type==='camp').length+2)%8]});return true;}
+  if(key==='freetown'){const g=neutralAt(0.4);add({type:'camp',free:true,fac:pick(FAC_ORDER),x,y,owned:false,garrison:[{k:g.k,n:g.n}],pool:{}});return true;}
+  if(key==='camp'){if(S.objs.filter(o=>o.type==='camp'&&!o.free).length>=4){toast('Four rival camps at most.');return false;}add({type:'camp',x,y,fac:null,dfac:FAC_ORDER[(S.objs.filter(o=>o.type==='camp').length+2)%8]});return true;}
   if(key==='relic'){const have=new Set(S.objs.filter(o=>o.type==='relic').map(o=>o.r));const r=[0,1,2,3,4,5].find(i=>!have.has(i));if(r===undefined){toast('All six relic lairs are placed. Erase one to move it.');return false;}const Rl=RELIC_LIST[r];add({type:'relic',r,x,y,k:Rl.k,n:ri(Rl.n[0],Rl.n[1])});return true;}
   if(key==='lair'){S.objs=S.objs.filter(o=>!(o.type==='relic'&&o.r===6));add({type:'relic',r:6,x,y,k:'drake',n:3});return true;}
   if(key==='monster'){const d=S.town.x>=0?clamp(Math.hypot(x-S.town.x,y-S.town.y)/(Math.hypot(W,H)*0.7),0.1,1):0.5;add({type:'neutral',x,y,...neutralAt(d)});return true;}
