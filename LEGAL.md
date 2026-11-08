@@ -39,6 +39,7 @@ No other libraries, images or audio are included. Art made later with ChatGPT or
 | Enemies, Loot & World Pack 02: 10 neutral enemy sheets, map guards and portraits, 4 mines, 9 owner pennants, chests, pickups, wayshrine, moonwell, watchtower, Glass Lair, 6 projectiles (`assets/enemies`, `assets/map`, `assets/projectiles`, `assets/portraits/enemies`) | Generated starter art, processed to a pixel grid and the shared palette (pack README) | 2026-11-08 | Same as above |
 | Portrait Updates Pack 11: Perry, Grimes, Sookie, Bear, Griffiths (`assets/portraits/heroes`) | Generated pixel portraits on the shared palette (pack README) | 2026-11-08 | Same as above |
 | Map & Battle Expansion Pack 12: troop team masks, banner walkers, hex overlays, spell effects, rival camps, spire, relic lairs, Glass Lair, battle hero figures, 31 artifact icons, panel textures (`assets/team_masks/units`, `assets/heroes/_banners`, `assets/battle`, `assets/map/buildings`, `assets/artifacts`, `assets/ui/textures`) | Generated art processed to the shared palette (pack README) | 2026-11-08 | Same as above |
+| Binx portrait without collar (`assets/portraits/heroes/binx_*.png`) | Supplied by the author (generated pixel portrait); 64 px made by halving locally | 2026-11-08 | Same as above |
 | Half-size move cursor (`assets/ui/cursors/move_small.png`) | Downscaled locally from Pack 09's move cursor | 2026-11-08 | Same as above |
 
 The generated source images (high-res magenta PNGs) are kept outside this repo.
