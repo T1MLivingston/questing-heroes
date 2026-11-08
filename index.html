@@ -751,6 +751,17 @@ img{image-rendering:auto}
 .fd-troop p{margin:0;font-size:13px;line-height:1.3}.fd-troop small{color:var(--muted);font-size:12px;line-height:1.25}
 @media (max-width:1100px){.facs2,.fd-heroes{grid-template-columns:repeat(2,minmax(0,1fr))}.fd-troops{grid-template-columns:repeat(3,minmax(0,1fr))}.fd-info{grid-template-columns:1fr}}
 @media (max-width:600px){.facs2,.fd-heroes,.fd-troops{grid-template-columns:1fr}.fd-hero{grid-template-columns:96px 1fr}.fd-hero>img{width:96px;height:96px}}
+
+/* v22: tighter banner cards; one-line strengths; troop pictures with tags overlaid so the stat boxes line up */
+.sheet.bannersheet{height:auto;max-height:94vh}.sheet.bannersheet.det{height:min(940px,94vh)}
+.facs2{min-height:0;grid-auto-rows:auto}
+.fcard2 .fc-acts{margin-top:auto}
+.fcard2 .sw,.fd-title .sw{flex-wrap:nowrap;white-space:nowrap;overflow:hidden;font-size:13px;gap:0 10px}
+.fd-title .sw{font-size:15px}
+.fd-troop .tpic{position:relative;width:180px;height:150px}.fd-troop .tpc{display:block;width:180px;height:150px;image-rendering:pixelated}
+.fd-troop .fd-tags{position:absolute;left:4px;right:4px;top:4px;justify-content:center}.fd-troop .fd-tags span{background:rgba(255,246,214,.92)}
+.fd-troop>b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.fc-blurb{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.6em}
 </style>
 
 <div id="app">
@@ -1065,11 +1076,11 @@ const DIFF_ICON={easy:'☘',normal:'⚔',hard:'☠'};
 const STAT_TIP={atk:'Attack: every troop in the army hits harder',def:'Defense: every troop in the army takes less damage',pow:'Power: spells hit harder and last longer',lore:'Lore: more mana, so more spells'};
 /* plain-words summary of each banner's special power */
 /* banner cards: two strengths and one weakness */
-const FAC_SW={rangers:[['Tough defenders','Strong top troop'],'Slow army'],wizards:[['Strong spells','Many shooters'],'Fragile troops'],necro:[['Grows every win','Fearless'],'Weak early troops'],
-  centaurs:[['Fastest army','Hits hard in packs'],'Light armour'],pirates:[['Gold rich','Heavy guns'],'Weak up close'],elves:[['Best archers','Fliers and riders'],'Fragile'],
-  dwarves:[['Toughest armour','Strong buildings'],'Slow'],merfolk:[['Fast in water','Charming sirens'],'Slow on land']};
+const FAC_SW={rangers:[['Tough','Big tier 5'],'Slow'],wizards:[['Strong spells','Shooters'],'Fragile'],necro:[['Grows each win','Fearless'],'Weak start'],
+  centaurs:[['Fastest','Pack hitters'],'Light armour'],pirates:[['Gold rich','Big guns'],'Weak up close'],elves:[['Best archers','Fliers'],'Fragile'],
+  dwarves:[['Toughest','Strong forge'],'Slow'],merfolk:[['Fast in water','Charmers'],'Slow on land']};
 const FAC_BLURB={rangers:'Troops that hold still get +2 defense.',wizards:"Your hero's first spell each battle casts twice.",necro:'After each win, some fallen foes rise to join you.',
-  centaurs:'Stacks side by side get faster and hit harder.',pirates:'Every win pays gold. Starts with a boat.',elves:'Archers that stayed put shoot twice.',dwarves:'The Great Forge makes every dwarf tougher.',merfolk:'Home is a lagoon. Fast in water, slow on land. Every third battle round: +2 speed and attack.'};
+  centaurs:'Stacks side by side get faster and hit harder.',pirates:'Every win pays gold. Starts with a boat.',elves:'Archers that stayed put shoot twice.',dwarves:'The Great Forge makes every dwarf tougher.',merfolk:'Lagoon home. Every third battle round: +2 speed and attack.'};
 function setMode(m){RELICS=m==='grail'?GRAILS:RELIC_LIST;for(const k in iconCache)if(k.startsWith('relic:'))delete iconCache[k];}
 const altarName=()=>S&&S.mode==='grail'?'Grail Altar':'Relic Hall';
 function goalMet(){if(S.mode==='conquest')return S.rivals.length===0;return(S.goal||[0,1,2,3,4,5,6]).every(i=>delivered(i));}
@@ -3785,13 +3796,21 @@ async function pickMap(opt={}){
 }
 /* Choose your banner: a tall grid of banner cards; Details opens a full page for one banner (heroes, troops, ability), with arrows to flip between banners */
 const UNIT_TAGS=u=>[u.fly&&'Flies',u.shots&&`Shoots (${u.shots})`,u.charge&&'Charge',u.double&&'Strikes twice',u.noRetal&&'No strike-back',u.retal>1&&'Strikes back twice',u.regen&&'Regrows',u.drain&&'Drains life',u.charm&&'Charms',u.undead&&'Undead'].filter(Boolean);
+/* crisp troop picture: the first idle frame of the battle art, cropped to the figure and scaled by a whole number */
+function troopSrc(k){const st=stripPath(k);if(st&&!unitArt(k)&&!ENEMY_ART[k])return{p:st,cols:6};const n=unitArt(k);if(n)return{p:`units/${unitFac(k)}/${n}/${n}_sheet.png`,cols:4,rows:5};if(ENEMY_ART[k])return{p:`enemies/${ENEMY_ART[k]}/sheet.png`,cols:4,rows:5};return null;}
+function paintTroopPics(root,tries=0){let left=0;
+  for(const cv of root.querySelectorAll('canvas.tpc:not([data-done])')){const k=cv.dataset.u,src=troopSrc(k);if(!src){cv.dataset.done=1;continue;}const a=artImg(src.p);if(!a.ok){left++;continue;}
+    const im=a.img,fw=im.width/src.cols,fh=src.rows?im.height/src.rows:im.height,t=document.createElement('canvas');t.width=fw;t.height=fh;const tc=t.getContext('2d');tc.drawImage(im,0,0,fw,fh,0,0,fw,fh);
+    const d=tc.getImageData(0,0,fw,fh).data;let x0=fw,y0=fh,x1=-1,y1=-1;for(let y=0;y<fh;y++)for(let x=0;x<fw;x++)if(d[(y*fw+x)*4+3]>0){if(x<x0)x0=x;if(x>x1)x1=x;if(y<y0)y0=y;if(y>y1)y1=y;}
+    const c=cv.getContext('2d'),W2=cv.width,H2=cv.height;c.clearRect(0,0,W2,H2);if(x1<0){cv.dataset.done=1;continue;}const cw=x1-x0+1,ch=y1-y0+1,z=Math.max(1,Math.floor(Math.min((W2-8)/cw,(H2-8)/ch)));
+    c.imageSmoothingEnabled=false;c.drawImage(t,x0,y0,cw,ch,Math.round((W2-cw*z)/2),Math.round(H2-6-ch*z),cw*z,ch*z);cv.dataset.done=1;}
+  if(left&&tries<40)setTimeout(()=>paintTroopPics(root,tries+1),100);}
 function bannerCard(k,off){const f=FAC[k],hs=HEROES.filter(h=>h.fac===k);
   return`<div class="pick fcard2" style="--c:${f.col};--c2:${f.col2}" data-fac="${k}" ${off?'aria-disabled="true"':''}>
     <div class="fc-head"><img src="${iconURL('crest',k,52)}" alt=""><div><h3>${f.arch}</h3><small>${f.mech}</small></div></div>
     <div class="sw">${FAC_SW[k][0].map(t=>`<span class="pro">+ ${t}</span>`).join('')}<span class="con">− ${FAC_SW[k][1]}</span></div>
     <p class="fc-blurb">${FAC_BLURB[k]}</p>
     <div class="fc-heroes">${hs.map(h=>`<img src="${iconURL('hero',h.id,84)}" alt="${esc(h.name)}" title="${esc(h.name)} · ${h.type}">`).join('')}</div>
-    <div class="fc-troops">${f.units.map(u=>`<span class="tpic" title="${U[u].name}"><img src="${iconURL('unit',u,64)}" alt="${U[u].name}"></span>`).join('')}</div>
     <div class="fc-acts"><button class="btn" data-det="${k}">Details</button><button class="btn primary" data-choose="${k}" ${off?'disabled':''}>Choose ▸</button></div></div>`;}
 function bannerDetail(k,off){const f=FAC[k],hs=HEROES.filter(h=>h.fac===k),i=FAC_ORDER.indexOf(k),prev=FAC_ORDER[(i+7)%8],next=FAC_ORDER[(i+1)%8];
   const stat=(n,v)=>`<span><em>${n}</em><b>${v}</b></span>`;
@@ -3805,8 +3824,7 @@ function bannerDetail(k,off){const f=FAC[k],hs=HEROES.filter(h=>h.fac===k),i=FAC
       <div class="fd-st">${['atk','def','pow','lore'].map((s2,j)=>`<span title="${STATN[s2]}"><img src="${iconURL('stat',s2,44)}" alt="">${h.st[j]}</span>`).join('')}</div>
       <p><b>★ ${h.ab}:</b> ${h.ad}</p></div></div>`).join('')}</div>
     <h3 class="fd-h">Troops</h3>
-    <div class="fd-troops">${f.units.map((uk,t)=>{const u=U[uk],up=U[uk+'_u'];return`<div class="fd-troop"><div class="fd-tier">Tier ${t+1}</div><div class="tpic"><img src="${iconURL('unit',uk,64)}" alt=""></div><b>${u.name}</b>
-      <div class="fd-tags">${UNIT_TAGS(u).map(x=>`<span>${x}</span>`).join('')}</div>
+    <div class="fd-troops">${f.units.map((uk,t)=>{const u=U[uk],up=U[uk+'_u'];return`<div class="fd-troop"><div class="fd-tier">Tier ${t+1}</div><div class="tpic"><canvas class="tpc" data-u="${uk}" width="180" height="150" aria-label="${u.name}"></canvas><div class="fd-tags">${UNIT_TAGS(u).map(x=>`<span>${x}</span>`).join('')}</div></div><b>${u.name}</b>
       <div class="fd-stats">${stat('Attack',u.atk)}${stat('Defense',u.def)}${stat('Health',u.hp)}${stat('Damage',`${u.min}–${u.max}`)}${stat('Speed',u.spd)}${stat('Per week',u.growth)}</div>
       <p>${u.desc}</p><small>Recruit at the ${f.dw[t]} · ${fmt(u.cost)} gold${u.amber?' + amber':''}${up?` · upgrades to ${up.name}`:''}</small></div>`;}).join('')}</div></div>`;}
 async function pickFaction(opt={}){
@@ -3815,7 +3833,7 @@ async function pickFaction(opt={}){
     const grid=()=>`<div class="facs2">${FAC_ORDER.map(k=>bannerCard(k,ex.includes(k))).join('')}</div>`;
     const pr=showModal({title,body:grid(),wide:true,buttons:[]});
     const m=$('#modal'),sheet=m.querySelector('.sheet'),body=m.querySelector('.body'),h2=m.querySelector('header h2');sheet.classList.add('bannersheet');
-    const show=k=>{if(k){body.innerHTML=bannerDetail(k,ex.includes(k));h2.textContent=`${title} · ${FAC[k].arch}`;}else{body.innerHTML=grid();h2.textContent=title;}body.scrollTop=0;};
+    const show=k=>{sheet.classList.toggle('det',!!k);if(k){body.innerHTML=bannerDetail(k,ex.includes(k));paintTroopPics(body);h2.textContent=`${title} · ${FAC[k].arch}`;}else{body.innerHTML=grid();h2.textContent=title;}body.scrollTop=0;};
     const fk=await new Promise(res=>{body.addEventListener('click',e=>{const d=e.target.closest('[data-det]');if(d){show(d.dataset.det);return;}
       if(e.target.closest('[data-grid]')){show(null);return;}
       const c=e.target.closest('[data-choose]')||e.target.closest('.fcard2');const k=c&&(c.dataset.choose||c.dataset.fac);if(k&&!ex.includes(k)){m._close(null);res(k);}});});
