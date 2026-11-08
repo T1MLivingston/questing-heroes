@@ -58,13 +58,13 @@ The script in `index.html` is split into sections marked with `/* ===== ... ====
 Everything lives in one object, `S`, so it can be saved as JSON:
 
 - `S.fac`: chosen faction key; `S.W`, `S.H`, `S.mapType`, `S.size`, `S.limit`: map setup (W and H are globals set from these on load)
-- `S.heroes[]` and `S.cur`: the player's heroes (up to 3) and the selected one; read it with `HERO()`. Each has id, name, stats (`atk`, `def`, `pow`, `lore`), `mana`, `mp`, `skills`, `spells`, `mount` (`foot`, `horse` or `hooves`), `boat`, `book` (has a spellbook), `items` (artifact keys), `relics` (carried relic indices), `army` (up to 7 stacks of `{k, n}`)
+- `S.heroes[]` and `S.cur`: the player's heroes (up to 4, or 5 once any town has the Heroes' Lodge: `heroCap()`) and the selected one; read it with `HERO()`. Each has id, name, stats (`atk`, `def`, `pow`, `lore`), `mana`, `mp`, `skills`, `spells`, `mount` (`foot`, `horse` or `hooves`), `boat`, `book` (has a spellbook), `items` (artifact keys), `relics` (carried relic indices), `army` (up to 7 stacks of `{k, n}`)
 - Use `hst(h, 'atk')` for a stat including relic and artifact bonuses; `gear(h, k)` sums artifact effects
 - `S.rivals[]`: AI heroes with `fac`, position, stats, `army`, `relics`
 - `S.rumours[]`, `S.delivered[]`: rumour circles and relics already in the Reliquary
 - `S.town`: `built` buildings, `pool` of recruits, `garrison`, `builtToday`
 - `S.tiles`, `S.explored`, `S.objs`: the map
-- `S.res`: gold, timber, ore, amber
+- `S.res`: gold, timber, ore, amber, gems, moonwater (`RES`; `migrateTowns` fills missing keys in old saves)
 - `S.day`: day counter; 28 days to a month, and the game ends after day 112 (`LIMIT`)
 
 ### Faction and hero data
@@ -126,7 +126,7 @@ Everything lives in one object, `S`, so it can be saved as JSON:
 
 ### Map size and variety
 
-- `MAP_SIZES`: Small 40×32, Medium 54×42, Large 68×52, Extra large 84×64 (the classic genre uses 36/72/108/144 squares; our tiles draw larger). `towns` is the number of free towns. `astar` uses a binary heap. Big maps keep fewer water frames (`terrainPh` length 1-4).
+- `MAP_SIZES`: Small 40×32, Medium 54×42, Large 68×52, Extra large 84×64 (the classic genre uses 36/72/108/144 squares; our tiles draw larger). `majors` and `outposts` are the default counts of great towns and outposts. `astar` uses a binary heap. Big maps keep fewer water frames (`terrainPh` length 1-4).
 - Each seed rolls a biome (`BIOMES`, `biomeOf`, `BIO` shifts the terrain thresholds in every generator; shown on the map card). Object counts jitter ±25% (`jit`). Wild monsters get a level 1-4 (weak, normal, strong, elite: `MON_LVL`, size ×0.6-1.9; elites drop gold and maybe an artifact). Free towns are Village, Town or City (`lvl`, `TOWN_LVL`, `campIncome`, `campTiers`). Each week rolls an event (`EVENTS`, `rollEvent`, `S.event`).
 
 ### Town growth, walls and sieges
@@ -134,7 +134,13 @@ Everything lives in one object, `S`, so it can be saved as JSON:
 - `FAC_BUILD[fac]`: three banner-only buildings (`fb1` horde: extra weekly growth for one troop; `fb2` visit: each hero gains +1 to a stat once, on arrival; `fb3` special, checked with `facSpecial`: `mpTown`, `manaRegen`, `harvest`, `horde2`, `goldWeek`, `amberDay`, `oreDay`). Costs in `FB_COST`.
 - `WALLS`: Palisade, Stronghold (+50% growth), Bastion (+100% growth, towers). `wallLvl()`; `townDefense()` is the garrison's power times the wall bonus (plus the towers). The garrison no longer joins a hero automatically; move troops on the town screen.
 - Sieges (single player): after day 7 a rival may target your town when no hero is home and it out-powers `townDefense()`. If it wins, `S.town.taken` is set: no town income or growth, the town can't be entered, and the rival (`rv.occupy`) stays at the gate. Beat it there to free the town; after 7 days held, you lose.
-- Camps: rival camps and free towns (`camp` objects with `free:true`, placed by `furnishMap`, held by wild creatures) both have a `garrison`. Beat it (or walk into an empty one) to capture: +500 gold a day and the first two troops of its banner each week (`pool`, `manageHolding`, `firstPool`). A rival whose own camp you hold stops growing and tries to retake it; rivals also claim free towns and raid holdings.
+- Towns (v25): `S.town` is the home town. Major towns are `camp` objects with `isMajor(o)` (free great towns with `major:true`, and every rival's home camp). Once captured, `makeTown` gives them `built`, `pool`, `garrison`, `name`, `builtToday`, so the camp object *is* the town. `allTowns()` = home plus `myMajors()`. The town screen works on the viewed town: `VT` (null = home), `TW()` and `TF()` (its banner); `openTown(o)`/`arriveTown(o)` set it, `withTown(t,f)` evaluates for another town (quick-icon dots). Income (`hallGold`), weekly growth, specials (`specialIn`, `facSpecial` over all towns) and `builtToday` run per town in `dayUpkeep`. The Relic Hall exists only at home.
+- Rival home towns: `newGame` gives each rival camp `built`, and `growRival` adds one building a week from `RIVAL_PLAN` (two some weeks on Hard); its garrison grows from its best dwelling and walls. The map draws major towns with their stage sprite and name. Twin Ridges now places rival home camps too.
+- Outposts (minor `camp`s): +gold and a few recruit tiers (`campTiers`, `campIncome`). Some are held by a rogue (`o.keeper`, listed in `S.jailed`): the rogue leads the garrison in battle (`keeperHero`) and offers to join when beaten (`keeperJoins`). Recruiting posts (`o.station`): one per banner near each home, its own troops (tiers 1-3, +250 gold). `manageHolding` only puts troops in a hero's army when the hero stands there; from afar recruits wait in the outpost garrison.
+- Setup (`pickMap`): Rivals 1-4 (picks the recommended size, `REC_SIZE`, marked ★), Great towns 0-4, Outposts Few/Some/Many; multiplayer allows 2-5 players. Stored as `mo.rivals` and `S.setup` (`majors`, `outposts`), read by `furnishMap`.
+- Influence: `joinOffer(o)` lets weaker wild stacks (not key guards or elites) join when your army is 3×+ stronger (free at 6×, else gold), or flee if you have no slot (`fightPreview` adds the buttons; `walk` handles `join`/`flee`).
+- Rival tracking: visible rivals walk step by step during `rivalsTurn` with the camera following; `rv.seen` keeps where you last saw each one, drawn as a faded ghost ("seen day N") on the map and minimap for a week.
+- Resources: gems (Gem Grotto mines, gem pickups, pearls) and moonwater (Moonwater Spring mines, flask piles, sea crystals). One of each rare mine per base, farther out and guarded. Upper buildings, upgrades and mine level 3 cost them. The Alchemist's Still (`still`, any town) unlocks `ALCHEMY` in the Market (3 ore + 250 gold → 1 gem; 2 amber + 250 gold → 1 moonwater); prices in `PRICE`.
 
 ### Map furniture
 

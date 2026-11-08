@@ -49,6 +49,8 @@ The generated source images (high-res magenta PNGs) are kept outside this repo.
 
 Troop roster (v17): all troop names are generic fantasy words or our own coinages (Owl Familiar, Hellkite, War Rabbit, Gem Golem, Coral Colossus and so on). Creature types such as skeleton, vampire, werewolf, centaur are common folklore; none of the lineups copies a specific game's town roster or art. Sprite sheets for the new troops are still to be generated (brief in `ART_REQUEST_TROOPS.md`); log them in the table above when they arrive.
 
+Town names and terms (v25): the free town names (Brackenford, Millbrook, Stonereach, Harrowgate, Elmstead, Copperhollow, Wrenmoor, Ashby Cross, Fairwater, Highmere, Oakvale, Saltmarsh, Kettleby, Dunmore, Larkspur, Greywick) are generic English-style place names made up for this game. Moonwater, Gem Grotto, Alchemist's Still, Heroes' Lodge and recruiting post are plain descriptive terms. The new resource icons (gems, moonwater) and the new mine pictures reuse existing pack art (ruby gem, ore pit, moonwell) or are drawn in code.
+
 ## Real names
 
 The heroes are named after people (and possibly pets) from the author's life: Bear, Dorothy, Oliver, Battaglia, Engelman, Tempest, Grimes, Rimmer, Parker, Shadow, Rago, Binx, Boopis, Monkey, Schmickle, O'Malley, Vargas, Sheila, Lawrence, Davis, Love, Michael, Livingston, Ivan, Dupengeiser, Slack, Perry, Rocky, Elvis, Letchworth, William IV and Griffiths. The last two names, William IV (Necromancer) and Griffiths (Merfolk), complete the roster. Sookie (Wizards) was added in v18; Eden (Rangers) and the rogues Boone, Holmes and Tinker (placeholder) in v24. Davis is retired (kept in the code only so old saves load).

@@ -811,6 +811,10 @@ img.upg{filter:sepia(.55) saturate(1.9) hue-rotate(-12deg) brightness(1.06) drop
 .half{position:absolute;left:-6px;top:-6px;width:22px;height:22px;border-radius:50%;background:#2453c9;color:#fff;font:800 13px/20px var(--f-display);text-align:center;border:2px solid #fff3c8;cursor:pointer}
 @media (max-width:820px){.trade{grid-template-columns:1fr}.trmid{grid-auto-flow:column;justify-content:center}}
 .qi i.todo{position:absolute;right:2px;top:2px;width:9px;height:9px;border-radius:50%;background:#ffd24a;border:1px solid #3a2400;box-shadow:0 0 6px #ffd24a}
+.dchip.rec:not(.on){box-shadow:inset 0 0 0 2px #e8b84a}
+.offer{background:rgba(70,140,70,.14);border-left:4px solid #4f9a4a;padding:6px 10px;margin:10px 0 0}
+.maprow.setup{flex-wrap:wrap;gap:6px}
+.maprow.setup .label{margin-left:10px}
 </style>
 
 <div id="app">
@@ -871,8 +875,8 @@ const fmt=n=>Math.round(n).toLocaleString('en-US');
 const hash=s=>{let h=2166136261;for(const ch of s){h^=ch.charCodeAt(0);h=Math.imul(h,16777619);}return h>>>0;};
 
 /* ================= DATA ================= */
-const RES=['gold','timber','ore','amber'];
-const RESNAME={gold:'Gold',timber:'Timber',ore:'Ore',amber:'Amber'};
+const RES=['gold','timber','ore','amber','gems','moonwater'];
+const RESNAME={gold:'Gold',timber:'Timber',ore:'Ore',amber:'Amber',gems:'Gems',moonwater:'Moonwater'};
 const STATN={atk:'Attack',def:'Defense',pow:'Power',lore:'Lore'};
 
 const FAC={
@@ -1133,7 +1137,7 @@ const MODES={
   grail:{n:3,name:'Grail Quest',desc:'The Oracle names three of the five Grails. Each is carried by a Grail Keeper that roams the land. Hunt down the ones you need and bring them to your Grail Altar.'},
   multi:{n:4,name:'Multiplayer',desc:'Two to four players take turns on one device, each with a banner, town and heroes. First to bring the Seven Relics home wins.'}};
 const ALTAR_NAMES={1:'Lesser Spell Altar',2:'Greater Spell Altar',3:'Star Altar'},ALTAR_COL={1:'#7fb4ff',2:'#c46bff',3:'#ffd24a'};
-const MODE_SHORT={relic:'Find the Seven Relics and bring them home.',conquest:'Defeat every rival hero.',grail:'Hunt the Grail Keepers the Oracle names.',multi:'2–4 players take turns on one device.'};
+const MODE_SHORT={relic:'Find the Seven Relics and bring them home.',conquest:'Defeat every rival hero.',grail:'Hunt the Grail Keepers the Oracle names.',multi:'2–5 players take turns on one device.'};
 const DIFF_ICON={easy:'☘',normal:'⚔',hard:'☠'};
 const STAT_TIP={atk:'Attack: every troop in the army hits harder',def:'Defense: every troop in the army takes less damage',pow:'Power: spells hit harder and last longer',lore:'Lore: more mana, so more spells'};
 /* plain-words summary of each banner's special power */
@@ -1151,8 +1155,9 @@ for(const fk of Object.keys(FAC))for(const k of FAC[fk].units){const b=U[k];U[k+
 /* a few upgrades get their own name instead of the banner prefix */
 Object.assign(U.cannon_u,{name:'Great Crossbow',pl:'Great Crossbows',g:['cannon','#7a5a32'],desc:'A huge crossbow that hurls spears across the field. Devastating at range. Very slow.'});
 /* mines come in three levels; pay at the mine to raise its output */
-const MINE={saw:{name:'Sawmill',res:'timber',out:[1,2,3]},orepit:{name:'Ore Pit',res:'ore',out:[1,2,3]},gold:{name:'Gold Seam',res:'gold',out:[500,750,1000]},amber:{name:'Amber Spring',res:'amber',out:[1,2,3]}};
-const MINE_UP=[null,{gold:1500,timber:3,ore:3},{gold:3000,timber:6,ore:6,amber:2}];
+const MINE={saw:{name:'Sawmill',res:'timber',out:[1,2,3]},orepit:{name:'Ore Pit',res:'ore',out:[1,2,3]},gold:{name:'Gold Seam',res:'gold',out:[500,750,1000]},amber:{name:'Amber Spring',res:'amber',out:[1,2,3]},
+  gem:{name:'Gem Grotto',res:'gems',out:[1,2,2]},moon:{name:'Moonwater Spring',res:'moonwater',out:[1,2,2]}};
+const MINE_UP=[null,{gold:1500,timber:3,ore:3},{gold:3000,timber:6,ore:6,gems:2}];
 const mineOut=o=>MINE[o.k].out[(o.lvl||1)-1]+(delivered(4)?(MINE[o.k].res==='gold'?250:1):0);
 /* weekly sites refill every Monday */
 const SITES={wish:{name:'Wishing Well',give:'500-1,000 gold'},clover:{name:'Clover Meadow',give:'+1 luck for 7 days'},woodcamp:{name:"Woodcutters' Camp",give:'5 timber'},orecart:{name:'Abandoned Ore Cart',give:'5 ore'},amberhollow:{name:'Amber Hollow',give:'2 amber'}};
@@ -1164,6 +1169,9 @@ function drawRes(c,k,x,y,r){
   if(k==='gold'){for(let i=0;i<3;i++){c.fillStyle=i===2?'#f4cd62':'#d9a93c';c.strokeStyle='#6d4f12';c.beginPath();c.ellipse(0,5-i*4,8,3.2,0,0,7);c.fill();c.stroke();}}
   else if(k==='timber'){for(const dy of[3,-3]){c.fillStyle='#8b5e34';c.strokeStyle='#3b2410';c.beginPath();c.roundRect(-8,dy-3,16,6,3);c.fill();c.stroke();c.fillStyle='#d6a96c';c.beginPath();c.ellipse(8,dy,2,3,0,0,7);c.fill();c.stroke();}}
   else if(k==='ore'){c.fillStyle='#7c7f86';c.strokeStyle='#2c2e33';c.beginPath();c.moveTo(-8,6);c.lineTo(-6,-3);c.lineTo(0,-7);c.lineTo(7,-2);c.lineTo(8,6);c.closePath();c.fill();c.stroke();c.fillStyle='#a9adb6';c.beginPath();c.moveTo(-6,-3);c.lineTo(0,-7);c.lineTo(1,0);c.closePath();c.fill();}
+  else if(k==='gems'){c.fillStyle='#d8354a';c.strokeStyle='#4a0a14';c.beginPath();c.moveTo(-8,-2);c.lineTo(-4,-7);c.lineTo(4,-7);c.lineTo(8,-2);c.lineTo(0,8);c.closePath();c.fill();c.stroke();c.fillStyle='rgba(255,200,210,.75)';c.beginPath();c.moveTo(-4,-6);c.lineTo(0,-6);c.lineTo(-2,-1);c.closePath();c.fill();}
+  else if(k==='moonwater'){c.fillStyle='rgba(220,235,255,.5)';c.strokeStyle='#1d2c4a';c.beginPath();c.moveTo(-2.5,-8);c.lineTo(2.5,-8);c.lineTo(2.5,-3);c.quadraticCurveTo(8,0,7,4);c.quadraticCurveTo(6,8,0,8);c.quadraticCurveTo(-6,8,-7,4);c.quadraticCurveTo(-8,0,-2.5,-3);c.closePath();c.fill();c.stroke();
+    c.fillStyle='#7fb2ff';c.beginPath();c.moveTo(-6.5,2);c.quadraticCurveTo(0,0,6.5,2);c.quadraticCurveTo(6,7.5,0,7.5);c.quadraticCurveTo(-6,7.5,-6.5,2);c.fill();c.fillStyle='#e8f2ff';c.fillRect(-3,-10,6,2.5);c.fillStyle='rgba(255,255,255,.8)';c.fillRect(-4,3,2,2);}
   else if(k==='amber'){c.fillStyle='#e0871f';c.strokeStyle='#5a2c05';c.beginPath();for(let i=0;i<6;i++){const a=Math.PI/3*i+Math.PI/6;c.lineTo(Math.cos(a)*8,Math.sin(a)*8);}c.closePath();c.fill();c.stroke();c.fillStyle='rgba(255,230,160,.8)';c.beginPath();c.moveTo(-3,-4);c.lineTo(1,-5);c.lineTo(-1,0);c.closePath();c.fill();}
   c.restore();
 }
@@ -1443,7 +1451,8 @@ const FLOT={floating_chest:{name:'Floating chest',give:'800-1,400 gold'},salvage
   supply_barrel:{name:'Supply barrel',give:'500 gold and 3 ore'},pearl_shell:{name:'Giant pearl',give:'2 amber'},message_bottle:{name:'Message in a bottle',give:'a rumour, or 600 gold'},
   sea_crystal:{name:'Sea crystal',give:'3 amber'},coral_relic:{name:'Coral relic',give:'an artifact'}};
 const UI_RES={gold:'gold',timber:'wood',ore:'ore'},UI_STAT={atk:'attack',def:'defense',lore:'mana'};
-const GEMS={ruby:{name:'Ruby',gold:1000},sapphire:{name:'Sapphire',gold:900},emerald:{name:'Emerald',gold:800},amethyst:{name:'Amethyst',gold:700},moonstone:{name:'Moonstone',gold:600}};
+const PILE_ART=new Set(['gold','timber','ore','amber']);
+const GEMS={ruby:{name:'Ruby',n:3},sapphire:{name:'Sapphire',n:2},emerald:{name:'Emerald',n:2},amethyst:{name:'Amethyst',n:2},moonstone:{name:'Moonstone',n:2,res:'moonwater'}};
 function spriteAt(c,path,x,y,sc,frames=1,fms=150){const a=artImg(path);if(!a.ok)return false;const im=a.img,fw=im.width/frames,f=frames>1?Math.floor(performance.now()/fms)%frames:0;
   c.imageSmoothingEnabled=false;c.drawImage(im,f*fw,0,fw,im.height,Math.round(x-fw*sc/2),Math.round(y-(im.height-4)*sc),Math.round(fw*sc),Math.round(im.height*sc));return true;}
 const unitArt=k=>{const u=U[k];return u?ART_UNITS[u.up?u.base:k]||null:null;};
@@ -1468,6 +1477,7 @@ const iconCache={};
 function iconURL(kind,key,size=64){
   if(kind==='crest')return ART_BASE+`shields/${key}_96.png`;
   if(kind==='res'&&key==='amber')return ART_BASE+'gems/amber.png';
+  if(kind==='res'&&key==='gems')return ART_BASE+'gems/ruby.png';
   if(kind==='res'&&UI_RES[key])return ART_BASE+`ui/icons/${UI_RES[key]}.png`;
   if(kind==='stat'&&UI_STAT[key])return ART_BASE+`ui/icons/${UI_STAT[key]}.png`;
   if(kind==='ui')return ART_BASE+`ui/icons/${key}.png`;
@@ -1506,12 +1516,12 @@ function teamCol(){return S&&S.col&&!S.players?S.col:S&&S.fac?FAC[S.fac].col:'#2
 /* ================= MAP ================= */
 let W=34,H=26;const TS=44;
 const DIFF={
-  easy:{name:'Easy',res:{gold:10000,timber:25,ore:25,amber:8},rv:0.75,desc:'10,000 gold and plenty of materials. Rivals start smaller and grow slowly.'},
-  normal:{name:'Normal',res:{gold:5000,timber:15,ore:15,amber:4},rv:1,desc:'5,000 gold. Rivals are your match.'},
-  hard:{name:'Hard',res:{gold:2500,timber:8,ore:8,amber:2},rv:1.3,desc:'2,500 gold and scarce materials. Rivals start bigger and grow faster.'}};
+  easy:{name:'Easy',res:{gold:10000,timber:25,ore:25,amber:8,gems:6,moonwater:6},rv:0.75,desc:'10,000 gold and plenty of materials. Rivals start smaller and grow slowly.'},
+  normal:{name:'Normal',res:{gold:5000,timber:15,ore:15,amber:4,gems:2,moonwater:2},rv:1,desc:'5,000 gold. Rivals are your match.'},
+  hard:{name:'Hard',res:{gold:2500,timber:8,ore:8,amber:2,gems:0,moonwater:0},rv:1.3,desc:'2,500 gold and scarce materials. Rivals start bigger and grow faster.'}};
 const rvMul=()=>DIFF[(S&&S.diff)||'normal'].rv;
 /* sizes sit below the classic genre's 36/72/108/144 squares because our tiles are shown larger; free towns are the neutral towns per map */
-const MAP_SIZES={small:{W:40,H:32,rivals:2,limit:112,label:'Small',towns:3},medium:{W:54,H:42,rivals:3,limit:140,label:'Medium',towns:5},large:{W:68,H:52,rivals:4,limit:168,label:'Large',towns:7},xl:{W:84,H:64,rivals:4,limit:196,label:'Extra large',towns:9}};
+const MAP_SIZES={small:{W:40,H:32,rivals:2,limit:112,label:'Small',majors:1,outposts:2},medium:{W:54,H:42,rivals:3,limit:140,label:'Medium',majors:2,outposts:3},large:{W:68,H:52,rivals:4,limit:168,label:'Large',majors:2,outposts:4},xl:{W:84,H:64,rivals:4,limit:196,label:'Extra large',majors:3,outposts:5}};
 const MAP_TYPES={
   wheel:{name:'Wheel & Spoke',desc:'Every hero starts at the end of a spoke. Spoke roads run in to a walled hub where the Glass Lair waits, and a ring road links the homes. Pirates live on their own island.'},
   ridges:{name:'Twin Ridges',desc:'Two crag ridges split the land into three bands. Push through one guarded pass at a time toward the Glass Lair in the far corner. Pirates live on their own island.'},
@@ -1680,6 +1690,8 @@ function genRidges(seed,opt){
   const dk2=shore.find(s=>s.d>14&&(!dk1||Math.hypot(s.x-dk1.x,s.y-dk1.y)>8));if(dk2)add({type:'dock',x:dk2.x,y:dk2.y});
   isles.forEach(il=>isleDocks(tiles,il,W/2,H/2,add,occupied));
   const rivalSpots=pseudo;
+  // every rival gets a home camp (a town it builds up) where its hero starts
+  pseudo.forEach(p=>{const ex=objs.findIndex(o=>o.x===p.x&&o.y===p.y);if(ex>=0)objs.splice(ex,1);add({type:'camp',x:p.x,y:p.y,fac:p.fac});});
   // make every object reachable on foot from the town gate, without cutting through the ridges
   for(let guard=0;guard<80;guard++){
     const seen=new Uint8Array(W*H),st=idx(town.x,town.y),q=[st];seen[st]=1;
@@ -2038,7 +2050,7 @@ function reachFrom(x0,y0,water){const dist=new Map(),q=[[x0,y0]];dist.set(idx(x0
     const o=objAt(nx,ny);dist.set(idx(nx,ny),d+1);if(!o||o.type==='town'||o.type==='camp'||o.type==='portal')q.push([nx,ny]);}
     const pj=PORT.get(idx(x,y));if(pj!==undefined&&!dist.has(pj)){dist.set(pj,d+1);q.push([pj%W,(pj/W)|0]);}}return dist;}
 /* ore pits and gold seams belong in stone: move each to the foot of nearby crags, or raise a crag behind it where that blocks nothing */
-const isKeyGuard=o=>o.key||o.guard||S.objs.some(q=>Math.max(Math.abs(q.x-o.x),Math.abs(q.y-o.y))<=1&&((q.type==='artifact'&&ITEMS[q.item]&&ITEMS[q.item].lvl>=3)||q.type==='prison'||(q.type==='mine'&&(q.k==='gold'||q.k==='amber'))));
+const isKeyGuard=o=>o.key||o.guard||S.objs.some(q=>Math.max(Math.abs(q.x-o.x),Math.abs(q.y-o.y))<=1&&((q.type==='artifact'&&ITEMS[q.item]&&ITEMS[q.item].lvl>=3)||q.type==='prison'||(q.type==='mine'&&['gold','amber','gem','moon'].includes(q.k))));
 function rockMines(home){const crag=(x,y)=>inb(x,y)&&S.tiles[idx(x,y)]===T.CRAG,BEH=[[0,-1],[-1,-1],[1,-1],[-1,0],[1,0]];
   const score=(x,y)=>BEH.reduce((a,[dx,dy])=>a+(crag(x+dx,y+dy)?1:0),0);
   const open=(x,y)=>{let n=0;for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++)if((dx||dy)&&inb(x+dx,y+dy)&&passableT(S.tiles[idx(x+dx,y+dy)]))n++;return n;};
@@ -2082,11 +2094,23 @@ function placeSpires(bases,add){
     if(best<0)break;picked.push(best);}
   for(const i of picked)add({type:'spire',x:i%W,y:(i/W)|0,owned:false,garrison:[]});
 }
-const campTiers=o=>o.free?(o.lvl||1)+1:2;
+const isMajor=o=>!!o&&o.type==='camp'&&(!!o.major||(!o.free&&!!o.fac));
+const myMajors=()=>S&&S.objs&&!S.players?S.objs.filter(o=>isMajor(o)&&o.owned===ME()&&o.built):[];
+const allTowns=()=>S&&S.town?[S.town,...myMajors()]:[];
+const hallGold=t=>t.built.hall4?3000:t.built.hall3?2000:t.built.hall2?1000:500;
+const heroCap=()=>4+(allTowns().some(t=>t.built&&t.built.lodge)?1:0);
+const TOWN_NAMES=['Brackenford','Millbrook','Stonereach','Harrowgate','Elmstead','Copperhollow','Wrenmoor','Ashby Cross','Fairwater','Highmere','Oakvale','Saltmarsh','Kettleby','Dunmore','Larkspur','Greywick'];
+/* a captured major town becomes a full town: its banner's dwellings, a hall, its own garrison and recruits */
+function makeTown(o){if(!o.built){o.built=o.free?{hall1:1,d1:1,d2:1}:{hall1:1,hall2:1,d1:1,d2:1,d3:1,lib1:1};o.pool={};
+    FAC[o.fac].units.forEach((k,i)=>{if(o.built['d'+(i+1)])o.pool[k]=Math.ceil(U[k].growth/2);});}
+  o.name=o.name||(o.free?TOWN_NAMES[(o.id*7)%TOWN_NAMES.length]:FAC[o.fac].town);o.builtToday=false;o.garrison=o.garrison||[];return o;}
+function captureCamp(o,h){o.owned=ME();o.ownerName=h.name;o.garrison=[];if(isMajor(o))makeTown(o);else o.pool=firstPool(o);
+  if(o.keeper){const id=o.keeper;o.keeper=null;S.jailed=(S.jailed||[]).filter(x=>x!==id);return id;}return null;}
+const campTiers=o=>o.station?3:o.free?(o.lvl||1)+1:2;
 const firstPool=o=>{const u=FAC[o.fac].units,p={};for(let i=0;i<campTiers(o);i++)p[u[i]]=Math.ceil(U[u[i]].growth/2);return p;};
-const campIncome=o=>o.free?[500,750,1000][(o.lvl||1)-1]:500;
+const campIncome=o=>isMajor(o)&&o.built?hallGold(o):o.station?250:o.free?[500,750,1000][(o.lvl||1)-1]:500;
 const TOWN_LVL=['','Village','Town','City'],MON_LVL=['','weak','','strong','elite'];
-const campName=o=>o.free?`free ${FAC[o.fac].arch} ${TOWN_LVL[o.lvl||1].toLowerCase()}`:`${FAC[o.fac].arch} camp`;
+const campName=o=>isMajor(o)?(o.name||(o.free?`free ${FAC[o.fac].arch} town`:`${FAC[o.fac].arch} home town`)):o.station?`${FAC[o.fac].arch} recruiting post`:o.free?`${FAC[o.fac].arch} outpost`:`${FAC[o.fac].arch} camp`;
 const spireFoe=o=>o&&((o.type==='spire'&&o.owned&&o.owned!==ME())||(o.type==='camp'&&o.owned!==ME()&&!S.players))&&(o.garrison||[]).length>0;
 /* a garrisoned spire holds the eight tiles around it: other banners can't walk through them until they take the spire */
 function zocFor(owner){const z=new Set();for(const o of S.objs)if(o.type==='spire'&&o.owned&&o.owned!==owner&&o.garrison.length)for(let a=-1;a<=1;a++)for(let b=-1;b<=1;b++)if((a||b)&&inb(o.x+a,o.y+b))z.add(idx(o.x+a,o.y+b));return z;}
@@ -2099,12 +2123,14 @@ function furnishMap(bases){
     for(const[k,lo,hi]of[['saw',2,6],['orepit',2,6],['amber',4,9],['gold',5,10]]){
       const near=S.objs.some(o=>o.type==='mine'&&o.k===k&&dist.has(idx(o.x,o.y))&&dist.get(idx(o.x,o.y))<=hi+2);if(near)continue;
       const p=freeTile(dist,lo,hi)||freeTile(dist,lo,hi+6)||freeTile(dist,1,hi+12,1);if(p)add({type:'mine',k,x:p.x,y:p.y,owned:false,lvl:1});}}
+  // rare mines: a gem grotto and a moonwater spring per base, a longer walk out (they are worth fighting over)
+  for(const b of bases){const dist=reachFrom(b.x,b.y+1);for(const[k,lo,hi]of[['gem',8,14],['moon',10,17]]){const p=freeTile(dist,lo,hi)||freeTile(dist,lo-3,hi+8);if(p)add({type:'mine',k,x:p.x,y:p.y,owned:false,lvl:1});}}
   // mines differ: some start richer than others
   const home=bases[0],maxD=Math.hypot(W,H);
   for(const o of S.objs)if(o.type==='mine'&&!o.lvl){const far=Math.hypot(o.x-home.x,o.y-home.y)/maxD;o.lvl=1+(R()<0.45?1:0)+(far>0.45&&R()<0.4?1:0);}
   rockMines(home);
   {const dKey=reachFrom(home.x,home.y+1,true);let mdK=1;for(const d of dKey.values())mdK=Math.max(mdK,d);
-    for(const o of S.objs.filter(q=>q.type==='mine'&&(q.k==='gold'||q.k==='amber'))){if(S.objs.some(q=>q.type==='neutral'&&Math.max(Math.abs(q.x-o.x),Math.abs(q.y-o.y))<=1))continue;
+    for(const o of S.objs.filter(q=>q.type==='mine'&&['gold','amber','gem','moon'].includes(q.k))){if(S.objs.some(q=>q.type==='neutral'&&Math.max(Math.abs(q.x-o.x),Math.abs(q.y-o.y))<=1))continue;
       const adj=[[0,1],[1,0],[-1,0],[1,1],[-1,1],[0,-1]].map(([dx,dy])=>({x:o.x+dx,y:o.y+dy})).filter(p=>inb(p.x,p.y)&&dKey.has(idx(p.x,p.y))&&passableT(S.tiles[idx(p.x,p.y)])&&!objAt(p.x,p.y)&&!townFoot(p.x,p.y));
       if(!adj.length)continue;const p=adj[0],t=Math.min(0.95,0.25+0.7*(dKey.get(idx(o.x,o.y))||0)/mdK),nt=neutralAt(t);add({type:'neutral',x:p.x,y:p.y,k:nt.k,n:nt.n,key:true});}}
   // weekly sites and artifacts, spread by distance from your town
@@ -2131,14 +2157,26 @@ function furnishMap(bases){
       if(g)add({type:'neutral',x:g.x,y:g.y,...(tier===2?{k:'imp',n:ri(18,26)}:{k:'troll',n:ri(12,16)})});}}
   {const RVs=new Set(S.rivers||[]),wet=[];for(let i=0;i<W*H;i++){if(S.tiles[i]!==T.LAKE||RVs.has(i)||!dist.has(i))continue;const x=i%W,y=(i/W)|0;if(x<2||y<2||x>W-3||y>H-3)continue;if(!S.objs.some(o=>Math.abs(o.x-x)<=1&&Math.abs(o.y-y)<=1))wet.push(i);}
     const nF=clamp(Math.round(wet.length/45),wet.length?2:0,10),ks=Object.keys(FLOT);for(let k=0;k<nF&&wet.length;k++){const i=wet.splice(Math.floor(R()*wet.length),1)[0];add({type:'flot',k:ks[k%ks.length],x:i%W,y:(i/W)|0});}}
-  for(let i=0;i<Math.round(5*KS*jit());i++){const p=freeTile(dist,...band(0.15,0.95),2);if(p)add({type:'gem',k:pick(Object.keys(GEMS)),x:p.x,y:p.y});}
+  for(let i=0;i<Math.round(7*KS*jit());i++){const p=freeTile(dist,...band(0.15,0.95),2);if(p)add({type:'gem',k:pick(Object.keys(GEMS)),x:p.x,y:p.y});}
+  for(let i=0;i<Math.round(3*KS*jit());i++){const p=freeTile(dist,...band(0.2,0.95),2);if(p)add({type:'pile',k:'moonwater',n:ri(1,3),x:p.x,y:p.y});}
   for(const o of S.objs)if(o.type==='stone'&&!o.style)o.style=pick(FAC_ORDER);
-  // free towns: villages of a random banner, held by wild creatures until someone claims them
-  const nT=(MAP_SIZES[S.size]||{towns:3}).towns;
-  for(let i=0;i<nT;i++){const lo=0.22+0.6*i/nT,p=freeTile(dist,...band(lo,Math.min(1,lo+0.35)),4)||freeTile(dist,...band(0.2,1),3);if(!p)continue;const d=dist.get(idx(p.x,p.y))/Math.max(1,md);
-    // village, town or city: farther out they are bigger, richer and better guarded
-    const lvl=clamp(1+(R()<d?1:0)+(R()<d*0.6?1:0),1,3),gm=[1,1.6,2.4][lvl-1];
-    const g1=neutralAt(clamp(d,0.15,1)),g2=neutralAt(clamp(d+0.1,0.15,1));add({type:'camp',free:true,lvl,fac:pick(FAC_ORDER),x:p.x,y:p.y,owned:false,garrison:[{k:g1.k,n:Math.round(g1.n*gm)},{k:g2.k,n:Math.ceil(g2.n/2*gm)}].filter((a,j,arr)=>arr.findIndex(b=>b.k===a.k)===j),pool:{}});}
+  // recruiting posts: every banner gets a small, lightly guarded post of its own troops in its home area
+  for(const b of bases){if(!b.fac)continue;const dB=reachFrom(b.x,b.y+1);const p=freeTile(dB,5,10,3)||freeTile(dB,4,14,2);if(!p)continue;const g=neutralAt(0.12);
+    add({type:'camp',free:true,station:true,lvl:1,fac:b.fac,x:p.x,y:p.y,owned:false,garrison:[{k:g.k,n:Math.max(2,Math.round(g.n*0.6))}],pool:{}});}
+  // free towns: a few major towns (captured, they become full towns you build up like your home) and smaller outposts (+gold and a few recruits)
+  {const su=S.setup||{},nM=su.majors??(MAP_SIZES[S.size]||{}).majors??1,nO=Math.round(((MAP_SIZES[S.size]||{}).outposts??2)*[0.5,1,1.6][su.outposts??1]);
+    const keepers=HEROES.filter(x=>x.rogue&&!(S.jailed||[]).includes(x.id)).map(x=>x.id).sort(()=>R()-0.5);
+    const far=p=>[...bases,...S.objs.filter(o=>o.type==='camp')].every(q=>Math.max(Math.abs(q.x-p.x),Math.abs(q.y-p.y))>=7);
+    const spotAt=(lo,hi)=>{for(let t=0;t<12;t++){const p=freeTile(dist,...band(lo,hi),4);if(p&&far(p))return p;}return freeTile(dist,...band(0.2,1),3);};
+    for(let i=0;i<nM;i++){const lo=0.3+0.4*i/Math.max(1,nM),p=spotAt(lo,Math.min(1,lo+0.35));if(!p)continue;const d=dist.get(idx(p.x,p.y))/Math.max(1,md);
+      const g1=neutralAt(clamp(d+0.2,0.3,1)),g2=neutralAt(clamp(d+0.3,0.3,1)),g3=neutralAt(clamp(d,0.2,1));
+      add({type:'camp',free:true,major:true,lvl:3,fac:pick(FAC_ORDER),x:p.x,y:p.y,owned:false,garrison:[{k:g1.k,n:Math.round(g1.n*2.4)},{k:g2.k,n:Math.round(g2.n*1.6)},{k:g3.k,n:Math.round(g3.n*1.5)}].filter((a,j,arr)=>arr.findIndex(q=>q.k===a.k)===j),pool:{}});}
+    for(let i=0;i<nO;i++){const lo=0.2+0.6*i/Math.max(1,nO),p=spotAt(lo,Math.min(1,lo+0.35));if(!p)continue;const d=dist.get(idx(p.x,p.y))/Math.max(1,md);
+      // village or town: farther out they are bigger, richer and better guarded; some are held by a rogue hero
+      const lvl=clamp(1+(R()<d?1:0),1,2),gm=[1,1.6][lvl-1],kp=d>0.25&&keepers.length&&R()<0.65?keepers.pop():null;
+      const g1=neutralAt(clamp(d,0.15,1)),g2=neutralAt(clamp(d+0.1,0.15,1));
+      add({type:'camp',free:true,lvl,fac:pick(FAC_ORDER),x:p.x,y:p.y,owned:false,keeper:kp,garrison:[{k:g1.k,n:Math.round(g1.n*gm*(kp?1.2:1))},{k:g2.k,n:Math.ceil(g2.n/2*gm)}].filter((a,j,arr)=>arr.findIndex(q=>q.k===a.k)===j),pool:{}});
+      if(kp)(S.jailed=S.jailed||[]).push(kp);}}
   placeSpires(bases,add);
   S.uid=uid;
 }
@@ -2152,12 +2190,12 @@ function newGame(fk,hid,mo={}){
   const cm=mo.custom?loadMaps().find(x=>x.id===mo.custom):null;if(cm)mo.size=cm.size;
   const sz=MAP_SIZES[mo.size||'small'],type=cm?'custom':mo.type||'wheel';W=cm?cm.W:sz.W;H=cm?cm.H:sz.H;
   const seed=mo.seed??((Math.random()*1e9)|0);
-  const nR=cm?cm.objs.filter(o=>o.type==='camp'&&!o.free).length:sz.rivals;
+  const nR=cm?cm.objs.filter(o=>o.type==='camp'&&!o.free).length:clamp(mo.rivals??sz.rivals,1,4);
   const rivalFacs=mo.players?mo.players.slice(1).map(p=>p.fk):FAC_ORDER.filter(k=>k!==fk).sort(()=>Math.random()-0.5).slice(0,nR);
   const w=cm?customWorld(cm,rivalFacs):genMap(seed,{type,fac:fk,rivals:rivalFacs});const f=FAC[fk];
   const [t1,t2]=f.units;
   S={v:3,roster:2,seed,fac:fk,W,H,mapType:type,size:mo.size||'small',limit:sz.limit,tiles:w.tiles,objs:w.objs,uid:w.uid+10,biome:w.biome||'vale',underY:w.underY||0,rivers:w.rivers||null,bridges:w.bridges||null,explored:new Array(W*H).fill(0),day:1,
-    res:{...DIFF[mo.diff||'normal'].res},diff:mo.diff||'normal',heroes:[],cur:0,rivals:[],rumours:[],delivered:[],
+    res:{...DIFF[mo.diff||'normal'].res},diff:mo.diff||'normal',heroes:[],cur:0,rivals:[],rumours:[],delivered:[],setup:{majors:mo.majors,outposts:mo.outposts},
     town:{x:w.town.x,y:w.town.y,name:f.town,built:{hall1:1,d1:1,d2:1,lib1:1},pool:{[t1]:U[t1].growth,[t2]:U[t2].growth},garrison:[],builtToday:false},
     over:false};
   const h=mkHero(hid,w.town.x,w.town.y);h.army=[{k:t1,n:Math.round(240/U[t1].hp)},{k:t2,n:Math.round(90/U[t2].hp)}];S.heroes.push(h);
@@ -2166,7 +2204,7 @@ function newGame(fk,hid,mo={}){
   // wild monsters roll a level: weak, normal, strong or elite (elites guard loot)
   {const home=S.town,maxD=Math.hypot(W,H);for(const o of S.objs){if(o.type!=='neutral'||o.guard||o.lvl)continue;const d=Math.hypot(o.x-home.x,o.y-home.y)/maxD,r=Math.random()+d*0.5;
     o.lvl=r<0.35?1:r<0.85?2:r<1.15?3:4;o.n=Math.max(1,Math.round(o.n*[0,0.6,1,1.4,1.9][o.lvl]));}}
-  for(const o of S.objs)if(o.type==='camp'&&o.fac&&!o.free){const u=FAC[o.fac].units;o.garrison=[{k:u[0],n:Math.round(160*rvMul()/U[u[0]].hp)},{k:u[1],n:Math.round(90*rvMul()/U[u[1]].hp)}];}
+  for(const o of S.objs)if(o.type==='camp'&&o.fac&&!o.free){const u=FAC[o.fac].units;Object.assign(o,{major:true,built:{hall1:1,d1:1,d2:1,lib1:1},name:FAC[o.fac].town,pool:{}});o.garrison=[{k:u[0],n:Math.round(160*rvMul()/U[u[0]].hp)},{k:u[1],n:Math.round(90*rvMul()/U[u[1]].hp)}];}
   S.mode=mo.mode||'relic';setMode(S.mode);
   if(S.mode==='grail'){const rel=S.objs.filter(o=>o.type==='relic'),lair=rel.find(o=>o.r===6),rest=rel.filter(o=>o.r<4);
     S.objs=S.objs.filter(o=>o.type!=='relic');rest.forEach(o=>{const G=GRAILS[o.r];S.objs.push({...o,k:G.k,n:ri(G.n[0],G.n[1]),roam:true});});
@@ -2190,7 +2228,7 @@ function newGame(fk,hid,mo={}){
     loadPlayer(0);
   }
   rebuildFoot();
-  if(!w.noFurnish){const bases=[{x:S.town.x,y:S.town.y},...(S.players?S.players.slice(1).map(q=>({x:q.town.x,y:q.town.y})):S.rivals.map(r=>({x:r.x,y:r.y})))];furnishMap(bases);}
+  if(!w.noFurnish){const bases=[{x:S.town.x,y:S.town.y,fac:S.fac},...(S.players?S.players.slice(1).map(q=>({x:q.town.x,y:q.town.y,fac:q.fac})):S.rivals.map(r=>({x:r.x,y:r.y,fac:r.fac})))];furnishMap(bases);}
 }
 function reveal(cx,cy,r){for(let y=cy-r;y<=cy+r;y++)for(let x=cx-r;x<=cx+r;x++)if(inb(x,y)&&(x-cx)**2+(y-cy)**2<=r*r+1)S.explored[idx(x,y)]=1;}
 const vision=()=>5+(hasSk('farsight')?1:0)+(fx().vision||0)+(S&&S.heroes?gear(HERO(),'vision'):0)+(S&&S.delivered&&delivered(0)?1:0);
@@ -2198,7 +2236,7 @@ const maxMana=()=>Math.round(hst(HERO(),'lore')*10*(hasSk('deepres')?1.25:1));
 function maxMP(){const sp=HERO().army.length?Math.min(...HERO().army.map(a=>U[a.k].spd+((fx().unitSpd||{})[a.k]||0))):5;
   let m=900+45*Math.min(sp,9);if(HERO().mount!=='foot')m*=1.4;if(hasSk('forcedmarch'))m*=1.1;m*=1+(gear(HERO(),'mpPct')+(fx().mpPct||0))/100;if(S.event&&S.event.k==='road')m*=1.1;return Math.round(m);}
 const xpFor=l=>Math.round(1000*l*(1+0.12*(l-1)));
-const income=()=>(S.town.taken?0:(S.town.built.hall4?3000:S.town.built.hall3?2000:S.town.built.hall2?1000:500))+S.heroes.reduce((a,h)=>a+gear(h,'goldDay')+((HBY[h.id]&&HBY[h.id].fx||{}).goldDay||0),0)+S.objs.filter(o=>o.type==='camp'&&o.owned===ME()).reduce((a,o)=>a+campIncome(o),0);
+const income=()=>(S.town.taken?0:hallGold(S.town))+S.heroes.reduce((a,h)=>a+gear(h,'goldDay')+((HBY[h.id]&&HBY[h.id].fx||{}).goldDay||0),0)+S.objs.filter(o=>o.type==='camp'&&o.owned===ME()).reduce((a,o)=>a+campIncome(o),0);
 function dateParts(d=S.day){const m=Math.floor((d-1)/28)+1,w=Math.floor(((d-1)%28)/7)+1,dd=(d-1)%7+1;return{m,w,d:dd};}
 const LIMIT=112;
 function terrainCost(x,y){
@@ -2369,7 +2407,7 @@ function drawMini(){if(!S)return;$('#miniwrap').hidden=false;if(miniOff)return;c
     else if(o.type==='mine'&&o.owned)dot(o.x,o.y,ownerCol(o.owned),k*0.7);
     else if(o.type==='relic')dot(o.x,o.y,'#f2d382',k*0.9);}
   if(S.heroes)for(const hh of S.heroes){dot(hh.x,hh.y,'#000',k*1.2);dot(hh.x,hh.y,teamCol(),k*0.9);}
-  if(S.rivals&&!S.editor)for(const rv of S.rivals)if(seenNow(rv.x,rv.y))dot(rv.x,rv.y,'#e04a3a',k*0.9);
+  if(S.rivals&&!S.editor)for(const rv of S.rivals)if(seenNow(rv.x,rv.y))dot(rv.x,rv.y,'#e04a3a',k*0.9);else if(rv.seen&&S.day-rv.seen.day<=7)dot(rv.seen.x,rv.seen.y,'rgba(224,74,58,.45)',k*0.7);
   c.strokeStyle='#fff3c8';c.lineWidth=1;c.strokeRect(camX/TS*k+0.5,camY/TS*k+0.5,vw/TS*k,vh/TS*k);}
 miniCv.addEventListener('pointerdown',e=>{if(!S)return;e.stopPropagation();const r=miniCv.getBoundingClientRect(),k=r.width/W;centerOn(Math.floor((e.clientX-r.left)/k),Math.floor((e.clientY-r.top)/k));});
 $('#miniTog').addEventListener('click',e=>{e.stopPropagation();miniOff=!miniOff;$('#miniwrap').classList.toggle('off',miniOff);$('#miniTog').textContent=miniOff?'▸ Map':'▾';if(!miniOff)drawMini();});
@@ -2437,6 +2475,14 @@ function drawObj(c,o){
     drawRelic(c,o.r,cx,cy-(o.r===6?24:4),8);token(c,o.k,cx+(o.r===6?0:12),cy+(o.r===6?2:8),o.r===6?15:10,'#c45a43');break;
   case 'drop':drawRelic(c,o.rs[0],cx,cy,10);break;
   case 'camp':{const col=FAC[o.fac||o.dfac||'necro'].col,gn=(o.garrison||[]).reduce((a,g)=>a+g.n,0);
+    // major towns (free ones, and rival homes once captured) stand as real towns, with their name
+    if(o.fac&&isMajor(o)&&(o.built||o.free)){const sp=townSprite(o.fac,o.built?townStage(o):2,o.owned?ownerCol(o.owned):o.free?'#9a958a':FAC[o.fac].col);if(sp){const k=TS/32*0.82,by=cy+TS/2-2;
+      c.fillStyle='rgba(0,0,0,.3)';c.beginPath();c.ellipse(cx,cy+14,46,9,0,0,7);c.fill();c.imageSmoothingEnabled=false;c.drawImage(sp,Math.round(cx-64*k),Math.round(by-92*k),Math.round(128*k),Math.round(96*k));
+      const nm=o.owned===ME()||o.name?campName(o):'Free town',top=by-92*k;c.font='700 11px "Alegreya SC",Georgia,serif';c.textAlign='center';c.textBaseline='alphabetic';const nw=c.measureText(nm).width+10;
+      c.fillStyle='rgba(16,20,19,.85)';c.fillRect(cx-nw/2,top-6,nw,15);c.strokeStyle=o.owned?ownerCol(o.owned):'#9a958a';c.lineWidth=1;c.strokeRect(cx-nw/2,top-6,nw,15);c.fillStyle='#f2d382';c.fillText(nm,cx,top+5);
+      if(o.owned)flag(c,cx+30,cy+6,ownerCol(o.owned));
+      if(gn&&!S.editor){c.font='800 12px "Alegreya SC",Georgia,serif';c.textBaseline='middle';const tt=o.owned===ME()?fmt(gn):'?',w=c.measureText(tt).width+10;c.fillStyle='rgba(12,18,48,.92)';c.fillRect(cx-w/2,cy+17,w,14);c.strokeStyle=o.owned?ownerCol(o.owned):'#c45a43';c.lineWidth=1.2;c.strokeRect(cx-w/2,cy+17,w,14);c.fillStyle='#fff';c.fillText(tt,cx,cy+24.5);}
+      break;}}
     {const fk2=o.fac||o.dfac||'necro',sp=townSprite(fk2,o.free?Math.min(3,o.lvl||1):1,o.owned?ownerCol(o.owned):o.free?'#9a958a':FAC[fk2].col);const csp=!o.free&&artImg(`map/buildings/camp_${fk2}.png`);if((csp&&csp.ok)||sp){const k=TS/32*0.62;c.fillStyle='rgba(0,0,0,.3)';c.beginPath();c.ellipse(cx,cy+14,30,7,0,0,7);c.fill();c.imageSmoothingEnabled=false;if(csp&&csp.ok)spriteAt(c,`map/buildings/camp_${fk2}.png`,cx,cy+TS/2-2,TS/32*0.85);else c.drawImage(sp,Math.round(cx-64*k),Math.round(cy+TS/2-2-92*k),Math.round(128*k),Math.round(96*k));
       if(o.owned)flag(c,cx+24,cy+8,ownerCol(o.owned));
       if(gn&&!S.editor){c.font='800 12px "Alegreya SC",Georgia,serif';c.textAlign='center';c.textBaseline='middle';const tt=o.owned===ME()?fmt(gn):'?',w=c.measureText(tt).width+10;c.fillStyle='rgba(12,18,48,.92)';c.fillRect(cx-w/2,cy+17,w,14);c.strokeStyle=o.owned?ownerCol(o.owned):'#c45a43';c.lineWidth=1.2;c.strokeRect(cx-w/2,cy+17,w,14);c.fillStyle='#fff';c.fillText(tt,cx,cy+24.5);}
@@ -2453,7 +2499,11 @@ function drawObj(c,o){
     c.fillStyle='#2b1d10';c.beginPath();c.moveTo(cx-8,cy+12);c.lineTo(cx-4,cy+2);c.lineTo(cx,cy+12);c.closePath();c.fill();flag(c,cx+13,cy+8,col);drawFire(c,'campfire',cx-15,cy+19,o.x*97+o.y*31);break;}
   case 'mine':{
     c.fillStyle='rgba(0,0,0,.3)';c.beginPath();c.ellipse(cx,cy+13,18,5,0,0,7);c.fill();
-    {const ma=MINE_ART[o.k],sc=TS/32*0.66,by=cy+TS/2-2;if(ma&&spriteAt(c,`map/mines/${ma[0]}.png`,cx,by,sc,2,450)){
+    {const ma=MINE_ART[o.k],sc=TS/32*0.66,by=cy+TS/2-2;if(o.k==='moon'||o.k==='gem'){const ok=o.k==='moon'?spriteAt(c,'map/sites/moonwell_lit.png',cx,by,TS/32*0.62):spriteAt(c,'map/mines/ore_pit.png',cx,by,sc,2,450);
+        if(ok){if(o.k==='gem'){drawRes(c,'gems',cx-9,cy+9,6);drawRes(c,'gems',cx+10,cy+10,5);}else drawRes(c,'moonwater',cx+13,cy+9,6);
+          for(let i=0;i<(o.lvl||1);i++){c.fillStyle='#f2d382';c.strokeStyle='#120f0b';c.lineWidth=1;c.fillRect(cx-9+i*7,by-1,5,5);c.strokeRect(cx-9+i*7,by-1,5,5);}
+          if(o.owned)flag(c,cx+14,cy-8,ownerCol(o.owned));break;}}
+      if(ma&&spriteAt(c,`map/mines/${ma[0]}.png`,cx,by,sc,2,450)){
       for(let i=0;i<(o.lvl||1);i++){c.fillStyle='#f2d382';c.strokeStyle='#120f0b';c.lineWidth=1;c.fillRect(cx-9+i*7,by-1,5,5);c.strokeRect(cx-9+i*7,by-1,5,5);}
       if(o.owned){const fa=artImg(`map/flags/${flagFor(ownerCol(o.owned))}.png`);if(fa.ok){const f=Math.floor(performance.now()/180)%2;c.drawImage(fa.img,f*16,0,16,16,Math.round(cx+(ma[1]-32)*sc),Math.round(by+(ma[2]-60)*sc),Math.round(16*sc*1.8),Math.round(16*sc*1.8));}else flag(c,cx+12,cy-6,ownerCol(o.owned));}
       break;}}
@@ -2467,7 +2517,7 @@ function drawObj(c,o){
     c.fillStyle='#7d7a72';c.fillRect(cx-16,cy-14,32,28);c.strokeRect(cx-16,cy-14,32,28);c.fillStyle='#5f5c55';for(let i=0;i<4;i++){c.fillRect(cx-16+i*9,cy-20,6,6);c.strokeRect(cx-16+i*9,cy-20,6,6);}
     c.fillStyle='#2a2522';c.fillRect(cx-9,cy-6,18,20);c.strokeStyle='#b8b4aa';c.lineWidth=1.6;c.beginPath();for(const dx of[-6,-2,2,6]){c.moveTo(cx+dx,cy-6);c.lineTo(cx+dx,cy+14);}c.stroke();
     if(o.rogue&&!S.heroes.some(x=>x.id===o.rogue)){c.fillStyle='#f2d382';c.font='800 13px "Alegreya SC",Georgia,serif';c.textAlign='center';c.textBaseline='middle';c.fillText('!',cx,cy-28);}break;}
-  case 'pile':if(!spriteAt(c,`map/pickups/${o.k==='timber'?'wood':o.k}.png`,cx,cy+TS/2-4,TS/32,2,400))drawRes(c,o.k,cx,cy+2,11);break;
+  case 'pile':if(PILE_ART.has(o.k)&&spriteAt(c,`map/pickups/${o.k==='timber'?'wood':o.k}.png`,cx,cy+TS/2-4,TS/32,2,400))break;c.fillStyle='rgba(0,0,0,.3)';c.beginPath();c.ellipse(cx,cy+12,11,4,0,0,7);c.fill();drawRes(c,o.k,cx,cy+2,11);break;
   case 'flot':{const t=performance.now()/500;c.fillStyle='rgba(200,230,240,.35)';c.beginPath();c.ellipse(cx,cy+12,13,4,0,0,7);c.fill();if(!spriteAt(c,`ocean/${o.k}.png`,cx,cy+12+Math.sin(t+o.y)*1.5,TS/32*0.85,o.k==='floating_chest'?4:1,250)){c.fillStyle='#a07040';c.fillRect(cx-6,cy-4,12,10);}break;}
   case 'gem':{const t=performance.now()/500;c.fillStyle='rgba(0,0,0,.3)';c.beginPath();c.ellipse(cx,cy+12,10,4,0,0,7);c.fill();if(!spriteAt(c,`gems/${o.k}.png`,cx,cy+10+Math.sin(t+o.x)*1.5,TS/32*0.85)){c.fillStyle='#c46bff';c.beginPath();c.arc(cx,cy,7,0,7);c.fill();}break;}
   case 'site':{const spent=o.week===weekNo();c.globalAlpha=spent?0.55:1;c.fillStyle='rgba(0,0,0,.3)';c.beginPath();c.ellipse(cx,cy+12,16,5,0,0,7);c.fill();c.strokeStyle='#26241f';c.lineWidth=1.2;
@@ -2607,7 +2657,9 @@ function drawMap(){
   if(S.heroes.length){S.heroes.forEach((h,i)=>{if(i!==S.cur)drawHero(c,h.x,h.y,h);});
   {const cx=heroDraw.x*TS+TS/2,cy=heroDraw.y*TS+TS/2;c.strokeStyle='#f2d382';c.lineWidth=1.5;c.setLineDash([4,3]);c.beginPath();c.ellipse(cx,cy+13,19,7,0,0,7);c.stroke();c.setLineDash([]);}
   drawHero(c,heroDraw.x,heroDraw.y,HERO());}
-  for(const rv of S.rivals)if(seenNow(rv.x,rv.y)){c.fillStyle='rgba(196,90,67,.55)';c.beginPath();c.ellipse(rv.x*TS+TS/2,rv.y*TS+TS/2+13,18,6,0,0,7);c.fill();drawHero(c,rv.x,rv.y,rv,FAC[rv.fac].col);}
+  for(const rv of S.rivals)if(!seenNow(rv.x,rv.y)&&rv.seen&&S.day-rv.seen.day<=7&&S.explored[idx(rv.seen.x,rv.seen.y)]&&!seenNow(rv.seen.x,rv.seen.y)){c.save();c.globalAlpha=0.38;drawHero(c,rv.seen.x,rv.seen.y,rv,FAC[rv.fac].col);c.restore();
+    const lx=rv.seen.x*TS+TS/2,ly=rv.seen.y*TS-4,tt=S.day===rv.seen.day?'seen today':`seen day ${rv.seen.day}`;c.font='700 11px "Alegreya SC",Georgia,serif';c.textAlign='center';c.textBaseline='middle';const w=c.measureText(tt).width+8;c.fillStyle='rgba(60,16,10,.8)';c.fillRect(lx-w/2,ly-7,w,14);c.fillStyle='#ffd9cf';c.fillText(tt,lx,ly);}
+  for(const rv of S.rivals)if(seenNow(rv.x,rv.y)){rv.seen={x:rv.x,y:rv.y,day:S.day};c.fillStyle='rgba(196,90,67,.55)';c.beginPath();c.ellipse(rv.x*TS+TS/2,rv.y*TS+TS/2+13,18,6,0,0,7);c.fill();drawHero(c,rv.x,rv.y,rv,FAC[rv.fac].col);}
   for(let y=y0;y<=y1;y++)for(let x=x0;x<=x1;x++){if(!S.explored[idx(x,y)]){c.fillStyle='rgba(10,12,11,.55)';c.fillRect(x*TS-8,y*TS-8,TS+16,TS+16);}}
   for(let y=y0;y<=y1;y++)for(let x=x0;x<=x1;x++){if(!S.explored[idx(x,y)]){c.fillStyle='#0a0c0b';c.fillRect(x*TS,y*TS,TS,TS);}}
   for(const ru of S.rumours){if(!S.objs.some(o=>o.type==='relic'&&o.r===ru.r))continue;const cx=ru.x*TS+TS/2,cy=ru.y*TS+TS/2;c.strokeStyle=RELICS[ru.r].col;c.lineWidth=2;c.setLineDash([7,6]);c.beginPath();c.arc(cx,cy,TS*3.2,0,7);c.stroke();c.setLineDash([]);drawRelic(c,ru.r,cx,cy,9);}
@@ -2656,12 +2708,14 @@ function describe(x,y){
     case 'neutral':{const[w,col]=threat(o.k,o.n);return`${o.guard?'<b>Guarded pass</b> · ':''}<b>${cnt(o.n)} ${o.lvl?MON_LVL[o.lvl]+' ':''}${U[o.k].pl}</b> · <span style="color:${col}">${w}</span>${o.lvl===4?' · guards loot':''}`;}
     case 'relic':{const Rl=RELICS[o.r];const[w,col]=threat(o.k,o.n);return`<b>${Rl.lair}</b> · guards the ${Rl.name} · ${cnt(o.n)} ${U[o.k].pl} · <span style="color:${col}">${w}</span>`;}
     case 'drop':return`<b>${o.rs.map(r=>RELICS[r].name).join(', ')}</b> · lying here, unguarded`;
-    case 'camp':{if(o.free&&!o.owned){const gn=(o.garrison||[]).reduce((a,g)=>a+g.n,0);return`<b>Free ${FAC[o.fac].arch} ${TOWN_LVL[o.lvl||1].toLowerCase()}</b> · unclaimed${gn?` · ${amountWord(gn).toLowerCase()} ${(o.garrison||[]).map(g=>U[g.k].pl).join(' and ')} hold it`:''} · capture it for +${fmt(campIncome(o))} gold a day and ${campTiers(o)} kinds of ${FAC[o.fac].arch} recruits`;}
-    const gn=(o.garrison||[]).reduce((a,g)=>a+g.n,0);return o.owned===ME()?`<b>Your ${FAC[o.fac].arch} holding</b> · +500 gold a day · recruits each week${gn?` · ${gn} troops guard it`:''}`:`<b>${campName(o)}</b>${o.owned?' (taken by another banner)':''} · ${gn?`guarded by ${amountWord(gn).toLowerCase()} troops · `:''}walk in to capture it`;}
+    case 'camp':{if(isMajor(o)&&o.free&&!o.owned){const gn=(o.garrison||[]).reduce((a,g)=>a+g.n,0);return`<b>Free ${FAC[o.fac].arch} town</b> · unclaimed${gn?` · ${amountWord(gn).toLowerCase()} ${(o.garrison||[]).map(g=>U[g.k].pl).join(', ')} hold it`:''} · capture it and it becomes a full town you can build up`;}
+      if(isMajor(o)&&o.owned===ME()){const gn=(o.garrison||[]).reduce((a,g)=>a+g.n,0);return`<b>${esc(campName(o))}</b> · your ${FAC[o.fac].arch} town · +${fmt(campIncome(o))} gold a day${gn?` · ${gn} troops in the garrison`:''} · double-click to open`;}
+      if(o.free&&!o.owned){const gn=(o.garrison||[]).reduce((a,g)=>a+g.n,0);return`<b>${campName(o).replace(/^./,c=>c.toUpperCase())}</b>${o.keeper?` · held by the rogue ${HBY[o.keeper].name}`:''} · unclaimed${gn?` · ${amountWord(gn).toLowerCase()} ${(o.garrison||[]).map(g=>U[g.k].pl).join(' and ')} hold it`:''} · capture it for +${fmt(campIncome(o))} gold a day and ${campTiers(o)} kinds of ${FAC[o.fac].arch} recruits`;}
+    const gn=(o.garrison||[]).reduce((a,g)=>a+g.n,0);return o.owned===ME()?`<b>Your ${FAC[o.fac].arch} ${isMajor(o)?'town':'outpost'}</b> · +${fmt(campIncome(o))} gold a day · recruits each week${gn?` · ${gn} troops guard it`:''}`:`<b>${campName(o)}</b>${o.owned?' (taken by another banner)':''} · ${gn?`guarded by ${amountWord(gn).toLowerCase()} troops · `:''}walk in to capture it`;}
     case 'mine':return`<b>${MINE[o.k].name}</b> (level ${o.lvl||1}) · +${fmt(mineOut(o))} ${RESNAME[MINE[o.k].res].toLowerCase()} a day · ${o.owned===ME()?'yours':o.owned?`held by ${o.ownerName}`:'unclaimed'}`;
     case 'pile':return`<b>${RESNAME[o.k]}</b> · ${fmt(o.n)}`;
     case 'flot':return`<b>${FLOT[o.k].name}</b> · ${FLOT[o.k].give} · needs a boat or swimmers`;
-    case 'gem':return`<b>${GEMS[o.k].name}</b> · worth ${fmt(GEMS[o.k].gold)} gold`;
+    case 'gem':return`<b>${GEMS[o.k].name}</b> · ${GEMS[o.k].n} ${RESNAME[GEMS[o.k].res||'gems'].toLowerCase()}`;
     case 'chest':return'<b>Weathered chest</b>';
     case 'site':return`<b>${SITES[o.k].name}</b> · ${o.week===weekNo()?'spent until next week':`once a week: ${SITES[o.k].give}`}`;
     case 'artifact':{const it=ITEMS[o.item];return`${itemIcon(o.item)}<b>${it.name}</b> · level ${it.lvl} ${it.tier} · ${itemTxt(o.item)}`;}
@@ -2690,7 +2744,7 @@ function renderUI(){
   if(!S)return;
   applyTheme();
   $('#res').innerHTML=RES.map(k=>`<span class="${k}" title="${RESNAME[k]}"><img src="${iconURL('res',k,40)}" alt="${RESNAME[k]}">${fmt(S.res[k])}</span>`).join('');
-  {const y={gold:income(),timber:0,ore:0,amber:0};for(const o of S.objs)if(o.type==='mine'&&o.owned===ME())y[MINE[o.k].res]+=mineOut(o);if(!S.town.taken){if(facSpecial('amberDay'))y.amber+=1;if(facSpecial('oreDay'))y.ore+=2;}
+  {const y=Object.fromEntries(RES.map(k=>[k,0]));y.gold=income();for(const o of S.objs)if(o.type==='mine'&&o.owned===ME())y[MINE[o.k].res]+=mineOut(o);if(!S.town.taken){if(facSpecial('amberDay'))y.amber+=1;if(facSpecial('oreDay'))y.ore+=2;}
     $('#yield').innerHTML=`<small>per day</small>${RES.map(k=>y[k]?`<span><img src="${iconURL('res',k,32)}" alt="${RESNAME[k]}">+${fmt(y[k])}</span>`:'').join('')}`;}
   const d=dateParts();$('#date').innerHTML=`<span>Month ${d.m} · Week ${d.w} · Day ${d.d}</span><em>${S.event&&S.event.k!=='plain'?`${S.event.name} · `:''}${S.limit-S.day+1} days left</em>`;$('#date').title=S.event?`${S.event.name}: ${S.event.txt}`:'';
   const h=HERO(),hd=H_(),need=xpFor(h.lvl),prev=h.lvl>1?xpFor(h.lvl-1):0;
@@ -2715,7 +2769,7 @@ function renderUI(){
   $('#objective').innerHTML=`<span class="rbhead">${S.mode==='conquest'?`⚔ ${S.rivals.length} left`:S.mode==='grail'?`Grails ${goal.filter(i=>delivered(i)).length}/${goal.length}`:`Relics ${S.delivered.length}/7`}</span>${S.mode==='conquest'?'':RELICS.map((Rl,i)=>{const st=relicState(i);return`<span class="rl ${st.cls}${S.mode==='grail'&&goal.includes(i)?' want':''}" title="${Rl.name}: ${st.txt}"><img src="${iconURL('relic',i,56)}" alt=""></span>`;}).join('')}`;
   $('#objective').title=`${head}. Click for details.`;$('#objective')._txt={head,gtxt};
   $('#armyPow').textContent=`Strength ${fmt(armyPower(h.army,h))}`;
-  const tn=townTabs().filter(x=>x.id!=='overview').reduce((a,x)=>a+(x.n||0),0);
+  const tn=withTown(null,()=>townTabs().filter(x=>x.id!=='overview').reduce((a,x)=>a+(x.n||0),0));
   $('#bTown').innerHTML=`<img class="bi" src="${ART_BASE}ui/icons/town.png" alt="">Town<span class="kbd">T</span>${tn?`<span class="bdg">${tn}</span>`:''}`;$('#bTown').classList.toggle('need',tn>0);
   $('#bEnd').classList.toggle('need',S.heroes.every(x=>x.mp<70));renderQuick();
 }
@@ -2824,6 +2878,9 @@ async function walk(){
     if(rv||(o&&(o.type==='neutral'||o.type==='relic'||spireFoe(o)))){
       const foe=rv?{type:'rival',rival:rv,x:rv.x,y:rv.y}:o;
       const go=await fightPreview(foe);if(!go){path=null;break;}
+      if(go==='join'||go==='flee'){const of=joinOffer(o);S.objs=S.objs.filter(q=>q!==o);
+        if(go==='join'&&of){pay({gold:of.cost});addToArmy(o.k,o.n);lootPop(`${o.n} ${U[o.k].pl} join ${HERO().name}`,iconURL('unit',o.k,64));}else toast(`The ${U[o.k].pl} scatter before ${HERO().name}'s army.`);
+        path=null;renderUI();save();break;}
       HERO().mp-=cost;renderUI();
       const won=await startBattle(foe);
       if(!won){moving=false;path=null;if(S&&!S.over){renderUI();save();}return;}
@@ -2841,12 +2898,16 @@ async function walk(){
   if(path&&!path.length)path=null;
   moving=false;renderUI();save();
 }
+/* influence: wild creatures facing a far stronger army may offer to join (free when it is overwhelming), or at least run away */
+function joinOffer(o){if(!o||o.type!=='neutral'||isKeyGuard(o)||o.lvl===4)return null;const h=HERO(),ours=armyPower(h.army,h),theirs=stackPower(o.k,o.n)||1;
+  const r=ours/theirs*(1+0.04*(h.lvl-1))*(1+0.1*(hst(h,'lore')>=6?1:0));if(r<3)return null;
+  const room=h.army.some(a=>a.k===o.k)||h.army.length<7;return{r,room,cost:r>=6?0:Math.round(o.n*U[o.k].hp*8/50)*50};}
 async function fightPreview(o){
   let enemy,title,theirs,reward='';
   if(o.type==='rival'){const rv=o.rival;enemy=rv.army;theirs=armyPower(rv.army,rv);title=`Attack ${rv.name}?`;
     reward=`<p class="muted">${rv.name} is a rival ${FAC[rv.fac].arch} hero (${sc('atk',hst(rv,'atk'))} ${sc('def',hst(rv,'def'))}).${rv.relics.length?` Win to take: <b style="color:var(--text)">${rv.relics.map(r=>RELICS[r].name).join(', ')}</b>.`:''}</p>`;}
   else if(o.type==='camp'){enemy=o.garrison;theirs=armyPower(o.garrison);title=`Attack the ${campName(o)}?`;
-    reward=`<p class="muted">Win to capture it: +500 gold a day and ${FAC[o.fac].arch} recruits each week.${S.rivals.some(r=>r.fac===o.fac)?` Its rival hero stops growing stronger while you hold it.`:''}</p>`;}
+    reward=`<p class="muted">${isMajor(o)?`Win to take a full ${FAC[o.fac].arch} town: its own buildings to raise, dwellings and garrison, +${fmt(o.built?hallGold(o):500)} gold a day or more.`:`Win to capture it: +${fmt(campIncome(o))} gold a day and ${FAC[o.fac].arch} recruits each week.`}${o.keeper?` The rogue <b>${HBY[o.keeper].name}</b> leads its defence (${sc('atk',HBY[o.keeper].st[0]+2)} ${sc('def',HBY[o.keeper].st[1]+2)}).`:''}${S.rivals.some(r=>r.fac===o.fac)?` Its rival hero stops growing stronger while you hold it.`:''}</p>`;}
   else if(o.type==='spire'){enemy=o.garrison;theirs=armyPower(o.garrison);title='Storm the spire?';
     reward=`<p class="muted">Held by ${spireOwnerName(o)}. Defenders fight from the walls with +3 defense. Win to take the spire.</p>`;}
   else{enemy=[{k:o.k,n:o.n}];theirs=stackPower(o.k,o.n);
@@ -2855,11 +2916,12 @@ async function fightPreview(o){
     if(o.guard)reward='<p class="muted">This pass is the only road through the crags. Break through to reach the land beyond.</p>';}
   const[w,col]=threatOf(theirs);const ours=armyPower(HERO().army,HERO()),pct=Math.round(ours/(ours+theirs)*100);
   const cnt=n=>fx().exact||o.type==='rival'?n:amountWord(n);
+  const of=joinOffer(o);if(of)reward+=`<p class="offer"><b>${of.room?`Awed by your army, the ${U[o.k].pl} offer to join ${HERO().name}${of.cost?` for ${fmt(of.cost)} gold`:' for nothing'}.`:`The ${U[o.k].pl} would join, but ${HERO().name} has no free army slot. They will flee if you let them.`}</b></p>`;
   return await showModal({title,
     body:`<div class="casualties"><div><div class="label">${HERO().name}'s army</div><ul>${HERO().army.map(a=>`<li>${a.n} ${U[a.k].pl}</li>`).join('')}</ul></div><div><div class="label">The enemy</div><ul>${enemy.map(a=>`<li>${cnt(a.n)} ${U[a.k].pl}</li>`).join('')}</ul>${enemy.length===1?unitChips(enemy[0].k):''}</div></div>${reward}
      <div class="meter" style="margin-top:14px"><span>Your strength</span><span style="color:${col};font-weight:800">${w}</span></div>
      <div class="bar" style="height:10px;background:var(--foe)"><i style="width:${pct}%;background:var(--team)"></i></div>`,
-    buttons:[{label:'Back',value:false},{label:'Fight',value:true,primary:true}],dismiss:false});
+    buttons:[{label:'Back',value:false},...(of?[of.room?{label:of.cost?`Hire them: ${fmt(of.cost)} gold`:'Welcome them',value:'join',disabled:S.res.gold<of.cost}:{label:'Let them flee',value:'flee'}]:[]),{label:'Fight',value:true,primary:!of}],dismiss:false});
 }
 async function gainRelic(h,rs){
   h.relics.push(...rs);renderUI();
@@ -2877,14 +2939,23 @@ function stepHero(n){
 }
 function tween(dur,f){return new Promise(res=>{const t0=performance.now();const step=now=>{const t=Math.min(1,(now-t0)/Math.max(1,dur));f(t);if(t<1)requestAnimationFrame(step);else res();};requestAnimationFrame(step);});}
 function gain(k,n){S.res[k]+=n;}
-async function manageHolding(o){const f=FAC[o.fac],h=HERO();o.pool=o.pool||{};
-  const body=()=>`<p class="muted" style="margin-top:0">Captured${o.free?` ${TOWN_LVL[o.lvl||1].toLowerCase()}`:''}: +${fmt(campIncome(o))} gold a day. Its troops muster here each week.</p><div class="ugrid">${f.units.slice(0,campTiers(o)).map(k=>{const av=o.pool[k]||0,mx=Math.min(av,maxAfford(k));
+async function manageHolding(o){const f=FAC[o.fac],h=HERO(),here=h.x===o.x&&h.y===o.y;o.pool=o.pool||{};o.garrison=o.garrison||[];
+  const gsum=()=>o.garrison.map(a=>`${a.n} ${U[a.k].pl}`).join(', ');
+  const body=()=>`<p class="muted" style="margin-top:0">Your outpost: +${fmt(campIncome(o))} gold a day. Its troops muster here each week. ${here?`Recruits join ${esc(h.name)}.`:`No hero is here, so recruits wait in the garrison until a hero comes to collect them.`}</p>${o.garrison.length?`<p><b>⚑ Garrison:</b> ${gsum()}</p>`:''}<div class="ugrid">${f.units.slice(0,campTiers(o)).map(k=>{const av=o.pool[k]||0,mx=Math.min(av,maxAfford(k));
     return unitCard(k,{cls:mx>0?'sugg':'',foot:`<div class="cost">${costHTML(unitCost(k,1))}<span class="muted">each · ${av} here</span></div><div class="rctl"><button class="btn sm${mx>0?' primary':''}" data-hrec="${k}" ${mx<1?'disabled':''}>Recruit ${mx}</button></div>`});}).join('')}</div>`;
-  const pr=showModal({title:campName(o).replace(/^./,c=>c.toUpperCase()),body:body(),wide:true,buttons:[{label:'Garrison',value:'g'},{label:'Done',value:1,primary:true}],dismiss:1});
+  const pr=showModal({title:campName(o).replace(/^./,c=>c.toUpperCase()),body:body(),wide:true,buttons:here?[{label:'Garrison',value:'g'},{label:'Done',value:1,primary:true}]:[{label:'Show on map',value:'m'},{label:'Done',value:1,primary:true}],dismiss:1});
   const b=$('#modal').querySelector('.body');
   b.addEventListener('click',e=>{const el=e.target.closest('[data-hrec]');if(!el)return;const k=el.dataset.hrec,n=Math.min(o.pool[k]||0,maxAfford(k));if(n<1)return;
-    if(!addToArmy(k,n)){toast('No free army slot.');return;}pay(unitCost(k,n));o.pool[k]-=n;toast(`${n} ${U[k].pl} join ${h.name}.`);b.innerHTML=body();renderUI();});
-  const v=await pr;renderUI();save();if(v==='g')await manageSpire(o);}
+    if(here){if(!addToArmy(k,n)){toast('No free army slot.');return;}}else{const g=o.garrison.find(x=>x.k===k);if(g)g.n+=n;else if(o.garrison.length<7)o.garrison.push({k,n});else{toast('The garrison is full.');return;}}
+    pay(unitCost(k,n));o.pool[k]-=n;toast(here?`${n} ${U[k].pl} join ${h.name}.`:`${n} ${U[k].pl} wait in the garrison.`);b.innerHTML=body();renderUI();});
+  const v=await pr;renderUI();save();if(v==='g'&&here)await manageSpire(o);else if(v==='m')centerOn(o.x,o.y);}
+/* a beaten rogue who held an outpost offers to join */
+async function keeperJoins(id){const hx=HBY[id],h=HERO();if(!hx)return;
+  if(S.heroes.length>=heroCap()){toast(`${hx.name} yields the outpost and slips away to the taverns.`);return;}
+  const v=await showModal({title:`${hx.name} yields`,body:`<div class="rrow"><img src="${iconURL('hero',id,128)}" alt="" style="width:112px;image-rendering:pixelated;border-radius:4px"><div><p class="tag" style="color:#8a2a1e">Rogue · no banner</p><p><b>${hx.name}</b> lowers their blade: "A fair fight. I'll ride with you, if you'll have me."</p><p>★ ${hx.ab}: ${hx.ad}</p></div></div>`,
+    buttons:[{label:'Send them off',value:0},{label:`Take ${hx.name} on`,value:1,primary:true}],dismiss:0});
+  if(!v)return;const nh=mkHero(id,h.x,h.y);if(delivered(5)){nh.book=true;nh.spells.push('starfall');}const cur=S.cur;S.heroes.push(nh);S.cur=S.heroes.length-1;nh.mana=maxMana();nh.mp=0;S.cur=cur;
+  lootPop(`${hx.name} joins you`,iconURL('hero',id,128));}
 async function manageSpire(o){
   const h=HERO(),body=()=>{const col=(arr,side)=>`<div><div class="label">${side==='h'?h.name+"'s army":'Spire garrison'}</div><div class="army" style="margin-top:6px">${Array.from({length:7},(_,i)=>{const a=arr[i];return a?`<button class="slot" data-sp="${side}${i}" title="Move ${U[a.k].pl}"><img class="${U[a.k]&&U[a.k].up?'upg':''}" src="${iconURL('unit',a.k,64)}" alt="${U[a.k].name}"><b>${a.n}</b></button>`:'<div class="slot empty"></div>';}).join('')}</div></div>`;
     return`<p>Click a stack to move it across. A garrisoned spire holds the ground around it (the dashed square): enemy heroes can't pass through until they beat the garrison. Defenders get +3 defense.</p><div class="casualties">${col(h.army,'h')}${col(o.garrison,'g')}</div>${h.army.length<=1?'<p class="muted">A hero must keep at least one stack.</p>':''}`;};
@@ -2905,21 +2976,21 @@ async function visit(o,last=true,jumped=false){
   case 'portal':{if(!last||jumped)return false;if(rivalAt(o.tx,o.ty)||heroIdxAt(o.tx,o.ty)>=0){toast('Someone is standing at the far end of the portal.');return true;}
     await stepHero({x:o.tx,y:o.ty});reveal(o.tx,o.ty,vision());toast(o.ty>=(S.underY||1e9)?'Through the portal: down into the underworld.':'Through the portal and back into daylight.');renderUI();return true;}
   case 'camp':{if(S.players)return false;
-    if(o.owned!==ME()){o.owned=ME();o.ownerName=h.name;o.garrison=[];o.pool=firstPool(o);toast(`The ${campName(o)} is yours: +500 gold a day.`);renderUI();if(!last)return false;}
-    if(!last)return false;await manageHolding(o);return true;}
+    if(o.owned!==ME()){const kp=captureCamp(o,h);toast(isMajor(o)?`${esc(campName(o))} is yours: a full town to build up.`:`The ${campName(o)} is yours: +${fmt(campIncome(o))} gold a day.`);renderUI();if(kp)await keeperJoins(kp);if(!last)return false;}
+    if(!last)return false;if(isMajor(o)){await arriveTown(o);return true;}await manageHolding(o);return true;}
   case 'spire':{if(o.owned!==ME()){o.owned=ME();o.ownerName=h.name;o.garrison=[];toast('Spire claimed. Leave troops in it to hold this road.');renderUI();}
     if(!last)return false;await manageSpire(o);return true;}
   case 'flot':{S.objs=S.objs.filter(q=>q!==o);let msg='';
     switch(o.k){case'floating_chest':{const g=ri(8,14)*100;gain('gold',g);msg=`${fmt(g)} gold in a floating chest.`;break;}case'salvage_crate':gain('timber',5);gain('ore',5);msg='Salvage: 5 timber and 5 ore.';break;
       case'driftwood':gain('timber',6);msg='6 timber of driftwood.';break;case'supply_barrel':gain('gold',500);gain('ore',3);msg='A supply barrel: 500 gold and 3 ore.';break;
-      case'pearl_shell':gain('amber',2);msg='A giant pearl, traded for 2 amber.';break;case'sea_crystal':gain('amber',3);msg='A sea crystal worth 3 amber.';break;
+      case'pearl_shell':gain('gems',2);msg='A giant pearl: +2 gems.';break;case'sea_crystal':gain('moonwater',2);msg='A sea crystal that melts into 2 moonwater.';break;
       case'message_bottle':{const r=addRumour(false,true);if(r)msg='A message in a bottle: '+r.replace(/<\/?b>/g,'');else{gain('gold',600);msg='A message in a bottle points to 600 gold.';}break;}
       case'coral_relic':{const pool=Object.keys(ITEMS).filter(k=>ITEMS[k].lvl<=3&&!S.heroes.some(x=>(x.items||[]).includes(k)||(x.pack||[]).includes(k)));if(pool.length){const it=pick(pool);giveItem(h,it);msg=`Coral-crusted: the ${ITEMS[it].name} (${itemTxt(it)}).`;}else{gain('gold',800);msg='800 gold in coral.';}break;}}
     lootPop(msg,ART_BASE+`ocean/${o.k}.png`);renderUI();return false;}
-  case 'gem':{const gm=GEMS[o.k];gain('gold',gm.gold);S.objs=S.objs.filter(q=>q!==o);lootPop(`A ${gm.name.toLowerCase()}! Sold for ${fmt(gm.gold)} gold`,iconURL('gem',o.k));renderUI();return false;}
+  case 'gem':{const gm=GEMS[o.k],rk=gm.res||'gems';gain(rk,gm.n);S.objs=S.objs.filter(q=>q!==o);lootPop(rk==='gems'?`A ${gm.name.toLowerCase()}: +${gm.n} gems`:`A ${gm.name.toLowerCase()}, melted into ${gm.n} moonwater`,iconURL('gem',o.k));renderUI();return false;}
   case 'prison':{const id=o.rogue&&!S.heroes.some(x=>x.id===o.rogue)&&!S.rivals.some(x=>x.id===o.rogue)?o.rogue:null;
     if(!id){toast('The cells stand empty.');return false;}const hx=HBY[id];
-    if(S.heroes.length>=3){await showModal({title:'Prison',body:`<div class="rrow"><img src="${iconURL('hero',id,128)}" alt="" style="width:96px;image-rendering:pixelated"><p><b>${hx.name}</b> rattles the bars. You already lead three heroes, so there is no one to free them into your company. Come back with room to spare.</p></div>`,buttons:[{label:'OK',value:1,primary:true}],dismiss:1});return false;}
+    if(S.heroes.length>=heroCap()){await showModal({title:'Prison',body:`<div class="rrow"><img src="${iconURL('hero',id,128)}" alt="" style="width:96px;image-rendering:pixelated"><p><b>${hx.name}</b> rattles the bars. You already lead ${heroCap()} heroes, so there is no one to free them into your company. Come back with room to spare.</p></div>`,buttons:[{label:'OK',value:1,primary:true}],dismiss:1});return false;}
     const v=await showModal({title:`Prison: ${hx.name}`,body:`<div class="rrow"><img src="${iconURL('hero',id,128)}" alt="" style="width:112px;image-rendering:pixelated;border-radius:4px"><div><p class="tag" style="color:#8a2a1e">Rogue · no banner</p><p><b>${hx.name}</b>, ${hx.type.toLowerCase()} hero. ★ ${hx.ab}: ${hx.ad}</p><p class="muted">Break the lock and ${hx.name} joins you for free.</p></div></div>`,buttons:[{label:'Leave them',value:0},{label:`Free ${hx.name}`,value:1,primary:true}],dismiss:0});
     if(!v)return false;const nh=mkHero(id,h.x,h.y);if(delivered(5)){nh.book=true;nh.spells.push('starfall');}const cur=S.cur;S.heroes.push(nh);S.cur=S.heroes.length-1;nh.mana=maxMana();nh.mp=0;S.cur=cur;
     o.rogue=null;S.jailed=(S.jailed||[]).filter(x=>x!==id);lootPop(`${hx.name} is free and joins you`,iconURL('hero',id,128));renderUI();save();return false;}
@@ -2979,18 +3050,18 @@ async function visit(o,last=true,jumped=false){
 }
 function addToArmy(k,n){const a=HERO().army;const s=a.find(x=>x.k===k);if(s){s.n+=n;return true;}if(a.length<7){a.push({k,n});return true;}return false;}
 function townArrive(){
-  const t=S.town,h=HERO();
-  for(const b of FAC_BUILD[S.fac]||[])if(b.visit&&t.built[b.id]&&!(t.taught||(t.taught={}))[h.id+b.id]){t.taught[h.id+b.id]=1;h[b.visit]++;toast(`${b.name}: ${h.name} learns +1 ${STATN[b.visit]}.`);}
+  const t=TW(),h=HERO(),home=t===S.town;
+  for(const b of FAC_BUILD[TF()]||[])if(b.visit&&t.built[b.id]&&!(t.taught||(t.taught={}))[h.id+b.id]){t.taught[h.id+b.id]=1;h[b.visit]++;toast(`${b.name}: ${h.name} learns +1 ${STATN[b.visit]}.`);}
   learnLibrary();
-  if(t.built.reliquary&&h.relics.length){const got=h.relics.splice(0);for(const r of got){S.delivered.push(r);if(r===5)S.heroes.forEach(x=>{x.book=true;if(!x.spells.includes('starfall'))x.spells.push('starfall');});}
+  if(home&&t.built.reliquary&&h.relics.length){const got=h.relics.splice(0);for(const r of got){S.delivered.push(r);if(r===5)S.heroes.forEach(x=>{x.book=true;if(!x.spells.includes('starfall'))x.spells.push('starfall');});}
     toast(`${got.map(r=>RELICS[r].name).join(', ')} placed in the Relic Hall. ${S.delivered.length}/7 home.`);}
-  else if(h.relics.length&&!t.built.reliquary)toast('Build the Relic Hall to bring your relics home.');
+  else if(home&&h.relics.length&&!t.built.reliquary)toast('Build the Relic Hall to bring your relics home.');
   if(t.built.stables&&h.mount==='foot'){h.mount='horse';toast(`${h.name} takes a horse from the stables.`);}
   if(t.built.lib1&&h.mana<maxMana()){h.mana=maxMana();toast('The Lantern Library refills your mana.');}
   renderUI();
 }
-async function arriveTown(){if(S.town.taken){toast(`${esc(S.town.taken.name)} holds ${esc(S.town.name)}.`);return;}townArrive();if(S.mode!=='conquest'&&goalMet()){await victory();return;}openTown();}
-function learnLibrary(){const h=HERO(),t=S.town;if(!h.book)return;const add=[];if(t.built.lib1)add.push(...libSpells(1));if(t.built.lib2)add.push(...libSpells(2));
+async function arriveTown(tw){tw=tw&&tw!==S.town?tw:null;if(!tw&&S.town.taken){toast(`${esc(S.town.taken.name)} holds ${esc(S.town.name)}.`);return;}VT=tw;townArrive();VT=null;if(S.mode!=='conquest'&&goalMet()){await victory();return;}openTown(tw);}
+function learnLibrary(){const h=HERO(),t=TW();if(!h.book)return;const add=[];if(t.built.lib1)add.push(...libSpells(1));if(t.built.lib2)add.push(...libSpells(2));
   const fresh=add.filter(s=>!h.spells.includes(s));if(fresh.length){h.spells.push(...fresh);toast(`${h.name} learns ${fresh.map(s=>SP[s].name).join(' and ')}.`);}}
 async function addXP(n){
   const h=HERO();h.xp+=n;
@@ -3013,17 +3084,20 @@ function rollEvent(){const tot=EVENTS.reduce((a,e)=>a+e.w,0);let r=Math.random()
 function dayUpkeep(weekly){
   const t=S.town,news=[],inc=income();gain('gold',inc);const msg=[t.taken?`no income: ${esc(t.taken.name)} holds ${esc(t.name)}`:`+${fmt(inc)} gold`];
   if(!t.taken){if(facSpecial('amberDay'))gain('amber',1);if(facSpecial('oreDay'))gain('ore',2);}
-  if(weekly)for(const o of S.objs)if(o.type==='camp'&&o.owned===ME()){o.pool=o.pool||{};for(const[k,n]of Object.entries(firstPool(o)))o.pool[k]=(o.pool[k]||0)+n;}
+  if(weekly)for(const o of S.objs)if(o.type==='camp'&&o.owned===ME()&&!o.built){o.pool=o.pool||{};for(const[k,n]of Object.entries(firstPool(o)))o.pool[k]=(o.pool[k]||0)+n;}
   let owned=0;for(const o of S.objs)if(o.type==='mine'&&o.owned===ME()){owned++;gain(MINE[o.k].res,mineOut(o));}
   if(owned)msg.push(`${owned} mine${owned>1?'s':''} paid out`);
-  const cur=S.cur;S.heroes.forEach((h,i)=>{S.cur=i;h.mp=maxMP();if(facSpecial('mpTown')&&h.x===t.x&&h.y===t.y)h.mp=Math.round(h.mp*1.25);h.mana=Math.min(maxMana(),h.mana+Math.max(1,hst(h,'lore'))+(hasSk('meditation')?2:0)+gear(h,'manaRegen')+(facSpecial('manaRegen')?2:0));});S.cur=cur;
-  t.builtToday=false;
-  if(weekly&&!t.taken){const d=dateParts(),ev=S.event||{};const mult=(t.built.muster?1.5:1)*[1,1,1.5,2][wallLvl()]*(ev.k==='bounty'?1.25:ev.k==='lean'?0.75:1),gr={};
-    if(ev.k==='unit'&&ev.unit)gr[ev.unit]=(gr[ev.unit]||0)+5;if(ev.k==='gold'){gain('gold',1000);}const fb=FAC_BUILD[S.fac]||[];
-    for(const b of fb)if(b.horde&&t.built[b.id]){const k=FAC[S.fac].units[b.horde[0]];gr[k]=(gr[k]||0)+b.horde[1];}
-    if(facSpecial('horde2')){const k=FAC[S.fac].units[1];gr[k]=(gr[k]||0)+2;}
-    if(facSpecial('goldWeek')){gain('gold',1500);msg.push('+1,500 gold from the cove');}S.heroes.forEach(h=>{for(const[k,v]of Object.entries((HBY[h.id].fx||{}).growth||{}))gr[k]=(gr[k]||0)+v;});
-    FAC[S.fac].units.forEach((k,i)=>{if(t.built['d'+(i+1)])t.pool[k]=(t.pool[k]||0)+Math.round(U[k].growth*mult)+(gr[k]||0)+(i===0&&delivered(1)?2:0);});
+  const cur=S.cur;S.heroes.forEach((h,i)=>{S.cur=i;h.mp=maxMP();if(allTowns().some(q=>specialIn(q,'mpTown')&&h.x===q.x&&h.y===q.y))h.mp=Math.round(h.mp*1.25);h.mana=Math.min(maxMana(),h.mana+Math.max(1,hst(h,'lore'))+(hasSk('meditation')?2:0)+gear(h,'manaRegen')+(facSpecial('manaRegen')?2:0));});S.cur=cur;
+  for(const q of allTowns())q.builtToday=false;
+  if(weekly){const d=dateParts(),ev=S.event||{};if(ev.k==='gold')gain('gold',1000);
+    for(const q of allTowns()){if(q.taken)continue;const fk=q.fac||S.fac,F=FAC[fk],fb=FAC_BUILD[fk]||[],gr={};
+      const mult=(q.built.muster?1.5:1)*[1,1,1.5,2][wallLvl(q)]*(ev.k==='bounty'?1.25:ev.k==='lean'?0.75:1);
+      if(ev.k==='unit'&&ev.unit)gr[ev.unit]=(gr[ev.unit]||0)+5;
+      for(const b of fb)if(b.horde&&q.built[b.id]){const k=F.units[b.horde[0]];gr[k]=(gr[k]||0)+b.horde[1];}
+      if(specialIn(q,'horde2')){const k=F.units[1];gr[k]=(gr[k]||0)+2;}
+      if(specialIn(q,'goldWeek')){gain('gold',1500);msg.push(`+1,500 gold from ${esc(q.name)}`);}
+      if(q===S.town)S.heroes.forEach(h=>{for(const[k,v]of Object.entries((HBY[h.id].fx||{}).growth||{}))gr[k]=(gr[k]||0)+v;});
+      q.pool=q.pool||{};F.units.forEach((k,i)=>{if(q.built['d'+(i+1)])q.pool[k]=(q.pool[k]||0)+Math.round(U[k].growth*mult)+(gr[k]||0)+(i===0&&q===S.town&&delivered(1)?2:0);});}
     if(ev.name)news.push(`<b>${ev.name}:</b> ${ev.txt}`);
     news.push(`<b>Week ${d.w} of Month ${d.m}.</b> Dwellings have new recruits. Wild creatures${S.rivals.some(r=>!r.human)?' and rivals':''} grow stronger.`);}
   news.push(`Day ${S.day}: ${msg.join(' · ')}.`);return news;
@@ -3092,8 +3166,12 @@ function addRumour(first,quiet){
   if(quiet)return msg;if(!first)toast(msg);
 }
 /* -------- rival heroes -------- */
+const RIVAL_PLAN=['hall2','d3','wall1','d4','hall3','muster','wall2','d5','hall4','wall3'];
 function growRival(rv){const u=FAC[rv.fac].units,wk=Math.floor((S.day-1)/7);
   const camp=S.objs.find(o=>o.type==='camp'&&!o.free&&o.fac===rv.fac);if(camp&&camp.owned)return;
+  // a rival builds up its home town too: one step a week (a second one some weeks on Hard), and its walls and dwellings strengthen the garrison
+  if(camp&&camp.built){const next=()=>RIVAL_PLAN.find(b=>!camp.built[b]);for(let i=0;i<(R()<rvMul()-0.7?2:1);i++){const b=next();if(b)camp.built[b]=1;}
+    const k=u[Math.min(4,[1,2,3,4,5].filter(i=>camp.built['d'+i]).length-1)];const g=camp.garrison.find(a=>a.k===k),n=Math.max(1,Math.ceil(U[k].growth/2*[1,1.25,1.5,2][wallLvl(camp)]));if(g)g.n+=n;else if(camp.garrison.length<7)camp.garrison.push({k,n});}
   if(camp&&camp.garrison){const g=camp.garrison.find(a=>a.k===u[0]);if(g)g.n+=Math.ceil(U[u[0]].growth/2);else camp.garrison.push({k:u[0],n:Math.ceil(U[u[0]].growth/2)});}
   const add=(k,n)=>{n=Math.round(n*rvMul());if(n<=0)return;const s=rv.army.find(a=>a.k===k);if(s)s.n+=n;else if(rv.army.length<7)rv.army.push({k,n});};
   add(u[0],U[u[0]].growth);add(u[1],U[u[1]].growth);add(u[2],Math.round(U[u[2]].growth*0.5));if(wk>=2)add(u[3],Math.round(U[u[3]].growth*0.5));if(wk>=4)add(u[4],1);
@@ -3130,6 +3208,7 @@ function autoResolve(rv,theirs){const ours=armyPower(rv.army,rv);
   if(ours>theirs){const f=Math.min(0.85,Math.pow(theirs/ours,1.4)*0.75);rv.army.forEach(a=>a.n=Math.max(1,Math.round(a.n*(1-f))));return true;}
   rv.army.forEach(a=>a.n=Math.max(1,Math.round(a.n*0.3)));return false;}
 async function rivalsTurn(){
+  for(const rv of S.rivals)rv._shown=0;
   for(const rv of [...S.rivals]){
     if(rv.human||rv.occupy)continue;
     if(!S||S.over||!S.rivals.includes(rv))continue;
@@ -3138,7 +3217,11 @@ async function rivalsTurn(){
       const tg=rivalTarget(rv);if(!tg)break;
       let arrived=false;
       for(let i=0;i<tg.path.length;i++){const n=tg.path[i],pv=i?tg.path[i-1]:{x:rv.x,y:rv.y};const cst=Math.round(rivalCost(rv,n.x,n.y,true)*((pv.x!==n.x&&pv.y!==n.y)?1.414:1));
-        if(cst>mp){mp=0;break;}mp-=cst;if(i===tg.path.length-1){arrived=true;break;}rv.face=dirOf(n.x-rv.x,n.y-rv.y);rv.x=n.x;rv.y=n.y;}
+        if(cst>mp){mp=0;break;}mp-=cst;if(i===tg.path.length-1){arrived=true;break;}rv.face=dirOf(n.x-rv.x,n.y-rv.y);
+        // rivals you can see walk step by step, with the camera following them, so you can track where they go
+        const vis=seenNow(rv.x,rv.y)||seenNow(n.x,n.y);if(vis&&!reduced){if(!rv._shown){rv._shown=1;centerOn(n.x,n.y);toast(`<b>${esc(rv.name)}</b> (${FAC[rv.fac].arch}) is on the move.`);await sleep(250);}
+          const sx=n.x*TS-camX,sy=n.y*TS-camY;if(sx<TS*2||sy<TS*2||sx>vw-TS*3||sy>vh-TS*3)centerOn(n.x,n.y);rv.x=n.x;rv.y=n.y;await sleep(170);}else{rv.x=n.x;rv.y=n.y;}
+        if(seenNow(rv.x,rv.y))rv.seen={x:rv.x,y:rv.y,day:S.day};}
       if(!arrived)break;
       const rres=await rivalInteract(rv,tg);if(S&&S.pendingWin){S.pendingWin=false;await victory();return;}if(rres==='stop')break;
       if(!S||S.over)return;
@@ -3162,8 +3245,8 @@ async function rivalInteract(rv,tg){
   if(o.type==='artifact'){S.objs=S.objs.filter(q=>q!==o);(rv.items=rv.items||[]).push(o.item);rv.x=o.x;rv.y=o.y;return'go';}
   if(o.type==='drop'){S.objs=S.objs.filter(q=>q!==o);rv.relics.push(...o.rs);rv.x=o.x;rv.y=o.y;toast(`<b>${rv.name}</b> picked up ${o.rs.map(r=>RELICS[r].name).join(', ')}.`);return'go';}
   if(o.type==='mine'){rv.x=o.x;rv.y=o.y;if(o.owned===ME())toast(`<b>${rv.name}</b> seized your ${MINE[o.k].name}.`);o.owned=rv.fac;o.ownerName=rv.name;return'go';}
-  if(o.type==='camp'){if(o.garrison&&o.garrison.length&&!autoResolve(rv,armyPower(o.garrison))){o.garrison.forEach(a=>a.n=Math.max(1,Math.round(a.n*0.7)));if(o.owned===ME())toast(`Your holding held against <b>${esc(rv.name)}</b>.`);return'stop';}
-    if(o.owned===ME())toast(`<b>${esc(rv.name)}</b> has taken back a camp from you.`);rv.x=o.x;rv.y=o.y;o.owned=!o.free&&o.fac===rv.fac?false:rv.fac;o.garrison=[];return'go';}
+  if(o.type==='camp'){if(o.garrison&&o.garrison.length&&!autoResolve(rv,o.built?townDefense(o):armyPower(o.garrison))){o.garrison.forEach(a=>a.n=Math.max(1,Math.round(a.n*0.7)));if(o.owned===ME())toast(`${esc(campName(o))} held against <b>${esc(rv.name)}</b>.`);return'stop';}
+    if(o.owned===ME())toast(`<b>${esc(rv.name)}</b> has taken ${esc(campName(o))} from you.`);rv.x=o.x;rv.y=o.y;o.owned=!o.free&&o.fac===rv.fac?false:rv.fac;o.garrison=[];return'go';}
   if(o.type==='spire'){rv.x=o.x;rv.y=o.y;
     if(o.garrison.length){if(!autoResolve(rv,armyPower(o.garrison)*1.25)){o.garrison.forEach(a=>a.n=Math.max(1,Math.round(a.n*0.7)));if(o.owned===ME())toast(`Your spire held against <b>${rv.name}</b>.`);return'stop';}}
     if(o.owned===ME())toast(`<b>${rv.name}</b> has taken one of your spires.`);o.owned=rv.fac;o.ownerName=rv.name;o.garrison=[];return'go';}
@@ -3178,14 +3261,20 @@ async function rivalInteract(rv,tg){
 /* each banner's mages teach their own spells: the Library the first two, the Star Archive the rest */
 const FAC_SPELLS={rangers:['mend','swift','entangle','bark','starfall'],wizards:['ember','swift','chain','bark','starfall'],necro:['ember','raise','bark','squall','starfall'],
   centaurs:['swift','mend','entangle','squall'],pirates:['squall','ember','swift','mend'],elves:['entangle','mend','swift','starfall'],dwarves:['ember','bark','geyser','mend'],merfolk:['squall','mend','chain','swift']};
-const libSpells=lvl=>{const l=FAC_SPELLS[S.fac];return lvl===1?l.slice(0,2):l.slice(2);};
+/* towns: S.town is the home town; a captured major town is its camp object (o.major, or a rival's home camp), which carries its own built, pool, garrison and name.
+   The town screen works on the viewed town TW() of banner TF(). */
+let VT=null;
+const TW=()=>VT||S.town,TF=()=>(VT&&VT.fac)||S.fac;
+const withTown=(t,f)=>{const o=VT;VT=!t||t===S.town?null:t;try{return f();}finally{VT=o;}};
+const specialIn=(t,k)=>!!(t&&t.built&&(FAC_BUILD[t.fac||S.fac]||[]).some(b=>b.special===k&&t.built[b.id]));
+const libSpells=lvl=>{const l=FAC_SPELLS[TF()];return lvl===1?l.slice(0,2):l.slice(2);};
 const BOOK_COST=500,HIRE_COST=2500;
-const heroHere=()=>HERO().x===S.town.x&&HERO().y===S.town.y;
+const heroHere=()=>HERO().x===TW().x&&HERO().y===TW().y;
 /* the tavern offers two heroes of your banner and two rogues (wanderers of other banners if rogues run out); the offer changes each week */
-const hireCost=x=>x.fac===S.fac&&!x.rogue?HIRE_COST:HIRE_COST+500;
+const hireCost=x=>x.fac===TF()&&!x.rogue?HIRE_COST:HIRE_COST+500;
 const hireable=()=>{const taken=new Set([...S.heroes.map(y=>y.id),...S.rivals.map(r=>r.id),...(S.players||[]).flatMap(p=>(p.heroes||[]).map(h=>h.id))]);
   const free=HEROES.filter(x=>!taken.has(x.id)&&!x.blank),g=mulberry32((S.seed^Math.imul(weekNo()+1,7919))>>>0),sh=a=>a.map(x=>[g(),x]).sort((p,q)=>p[0]-q[0]).map(x=>x[1]);
-  const rg=sh(free.filter(x=>x.rogue&&!(S.jailed||[]).includes(x.id))).slice(0,2);return[...sh(free.filter(x=>x.fac===S.fac&&!x.rogue)).slice(0,2),...rg,...sh(free.filter(x=>x.fac!==S.fac&&!x.rogue)).slice(0,2-rg.length)];};
+  const rg=sh(free.filter(x=>x.rogue&&!(S.jailed||[]).includes(x.id))).slice(0,2);return[...sh(free.filter(x=>x.fac===TF()&&!x.rogue)).slice(0,2),...rg,...sh(free.filter(x=>x.fac!==TF()&&!x.rogue)).slice(0,2-rg.length)];};
 /* each banner's own buildings: a horde (more of one troop each week), one that teaches visiting heroes, and a special */
 const FAC_BUILD={
   rangers:[{id:'fb1',name:'Bramble Warren',horde:[0,4]},{id:'fb2',name:"Hunter's Lodge",visit:'atk'},{id:'fb3',name:'Waystone Circle',special:'mpTown',desc:'Heroes who start the day in town get +25% movement that day.'}],
@@ -3196,34 +3285,36 @@ const FAC_BUILD={
   elves:[{id:'fb1',name:'Seedling Grove',horde:[0,4]},{id:'fb2',name:'Moonlit Glade',visit:'lore'},{id:'fb3',name:'Sylvan Spring',special:'amberDay',desc:'Gives 1 amber each day.'}],
   dwarves:[{id:'fb1',name:'Delving Halls',horde:[0,4]},{id:'fb2',name:'Runestone',visit:'def'},{id:'fb3',name:'Deep Seam',special:'oreDay',desc:'Gives 2 ore each day.'}],
   merfolk:[{id:'fb1',name:'Spawning Pools',horde:[0,5]},{id:'fb2',name:'Coral Shrine',visit:'pow'},{id:'fb3',name:'Tide Market',special:'goldWeek',desc:'Brings in 1,500 gold at the start of each week.'}]};
-const FB_COST=[{gold:1500,timber:5},{gold:2000,ore:5},{gold:3000,timber:5,amber:5}];
-const facSpecial=k=>!!(S&&S.town&&S.town.built&&(FAC_BUILD[S.fac]||[]).some(b=>b.special===k&&S.town.built[b.id]));
+const FB_COST=[{gold:1500,timber:5},{gold:2000,ore:5,gems:2},{gold:3000,timber:5,amber:3,moonwater:3}];
+const facSpecial=k=>!!(S&&S.town&&allTowns().some(t=>!t.taken&&specialIn(t,k)));
 /* walls: more growth, and they defend the town when a rival attacks it */
 const WALLS=[{id:'wall1',name:'Palisade',cost:{gold:1500,timber:10},desc:'A timber wall: the garrison fights 25% harder when the town is attacked.'},
   {id:'wall2',name:'Stronghold',cost:{gold:3000,ore:10},req:['wall1'],desc:'Stone walls: +50% troop growth each week, and the garrison fights 50% harder.'},
-  {id:'wall3',name:'Bastion',cost:{gold:5000,ore:10,amber:5},req:['wall2','hall2'],desc:'Towers on the walls: +100% troop growth each week, the garrison fights twice as hard, and the towers join the defence.'}];
-const wallLvl=()=>S.town.built.wall3?3:S.town.built.wall2?2:S.town.built.wall1?1:0;
-function townDefense(){const lv=wallLvl(),g=armyPower(S.town.garrison||[]);return g*[1,1.25,1.5,2][lv]+(lv===3?stackPower('troll',8):0);}
+  {id:'wall3',name:'Bastion',cost:{gold:5000,ore:10,gems:3},req:['wall2','hall2'],desc:'Towers on the walls: +100% troop growth each week, the garrison fights twice as hard, and the towers join the defence.'}];
+const wallLvl=(t=TW())=>!t.built?0:t.built.wall3?3:t.built.wall2?2:t.built.wall1?1:0;
+function townDefense(t=S.town){const lv=wallLvl(t),g=armyPower(t.garrison||[]);return g*[1,1.25,1.5,2][lv]+(lv===3?stackPower('troll',8):0);}
 function townBuildings(){
-  const f=FAC[S.fac],fk=S.fac;
+  const f=FAC[TF()],fk=TF();
   const L=[
     {id:'hall1',name:'Moot Hall',cost:{},desc:'Brings in 500 gold each day.'},
     {id:'hall2',name:'Council Hall',cost:{gold:2500,timber:5,ore:5},req:['hall1'],desc:'Raises daily gold to 1,000.'},
-    {id:'hall3',name:'High Seat',cost:{gold:5000,timber:10,ore:10,amber:5},req:['hall2','lib1'],desc:'Raises daily gold to 2,000.'},
-    {id:'hall4',name:'Crown Seat',cost:{gold:10000,ore:10,amber:10},req:['hall3','wall2'],desc:'Makes this your capital: daily gold rises to 3,000.'},
-    {id:'reliquary',name:altarName(),cost:{gold:1500,ore:5},desc:S.mode==='grail'?'Heroes entering town place their grails here. The three the Oracle wants win the game.':S.mode==='conquest'?'Heroes entering town place their relics here for the bonuses.':'Heroes entering town place their relics here. All seven wins the game.'},
-    {id:'tavern',name:'Tavern',cost:{gold:800,timber:5},desc:'Hire up to two more heroes: two of your banner and two rogues, new each week.'},
+    {id:'hall3',name:'High Seat',cost:{gold:5000,timber:10,ore:10,gems:3},req:['hall2','lib1'],desc:'Raises daily gold to 2,000.'},
+    {id:'hall4',name:'Crown Seat',cost:{gold:10000,ore:10,gems:5,moonwater:5},req:['hall3','wall2'],desc:VT?'A grand seat of rule: daily gold rises to 3,000.':'Makes this your capital: daily gold rises to 3,000.'},
+    ...VT?[]:[{id:'reliquary',name:altarName(),cost:{gold:1500,ore:5},desc:S.mode==='grail'?'Heroes entering town place their grails here. The three the Oracle wants win the game.':S.mode==='conquest'?'Heroes entering town place their relics here for the bonuses.':'Heroes entering town place their relics here. All seven wins the game.'}],
+    {id:'tavern',name:'Tavern',cost:{gold:800,timber:5},desc:'Hire more heroes (up to four, five with the Heroes\' Lodge): two of this banner and two rogues, new each week.'},
+    {id:'lodge',name:"Heroes' Lodge",cost:{gold:5000,timber:10,gems:4,moonwater:3},req:['tavern','hall3'],desc:'Room for a fifth hero in your company.'},
+    {id:'still',name:"Alchemist's Still",cost:{gold:2000,timber:5,ore:5},req:['hall2'],desc:'Cut gems from ore and distil moonwater from amber, any day, in the Market.'},
   ];
-  const dc=[{gold:400},{gold:1000,timber:5},{gold:2000,timber:10,ore:5},{gold:3000,ore:5,amber:5},{gold:6000,timber:10,amber:10}];
+  const dc=[{gold:400},{gold:1000,timber:5},{gold:2000,timber:10,ore:5},{gold:3000,ore:5,amber:5,gems:3},{gold:6000,timber:10,amber:5,moonwater:5}];
   const dr=[[],[],['d1'],['d2','lib1'],['d3','d4']];
   f.units.forEach((k,i)=>L.push({id:'d'+(i+1),name:f.dw[i],unit:k,cost:dc[i],req:dr[i],desc:`Musters ${U[k].pl}.`}));
-  const uc=[{gold:800,timber:5},{gold:1200,ore:5},{gold:2000,timber:5,ore:5},{gold:3000,amber:5},{gold:5000,amber:10}];
+  const uc=[{gold:800,timber:5},{gold:1200,ore:5},{gold:2000,timber:5,ore:5,gems:2},{gold:3000,amber:5,moonwater:3},{gold:5000,gems:5,moonwater:5}];
   f.units.forEach((k,i)=>L.push({id:'u'+(i+1),name:`${f.dw[i]}: upgrade`,cost:uc[i],req:['d'+(i+1)],desc:`Recruits ${U[k+'_u'].pl} instead, and lets heroes in town upgrade their ${U[k].pl}.`}));
   L.push({id:'muster',name:'Muster Field',cost:{gold:1500,ore:5},req:['d1'],desc:'Every dwelling grows 50% more recruits each week.'});
   if(f.travel!=='hooves')L.push({id:'stables',name:'Stables',cost:{gold:1500,timber:5},desc:'Your hero takes a horse here: +40% movement.'});
   if(fk==='dwarves')L.push({id:'forge',name:'Great Forge',cost:{gold:2000,ore:Math.round(10*(fx().forgeCut||1))},req:['d1'],desc:'Forging: every Dwarven unit gets +1 attack and +1 defense.'});
   L.push({id:'lib1',name:'Lantern Library',cost:{gold:2000,timber:5,ore:5},desc:`Sells spellbooks and teaches ${libSpells(1).map(x=>SP[x].name).join(' and ')}. Refills mana on each visit.`});
-  L.push({id:'lib2',name:'Star Archive',cost:{gold:4000,ore:5,amber:5},req:['lib1'],desc:`Teaches ${libSpells(2).map(x=>SP[x].name).join(', ')}.`});
+  L.push({id:'lib2',name:'Star Archive',cost:{gold:4000,ore:5,moonwater:4},req:['lib1'],desc:`Teaches ${libSpells(2).map(x=>SP[x].name).join(', ')}.`});
   L.push({id:'market',name:'Barter Yard',cost:{gold:500,timber:5},desc:'Trade goods for gold, or gold for goods.'});
   for(const w of WALLS)L.push({...w,wall:true});
   (FAC_BUILD[fk]||[]).forEach((b,i)=>{const desc=b.horde?`+${b.horde[1]} ${U[f.units[b.horde[0]]].pl} each week.`:b.visit?`Each hero who visits learns +1 ${STATN[b.visit]}, once.`:b.desc;
@@ -3233,7 +3324,7 @@ function townBuildings(){
 function canAfford(cost){return Object.entries(cost).every(([k,v])=>S.res[k]>=v);}
 function pay(cost){for(const[k,v]of Object.entries(cost))S.res[k]-=v;}
 function unitCost(k,n){const u=U[k];const cut=S&&S.heroes?Math.max(0,...S.heroes.map(h=>gear(h,'costCut'))):0;const c={gold:Math.round(u.cost*n*(1-cut/100))};if(u.amber)c.amber=u.amber*n;return c;}
-const recruitKey=k=>{const i=FAC[S.fac].units.indexOf(k);return i>=0&&S.town.built['u'+(i+1)]?k+'_u':k;};
+const recruitKey=k=>{const i=FAC[TF()].units.indexOf(k);return i>=0&&TW().built['u'+(i+1)]?k+'_u':k;};
 /* every mine you hold, with an upgrade button while it is below level 3 (Barter Yard) */
 function mineList(){const ms=S.objs.filter(o=>o.type==='mine'&&o.owned===ME());if(!ms.length)return'<h3 class="fd-h" style="margin-top:14px">Your mines</h3><p class="muted">Claim mines on the map and you can upgrade them from here.</p>';
   return`<h3 class="fd-h" style="margin-top:14px">Your mines</h3><div class="grid">${ms.map(o=>{const m=MINE[o.k],lv=o.lvl||1,c=MINE_UP[lv];
@@ -3241,45 +3332,51 @@ function mineList(){const ms=S.objs.filter(o=>o.type==='mine'&&o.owned===ME());i
       ${lv<3?`<div class="cost">${costHTML(c,S.res)}</div><div><button class="btn sm" data-mineup="${o.id}" ${canAfford(c)?'':'disabled'}>Upgrade</button> <button class="btn sm" data-minego="${o.id}">Show on map</button></div>`:`<div><button class="btn sm" data-minego="${o.id}">Show on map</button></div>`}</div>`;}).join('')}</div>`;}
 function upCost(k,n){const c={gold:Math.max(0,(U[k+'_u'].cost-U[k].cost)*n)};return c;}
 function maxAfford(k){const c1=unitCost(k,1);let m=Math.floor(S.res.gold/Math.max(1,c1.gold));if(c1.amber)m=Math.min(m,Math.floor(S.res.amber/c1.amber));return m;}
+/* market prices [sell, buy] in gold, and the Alchemist's Still recipes (any town's still works) */
+const PRICE={timber:[100,400],ore:[100,400],amber:[250,900],gems:[300,1100],moonwater:[300,1100]};
+const ALCHEMY={gem:{name:'Cut a gem',cost:{gold:250,ore:3},out:'gems'},moon:{name:'Distil moonwater',cost:{gold:250,amber:2},out:'moonwater'}};
+const anyStill=()=>allTowns().some(q=>q.built&&q.built.still);
+function alchemyHTML(){const on=anyStill();return`<h3 class="fd-h" style="margin-top:14px">Alchemist's Still</h3>${on?'':'<p class="muted">Build the Alchemist\'s Still in any of your towns to make gems and moonwater yourself.</p>'}
+  <div class="grid">${Object.entries(ALCHEMY).map(([k,r])=>`<div class="bcard"><h4><img src="${iconURL('res',r.out,32)}" alt="" style="width:18px;vertical-align:-3px"> ${r.name}</h4><div class="cost">${costHTML(r.cost,S.res)}</div><div><button class="btn sm" data-alch="${k}" ${on&&canAfford(r.cost)?'':'disabled'}>Make 1 ${RESNAME[r.out].toLowerCase()}</button></div></div>`).join('')}</div>`;}
 const costPlain=c=>Object.entries(c).filter(([,v])=>v>0).map(([k,v])=>`${fmt(v)} ${RESNAME[k].toLowerCase()}`).join(', ');
-const bAvail=b=>!S.town.built[b.id]&&!(b.req||[]).some(r=>!S.town.built[r]);
+const bAvail=b=>!TW().built[b.id]&&!(b.req||[]).some(r=>!TW().built[r]);
 /* the one thing worth doing next */
 function townAdvice(){
-  const t=S.town,here=heroHere(),BL=townBuildings(),h=HERO();
-  if(here&&h.relics.length&&!t.built.reliquary){return{tab:'build',id:'reliquary',text:canAfford(BL.find(b=>b.id==='reliquary').cost)&&!t.builtToday?`Build the Relic Hall so ${h.name} can bring the relics home.`:`Save up for the Relic Hall: ${h.name} is carrying relics.`};}
-  const rec=FAC[S.fac].units.filter((k,i)=>t.built['d'+(i+1)]&&(t.pool[k]||0)>0&&maxAfford(recruitKey(k))>0);
+  const t=TW(),here=heroHere(),BL=townBuildings(),h=HERO();
+  if(!VT&&here&&h.relics.length&&!t.built.reliquary){return{tab:'build',id:'reliquary',text:canAfford(BL.find(b=>b.id==='reliquary').cost)&&!t.builtToday?`Build the Relic Hall so ${h.name} can bring the relics home.`:`Save up for the Relic Hall: ${h.name} is carrying relics.`};}
+  const rec=FAC[TF()].units.filter((k,i)=>t.built['d'+(i+1)]&&(t.pool[k]||0)>0&&maxAfford(recruitKey(k))>0);
   if(here&&rec.length){const k=rec[rec.length-1],rk=recruitKey(k);return{tab:'recruit',text:`Recruit ${Math.min(t.pool[k],maxAfford(rk))} ${U[rk].pl} for ${h.name}'s army.`};}
-  if(!t.builtToday){const order=['hall2','d3','reliquary','lib1','d4','hall3','tavern','u1','u2','d5','market','u3','muster','stables','forge','lib2','u4','u5'];
+  if(!t.builtToday){const order=['hall2','d3','reliquary','lib1','market','d4','still','hall3','tavern','u1','u2','d5','u3','muster','stables','forge','lib2','lodge','u4','u5'];
     for(const id of order){const b=BL.find(x=>x.id===id);if(b&&bAvail(b)&&canAfford(b.cost))return{tab:'build',id,text:`Build the ${b.name}. ${b.desc}`};}
     const next=order.map(id=>BL.find(x=>x.id===id)).find(b=>b&&bAvail(b));
     if(next)return{tab:'build',id:next.id,text:`Save up for the ${next.name} (${costPlain(next.cost)}).${t.built.market?' The market can trade spare goods.':''}`};}
   if(here&&!h.book&&t.built.lib1&&S.res.gold>=BOOK_COST)return{tab:'library',text:`Buy ${h.name} a spellbook at the Lantern Library.`};
-  if(t.built.tavern&&S.heroes.length<3&&S.res.gold>=HIRE_COST)return{tab:'tavern',text:'Hire another hero to scout and claim mines.'};
+  if(t.built.tavern&&S.heroes.length<heroCap()&&S.res.gold>=HIRE_COST)return{tab:'tavern',text:'Hire another hero to scout and claim mines.'};
   return{tab:'overview',text:t.builtToday?'Today’s building is done. Head out and explore.':'Nothing urgent. Head out and explore.'};
 }
 function townTabs(){
-  const t=S.town,here=heroHere(),BL=townBuildings(),fu=FAC[S.fac].units;
+  const t=TW(),here=heroHere(),BL=townBuildings(),fu=FAC[TF()].units;
   const recN=fu.reduce((a,k,i)=>a+(t.built['d'+(i+1)]&&maxAfford(recruitKey(k))>0?(t.pool[k]||0):0),0);
   const buildN=t.builtToday?0:BL.filter(b=>bAvail(b)&&canAfford(b.cost)).length;
   const upN=here?HERO().army.filter(a=>{const ti=fu.indexOf(a.k);return ti>=0&&t.built['u'+(ti+1)]&&canAfford(upCost(a.k,a.n));}).length:0;
-  const hireN=t.built.tavern&&S.heroes.length<3?hireable().filter(x=>S.res.gold>=hireCost(x)).length:0;
+  const hireN=t.built.tavern&&S.heroes.length<heroCap()?hireable().filter(x=>S.res.gold>=hireCost(x)).length:0;
   const libN=t.built.lib1&&here&&!HERO().book&&S.res.gold>=BOOK_COST?1:0;
   const relN=here&&t.built.reliquary?HERO().relics.length:0;
   return[{id:'overview',label:'Town'},{id:'recruit',label:'Recruit',n:recN},{id:'build',label:'Build',n:buildN},{id:'upgrade',label:'Upgrades',n:upN},
-    {id:'market',label:'Market',locked:!t.built.market},{id:'tavern',label:'Tavern',n:hireN,locked:!t.built.tavern},{id:'library',label:'Library',n:libN,locked:!t.built.lib1},{id:'relics',label:altarName(),n:relN}];
+    {id:'market',label:'Market',locked:!t.built.market},{id:'tavern',label:'Tavern',n:hireN,locked:!t.built.tavern},{id:'library',label:'Library',n:libN,locked:!t.built.lib1},...VT?[]:[{id:'relics',label:altarName(),n:relN}]];
 }
 let townTab='overview',townFocus=null,townSpots=[];
 function townHTML(){
-  const t=S.town,here=heroHere(),BL_=townBuildings(),BY=Object.fromEntries(BL_.map(b=>[b.id,b])),adv=townAdvice(),h=HERO();
+  const t=TW(),here=heroHere(),BL_=townBuildings(),BY=Object.fromEntries(BL_.map(b=>[b.id,b])),adv=townAdvice(),h=HERO();
   const tabs=townTabs().map(tb=>`<button class="ttab${tb.id===townTab?' on':''}${tb.n>0?' hot':''}${tb.locked?' locked':''}" data-tab="${tb.id}">${tb.label}${adv.tab===tb.id&&tb.id!=='overview'?'<span class="sg" title="Suggested">★</span>':''}${tb.n>0?`<i>${tb.n}</i>`:''}</button>`).join('');
   const resBar=`<div class="tres">${RES.map(k=>`<span title="${RESNAME[k]}"><img src="${iconURL('res',k,40)}" alt="${RESNAME[k]}">${fmt(S.res[k])}</span>`).join('')}<span class="muted" style="font-weight:500">+${fmt(income())} gold a day · ${t.builtToday?'building done for today':'1 building a day'}</span></div>`;
   const advice=`<div class="advice slim"><span><b>Suggested:</b> ${adv.text}</span>${adv.tab!==townTab||adv.id?`<button class="btn sm" data-go="${adv.tab}" data-goid="${adv.id||''}">${adv.tab==='overview'?'OK':'Take me there'}</button>`:''}</div>`;
   const locked=(what,id)=>{const b=BY[id];const miss=(b.req||[]).filter(r=>!t.built[r]);return`<div class="bcard"><h4>${what} is not built yet</h4><p>${b.desc}</p><div class="cost">${costHTML(b.cost,S.res)}</div><div>${miss.length?`<span class="tag no">Needs ${miss.map(r=>BY[r].name).join(', ')}</span>`:`<button class="btn sm" data-build="${id}" ${t.builtToday||!canAfford(b.cost)?'disabled':''}>Build the ${b.name}</button>`}</div></div>`;};
   let body='';
   if(townTab==='overview'){
-    const f=FAC[S.fac];
-    const vis=here?h:null,fu=FAC[S.fac].units;
-    const canUp=g=>{const ti=FAC[S.fac].units.indexOf(g.k);return ti>=0&&!!t.built['u'+(ti+1)];};
+    const f=FAC[TF()];
+    const vis=here?h:null,fu=FAC[TF()].units;
+    const canUp=g=>{const ti=FAC[TF()].units.indexOf(g.k);return ti>=0&&!!t.built['u'+(ti+1)];};
     const slots=(arr,side)=>Array.from({length:7},(_,i)=>{const g=arr[i];if(!g)return'<div class="slot empty"></div>';const up=canUp(g)&&(side==='g'||vis),c=up?upCost(g.k,g.n):null;
       return`<button class="slot" data-gtx="${side}${i}" title="${g.n} ${U[g.k].pl}${vis?` · click to move to the ${side==='g'?'hero':'garrison'}`:''}"><img class="${U[g.k]&&U[g.k].up?'upg':''}" src="${iconURL('unit',g.k,64)}" alt="${U[g.k].name}"><b>${g.n}</b>${up?`<span class="uplus${canAfford(c)?'':' poor'}" data-uplus="${side}${i}" role="button" title="Upgrade to ${U[g.k+'_u'].pl}: ${fmt(c.gold)} gold">+</span>`:''}</button>`;}).join('');
     body=`<div class="tscreen"><div class="tview-wrap"><canvas class="tview" id="townView" width="960" height="300" aria-label="${esc(t.name)}: click a building. Click the hall to see everything you can build."></canvas><div class="tv-tip" id="tvTip" hidden></div></div>
@@ -3297,11 +3394,11 @@ function townHTML(){
       </div></div>`;
   }else if(townTab==='recruit'){
     const gr={};S.heroes.forEach(x=>{for(const[k,v]of Object.entries((HBY[x.id].fx||{}).growth||{}))gr[k]=(gr[k]||0)+v;});
-    const dw=FAC[S.fac].units.map((k,i)=>t.built['d'+(i+1)]?k:null).filter(Boolean).map(k=>{const rk=recruitKey(k),u=U[rk],av=t.pool[k]||0,mx=Math.min(av,maxAfford(rk));
+    const dw=FAC[TF()].units.map((k,i)=>t.built['d'+(i+1)]?k:null).filter(Boolean).map(k=>{const rk=recruitKey(k),u=U[rk],av=t.pool[k]||0,mx=Math.min(av,maxAfford(rk));
       return unitCard(rk,{cls:mx>0?'sugg':'',foot:`<div class="cost">${costHTML(unitCost(rk,1))}<span class="muted">each · ${av} here · +${U[k].growth+(gr[k]||0)}/wk</span></div>
        <div class="rctl"><input type="number" id="rc-${k}" min="0" max="${mx}" value="${mx}" aria-label="How many ${u.pl}"><button class="btn sm${mx>0?' primary':''}" data-recruit="${k}" ${mx<1?'disabled':''}>Recruit</button></div>`});}).join('');
     const mini=arr=>Array.from({length:7},(_,i)=>{const g=arr[i];return g?`<div class="slot"><img class="${U[g.k]&&U[g.k].up?'upg':''}" src="${iconURL('unit',g.k,64)}" alt="${U[g.k].name}"><b>${g.n}</b></div>`:'<div class="slot empty"></div>';}).join('');
-    const canAny=FAC[S.fac].units.some((k,i)=>t.built['d'+(i+1)]&&Math.min(t.pool[k]||0,maxAfford(recruitKey(k)))>0);
+    const canAny=FAC[TF()].units.some((k,i)=>t.built['d'+(i+1)]&&Math.min(t.pool[k]||0,maxAfford(recruitKey(k)))>0);
     body=`<div class="rtop"><div class="rwho">${here?`<img src="${iconURL('hero',h.id,84)}" alt=""><div><b>${esc(h.name)}'s army</b><div class="trow small">${mini(h.army)}</div></div>`:`<div><b>${esc(h.name)} is away</b><small>Recruits wait in the garrison.</small></div>`}</div>
       <div class="rwho"><div><b>⚑ Garrison</b><div class="trow small">${mini(t.garrison)}</div></div></div>
       <button class="btn primary" data-recall="1" ${canAny?'':'disabled'} title="Recruit as many as you can afford from every dwelling, strongest first">Recruit all</button></div><div class="ugrid">${dw}</div>`;
@@ -3312,25 +3409,25 @@ function townHTML(){
       else if(miss.length)act=`<span class="tag no">Needs ${miss.map(r=>BY[r]?BY[r].name:r).join(', ')}</span>`;
       else act=`<button class="btn sm" data-build="${b.id}" ${t.builtToday||!canAfford(b.cost)?'disabled':''}>Build</button>`;
       const sug=adv.id===b.id&&!built;
-      return`<div class="bcard${built?' built':''}${sug?' sugg':''}" id="bc-${b.id}">${sug?'<span class="ribbon">Suggested</span>':''}<div class="bthumb">${BUILD_ART.has(S.fac+'/'+b.id)?`<img src="${ART_BASE}buildings/${S.fac}/${b.id}.png" alt="">`:`<span>${b.wall?'🧱':b.unit?'⛺':b.id.startsWith('hall')?'🏛':b.id.startsWith('lib')?'📚':b.unique?'✦':b.id.startsWith('u')?'⚒':'🏠'}</span>`}</div><h4>${b.name}</h4><p>${b.desc}</p>${built?'':`<div class="cost">${costHTML(b.cost,S.res)}</div>`}<div>${act}</div></div>`;}).join('')}</div>`;
+      return`<div class="bcard${built?' built':''}${sug?' sugg':''}" id="bc-${b.id}">${sug?'<span class="ribbon">Suggested</span>':''}<div class="bthumb">${BUILD_ART.has(TF()+'/'+b.id)?`<img src="${ART_BASE}buildings/${TF()}/${b.id}.png" alt="">`:`<span>${b.wall?'🧱':b.unit?'⛺':b.id.startsWith('hall')?'🏛':b.id.startsWith('lib')?'📚':b.unique?'✦':b.id.startsWith('u')?'⚒':'🏠'}</span>`}</div><h4>${b.name}</h4><p>${b.desc}</p>${built?'':`<div class="cost">${costHTML(b.cost,S.res)}</div>`}<div>${act}</div></div>`;}).join('')}</div>`;
   }else if(townTab==='upgrade'){
-    const fu=FAC[S.fac].units;
+    const fu=FAC[TF()].units;
     const upg=here?h.army.map((a,i)=>{const ti=fu.indexOf(a.k);if(ti<0||!t.built['u'+(ti+1)])return'';const c=upCost(a.k,a.n);
       return unitCard(a.k+'_u',{n:a.n,head:`${U[a.k].pl} → ${U[a.k+'_u'].pl}`,cls:canAfford(c)?'sugg':'',foot:`<div class="cost">${costHTML(c,S.res)}</div><div><button class="btn sm${canAfford(c)?' primary':''}" data-upg="${i}" ${canAfford(c)?'':'disabled'}>Upgrade</button></div>`});}).join(''):'';
     body=upg?`<div class="ugrid">${upg}</div>`:`<p class="muted">${here?`Nothing to upgrade. Build a dwelling upgrade on the Build tab, then upgrade ${h.name}'s troops here.`:'A hero must be in town to upgrade troops.'}</p>`;
   }else if(townTab==='market'){
-    body=t.built.market?`<div class="grid">${['timber','ore','amber'].map(k=>{const sell=k==='amber'?250:100,buy=k==='amber'?900:400;
+    body=t.built.market?`<div class="grid">${RES.filter(k=>k!=='gold').map(k=>{const[sell,buy]=PRICE[k];
       return`<div class="bcard"><h4><img src="${iconURL('res',k,32)}" alt="" style="width:18px;vertical-align:-3px"> ${RESNAME[k]} · you have ${S.res[k]}</h4><p>Sell for ${sell} gold each, buy for ${buy}.</p>
         <div class="rctl"><button class="btn sm" data-sell="${k}" data-n="1" ${S.res[k]<1?'disabled':''}>Sell 1</button><button class="btn sm" data-sell="${k}" data-n="5" ${S.res[k]<5?'disabled':''}>Sell 5</button>
-        <button class="btn sm" data-buy="${k}" data-n="1" ${S.res.gold<buy?'disabled':''}>Buy 1</button><button class="btn sm" data-buy="${k}" data-n="5" ${S.res.gold<buy*5?'disabled':''}>Buy 5</button></div></div>`;}).join('')}</div>${mineList()}`:`<div class="grid">${locked('The Barter Yard','market')}</div>`;
+        <button class="btn sm" data-buy="${k}" data-n="1" ${S.res.gold<buy?'disabled':''}>Buy 1</button><button class="btn sm" data-buy="${k}" data-n="5" ${S.res.gold<buy*5?'disabled':''}>Buy 5</button></div></div>`;}).join('')}</div>${alchemyHTML()}${mineList()}`:`<div class="grid">${locked('The Barter Yard','market')}</div>`;
   }else if(townTab==='tavern'){
-    body=!t.built.tavern?`<div class="grid">${locked('The Tavern','tavern')}</div>`:S.heroes.length>=3?'<p class="muted">You already lead three heroes.</p>':
-      `<div class="grid">${hireable().map(x=>`<div class="bcard"><div class="rrow"><img src="${iconURL('hero',x.id,104)}" alt="" style="border-radius:4px;image-rendering:pixelated"><div><h4>${x.name}${x.rogue?'':` <img src="${iconURL('crest',x.fac,52)}" alt="" style="width:22px;height:22px;vertical-align:-4px">`}</h4><p class="tag ${x.fac===S.fac&&!x.rogue?'ok':''}" style="color:${x.rogue?'#8a2a1e':x.fac===S.fac?'var(--good)':FAC[x.fac].col2}">${x.rogue?'Rogue · no banner':x.fac===S.fac?'Your banner':'Wanderer · '+FAC[x.fac].arch}</p><p>${x.type} hero · ★ ${x.ab}: ${x.ad}</p></div></div><div class="scs">${sc('atk',x.st[0])}${sc('def',x.st[1])}${sc('pow',x.st[2])}${sc('lore',x.st[3])}</div>
+    body=!t.built.tavern?`<div class="grid">${locked('The Tavern','tavern')}</div>`:S.heroes.length>=heroCap()?`<p class="muted">You already lead ${heroCap()} heroes, the most you can.${heroCap()<5?' Build the Heroes\' Lodge to make room for a fifth.':''}</p>`:
+      `<div class="grid">${hireable().map(x=>`<div class="bcard"><div class="rrow"><img src="${iconURL('hero',x.id,104)}" alt="" style="border-radius:4px;image-rendering:pixelated"><div><h4>${x.name}${x.rogue?'':` <img src="${iconURL('crest',x.fac,52)}" alt="" style="width:22px;height:22px;vertical-align:-4px">`}</h4><p class="tag ${x.fac===TF()&&!x.rogue?'ok':''}" style="color:${x.rogue?'#8a2a1e':x.fac===TF()?'var(--good)':FAC[x.fac].col2}">${x.rogue?'Rogue · no banner':x.fac===TF()?'Your banner':'Wanderer · '+FAC[x.fac].arch}</p><p>${x.type} hero · ★ ${x.ab}: ${x.ad}</p></div></div><div class="scs">${sc('atk',x.st[0])}${sc('def',x.st[1])}${sc('pow',x.st[2])}${sc('lore',x.st[3])}</div>
         <p>Skill: ${x.sk.map(k=>SK[k].name).join(', ')} · Artifact: ${x.item?ITEMS[x.item].name:'none'}</p><div class="cost">${costHTML({gold:hireCost(x)},S.res)}</div><div><button class="btn sm" data-hire="${x.id}" ${S.res.gold<hireCost(x)?'disabled':''}>Hire</button></div></div>`).join('')}</div><p class="muted">Rogues answer to no banner: they keep their own trick and lead your troops. Some are locked in prisons out on the map, waiting to be freed. New faces arrive each week.</p>`;
   }else if(townTab==='library'){
     if(!t.built.lib1)body=`<div class="grid">${locked('The Lantern Library','lib1')}</div>`;
-    else{const fs=FAC_SPELLS[S.fac];
-      body=`<p class="muted" style="margin-top:0">${FAC[S.fac].arch} mages teach: ${fs.map(x=>SP[x].name).join(', ')}. The Library teaches the first two; the Star Archive teaches the rest. Heroes need a spellbook to learn or cast.</p>
+    else{const fs=FAC_SPELLS[TF()];
+      body=`<p class="muted" style="margin-top:0">${FAC[TF()].arch} mages teach: ${fs.map(x=>SP[x].name).join(', ')}. The Library teaches the first two; the Star Archive teaches the rest. Heroes need a spellbook to learn or cast.</p>
       <div class="grid">${S.heroes.filter(x=>x.x===t.x&&x.y===t.y).map(x=>`<div class="bcard"><h4>${x.name}</h4><p>${x.book?`Spellbook: ${x.spells.map(k=>SP[k].name).join(', ')||'empty'}`:'No spellbook yet.'}</p>${x.book?'':`<div class="cost">${costHTML({gold:BOOK_COST},S.res)}</div><div><button class="btn sm" data-book="${x.id}" ${S.res.gold<BOOK_COST?'disabled':''}>Buy a spellbook</button></div>`}</div>`).join('')||'<p class="muted">Bring a hero to town to buy a spellbook.</p>'}</div>
       <div class="grid" style="margin-top:10px">${fs.map((k,i)=>`<div class="bcard${i<2||t.built.lib2?' built':''}"><h4>${SP[k].name} <span class="muted">· ${SP[k].cost} mana</span></h4><p>${SP[k].desc(hst(h,'pow'))}</p><span class="tag ${i<2||t.built.lib2?'ok':'no'}">${i<2?'Lantern Library':t.built.lib2?'Star Archive':'Needs the Star Archive'}</span></div>`).join('')}</div>`;}
   }else if(townTab==='relics'){
@@ -3344,7 +3441,7 @@ function townHTML(){
 }
 /* the town itself: buildings stand in place once built; empty lots show what can go up next */
 function drawTownView(cv){
-  const c=cv.getContext('2d'),f=FAC[S.fac],t=S.town,BL=townBuildings(),BY=Object.fromEntries(BL.map(b=>[b.id,b])),now=performance.now();
+  const c=cv.getContext('2d'),f=FAC[TF()],t=TW(),BL=townBuildings(),BY=Object.fromEntries(BL.map(b=>[b.id,b])),now=performance.now();
   townSpots=[];c.imageSmoothingEnabled=false;
   const tc=shadeRGB(f.col,-0.55),sky=c.createLinearGradient(0,0,0,300);sky.addColorStop(0,'#141c26');sky.addColorStop(0.7,`rgb(${tc})`);sky.addColorStop(1,'#2b2a22');c.fillStyle=sky;c.fillRect(0,0,960,300);
   c.fillStyle='#24331f';c.beginPath();c.moveTo(0,200);for(let x=0;x<=960;x+=60)c.lineTo(x,180-Math.sin(x/90)*22-((x/60)%2)*8);c.lineTo(960,300);c.lineTo(0,300);c.fill();
@@ -3395,7 +3492,7 @@ function drawTownView(cv){
   {const lv=wallLvl();if(lv){const y0=lv===1?262:256;c.strokeStyle='#2b2418';c.lineWidth=1.5;
     if(lv===1){c.fillStyle='#7a5432';for(let x=10;x<950;x+=12){if(x>420&&x<540)continue;c.beginPath();c.moveTo(x,288);c.lineTo(x,y0);c.lineTo(x+5,y0-7);c.lineTo(x+10,y0);c.lineTo(x+10,288);c.closePath();c.fill();c.stroke();}}
     else{c.fillStyle=lv===3?'#b9b2a0':'#a39c88';for(const[x0,x1]of[[0,425],[535,960]]){c.fillRect(x0,y0,x1-x0,32);c.strokeRect(x0,y0,x1-x0,32);for(let x=x0;x<x1;x+=16)c.fillRect(x,y0-7,9,7);}
-      if(lv===3)for(const tx of[60,330,630,900]){c.fillStyle='#c9c2ae';c.fillRect(tx-14,y0-34,28,66);c.strokeRect(tx-14,y0-34,28,66);c.fillStyle=FAC[S.fac].col;c.beginPath();c.moveTo(tx-18,y0-34);c.lineTo(tx,y0-56);c.lineTo(tx+18,y0-34);c.closePath();c.fill();c.stroke();}}
+      if(lv===3)for(const tx of[60,330,630,900]){c.fillStyle='#c9c2ae';c.fillRect(tx-14,y0-34,28,66);c.strokeRect(tx-14,y0-34,28,66);c.fillStyle=FAC[TF()].col;c.beginPath();c.moveTo(tx-18,y0-34);c.lineTo(tx,y0-56);c.lineTo(tx+18,y0-34);c.closePath();c.fill();c.stroke();}}
     spot(0,y0-10,420,40,'build',lv===3?'wall3':lv===2?'wall3':'wall2',`${WALLS[lv-1].name}: the garrison fights ${['','25%','50%','twice as'][lv]} harder${lv>1?` · +${lv===2?50:100}% growth`:''}`);}}
   // heroes in town stand at the gate
   S.heroes.filter(x=>x.x===t.x&&x.y===t.y).forEach((x,i)=>{c.save();c.translate(438+i*30-TS/2,262-TS/2);const f0=x.face;x.face='s';drawHero(c,0,0,x);x.face=f0;c.restore();});
@@ -3416,27 +3513,28 @@ async function askName(title,cur,max=24){let val=cur;
   const inp=$('#nmIn');inp.focus();inp.select();inp.oninput=()=>{val=inp.value;};inp.onkeydown=e=>{if(e.key==='Enter'){val=inp.value;$('#modal')._close('ok');}};
   const v=await p;const t=(val||'').replace(/[<>]/g,'').trim().slice(0,max);return v==='ok'&&t?t:null;}
 document.addEventListener('dblclick',async e=>{const rt=e.target.closest('[data-rename-town]'),hn=e.target.closest('.hname b');
-  if(rt){e.stopPropagation();$('#modal')._close(1);await sleep(30);const n=await askName('Rename your town',S.town.name);if(n){S.town.name=n;save();}renderUI();openTown();}
+  if(rt){e.stopPropagation();const tw=TW();$('#modal')._close(1);await sleep(30);const n=await askName('Rename your town',tw.name);if(n){tw.name=n;save();}renderUI();openTown(tw);}
   else if(hn&&S&&!modalOpen&&!moving){const h=HERO(),n=await askName(`Rename ${esc(h.name)}`,h.name);if(n){h.name=n;save();}renderUI();}},true);
 document.addEventListener('click',async e=>{
   const rh=e.target.closest('[data-rename-hero]');if(!rh)return;e.stopPropagation();const rt=null;
-  if(rt){$('#modal')._close(1);await sleep(30);const n=await askName('Rename your town',S.town.name);if(n){S.town.name=n;save();}renderUI();openTown();}
+  if(rt){$('#modal')._close(1);await sleep(30);const n=await askName('Rename your town',TW().name);if(n){TW().name=n;save();}renderUI();openTown();}
   else if(!modalOpen&&!moving){const h=HERO(),n=await askName(`Rename ${esc(h.name)}`,h.name);if(n){h.name=n;save();}renderUI();}
 },true);
-async function openTown(){
+async function openTown(tw){
   if(modalOpen||S.over)return;
-  if(S.town.taken){toast(`${esc(S.town.taken.name)} holds ${esc(S.town.name)}. Defeat them at the gate to take it back.`);return;}
+  tw=tw&&tw!==S.town?tw:null;VT=tw;
+  if(!tw&&S.town.taken){VT=null;toast(`${esc(TW().taken.name)} holds ${esc(TW().name)}. Defeat them at the gate to take it back.`);return;}
   townTab=townAdvice().tab==='overview'?'overview':'overview';townFocus=null;
-  const p=showModal({title:`<img src="${iconURL('crest',S.fac,52)}" alt="" style="width:44px;height:44px;vertical-align:-12px;margin-right:8px;image-rendering:pixelated"><span class="tname" data-rename-town="1" title="Double-click to rename">${esc(S.town.name)}</span>`,body:townHTML(),wide:true,top:true,buttons:[{label:'Leave town ▸',value:1,primary:true}],dismiss:1});
+  const p=showModal({title:`<img src="${iconURL('crest',TF(),52)}" alt="" style="width:44px;height:44px;vertical-align:-12px;margin-right:8px;image-rendering:pixelated"><span class="tname" data-rename-town="1" title="Double-click to rename">${esc(TW().name)}</span>`,body:townHTML(),wide:true,top:true,buttons:[{label:'Leave town ▸',value:1,primary:true}],dismiss:1});
   const m=$('#modal'),body=m.querySelector('.body');
   const go=(tab,id)=>{townTab=tab;townFocus=id||null;refresh();};
   const refresh=()=>{body.innerHTML=townHTML();renderUI();bindTownView(body,go);
     if(townFocus){const el=body.querySelector('#bc-'+townFocus);if(el){el.classList.add('flash');el.scrollIntoView({block:'center',behavior:reduced?'auto':'smooth'});}townFocus=null;}};
   bindTownView(body,go);
   body.addEventListener('click',e=>{
-    {const upl=e.target.closest('[data-uplus]');if(upl){const t=S.town,side=upl.dataset.uplus[0],i=+upl.dataset.uplus.slice(1),arr=side==='g'?t.garrison:HERO().army,a=arr[i];if(!a)return;const c=upCost(a.k,a.n);
+    {const upl=e.target.closest('[data-uplus]');if(upl){const t=TW(),side=upl.dataset.uplus[0],i=+upl.dataset.uplus.slice(1),arr=side==='g'?t.garrison:HERO().army,a=arr[i];if(!a)return;const c=upCost(a.k,a.n);
       if(!canAfford(c)){toast(`Upgrading needs ${fmt(c.gold)} gold.`);return;}pay(c);const uk=a.k+'_u',ex=arr.find(x=>x.k===uk);if(ex){ex.n+=a.n;arr.splice(i,1);}else a.k=uk;lootPop(`${a.n} ${U[uk].pl}`,iconURL('unit',uk,64));refresh();return;}}
-    const el=e.target.closest('button');if(!el||el.disabled)return;const t=S.town;
+    const el=e.target.closest('button');if(!el||el.disabled)return;const t=TW();
     if(el.dataset.tab){go(el.dataset.tab);return;}
     if(el.dataset.go){go(el.dataset.go,el.dataset.goid);return;}
     if(el.dataset.build){const b=townBuildings().find(x=>x.id===el.dataset.build);if(!b||t.builtToday||!canAfford(b.cost))return;pay(b.cost);t.built[b.id]=1;t.builtToday=true;
@@ -3449,7 +3547,7 @@ async function openTown(){
     else if(el.dataset.gtx){if(!heroHere())return;const side=el.dataset.gtx[0],i=+el.dataset.gtx.slice(1),hh=HERO(),from=side==='g'?t.garrison:hh.army,to=side==='g'?hh.army:t.garrison,st=from[i];
       if(!st||(side==='h'&&hh.army.length<=1)){if(side==='h')toast('A hero must keep at least one stack.');return;}
       const ex=to.find(a=>a.k===st.k);if(ex)ex.n+=st.n;else if(to.length<7)to.push({...st});else{toast('No free slot there.');return;}from.splice(i,1);refresh();save();}
-    else if(el.dataset.recall){let got=[];const fu=FAC[S.fac].units;for(let i=fu.length-1;i>=0;i--){const bk=fu[i];if(!t.built['d'+(i+1)])continue;const k=recruitKey(bk),n=Math.min(t.pool[bk]||0,maxAfford(k));if(n<1)continue;
+    else if(el.dataset.recall){let got=[];const fu=FAC[TF()].units;for(let i=fu.length-1;i>=0;i--){const bk=fu[i];if(!t.built['d'+(i+1)])continue;const k=recruitKey(bk),n=Math.min(t.pool[bk]||0,maxAfford(k));if(n<1)continue;
         pay(unitCost(k,n));t.pool[bk]-=n;if(!(heroHere()&&addToArmy(k,n))){const g=t.garrison.find(x=>x.k===k);if(g)g.n+=n;else t.garrison.push({k,n});}got.push(`${n} ${U[k].pl}`);}
       if(got.length)toast(`Recruited ${got.join(', ')}.`);refresh();}
     else if(el.dataset.recruit){const bk=el.dataset.recruit,k=recruitKey(bk);const inp=body.querySelector('#rc-'+bk);let n=Math.floor(+inp.value||0);n=clamp(n,0,Math.min(t.pool[bk]||0,maxAfford(k)));if(n<1)return;
@@ -3457,15 +3555,16 @@ async function openTown(){
       if(here&&addToArmy(k,n))toast(`${n} ${U[k].pl} join the army.`);else{const g=t.garrison.find(x=>x.k===k);if(g)g.n+=n;else t.garrison.push({k,n});toast(here?`The army has no free slot. ${n} ${U[k].pl} wait in the garrison.`:`${n} ${U[k].pl} wait in the garrison.`);}
       refresh();}
     else if(el.dataset.upg){const a=HERO().army[+el.dataset.upg];if(!a)return;const c=upCost(a.k,a.n);if(!canAfford(c))return;pay(c);const uk=a.k+'_u';const ex=HERO().army.find(x=>x.k===uk);if(ex){ex.n+=a.n;HERO().army.splice(+el.dataset.upg,1);}else a.k=uk;toast(`Upgraded to ${U[uk].pl}.`);refresh();}
-    else if(el.dataset.hire){const hx=HBY[el.dataset.hire];if(!hx||S.res.gold<hireCost(hx)||S.heroes.length>=3)return;S.res.gold-=hireCost(hx);const nh=mkHero(el.dataset.hire,t.x,t.y);const t1=FAC[S.fac].units[0];nh.army=[{k:recruitKey(t1),n:Math.round(150/U[t1].hp)}];
+    else if(el.dataset.hire){const hx=HBY[el.dataset.hire];if(!hx||S.res.gold<hireCost(hx)||S.heroes.length>=heroCap())return;S.res.gold-=hireCost(hx);const nh=mkHero(el.dataset.hire,t.x,t.y);const t1=FAC[TF()].units[0];nh.army=[{k:recruitKey(t1),n:Math.round(150/U[t1].hp)}];
       if(delivered(5)){nh.book=true;nh.spells.push('starfall');}const cur=S.cur;S.heroes.push(nh);S.cur=S.heroes.length-1;nh.mana=maxMana();nh.mp=maxMP();S.cur=cur;toast(`${nh.name} joins your banner and waits at the town gate.`);refresh();}
     else if(el.dataset.book){const x=S.heroes.find(q=>q.id===el.dataset.book);if(!x||x.book||S.res.gold<BOOK_COST)return;S.res.gold-=BOOK_COST;x.book=true;const cur=S.cur;S.cur=S.heroes.indexOf(x);learnLibrary();x.mana=maxMana();S.cur=cur;toast(`${x.name} now carries a spellbook.`);refresh();}
-    else if(el.dataset.sell){const k=el.dataset.sell,n=+el.dataset.n||1;if(S.res[k]<n)return;S.res[k]-=n;S.res.gold+=(k==='amber'?250:100)*n;refresh();}
+    else if(el.dataset.sell){const k=el.dataset.sell,n=+el.dataset.n||1;if(S.res[k]<n)return;S.res[k]-=n;S.res.gold+=PRICE[k][0]*n;refresh();}
+    else if(el.dataset.alch){const r=ALCHEMY[el.dataset.alch];if(!r||!anyStill()||!canAfford(r.cost))return;pay(r.cost);gain(r.out,1);lootPop(`+1 ${RESNAME[r.out].toLowerCase()}`,iconURL('res',r.out,64));refresh();}
     else if(el.dataset.mineup){const o=S.objs.find(q=>q.id===+el.dataset.mineup);if(!o||(o.lvl||1)>=3)return;const c=MINE_UP[o.lvl||1];if(!canAfford(c))return;pay(c);o.lvl=(o.lvl||1)+1;lootPop(`${MINE[o.k].name} upgraded to level ${o.lvl}`,iconURL('res',MINE[o.k].res,64));refresh();}
     else if(el.dataset.minego){const o=S.objs.find(q=>q.id===+el.dataset.minego);if(o){$('#modal')._close&&$('#modal')._close(null);centerOn(o.x,o.y);}}
-    else if(el.dataset.buy){const k=el.dataset.buy,n=+el.dataset.n||1,c=(k==='amber'?900:400)*n;if(S.res.gold<c)return;S.res.gold-=c;S.res[k]+=n;refresh();}
+    else if(el.dataset.buy){const k=el.dataset.buy,n=+el.dataset.n||1,c=PRICE[k][1]*n;if(S.res.gold<c)return;S.res.gold-=c;S.res[k]+=n;refresh();}
   });
-  await p;save();renderUI();
+  await p;VT=null;save();renderUI();
 }
 
 /* ================= BATTLE ================= */
@@ -3500,6 +3599,8 @@ const totalHP=s=>s.alive?(s.n-1)*s.u.hp+s.hp:0;
 function mkStack(k,n,side,c,r,slot){const u=U[k];let shots=u.shots||0;if(side===0&&u.shots)shots+=((fx().unitShots||{})[k]||0)+gear(HERO(),'shots');
   return{id:Math.random(),k,u,n,n0:n,hp:u.hp,side,c,r,slot,shots,retLeft:u.retal||1,acted:false,waited:false,defending:false,buff:{atk:0,def:0,spd:0,morale:0},alive:true,anim:null,rooted:0,skip:0,stood:false,movedTurn:false,movedLast:false};}
 const rowsFor=n=>n===1?[4]:Array.from({length:n},(_,i)=>Math.round(i*(BR-1)/(n-1)));
+/* a rogue hero holding an outpost leads its garrison in battle */
+function keeperHero(o){const h=HBY[o.keeper];if(!h)return null;return{id:h.id,name:h.name,fac:h.fac,atk:h.st[0]+2,def:h.st[1]+2,pow:h.st[2]+1,lore:h.st[3]+1,relics:[],items:[],keeper:true};}
 function startBattle(o){
   return new Promise(resolve=>{
     const stacks=[];const army=HERO().army;const rows=rowsFor(army.length),col0=hasSk('battleplan')?1:0;
@@ -3510,7 +3611,7 @@ function startBattle(o){
     const er=rowsFor(k);for(let i=0;i<k;i++){const n=Math.floor(o.n/k)+(i<o.n%k?1:0);stacks.push(mkStack(o.k,n,1,BC-1,er[i],i));}}
     const obst=new Set();const no=ri(3,6);for(let i=0;i<no*4&&obst.size<no;i++){const c=ri(3,BC-4),r=ri(0,BR-1);obst.add(hk(c,r));}
     bt={stacks,obst,round:1,active:null,pending:null,targeting:null,spellCast:false,spellsCast:0,auto:false,over:false,log:[],floats:[],fx:[],resolve,obj:o,terr:tileAt(o.x,o.y),hover:null,mouse:null,
-      title:o.type==='camp'?`Battle for the ${campName(o)}`:o.type==='spire'?'Battle for the spire':o.type==='rival'?`Battle with ${o.rival.name}'s army`:o.type==='relic'?`Battle at the ${RELICS[o.r].lair}`:o.guard?'Battle at the guarded pass':`Battle with ${U[o.k].pl}`,rocks:{},forced:null,firstDone:false,geyserUsed:false,corpses:[],enemyHero:o.type==='rival'?o.rival:null};
+      title:o.type==='camp'?`Battle for the ${campName(o)}`:o.type==='spire'?'Battle for the spire':o.type==='rival'?`Battle with ${o.rival.name}'s army`:o.type==='relic'?`Battle at the ${RELICS[o.r].lair}`:o.guard?'Battle at the guarded pass':`Battle with ${U[o.k].pl}`,rocks:{},forced:null,firstDone:false,geyserUsed:false,corpses:[],enemyHero:o.type==='rival'?o.rival:o.keeper?keeperHero(o):null};
     $('#battle').hidden=false;$('#btTitle').textContent=bt.title;
     layoutBattle();renderBG();
     logB(o.type==='spire'||o.type==='camp'?'The garrison stands ready. Round 1.':o.type==='rival'?`${o.rival.name}'s army takes the field. Round 1.`:`${fx().exact?o.n:amountWord(o.n)} ${U[o.k].pl} bar the way. Round 1.`);
@@ -3735,7 +3836,7 @@ async function endBattle(){
   const lost=side=>bt.stacks.filter(s=>s.side===side).map(s=>({k:s.k,n:Math.max(0,s.n0-s.n)})).filter(x=>x.n>0);
   const merge=l=>{const m={};for(const x of l)m[x.k]=(m[x.k]||0)+x.n;return Object.entries(m).map(([k,n])=>`<li>${n} ${U[k].pl}</li>`).join('')||'<li class="muted">None</li>';};
   const killedHP=bt.stacks.filter(s=>s.side===1).reduce((a,s)=>a+(s.n0-s.n)*s.u.hp,0);const xp=killedHP;
-  let extras=[];let thralls=0,plunder=0;
+  let extras=[];let thralls=0,plunder=0,freedKeeper=null;
   if(won&&S.fac==='necro'){thralls=Math.max(1,Math.round(killedHP*((fx().harvest||0.10)+(facSpecial('harvest')?0.05:0))/U.skeleton.hp));extras.push(`<b>Grave Harvest:</b> ${thralls} Skeletons rise and join you.`);}
   if(won&&S.fac==='pirates'){plunder=Math.round(xp*0.6*(fx().plunder||1));extras.push(`<b>Plunder:</b> +${fmt(plunder)} gold.`);}
   const o=bt.obj,rv=o.type==='rival'?o.rival:null,h=HERO();
@@ -3743,7 +3844,7 @@ async function endBattle(){
   if(!won&&h.relics.length)extras.push(rv?`${rv.name} takes ${h.relics.map(r=>RELICS[r].name).join(', ')}.`:`${h.relics.map(r=>RELICS[r].name).join(', ')} ${h.relics.length>1?'fall':'falls'} to the ground where ${h.name} stood.`);
   if(won&&o.type==='neutral'&&o.lvl===4){const g=ri(6,12)*100;S.res.gold+=g;const pool=Object.keys(ITEMS).filter(k=>ITEMS[k].lvl<=2&&!S.heroes.some(x=>(x.items||[]).includes(k)));
     let it=null;if(pool.length&&Math.random()<0.6){it=pick(pool);giveItem(h,it);}extras.push(`<b>Elite loot:</b> ${fmt(g)} gold${it?` and the ${ITEMS[it].name} (${itemTxt(it)})`:''}.`);}
-  if(won&&o.type==='camp')extras.push(`<b>${campName(o)} captured:</b> +500 gold a day, and ${FAC[o.fac].arch} recruits there each week.`);
+  if(won&&o.type==='camp')extras.push(isMajor(o)?`<b>${campName(o)} is yours:</b> a full ${FAC[o.fac].arch} town. Build it up and recruit there like your home.`:`<b>${campName(o)} captured:</b> +${fmt(campIncome(o))} gold a day, and ${FAC[o.fac].arch} recruits there each week.`);
   if(won&&rv&&S.town.taken&&S.town.taken.id===rv.id)extras.push(`<b>${esc(S.town.name)} is free again.</b>`);
   const body=`<p>${won?`The field is yours. ${h.name} gains ${fmt(xp)} experience.`:`${h.name}'s army is broken, and ${h.name} is lost.${S.heroes.length>1?' Your other heroes fight on.':''}`}</p>${extras.map(x=>`<p>${x}</p>`).join('')}
    <div class="casualties"><div><div class="label">Your losses</div><ul>${merge(lost(0))}</ul></div><div><div class="label">Enemy losses</div><ul>${merge(lost(1))}</ul></div></div>`;
@@ -3753,7 +3854,7 @@ async function endBattle(){
     HERO().army=army;if(thralls){if(!addToArmy('skeleton',thralls)){const g=S.town.garrison.find(x=>x.k==='skeleton');if(g)g.n+=thralls;else S.town.garrison.push({k:'skeleton',n:thralls});}}
     if(plunder)S.res.gold+=plunder;
     if(o.type==='spire'){o.owned=ME();o.ownerName=h.name;o.garrison=[];}
-    if(o.type==='camp'){o.owned=ME();o.ownerName=h.name;o.garrison=[];o.pool=firstPool(o);}
+    if(o.type==='camp')freedKeeper=captureCamp(o,h);
     if(rv&&S.town.taken&&S.town.taken.id===rv.id)delete S.town.taken;
     if(rv){const rl=rv.relics.splice(0);S.rivals=S.rivals.filter(r=>r!==rv);if(rl.length)h.relics.push(...rl);
       if(rv.human){const q=S.players[rv.owner];q.heroes=q.heroes.filter(x=>x!==rv);if(!q.heroes.length)q.out=true;}}
@@ -3767,7 +3868,7 @@ async function endBattle(){
     h.relics=[];S.heroes.splice(S.cur,1);S.cur=0;
   }
   const res=bt.resolve;$('#battle').hidden=true;bt=null;$('#btCard').innerHTML='';
-  if(won){await addXP(xp);renderUI();save();res(true);}
+  if(won){await addXP(xp);if(freedKeeper)await keeperJoins(freedKeeper);renderUI();save();res(true);}
   else if(!S.heroes.length){res(false);if(S.players)await eliminated();else await defeat('Your last hero has fallen.');}
   else{heroDraw.x=HERO().x;heroDraw.y=HERO().y;path=null;centerOn(HERO().x,HERO().y,true);renderUI();save();res(false);}
 }
@@ -3891,9 +3992,9 @@ $('#bAuto').onclick=()=>{if(!bt)return;bt.auto=!bt.auto;if(bt.auto&&bt.pending)b
 
 /* ================= START: map setup, faction and hero pickers ================= */
 /* draw a small overview of a generated map; the preview uses sample banners, so real games differ in the details */
-function mapPreviewURL(type,size,seed){
+function mapPreviewURL(type,size,seed,nr){
   const sz=MAP_SIZES[size],oW=W,oH=H;W=sz.W;H=sz.H;
-  const rv=['pirates','wizards','necro','elves','dwarves'].slice(0,sz.rivals);
+  const rv=['pirates','wizards','necro','elves','dwarves'].slice(0,nr??sz.rivals);
   const w=genMap(seed,{type,fac:'rangers',rivals:rv});
   const url=drawPreview(w);W=oW;H=oH;return url;
 }
@@ -3914,15 +4015,20 @@ function drawPreview(w){
   }
   return cv.toDataURL();
 }
+const REC_SIZE={1:'small',2:'small',3:'medium',4:'large'};
 async function pickMap(opt={}){
   const mine=loadMaps().filter(m=>m.objs.some(o=>o.type==='town')&&m.objs.filter(o=>o.type==='relic').length>=7);
-  let type=opt.custom?'custom:'+opt.custom:'wheel',size='small',seed=(Math.random()*1e9)|0,mode='relic',np=2,diff='normal';
+  let type=opt.custom?'custom:'+opt.custom:'wheel',size='small',seed=(Math.random()*1e9)|0,mode='relic',np=2,diff='normal',nr=null,nm=null,no=1;
+  const NR=()=>nr??MAP_SIZES[size].rivals,NM=()=>nm??MAP_SIZES[size].majors,OUTW=['Few','Some','Many'];
   const html=()=>`<div class="gm-top"><div class="diffs" role="group" aria-label="Difficulty"><span class="label">Difficulty</span>${Object.entries(DIFF).map(([k,d])=>`<button class="dchip${k===diff?' on':''}" data-diff="${k}" title="${d.desc}"><i>${DIFF_ICON[k]}</i>${d.name}</button>`).join('')}</div>
-      ${mode==='multi'?`<div class="diffs" role="group" aria-label="Players"><span class="label">Players</span>${[2,3,4].map(n=>`<button class="dchip${n===np?' on':''}" data-np="${n}" ${n>MAP_SIZES[size].rivals+1?'disabled':''}>${n}</button>`).join('')}</div>`:''}</div>
+      ${mode==='multi'?'':`<div class="diffs" role="group" aria-label="Rivals"><span class="label">Rivals</span>${[1,2,3,4].map(n=>`<button class="dchip${n===NR()?' on':''}" data-nr="${n}" title="Play against ${n} rival banner${n>1?'s':''}, each with a home town to build up. Picks the recommended map size.">${n}</button>`).join('')}</div>`}
+      ${mode==='multi'?`<div class="diffs" role="group" aria-label="Players"><span class="label">Players</span>${[2,3,4,5].map(n=>`<button class="dchip${n===np?' on':''}" data-np="${n}">${n}</button>`).join('')}</div>`:''}</div>
     <div class="modes4">${Object.entries(MODES).map(([k,m])=>`<button class="mode${k===mode?' on':''}" data-mode="${k}" title="${m.desc}"><b>${m.n}. ${m.name}</b><span>${MODE_SHORT[k]}</span></button>`).join('')}</div>
-    <div class="maprow"><h3>Map</h3>${Object.entries(MAP_SIZES).map(([k,z])=>`<button class="dchip${k===size?' on':''}" data-size="${k}" title="${z.W}×${z.H} tiles · ${z.rivals} rivals · ${Math.round(z.limit/28)} months">${z.label}</button>`).join('')}<button class="dchip" data-reroll="1" title="Roll a new layout">↻ New layout</button>
-      <span class="muted msize">${MAP_SIZES[size].W}×${MAP_SIZES[size].H} · ${MAP_SIZES[size].rivals} rivals · ${MAP_SIZES[size].towns} free towns · ${Math.round(MAP_SIZES[size].limit/28)} months</span></div>
-    <div class="maps4">${Object.entries(MAP_TYPES).map(([k,m])=>`<button class="mapc${k===type?' on':''}" data-map="${k}" title="${m.desc}"><span class="mimg"><img class="mprev" src="${mapPreviewURL(k,size,seed)}" alt="Preview of ${m.name}"><span class="mdesc">${m.desc}</span></span><b>${m.name}</b><small class="mbio">${biomeOf(seed).name}</small></button>`).join('')}</div>
+    <div class="maprow"><h3>Map</h3>${Object.entries(MAP_SIZES).map(([k,z])=>`<button class="dchip${k===size?' on':''}${k===REC_SIZE[mode==='multi'?np-1:NR()]?' rec':''}" data-size="${k}" title="${z.W}×${z.H} tiles · ${Math.round(z.limit/28)} months${k===REC_SIZE[mode==='multi'?np-1:NR()]?' · recommended':''}">${z.label}${k===REC_SIZE[mode==='multi'?np-1:NR()]?' ★':''}</button>`).join('')}<button class="dchip" data-reroll="1" title="Roll a new layout">↻ New layout</button>
+      <span class="muted msize">${MAP_SIZES[size].W}×${MAP_SIZES[size].H} · ${Math.round(MAP_SIZES[size].limit/28)} months</span></div>
+    <div class="maprow setup"><span class="label" title="Free towns that become full towns once captured: build them up like your home">Great towns</span>${[0,1,2,3,4].map(n=>`<button class="dchip${n===NM()?' on':''}" data-nm="${n}" title="${n} free great town${n===1?'':'s'}: capture one and build it up like your home">${n}</button>`).join('')}
+      <span class="label" title="Small outposts: gold and a few recruits; some are held by a rogue hero">Outposts</span>${OUTW.map((w,i)=>`<button class="dchip${i===no?' on':''}" data-no="${i}" title="${w} outposts (gold and a few recruits; some held by a rogue)">${w}</button>`).join('')}</div>
+    <div class="maps4">${Object.entries(MAP_TYPES).map(([k,m])=>`<button class="mapc${k===type?' on':''}" data-map="${k}" title="${m.desc}"><span class="mimg"><img class="mprev" src="${mapPreviewURL(k,size,seed,mode==='multi'?np-1:NR())}" alt="Preview of ${m.name}"><span class="mdesc">${m.desc}</span></span><b>${m.name}</b><small class="mbio">${biomeOf(seed).name}</small></button>`).join('')}</div>
     ${mine.length?`<div class="maprow mine"><span class="label">Your maps</span>${mine.map(m=>`<button class="dchip mmap${type==='custom:'+m.id?' on':''}" data-map="custom:${m.id}" title="${esc(m.name)} · ${m.W}×${m.H}"><img src="${customPreviewURL(m)}" alt="">${esc(m.name)}</button>`).join('')}</div>`:''}
     <div class="maprow mine"><button class="dchip" data-mkmap="1" title="Open the map editor">🗺 Make your own map</button></div>
     <div class="legend"><span><i style="background:${FAC.rangers.col}"></i>Your town</span><span><i style="background:#c0582e;border-radius:50%"></i>Rivals</span><span><i style="background:${RELICS[0].col};border-radius:50%"></i>Relics</span><span><i style="background:${RELICS[6].col};border-radius:50%"></i>Glass Lair</span><span><b style="color:#d9452a">✕</b> Guards</span><span><i style="background:#c46bff;border-radius:50%"></i>Portals</span><span><i style="background:#e8e4f4;border:1px solid #888"></i>Spires</span><span><i style="background:#d9b48a"></i>Docks</span></div>`;
@@ -3930,10 +4036,10 @@ async function pickMap(opt={}){
   const body=$('#modal').querySelector('.body');
   body.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
     if(b.dataset.mkmap){$('#modal')._close('edit');return;}
-    if(b.dataset.mode)mode=b.dataset.mode;else if(b.dataset.diff)diff=b.dataset.diff;else if(b.dataset.np)np=+b.dataset.np;else if(b.dataset.map)type=b.dataset.map;else if(b.dataset.size){size=b.dataset.size;np=Math.min(np,MAP_SIZES[size].rivals+1);}else if(b.dataset.reroll)seed=(Math.random()*1e9)|0;else return;body.innerHTML=html();});
+    if(b.dataset.mode)mode=b.dataset.mode;else if(b.dataset.diff)diff=b.dataset.diff;else if(b.dataset.np){np=+b.dataset.np;size=REC_SIZE[np-1];}else if(b.dataset.map)type=b.dataset.map;else if(b.dataset.size){size=b.dataset.size;nm=null;}else if(b.dataset.nr){nr=+b.dataset.nr;size=REC_SIZE[nr];nm=null;}else if(b.dataset.nm)nm=+b.dataset.nm;else if(b.dataset.no)no=+b.dataset.no;else if(b.dataset.reroll)seed=(Math.random()*1e9)|0;else return;body.innerHTML=html();});
   const v=await p;if(v==='edit')return{edit:true};if(v!=='go')return null;
-  if(type.startsWith('custom:')){const id=type.slice(7),m=loadMaps().find(x=>x.id===id);if(m)return{type:'custom',custom:id,size:m.size,seed,mode,diff,nPlayers:mode==='multi'?Math.min(np,1+m.objs.filter(o=>o.type==='camp'&&!o.free).length):1};}
-  return{type,size,seed,mode,diff,nPlayers:mode==='multi'?np:1};
+  if(type.startsWith('custom:')){const id=type.slice(7),m=loadMaps().find(x=>x.id===id);if(m)return{type:'custom',custom:id,size:m.size,seed,mode,diff,majors:NM(),outposts:no,nPlayers:mode==='multi'?Math.min(np,1+m.objs.filter(o=>o.type==='camp'&&!o.free).length):1};}
+  return{type,size,seed,mode,diff,rivals:NR(),majors:NM(),outposts:no,nPlayers:mode==='multi'?np:1};
 }
 /* Choose your banner: a tall grid of banner cards; Details opens a full page for one banner (heroes, troops, ability), with arrows to flip between banners */
 const UNIT_TAGS=u=>[u.fly&&'Flies',u.shots&&`Shoots (${u.shots})`,u.charge&&'Charge',u.double&&'Strikes twice',u.noRetal&&'No strike-back',u.retal>1&&'Strikes back twice',u.regen&&'Regrows',u.drain&&'Drains life',u.charm&&'Charms',u.undead&&'Undead'].filter(Boolean);
@@ -4043,7 +4149,10 @@ function migrateRoster(st){if(!st||st.roster>=2)return;const M={};for(const[f,ol
     for(const key of['pool'])if(v[key]&&typeof v[key]==='object'&&!Array.isArray(v[key])){const o={};for(const[k,n]of Object.entries(v[key]))o[fix(k)]=(o[fix(k)]||0)+n;v[key]=o;}
     if(v.unit&&M[v.unit])v.unit=fix(v.unit);for(const x of Object.values(v))if(x&&typeof x==='object')walk(x);};
   walk(st);st.roster=2;}
-function afterLoad(){migrateRoster(S);setMode(S.mode||'relic');if(S.players)loadPlayer(S.pi);rebuildFoot();S.heroes.forEach(x=>{if(x.book===undefined)x.book=x.spells.length>0;});W=S.W||34;H=S.H||26;S.limit=S.limit||112;S.cur=clamp(S.cur||0,0,S.heroes.length-1);renderTerrain();heroDraw.x=HERO().x;heroDraw.y=HERO().y;path=null;sizeMap();centerOn(HERO().x,HERO().y,true);renderUI();}
+/* saves from before v25: new resources, and cities and rival homes you already hold become full towns */
+function migrateTowns(st){const fix=r=>{if(r)for(const k of RES)if(r[k]==null)r[k]=0;};fix(st.res);(st.players||[]).forEach(q=>fix(q.res));
+  if(st.players)return;for(const o of st.objs)if(o.type==='camp'){if(o.free&&o.lvl===3&&o.major===undefined)o.major=true;if(!o.free&&o.fac&&!o.built&&!o.owned)Object.assign(o,{major:true,built:{hall1:1,hall2:1,d1:1,d2:1,d3:1,lib1:1},name:FAC[o.fac].town,pool:{}});if(isMajor(o)&&o.owned&&o.owned===ME()&&!o.built)makeTown(o);}}
+function afterLoad(){migrateRoster(S);migrateTowns(S);setMode(S.mode||'relic');if(S.players)loadPlayer(S.pi);rebuildFoot();S.heroes.forEach(x=>{if(x.book===undefined)x.book=x.spells.length>0;});W=S.W||34;H=S.H||26;S.limit=S.limit||112;S.cur=clamp(S.cur||0,0,S.heroes.length-1);renderTerrain();heroDraw.x=HERO().x;heroDraw.y=HERO().y;path=null;sizeMap();centerOn(HERO().x,HERO().y,true);renderUI();}
 
 /* -------- map input -------- */
 let drag=null;
@@ -4083,7 +4192,7 @@ mapCv.addEventListener('pointercancel',()=>{drag=null;});
 /* double-click your town on the map to open it */
 mapCv.addEventListener('dblclick',e=>{if(!S||S.editor||moving||modalOpen||S.over)return;const r=mapCv.getBoundingClientRect(),x=Math.floor((e.clientX-r.left+camX)/TS),y=Math.floor((e.clientY-r.top+camY)/TS);
   if(townFoot(x,y)||(x===S.town.x&&y===S.town.y)){path=null;$('#bTown').click();return;}
-  const o=objAt(x,y);if(o&&o.type==='camp'&&o.owned===ME()){path=null;manageHolding(o);}});
+  const o=objAt(x,y);if(o&&o.type==='camp'&&o.owned===ME()){path=null;if(o.built)openTown(o);else manageHolding(o);}});
 /* clicking your own hero opens a small menu of orders right beside it */
 /* Gather: walk to the nearest ready weekly site or moonwell (then loose pickups, then unclaimed mines) */
 async function gatherNext(){if(!S||moving||modalOpen||S.over)return;closeHeroMenu();const h=HERO(),wk=weekNo();
@@ -4136,15 +4245,16 @@ $('#bMenu').onclick=async()=>{if(!S||moving||modalOpen)return;closeHeroMenu();
   else if(v==='edit'){save();S=null;terrainCv=null;terrainPh=null;openEditor();}
   else if(v==='quit'){save();S=null;terrainCv=null;terrainPh=null;title();}};
 $('#bEnd').onclick=()=>{closeHeroMenu();endDay();};
-$('#bTown').onclick=()=>{if(!S||moving||modalOpen)return;if(HERO().x===S.town.x&&HERO().y===S.town.y)arriveTown();else openTown();};
+$('#bTown').onclick=()=>{if(!S||moving||modalOpen)return;const h=HERO();if(h.x===S.town.x&&h.y===S.town.y){arriveTown();return;}const mt=myMajors().find(o=>o.x===h.x&&o.y===h.y);if(mt)arriveTown(mt);else openTown();};
 $('#bCenter').onclick=()=>S&&centerOn(HERO().x,HERO().y);
 /* quick icons beside Town and Hero: your town and holdings, and each hero; click to go there or select */
-function renderQuick(){if(!S)return;const hold=S.objs.filter(o=>o.type==='camp'&&o.owned===ME());
-  const tn=S.town.taken?0:townTabs().filter(x=>x.id!=='overview').reduce((a,x)=>a+(x.n||0),0);
-  $('#qTowns').innerHTML=`<button class="qi" data-q="t" title="${esc(S.town.name)}${S.town.taken?' (held by a rival)':tn?': something to build or recruit':': open the town'}"><img src="${iconURL('crest',S.fac,52)}" alt="">${tn?'<i class="todo"></i>':''}</button>`+hold.map(o=>{const pn=Object.values(o.pool||{}).reduce((a,n)=>a+n,0);return`<button class="qi" data-q="c:${o.id}" title="${esc(campName(o))}: +${fmt(campIncome(o))} gold a day${pn?` · ${pn} troops waiting`:''}"><img src="${iconURL('crest',o.fac||S.fac,52)}" alt="">${pn?'<i class="todo"></i>':''}</button>`;}).join('');
+function renderQuick(){if(!S)return;const hold=S.objs.filter(o=>o.type==='camp'&&o.owned===ME()&&!o.built),maj=myMajors();
+  const todo=t=>withTown(t,()=>townTabs().filter(x=>x.id!=='overview').reduce((a,x)=>a+(x.n||0),0)),tn=S.town.taken?0:todo(S.town);
+  $('#qTowns').innerHTML=`<button class="qi" data-q="t" title="${esc(S.town.name)}${S.town.taken?' (held by a rival)':tn?': something to build or recruit':': open the town'}"><img src="${iconURL('crest',S.fac,52)}" alt="">${tn?'<i class="todo"></i>':''}</button>`+maj.map(o=>{const n=todo(o);return`<button class="qi" data-q="m:${o.id}" title="${esc(campName(o))}${n?': something to build or recruit':': open the town'}"><img src="${iconURL('crest',o.fac,52)}" alt="">${n?'<i class="todo"></i>':''}</button>`;}).join('')+hold.map(o=>{const pn=Object.values(o.pool||{}).reduce((a,n)=>a+n,0);return`<button class="qi" data-q="c:${o.id}" title="${esc(campName(o))}: +${fmt(campIncome(o))} gold a day${pn?` · ${pn} troops waiting`:''}"><img src="${iconURL('crest',o.fac||S.fac,52)}" alt="">${pn?'<i class="todo"></i>':''}</button>`;}).join('');
   $('#qHeroes').innerHTML=S.heroes.map((x,i)=>`<button class="qi hero${i===S.cur?' on':''}" data-q="h:${i}" title="${esc(x.name)} · level ${x.lvl} · ${x.mp>60?fmt(x.mp)+' movement left':'done for today'}"><img src="${iconURL('hero',x.id,84)}" alt="">${x.mp>60?'<i></i>':''}</button>`).join('');}
 $('#cmdbar').addEventListener('click',e=>{const b=e.target.closest('[data-q]');if(!b||!S||moving||modalOpen)return;const v=b.dataset.q;
   if(v==='t'){centerOn(S.town.x,S.town.y);if(!S.town.taken)$('#bTown').click();}
+  else if(v[0]==='m'){const o=S.objs.find(q=>q.id===+v.slice(2));if(o){centerOn(o.x,o.y);const h=HERO();if(h.x===o.x&&h.y===o.y)arriveTown(o);else openTown(o);}}
   else if(v[0]==='c'){const o=S.objs.find(q=>q.id===+v.slice(2));if(o)centerOn(o.x,o.y);}
   else selectHero(+v.slice(2));});
 addEventListener('keydown',e=>{
@@ -4288,7 +4398,7 @@ function boot(data){
   title();
 }
 window.claude?.hot?.snapshot?.(()=>({save:S&&!S.over?JSON.stringify(S):null}));
-window.__qh={drawUnit,U,FAC_ORDER,migrateRoster,centerOn,rivalTarget,get tcv(){return terrainCv;},MAP_TYPES,rivalInteract,manageSpire,get cam(){return[camX,camY,TS];},openHeroMenu,pickMap,mapPreviewURL,get S(){return S;},startBattle,endDay,walk,planTo,set path(p){path=p;},newGame,afterLoad,HEROES,FAC,RELICS,arriveTown,selectHero,openTown};
+window.__qh={drawUnit,U,joinOffer,fightPreview,manageHolding,heroCap,allTowns,myMajors,growRival,rivalsTurn,townBuildings,get VT(){return VT;},FAC_ORDER,migrateRoster,centerOn,rivalTarget,get tcv(){return terrainCv;},MAP_TYPES,rivalInteract,manageSpire,get cam(){return[camX,camY,TS];},openHeroMenu,pickMap,mapPreviewURL,get S(){return S;},startBattle,endDay,walk,planTo,set path(p){path=p;},newGame,afterLoad,HEROES,FAC,RELICS,arriveTown,selectHero,openTown};
 window.claude?.hot?.ready?window.claude.hot.ready(boot):boot(window.claude?.hot?.data??{});
 })();
 </script>
