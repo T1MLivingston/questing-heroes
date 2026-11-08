@@ -21,7 +21,8 @@ This is a **private, personal project**. See `LEGAL.md` before publishing anythi
 questing-heroes/
 ├── index.html    # Complete game (HTML + CSS + JavaScript)
 ├── CLAUDE.md     # This file
-├── ART_REQUEST_TROOPS.md # Brief for the next troop sprite pack
+├── ART_REQUEST_TROOPS.md # Brief for the troop sprite pack (delivered as Pack 10)
+├── ART_REQUEST_TOWNS.md  # Brief for the town buildings pack (Pack 13)
 ├── LEGAL.md      # Originality notes, third-party notices, pre-publish checklist
 ├── LICENSE       # All rights reserved (personal project)
 ├── assets/       # Sprite art: terrain/ (ground, edges, roads, scenery, fire), units/, heroes/, portraits/, shields/ (faction crests), team_masks/, manifest.json, palette/
