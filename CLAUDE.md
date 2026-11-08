@@ -21,6 +21,7 @@ This is a **private, personal project**. See `LEGAL.md` before publishing anythi
 questing-heroes/
 ├── index.html    # Complete game (HTML + CSS + JavaScript)
 ├── CLAUDE.md     # This file
+├── ART_REQUEST_TROOPS.md # Brief for the next troop sprite pack
 ├── LEGAL.md      # Originality notes, third-party notices, pre-publish checklist
 ├── LICENSE       # All rights reserved (personal project)
 ├── assets/       # Sprite art: terrain/ (ground, edges, roads, scenery, fire), units/, heroes/, portraits/, shields/ (faction crests), team_masks/, manifest.json, palette/
@@ -67,6 +68,11 @@ Everything lives in one object, `S`, so it can be saved as JSON:
 
 ### Faction and hero data
 
+- Rosters (tiers 1-5): Rangers Thornguard, Reedbow, Antler Knight, Moth Seer, Oak Warden; Wizards Owl Familiar, Apprentice Mage, Earth Elemental, Storm Elemental, Archmage; Necromancers Skeleton, Zombie, Werewolf, Vampire, Hellkite; Beast Masters War Rabbit, Boar, Hound, Centaur, Lion; Pirates Deckhand, Powder Monkey, Duelist, Gunner, Cannon Crew (upgrade: Great Crossbow); Elves Sprite, Longbow Ranger, Grove Warden, Elven Rider, Giant Eagle; Dwarves Young Dwarf, Dwarf Crossbowman, Dwarf Paladin, Ram Rider, Gem Golem; Merfolk Spearfolk, Siren, Giant Crab, Turtle Knight, Coral Colossus.
+- Saves from before this roster are migrated by tier in `migrateRoster` (`OLD_ROSTER`, `S.roster` = 2). Grave Harvest and Raise Bones make Skeletons.
+- Banner cards show `FAC_SW` (two strengths, one weakness) under the name.
+- `ART_REQUEST_TROOPS.md` is the art brief for the troop sprite sheets still to come.
+
 - Each faction in `FAC` has 5 units (tiers 1 to 5), dwelling names, a colour palette, a signature mechanic and a travel mode.
 - Each hero in `HEROES` has base stats `st: [atk, def, pow, lore]` (raised at load: +1 to all, +1-2 on the main stat, +1 on one stat picked by a hash of the id), starting skills `sk`, starting spells `sp` and a signature ability. The ability is data in `fx` (for example `unitAtk`, `unitSpd`, `growth`, `harvest`, `echo`), read by the battle and map code via `fx()`.
 - Faction mechanics are checked by faction key in the battle stat functions and `endBattle`.
@@ -85,7 +91,7 @@ Everything lives in one object, `S`, so it can be saved as JSON:
 
 ### Sprite art
 
-- Tables near the top of ART: `ART_PORTRAITS` (hero ids with `portraits/heroes/<id>_64|128.png`), `ART_MAP` (heroes with an 8-direction `heroes/<id>/map/<id>_map_sheet.png`, 48×48 frames, rows S, SW, W, NW, N, NE, E, SE) and `ART_UNITS` (game unit key → `units/rangers/<name>/<name>_sheet.png`, 64×64 frames, rows idle, move, attack, hit, death).
+- Tables near the top of ART: `ART_PORTRAITS` (hero ids with `portraits/heroes/<id>_64|128.png`), `ART_MAP` (heroes with an 8-direction `heroes/<id>/map/<id>_map_sheet.png`, 48×48 frames, rows S, SW, W, NW, N, NE, E, SE) and `ART_UNITS` (game unit key → `units/<faction>/<name>/<name>_sheet.png`, faction from `unitFac`, 64×64 frames, rows idle, move, attack, hit, death).
 - `tinted()` recolours team pixels from the paired `team_masks/` file to the faction colour. Pixel reads fail on `file://`, so serve the folder (`python3 -m http.server`) to see team colours; otherwise the original colours show.
 - Map terrain (`assets/terrain`, see its README) is prerendered by `renderTerrainArt` at the art's native 32px per tile and scaled to `TS` when drawn. Ground is a meadow base with dual-grid corner overlays per terrain (heath = dry grass, bog = swamp, forest floor, crags = rocky, sand shores, water), cobblestone roads by neighbour connections, then props sorted by their foot: a tree per forest tile, mountains or hills on crags, flowers, reeds and boulders scattered on free tiles. Four canvases (`terrainPh`) hold the four water phases (220 ms). The old drawn terrain is used until all `TA_FILES` load. `drawFire` animates the campfire at camps and the torches at town gates.
 - Towns: `assets/towns/<fac>/1..4.png` (Settlement, Town Hall, City Hall, Capital; 128×96, pivot 64,92, team masks in `team_masks/towns`). `townStage` picks by hall (`hall4` Crown Seat is the capital); `drawTown` draws it on the map, `drawTownView` uses it as the centrepiece, and camps and free towns show their banner's settlement at a smaller scale.

@@ -38,6 +38,8 @@ No other libraries, images or audio are included. Art made later with ChatGPT or
 
 The generated source images (high-res magenta PNGs) are kept outside this repo.
 
+Troop roster (v17): all troop names are generic fantasy words or our own coinages (Owl Familiar, Hellkite, War Rabbit, Gem Golem, Coral Colossus and so on). Creature types such as skeleton, vampire, werewolf, centaur are common folklore; none of the lineups copies a specific game's town roster or art. Sprite sheets for the new troops are still to be generated (brief in `ART_REQUEST_TROOPS.md`); log them in the table above when they arrive.
+
 ## Real names
 
 The heroes are named after people (and possibly pets) from the author's life: Bear, Dorothy, Oliver, Battaglia, Engelman, Tempest, Grimes, Rimmer, Parker, Shadow, Rago, Binx, Boopis, Monkey, Schmickle, O'Malley, Vargas, Sheila, Lawrence, Davis, Love, Michael, Livingston, Ivan, Dupengeiser, Slack, Perry, Rocky, Elvis, Letchworth, William IV and Griffiths. The last two names, William IV (Necromancer) and Griffiths (Merfolk), complete the roster.

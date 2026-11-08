@@ -599,6 +599,7 @@ body{background:radial-gradient(circle at 30% 0,#1d2a5e,#0d1229 70%);color:var(-
 .hcard{position:relative;justify-content:flex-start}
 .hcard>*:not(.fpick){position:relative;z-index:1;pointer-events:none}.hcard details,.hcard details *{pointer-events:auto}
 .hcard .fpick{position:absolute;inset:0;background:none;border:0;cursor:pointer;z-index:0}
+.fcard .sw{display:flex;flex-wrap:wrap;gap:3px 8px;font-size:12.5px;line-height:1.25;margin-top:2px}.fcard .sw .pro{color:#1f5a2a;font-weight:600}.fcard .sw .con{color:#8a2a1e;font-weight:600}
 .heroes4{align-items:stretch}.hcard .sub{display:flex;align-items:center;gap:6px;justify-content:center}
 .bk{font-size:14px;line-height:1;background:#2453c9;border-radius:3px;padding:2px 4px;box-shadow:0 0 0 1px #0b1e5c}.bk.none{background:#cfc6ae;box-shadow:none;filter:grayscale(1);opacity:.6;text-decoration:line-through}
 .bigstats em{display:flex;align-items:center;gap:3px;font-style:normal;font-size:12px;color:var(--muted)}.bigstats em img{width:16px;height:16px}
@@ -655,7 +656,7 @@ img{image-rendering:auto}
 .btn.icon .bi{margin:0}
 .hbook img,.booktile img,.hdet img{width:24px;height:24px;image-rendering:pixelated}.booktile img{width:36px;height:36px}
 .hdet{display:inline-flex;align-items:center;gap:4px}
-#modal{background:rgba(6,9,24,.55) url(assets/ui/textures/modal_dim.png) center/cover;image-rendering:pixelated}
+#modal{background:rgba(30,40,70,.32);backdrop-filter:blur(2px);image-rendering:auto}
 .hs .hsl img,.stats img,.sc img,.uad img,.bigstats em img{image-rendering:pixelated!important}
 </style>
 
@@ -725,25 +726,25 @@ const FAC={
     units:['thorn','reed','antler','moth','oak'],dw:['Bramble Barracks','Reed Lodge','Antler Stables','Moth Spire','Heartwood Grove'],travel:'foot'},
   wizards:{arch:'Wizards',name:'Azure Conclave',town:'Lanternspire',col:'#4a74d6',col2:'#dfe4ee',pal:['#4a74d6','#dfe4ee','#7d5fc0','#e0b24a'],
     tags:['Spellcasters','Fragile troops','Tricky'],mech:'Spell Echo',mechDesc:"Your hero's first spell each battle is cast twice.",
-    units:['inkling','hound','sentinel','owl','magus'],dw:['Inkwell Hall','Clockwork Kennel','Rune Foundry','Star Aviary','Storm Tower'],travel:'foot'},
+    units:['owl','apprentice','earthel','stormel','magus'],dw:['Owlery','Apprentice Hall','Earthen Circle','Storm Spire','Archmage Tower'],travel:'foot'},
   necro:{arch:'Necromancers',name:'Hollow Court',town:'Grimhollow',col:'#8656b8',col2:'#d8d0b8',pal:['#8656b8','#d8d0b8','#3d4a46','#7fd0a0'],
-    tags:['Army grows','Slow start','Relentless'],mech:'Grave Harvest',mechDesc:'After each victory, 10% of the fallen enemies rise as Bone Thralls in your army.',
-    units:['thrall','rats','wraith','barrow','hiero'],dw:['Bone Pit','Rat Warren','Lantern Crypt','Barrow Gate','Plague Chapel'],travel:'foot'},
+    tags:['Army grows','Slow start','Relentless'],mech:'Grave Harvest',mechDesc:'After each victory, 10% of the fallen enemies rise as Skeletons in your army.',
+    units:['skeleton','zombie','werewolf','vampire','hellkite'],dw:['Bone Pit','Grave Field','Moonlit Kennel','Blood Manor','Hellkite Roost'],travel:'foot'},
   centaurs:{arch:'Beast Masters',name:'Wildhoof Covenant',town:'Hoofmeet Downs',col:'#c07a2e',col2:'#ead49a',pal:['#c07a2e','#ead49a','#6b4a2e','#4f6c35'],
     tags:['Fast','Flanking','Combos'],mech:'Pack Bond',mechDesc:'Your stacks standing next to another of your stacks gain +1 speed and +2 attack.',
-    units:['hounds','skirm','badger','lancer','bearw'],dw:['Kennel Ring','Skirmisher Camp','Badger Sett','Stag Paddock','Bear Den'],travel:'hooves'},
+    units:['rabbit','boar','hounds','centaur','lion'],dw:['Warren','Boar Wallow','Kennel Ring','Centaur Camp','Pride Rock'],travel:'hooves'},
   pirates:{arch:'Pirates',name:'Saltwind Corsairs',town:'Port Brigand',col:'#b8403a',col2:'#ecdcaa',pal:['#b8403a','#ecdcaa','#22303a','#c9a24a'],
     tags:['Gold rich','Heavy guns','Sailors'],mech:'Plunder',mechDesc:'Every battle you win pays out gold. Your hero starts with a boat.',
-    units:['deckhand','powder','duelist','harpoon','cannon'],dw:['Bunkhouse','Powder Store','Fencing Deck','Harpoon Range','Gun Deck'],travel:'boat'},
+    units:['deckhand','powder','duelist','gunner','cannon'],dw:['Bunkhouse','Monkey Rigging','Fencing Deck','Musket Range','Gun Deck'],travel:'boat'},
   elves:{arch:'Elves',name:'Silverbough',town:'Silverbough Glade',col:'#5fb070',col2:'#e2e8f2',pal:['#5fb070','#e2e8f2','#3b5f8a','#b8d86a'],
     tags:['Best archers','Fast','Fragile'],mech:'Double Volley',mechDesc:"Your archers that didn't move last turn shoot twice.",
-    units:['sprite','longbow','dryad','dancer','stag'],dw:['Thorn Bower','Archery Glade','Dryad Grove','Moon Pavilion','Silver Paddock'],travel:'foot'},
+    units:['sprite','longbow','dryad','rider','eagle'],dw:['Sprite Bower','Archery Glade','Warden Grove','Silver Stables','Eagle Eyrie'],travel:'foot'},
   dwarves:{arch:'Dwarves',name:'Emberforge Holds',town:'Emberdeep',col:'#d66a2c',col2:'#cfc8ba',pal:['#d66a2c','#cfc8ba','#5a5a62','#f2c14e'],
     tags:['Armoured','Slow','Upgradeable'],mech:'Forging',mechDesc:'Build the Great Forge to give every Dwarven unit +1 attack and +1 defense.',
-    units:['delver','bolt','anvil','smith','ram'],dw:['Delver Shafts','Bolt Workshop','Anvil Hall','Firebrand Smithy','Ram Works'],travel:'foot'},
+    units:['delver','bolt','paladin','ramrider','golem'],dw:['Youngling Halls','Crossbow Works','Paladin Chapel','Ram Pens','Golem Forge'],travel:'foot'},
   merfolk:{arch:'Merfolk',name:'Deepwater Tide',town:'Coralreach',col:'#22a3b4',col2:'#f2917a',pal:['#22a3b4','#f2917a','#1e4f6a','#e8d7a8'],
     tags:['Swimmers','Tidal surges','Unusual'],mech:'High Tide',mechDesc:'Every third round the tide rises: your units gain +2 speed and +2 attack for that round.',
-    units:['shell','coral','eel','seahorse','choir'],dw:['Shell Beds','Coral Barracks','Eel Pools','Seahorse Stables','Choir Grotto'],travel:'swim'},
+    units:['spear','siren','crab','turtle','colossus'],dw:['Coral Barracks','Siren Rocks','Crab Shoals','Turtle Beach','Living Reef'],travel:'swim'},
 };
 const FAC_ORDER=['rangers','wizards','necro','centaurs','pirates','elves','dwarves','merfolk'];
 const TRAVEL={foot:'On foot. Build Stables or visit a Horse Fair for a horse.',hooves:'Hooves: horse speed from day one.',boat:'Starts with a boat for crossing lakes.',swim:'Lives in a lagoon. Swims fast (half the cost of walking) but is 50% slower on land.'};
@@ -755,41 +756,41 @@ const U={
   antler:{name:'Antler Knight',pl:'Antler Knights',hp:32,atk:9,def:8,min:5,max:8,spd:7,cost:340,growth:5,col:'#8b5a35',charge:true,desc:'Charge: +6% damage per hex moved before striking.'},
   moth:{name:'Moth Seer',pl:'Moth Seers',hp:26,atk:9,def:7,min:4,max:7,spd:9,fly:true,noRetal:true,cost:450,growth:3,col:'#7b6aa8',desc:'Flies. Enemies cannot strike back.'},
   oak:{name:'Oak Warden',pl:'Oak Wardens',hp:110,atk:15,def:17,min:13,max:20,spd:4,retal:2,cost:1150,amber:1,growth:1,col:'#3f6b3a',desc:'Strikes back twice each round.'},
-  inkling:{name:'Inkling',pl:'Inklings',hp:7,atk:4,def:2,min:1,max:3,spd:6,shots:10,cost:70,growth:12,g:['blob','#2a2f4a'],desc:'Living ink that spits blots from range.'},
-  hound:{name:'Clockwork Hound',pl:'Clockwork Hounds',hp:16,atk:6,def:6,min:2,max:4,spd:8,cost:130,growth:8,g:['wolf','#b8a070'],desc:'Wind-up hunter. Fast.'},
-  sentinel:{name:'Rune Sentinel',pl:'Rune Sentinels',hp:42,atk:8,def:12,min:4,max:7,spd:4,cost:360,growth:4,g:['construct','#8a8fa8'],desc:'Stone guardian. Very hard to hurt.'},
-  owl:{name:'Star Owl',pl:'Star Owls',hp:24,atk:10,def:7,min:4,max:8,spd:10,fly:true,cost:460,growth:3,g:['bird','#3d4f8a'],desc:'Flies. Strikes from the night sky.'},
-  magus:{name:'Storm Magus',pl:'Storm Magi',hp:60,atk:15,def:11,min:11,max:17,spd:6,shots:12,cost:1100,amber:1,growth:1,g:['fig',{w:'staff',hat:'pointed',col:'#3a5fb8'}],desc:'Hurls lightning from range.'},
-  thrall:{name:'Bone Thrall',pl:'Bone Thralls',hp:8,atk:3,def:4,min:1,max:3,spd:4,cost:50,growth:14,undead:true,g:['skull','#d8d0b8'],desc:'Undead. Cheap and endless.'},
-  rats:{name:'Grave Rat Swarm',pl:'Grave Rat Swarms',hp:10,atk:5,def:2,min:2,max:3,spd:7,cost:100,growth:9,g:['rat','#6e6458'],desc:'Quick, filthy, hungry.'},
-  wraith:{name:'Lantern Wraith',pl:'Lantern Wraiths',hp:26,atk:8,def:6,min:3,max:6,spd:7,fly:true,drain:true,undead:true,cost:380,growth:4,g:['wraith','#86b8a8'],desc:'Flies. Heals itself by draining what it hits.'},
-  barrow:{name:'Barrow Knight',pl:'Barrow Knights',hp:38,atk:10,def:10,min:5,max:8,spd:6,undead:true,cost:440,growth:3,g:['fig',{w:'sword',hat:'helm',col:'#4a3f5a',skin:'#c9c7b0'}],desc:'Undead knight in grave armour.'},
-  hiero:{name:'Plague Hierophant',pl:'Plague Hierophants',hp:70,atk:14,def:12,min:10,max:16,spd:5,shots:10,undead:true,cost:1150,amber:1,growth:1,g:['fig',{w:'staff',hat:'hood',col:'#3f5a3a',skin:'#a8c8a0'}],desc:'Casts rot from range.'},
-  hounds:{name:'Hound Pack',pl:'Hound Packs',hp:9,atk:5,def:3,min:1,max:3,spd:8,cost:60,growth:12,g:['wolf','#9a7a52'],desc:'Fast, cheap biters.'},
-  skirm:{name:'Centaur Skirmisher',pl:'Centaur Skirmishers',hp:14,atk:6,def:4,min:2,max:4,spd:7,shots:10,cost:120,growth:9,g:['fig',{w:'bow',hat:'band',col:'#8a5a2e'}],desc:'Shoots on the gallop.'},
-  badger:{name:'Badger Brute',pl:'Badger Brutes',hp:34,atk:9,def:9,min:5,max:7,spd:5,cost:330,growth:5,g:['badger','#4a4642'],desc:'Stubborn and hard to shift.'},
-  lancer:{name:'Centaur Stag Lancer',pl:'Stag Lancers',hp:35,atk:11,def:7,min:6,max:9,spd:8,charge:true,cost:460,growth:3,g:['fig',{w:'spear',hat:'antler',col:'#a0602a'}],desc:'Charge: +6% damage per hex moved.'},
-  bearw:{name:'Bear Warden',pl:'Bear Wardens',hp:95,atk:15,def:15,min:12,max:18,spd:5,retal:2,cost:1100,amber:1,growth:1,g:['bear','#5a3c24'],desc:'Strikes back twice each round.'},
+  owl:{name:'Owl Familiar',pl:'Owl Familiars',hp:7,atk:4,def:2,min:1,max:3,spd:8,fly:true,cost:70,growth:12,g:['bird','#8a6a4a'],desc:'Flies. A wise old bird that serves the tower.'},
+  apprentice:{name:'Apprentice Mage',pl:'Apprentice Mages',hp:10,atk:6,def:3,min:2,max:4,spd:5,shots:10,cost:130,growth:8,g:['fig',{w:'staff',hat:'pointed',col:'#6a7ad0'}],desc:'Shoots sparks from range. Half damage up close.'},
+  earthel:{name:'Earth Elemental',pl:'Earth Elementals',hp:44,atk:8,def:12,min:4,max:7,spd:4,cost:360,growth:4,g:['construct','#8a7458'],desc:'Living stone. Very hard to hurt.'},
+  stormel:{name:'Storm Elemental',pl:'Storm Elementals',hp:24,atk:11,def:7,min:4,max:8,spd:10,fly:true,noRetal:true,cost:460,growth:3,g:['storm','#7fb8f0'],desc:'Flies on the wind. Enemies cannot strike back at lightning.'},
+  magus:{name:'Archmage',pl:'Archmages',hp:60,atk:15,def:11,min:11,max:17,spd:6,shots:12,cost:1100,amber:1,growth:1,g:['fig',{w:'staff',hat:'pointed',col:'#3a5fb8'}],desc:'Master of the tower. Hurls lightning from range.'},
+  skeleton:{name:'Skeleton',pl:'Skeletons',hp:8,atk:3,def:4,min:1,max:3,spd:4,cost:50,growth:14,undead:true,g:['skull','#d8d0b8'],desc:'Undead. Cheap and endless.'},
+  zombie:{name:'Zombie',pl:'Zombies',hp:16,atk:5,def:4,min:2,max:3,spd:4,cost:100,growth:9,undead:true,g:['fig',{w:'none',hat:'none',col:'#4a5a3a',skin:'#8aa878'}],desc:'Undead. Slow, but takes a lot of punishment.'},
+  werewolf:{name:'Werewolf',pl:'Werewolves',hp:30,atk:10,def:6,min:4,max:7,spd:8,cost:380,growth:4,g:['wolf','#6a5a4e'],desc:'Fast and savage hunter of the night.'},
+  vampire:{name:'Vampire',pl:'Vampires',hp:34,atk:11,def:9,min:5,max:8,spd:8,fly:true,drain:true,undead:true,cost:460,growth:3,g:['fig',{w:'sword',hat:'cape',col:'#5a1a2a',skin:'#e0dcd0'}],desc:'Flies. Heals itself by draining what it bites.'},
+  hellkite:{name:'Hellkite',pl:'Hellkites',hp:110,atk:17,def:13,min:14,max:22,spd:9,fly:true,undead:true,cost:1300,amber:1,growth:1,g:['dragon','#4a2e5a'],desc:'Flies. The supreme terror of the Hollow Court: a dead dragon wreathed in green fire.'},
+  rabbit:{name:'War Rabbit',pl:'War Rabbits',hp:7,atk:4,def:2,min:1,max:3,spd:9,cost:55,growth:13,g:['rabbit','#b89a78'],desc:'Very fast and very many.'},
+  boar:{name:'Boar',pl:'Boars',hp:18,atk:7,def:5,min:2,max:5,spd:6,charge:true,cost:130,growth:8,g:['boar','#6a4a36'],desc:'Charge: +6% damage per hex moved before striking.'},
+  hounds:{name:'Hound',pl:'Hounds',hp:30,atk:9,def:7,min:4,max:7,spd:9,cost:340,growth:5,g:['wolf','#9a7a52'],desc:'Fast tracker that hunts in packs.'},
+  centaur:{name:'Centaur',pl:'Centaurs',hp:32,atk:10,def:7,min:5,max:8,spd:8,shots:10,cost:460,growth:3,g:['centaur','#a0602a'],desc:'Shoots on the gallop.'},
+  lion:{name:'Lion',pl:'Lions',hp:100,atk:16,def:14,min:13,max:19,spd:7,retal:2,cost:1150,amber:1,growth:1,g:['lion','#d0a050'],desc:'King of the herd. Strikes back twice each round.'},
   deckhand:{name:'Deckhand',pl:'Deckhands',hp:10,atk:5,def:4,min:1,max:3,spd:5,cost:65,growth:12,g:['fig',{w:'sword',hat:'band',col:'#3a4a5a'}],desc:'Tough sailors with belaying pins.'},
-  powder:{name:'Powder Monkey',pl:'Powder Monkeys',hp:8,atk:6,def:3,min:2,max:4,spd:6,shots:8,cost:115,growth:9,g:['fig',{w:'bomb',hat:'band',col:'#7a3a2a'}],desc:'Lobs powder bombs.'},
-  duelist:{name:'Cutlass Duelist',pl:'Cutlass Duelists',hp:28,atk:10,def:7,min:4,max:7,spd:7,double:true,cost:400,growth:4,g:['fig',{w:'sword',hat:'tricorn',col:'#9a2a2a'}],desc:'Strikes twice.'},
-  harpoon:{name:'Harpoon Gunner',pl:'Harpoon Gunners',hp:26,atk:10,def:6,min:5,max:8,spd:5,shots:10,cost:420,growth:3,g:['fig',{w:'gun',hat:'band',col:'#2a4a5a'}],desc:'Heavy ranged shots.'},
-  cannon:{name:'Cannon Crew',pl:'Cannon Crews',hp:80,atk:16,def:10,min:14,max:22,spd:3,shots:8,cost:1150,amber:1,growth:1,g:['cannon','#3a3a3e'],desc:'Devastating at range. Very slow.'},
-  sprite:{name:'Thorn Sprite',pl:'Thorn Sprites',hp:6,atk:4,def:2,min:1,max:3,spd:8,fly:true,cost:60,growth:12,g:['sprite','#9ad070'],desc:'Flies. Tiny and quick.'},
+  powder:{name:'Powder Monkey',pl:'Powder Monkeys',hp:8,atk:6,def:3,min:2,max:4,spd:7,shots:8,cost:115,growth:9,g:['monkey','#8a5a32'],desc:'A ship monkey that lobs powder bombs.'},
+  duelist:{name:'Duelist',pl:'Duelists',hp:28,atk:10,def:7,min:4,max:7,spd:7,double:true,noRetal:true,cost:420,growth:4,g:['fig',{w:'sword',hat:'tricorn',col:'#9a2a2a'}],desc:'Strikes twice, and parries so well that no one strikes back.'},
+  gunner:{name:'Gunner',pl:'Gunners',hp:26,atk:10,def:6,min:5,max:8,spd:5,shots:10,cost:420,growth:3,g:['fig',{w:'gun',hat:'band',col:'#2a4a5a'}],desc:'Musket fire from range.'},
+  cannon:{name:'Cannon Crew',pl:'Cannon Crews',hp:80,atk:16,def:10,min:14,max:22,spd:3,shots:8,cost:1150,amber:1,growth:1,g:['cannon','#3a3a3e'],desc:'Devastating at range. Very slow. Upgrades to a giant crossbow.'},
+  sprite:{name:'Sprite',pl:'Sprites',hp:6,atk:4,def:2,min:1,max:3,spd:8,fly:true,cost:60,growth:12,g:['sprite','#9ad070'],desc:'Flies. Tiny and quick.'},
   longbow:{name:'Longbow Ranger',pl:'Longbow Rangers',hp:12,atk:7,def:4,min:2,max:4,spd:5,shots:14,cost:140,growth:8,g:['fig',{w:'bow',hat:'ears',col:'#3f6a3a',hair:'#e8e0c0'}],desc:'The finest archers in the land.'},
-  dryad:{name:'Dryad Warden',pl:'Dryad Wardens',hp:30,atk:8,def:10,min:4,max:6,spd:5,regen:true,cost:340,growth:5,g:['fig',{w:'staff',hat:'leaf',col:'#5a8a3a',skin:'#a8c088'}],desc:'Regrows its wounds each turn.'},
-  dancer:{name:'Moonblade Dancer',pl:'Moonblade Dancers',hp:30,atk:11,def:7,min:5,max:8,spd:9,noRetal:true,cost:460,growth:3,g:['fig',{w:'sword',hat:'ears',col:'#5a6aa8',hair:'#e8e0c0'}],desc:'So quick enemies cannot strike back.'},
-  stag:{name:'Silver Stag Rider',pl:'Silver Stag Riders',hp:95,atk:15,def:14,min:12,max:20,spd:8,charge:true,cost:1200,amber:1,growth:1,g:['stag','#d8dde8'],desc:'Charge: +6% damage per hex moved.'},
-  delver:{name:'Tunnel Delver',pl:'Tunnel Delvers',hp:12,atk:4,def:6,min:1,max:3,spd:4,cost:65,growth:12,g:['fig',{w:'hammer',hat:'beard',col:'#6a4a2a'}],desc:'Short, stout, unmovable.'},
-  bolt:{name:'Bolt Thrower',pl:'Bolt Throwers',hp:11,atk:6,def:5,min:2,max:4,spd:4,shots:12,cost:120,growth:9,g:['fig',{w:'gun',hat:'beard',col:'#5a5a62'}],desc:'Crossbow bolts from range.'},
-  anvil:{name:'Anvil Guard',pl:'Anvil Guards',hp:40,atk:8,def:13,min:4,max:7,spd:4,cost:350,growth:5,g:['fig',{w:'shield',hat:'beard',col:'#7a7a82'}],desc:'A wall of iron.'},
-  smith:{name:'Firebrand Smith',pl:'Firebrand Smiths',hp:30,atk:11,def:8,min:5,max:9,spd:5,cost:420,growth:3,g:['fig',{w:'hammer',hat:'beard',col:'#c0582e'}],desc:'Red-hot hammers.'},
-  ram:{name:'Steam Ram',pl:'Steam Rams',hp:100,atk:16,def:15,min:12,max:20,spd:5,charge:true,cost:1200,amber:1,growth:1,g:['ram','#8a7a6a'],desc:'Charge: +6% damage per hex moved.'},
-  shell:{name:'Shellback',pl:'Shellbacks',hp:12,atk:4,def:7,min:1,max:3,spd:4,cost:65,growth:12,g:['shell','#5a8a7a'],desc:'Armoured reef dwellers.'},
-  coral:{name:'Coral Spearfolk',pl:'Coral Spearfolk',hp:12,atk:6,def:4,min:2,max:3,spd:6,shots:8,cost:120,growth:9,g:['fig',{w:'spear',hat:'fin',col:'#e07a6a',skin:'#7ac0c0'}],desc:'Throws coral javelins.'},
-  eel:{name:'Eel Charmer',pl:'Eel Charmers',hp:24,atk:8,def:6,min:4,max:6,spd:5,shots:10,cost:360,growth:5,g:['eel','#3aa0a8'],desc:'Shocks enemies from range.'},
-  seahorse:{name:'Seahorse Knight',pl:'Seahorse Knights',hp:34,atk:10,def:8,min:5,max:8,spd:8,charge:true,cost:450,growth:3,g:['seahorse','#e09a4a'],desc:'Charge: +6% damage per hex moved.'},
-  choir:{name:'Siren Choir',pl:'Siren Choirs',hp:60,atk:13,def:10,min:8,max:14,spd:6,shots:10,charm:true,cost:1100,amber:1,growth:1,g:['fig',{w:'song',hat:'fin',col:'#2a8aa0',skin:'#8ad0d0'}],desc:'Ranged. 30% chance a hit charms the target, losing its next turn.'},
+  dryad:{name:'Grove Warden',pl:'Grove Wardens',hp:30,atk:8,def:10,min:4,max:6,spd:5,regen:true,cost:340,growth:5,g:['fig',{w:'staff',hat:'leaf',col:'#5a8a3a',skin:'#a8c088'}],desc:'Regrows its wounds each turn.'},
+  rider:{name:'Elven Rider',pl:'Elven Riders',hp:34,atk:11,def:7,min:5,max:8,spd:9,charge:true,cost:460,growth:3,g:['rider',{col:'#5a6aa8',horse:'#e8e4dc',w:'spear',hat:'ears'}],desc:'Charge: +6% damage per hex moved.'},
+  eagle:{name:'Giant Eagle',pl:'Giant Eagles',hp:90,atk:16,def:12,min:12,max:20,spd:11,fly:true,cost:1200,amber:1,growth:1,g:['eagle','#7a5a32'],desc:'Flies farther than anything in the land.'},
+  delver:{name:'Young Dwarf',pl:'Young Dwarves',hp:12,atk:4,def:6,min:1,max:3,spd:4,cost:65,growth:12,g:['fig',{w:'hammer',hat:'beard',col:'#6a4a2a'}],desc:'Short, stout, unmovable.'},
+  bolt:{name:'Dwarf Crossbowman',pl:'Dwarf Crossbowmen',hp:12,atk:6,def:5,min:2,max:4,spd:4,shots:12,cost:120,growth:9,g:['fig',{w:'bow',hat:'beard',col:'#5a5a62'}],desc:'Heavy crossbow bolts from range.'},
+  paladin:{name:'Dwarf Paladin',pl:'Dwarf Paladins',hp:40,atk:9,def:13,min:4,max:7,spd:4,cost:360,growth:5,g:['fig',{w:'hammer',hat:'helm',col:'#c0a040'}],desc:'A holy wall of iron.'},
+  ramrider:{name:'Ram Rider',pl:'Ram Riders',hp:34,atk:11,def:8,min:5,max:9,spd:7,charge:true,cost:440,growth:3,g:['rider',{col:'#c0582e',horse:'#ddd8cc',w:'hammer',hat:'beard',ram:true}],desc:'Charge: +6% damage per hex moved.'},
+  golem:{name:'Gem Golem',pl:'Gem Golems',hp:120,atk:15,def:18,min:12,max:20,spd:4,retal:2,cost:1200,amber:1,growth:1,g:['golem','#7a7a82'],desc:'A stone giant woken by a heart gem. Strikes back twice each round.'},
+  spear:{name:'Spearfolk',pl:'Spearfolk',hp:11,atk:5,def:5,min:1,max:3,spd:5,cost:65,growth:12,g:['fig',{w:'spear',hat:'fin',col:'#e07a6a',skin:'#7ac0c0'}],desc:'Reef guards with coral spears.'},
+  siren:{name:'Siren',pl:'Sirens',hp:10,atk:6,def:3,min:2,max:3,spd:6,shots:8,charm:true,cost:130,growth:8,g:['fig',{w:'song',hat:'fin',col:'#2a8aa0',skin:'#8ad0d0'}],desc:'Sings from range. 30% chance a hit charms the target, losing its next turn.'},
+  crab:{name:'Giant Crab',pl:'Giant Crabs',hp:40,atk:8,def:13,min:4,max:7,spd:4,cost:350,growth:5,g:['crab','#c8584a'],desc:'Armoured shell. Scuttles onto land as easily as the sea floor.'},
+  turtle:{name:'Turtle Knight',pl:'Turtle Knights',hp:42,atk:10,def:11,min:5,max:8,spd:5,charge:true,cost:450,growth:3,g:['turtle','#4a8a5a'],desc:'A knight on a great sea turtle. Charge: +6% damage per hex moved.'},
+  colossus:{name:'Coral Colossus',pl:'Coral Colossi',hp:110,atk:15,def:15,min:12,max:19,spd:5,retal:2,cost:1150,amber:1,growth:1,g:['colossus','#e07a6a'],desc:'A walking reef. Strikes back twice each round.'},
   // neutrals
   wight:{name:'Bog Wight',pl:'Bog Wights',hp:8,atk:4,def:3,min:1,max:3,spd:5,col:'#6c8f86',undead:true,desc:'Drifting marsh dead.'},
   wolf:{name:'Ash Wolf',pl:'Ash Wolves',hp:14,atk:7,def:4,min:2,max:5,spd:8,col:'#857a70',desc:'Fast pack hunters.'},
@@ -797,7 +798,7 @@ const U={
   troll:{name:'Moss Troll',pl:'Moss Trolls',hp:48,atk:11,def:10,min:6,max:12,spd:5,regen:true,col:'#5d7f4c',desc:'Regrows its wounds each turn.'},
   drake:{name:'Glass Drake',pl:'Glass Drakes',hp:300,atk:20,def:18,min:25,max:40,spd:10,fly:true,col:'#8fd0d4',desc:'Flies. Terror of the southern lair.'},
 };
-for(const f of Object.values(FAC))for(const k of f.units)if(['hounds','skirm','badger','lancer','bearw'].includes(k))U[k].beast=true;
+for(const f of Object.values(FAC))for(const k of f.units)if(FAC.centaurs.units.includes(k))U[k].beast=true;
 const facOfUnit=k=>{const b=k.replace(/_u$/,'');return Object.keys(FAC).find(f=>FAC[f].units.includes(b));};
 
 const SP={
@@ -805,7 +806,7 @@ const SP={
   chain:{name:'Chain Spark',cost:6,target:'enemy',desc:p=>`Deals ${12+8*p} damage, then half that to the nearest other enemy.`},
   squall:{name:'Squall',cost:6,target:'enemy',desc:p=>`Deals ${8+6*p} damage and gives -3 speed for the battle.`},
   entangle:{name:'Entangle',cost:5,target:'enemy',desc:()=>'Roots an enemy stack: it cannot move this round.'},
-  raise:{name:'Raise Bones',cost:8,target:'all',desc:p=>`Raises ${4+3*p} Bone Thralls beside your army.`},
+  raise:{name:'Raise Bones',cost:8,target:'all',desc:p=>`Raises ${4+3*p} Skeletons beside your army.`},
   geyser:{name:'Geyser',cost:0,target:'enemy',desc:p=>`Once per battle: a geyser erupts beside an enemy, dealing ${10+6*p} to it and its neighbours and blocking that hex.`},
   mend:{name:'Mend',cost:6,target:'ally',desc:p=>`Restores ${20+15*p} health to an allied stack and raises its fallen.`},
   swift:{name:'Swift Wind',cost:4,target:'ally',desc:()=>'Gives an allied stack +3 speed for the battle.'},
@@ -834,38 +835,38 @@ const HEROES=[
   {id:'oliver',name:'Oliver',fac:'rangers',type:'Might',st:[2,1,1,1],ab:'Trailblazer',ad:'Heath and bog cost 20% less movement.',sk:['forcedmarch'],sp:[],fx:{terrainCut:0.8}},
   {id:'engelman',name:'Engelman',fac:'wizards',type:'Magic',st:[0,1,3,2],ab:'Arcanist',ad:'Spell Echo also works on the second spell each battle.',sk:['arcane'],sp:['ember'],fx:{echo:2}},
   {id:'tempest',name:'Tempest',fac:'wizards',type:'Magic',st:[0,1,2,3],ab:'Stormborn',ad:'Chain Spark jumps to one extra enemy.',sk:['deepres'],sp:['chain'],fx:{chainExtra:1}},
-  {id:'parker',name:'Parker',fac:'necro',type:'Might',st:[2,2,1,1],ab:'Restless Dead',ad:'Grave Rat Swarms and Lantern Wraiths +2 speed.',sk:['battleplan'],sp:[],fx:{unitSpd:{rats:2,wraith:2}}},
+  {id:'parker',name:'Parker',fac:'necro',type:'Might',st:[2,2,1,1],ab:'Restless Dead',ad:'Zombies and Werewolves +2 speed.',sk:['battleplan'],sp:[],fx:{unitSpd:{zombie:2,werewolf:2}}},
   {id:'shadow',name:'Shadow',fac:'necro',type:'Magic',st:[0,1,2,2],ab:'Gravecaller',ad:'Grave Harvest raises 15% instead of 10%.',sk:[],sp:['raise'],fx:{harvest:0.15}},
-  {id:'grimes',name:'Grimes',fac:'wizards',type:'Magic',st:[0,2,2,2],ab:'Rune Warden',ad:'Rune Sentinels +3 defense.',sk:['shieldcraft'],sp:['ember'],fx:{unitDef:{sentinel:3}}},
-  {id:'boopis',name:'Boopis',fac:'centaurs',type:'Magic',st:[1,1,2,1],ab:'Pounce',ad:'Hound Packs +4 growth per week and +1 speed.',sk:['fortune'],sp:['ember'],fx:{growth:{hounds:4},unitSpd:{hounds:1}}},
-  {id:'rocky',name:'Rocky',fac:'merfolk',type:'Might',st:[3,1,1,1],ab:'Wave Rider',ad:'Seahorse Knights +2 attack and +2 speed.',sk:['forcedmarch'],sp:[],fx:{unitAtk:{seahorse:2},unitSpd:{seahorse:2}}},
+  {id:'grimes',name:'Grimes',fac:'wizards',type:'Magic',st:[0,2,2,2],ab:'Stone Warden',ad:'Earth Elementals +3 defense.',sk:['shieldcraft'],sp:['ember'],fx:{unitDef:{earthel:3}}},
+  {id:'boopis',name:'Boopis',fac:'centaurs',type:'Magic',st:[1,1,2,1],ab:'Pounce',ad:'War Rabbits +4 growth per week and +1 speed.',sk:['fortune'],sp:['ember'],fx:{growth:{rabbit:4},unitSpd:{rabbit:1}}},
+  {id:'rocky',name:'Rocky',fac:'merfolk',type:'Might',st:[3,1,1,1],ab:'Wave Rider',ad:'Turtle Knights +2 attack and +2 speed.',sk:['forcedmarch'],sp:[],fx:{unitAtk:{turtle:2},unitSpd:{turtle:2}}},
   {id:'monkey',name:'Monkey',fac:'centaurs',type:'Might',st:[2,2,1,1],ab:'Troublemaker',ad:'Your first stack to act each battle gets an extra turn.',sk:['bladework'],sp:[],fx:{extraFirst:true}},
   {id:'binx',name:'Binx',fac:'centaurs',type:'Magic',st:[1,1,2,2],ab:'Night Prowler',ad:'+2 vision, and you see exact enemy army sizes.',sk:['farsight'],sp:['ember'],fx:{vision:2,exact:true}},
   {id:'omalley',name:"O'Malley",fac:'pirates',type:'Might',st:[2,2,1,1],ab:'Scourge of the Coast',ad:'Plunder pays 50% more.',sk:['seamanship'],sp:[],fx:{plunder:1.5}},
-  {id:'vargas',name:'Vargas',fac:'pirates',type:'Might',st:[3,1,1,1],ab:'Powder Master',ad:'Cannon Crews and Harpoon Gunners +25% damage and +2 shots.',sk:['steadyaim'],sp:[],fx:{unitDmgPct:{cannon:1.25,harpoon:1.25},unitShots:{cannon:2,harpoon:2}}},
+  {id:'vargas',name:'Vargas',fac:'pirates',type:'Might',st:[3,1,1,1],ab:'Powder Master',ad:'Cannon Crews and Gunners +25% damage and +2 shots.',sk:['steadyaim'],sp:[],fx:{unitDmgPct:{cannon:1.25,gunner:1.25},unitShots:{cannon:2,gunner:2}}},
   {id:'sheila',name:'Sheila',fac:'pirates',type:'Magic',st:[0,1,2,2],ab:'Weatherwise',ad:'Squall costs half.',sk:[],sp:['squall'],fx:{squallHalf:true}},
   {id:'davis',name:'Davis',fac:'elves',type:'Might',st:[2,1,1,1],ab:'Master Archer',ad:'Longbow Rangers +1 damage and +4 shots.',sk:['steadyaim'],sp:[],fx:{unitDmgFlat:{longbow:1},unitShots:{longbow:4}}},
   {id:'love',name:'Love',fac:'elves',type:'Magic',st:[0,1,2,2],ab:'Heartbloom',ad:'Healing spells also give the target +1 morale for the battle.',sk:[],sp:['mend'],fx:{healMorale:1}},
   {id:'ivan',name:'Ivan',fac:'dwarves',type:'Might',st:[2,2,1,1],ab:'Master Smith',ad:'The Great Forge costs 25% less ore.',sk:['shieldcraft'],sp:[],fx:{forgeCut:0.75}},
-  {id:'rago',name:'Rago',fac:'necro',type:'Magic',st:[1,1,2,2],ab:'Hex Mistress',ad:'Plague Hierophants +2 attack and +2 shots.',sk:['battleplan'],sp:['ember'],fx:{unitAtk:{hiero:2},unitShots:{hiero:2}}},
+  {id:'rago',name:'Rago',fac:'necro',type:'Magic',st:[1,1,2,2],ab:'Hex Mistress',ad:'Vampires +2 attack and +2 speed.',sk:['battleplan'],sp:['ember'],fx:{unitAtk:{vampire:2},unitSpd:{vampire:2}}},
   {id:'dupengeiser',name:'Dupengeiser',fac:'dwarves',type:'Magic',st:[1,1,2,2],ab:'Steamcaller',ad:'Once per battle, raise a scalding geyser beside an enemy.',sk:['warding'],sp:['geyser'],fx:{}},
-  {id:'rimmer',name:'Rimmer',fac:'wizards',type:'Magic',st:[1,1,2,2],ab:'Star Keeper',ad:'Star Owls +2 attack and +1 speed.',sk:['meditation'],sp:['ember'],fx:{unitAtk:{owl:2},unitSpd:{owl:1}}},
-  {id:'schmickle',name:'Schmickle',fac:'centaurs',type:'Might',st:[2,2,1,1],ab:'Burrow Friend',ad:'Badger Brutes +2 defense and +1 speed.',sk:['shieldcraft'],sp:[],fx:{unitDef:{badger:2},unitSpd:{badger:1}}},
-  {id:'elvis',name:'Elvis',fac:'merfolk',type:'Magic',st:[1,1,2,2],ab:'Siren Voice',ad:'Siren Choir charms last 1 turn longer, and your whole army has +1 morale.',sk:['command'],sp:['ember'],fx:{charmExtra:1,morale:1}},
+  {id:'rimmer',name:'Rimmer',fac:'wizards',type:'Magic',st:[1,1,2,2],ab:'Storm Keeper',ad:'Storm Elementals +2 attack and +1 speed.',sk:['meditation'],sp:['ember'],fx:{unitAtk:{stormel:2},unitSpd:{stormel:1}}},
+  {id:'schmickle',name:'Schmickle',fac:'centaurs',type:'Might',st:[2,2,1,1],ab:'Tusk Friend',ad:'Boars +2 defense and +1 speed.',sk:['shieldcraft'],sp:[],fx:{unitDef:{boar:2},unitSpd:{boar:1}}},
+  {id:'elvis',name:'Elvis',fac:'merfolk',type:'Magic',st:[1,1,2,2],ab:'Siren Voice',ad:'Siren charms last 1 turn longer, and your whole army has +1 morale.',sk:['command'],sp:['ember'],fx:{charmExtra:1,morale:1}},
 ];
 /* placeholder heroes fill every faction to four; rename them and give them art later */
 HEROES.push(
-  {id:'necro4',name:'William IV',fac:'necro',type:'Might',st:[2,2,1,1],ab:'Bone Collector',ad:'Bone Thralls +3 growth per week.',sk:[],sp:[],fx:{growth:{thrall:3}}},
-  {id:'mer2',name:'Griffiths',fac:'merfolk',type:'Might',st:[2,2,1,1],ab:'Shell Warden',ad:'Shellbacks +3 defense.',sk:[],sp:[],fx:{unitDef:{shell:3}}},
+  {id:'necro4',name:'William IV',fac:'necro',type:'Might',st:[2,2,1,1],ab:'Bone Collector',ad:'Skeletons +3 growth per week.',sk:[],sp:[],fx:{growth:{skeleton:3}}},
+  {id:'mer2',name:'Griffiths',fac:'merfolk',type:'Might',st:[2,2,1,1],ab:'Crab Warden',ad:'Giant Crabs +3 defense.',sk:[],sp:[],fx:{unitDef:{crab:3}}},
 );
 HEROES.push(
   {id:'battaglia',name:'Battaglia',fac:'rangers',type:'Magic',st:[0,1,3,2],ab:'Champion of the Vale',ad:'Antler Knights +2 attack and +2 defense.',sk:[],sp:[],fx:{unitAtk:{antler:2},unitDef:{antler:2}}},
   {id:'lawrence',name:'Lawrence',fac:'pirates',type:'Magic',st:[0,1,2,2],ab:"Ship's Surgeon",ad:'Mend heals 40% more, and Deckhands +2 growth per week.',sk:[],sp:['mend'],fx:{mendPct:1.4,growth:{deckhand:2}}},
-  {id:'michael',name:'Michael',fac:'elves',type:'Might',st:[2,2,1,1],ab:'Glade Guard',ad:'Dryad Wardens +2 attack and +2 defense.',sk:[],sp:[],fx:{unitAtk:{dryad:2},unitDef:{dryad:2}}},
+  {id:'michael',name:'Michael',fac:'elves',type:'Might',st:[2,2,1,1],ab:'Glade Guard',ad:'Grove Wardens +2 attack and +2 defense.',sk:[],sp:[],fx:{unitAtk:{dryad:2},unitDef:{dryad:2}}},
   {id:'livingston',name:'Livingston',fac:'elves',type:'Magic',st:[0,1,2,2],ab:'Rootweaver',ad:'Entangle lasts 1 round longer.',sk:[],sp:['entangle'],fx:{entangleExtra:1}},
-  {id:'slack',name:'Slack',fac:'dwarves',type:'Might',st:[2,1,2,1],ab:'Hammer and Hex',ad:'Tunnel Delvers +2 attack, and Ember Dart deals 50% more. Starts with a spellbook.',sk:[],sp:['ember'],fx:{unitAtk:{delver:2},emberPct:1.5}},
-  {id:'perry',name:'Perry',fac:'dwarves',type:'Magic',st:[1,1,2,2],ab:'Ember Speaker',ad:'Firebrand Smiths +2 attack.',sk:[],sp:['ember'],fx:{unitAtk:{smith:2}}},
-  {id:'letchworth',name:'Letchworth',fac:'merfolk',type:'Magic',st:[0,1,2,2],ab:'Eel Keeper',ad:'Eel Charmers +2 shots and +1 damage.',sk:[],sp:['squall'],fx:{unitShots:{eel:2},unitDmgFlat:{eel:1}}},
+  {id:'slack',name:'Slack',fac:'dwarves',type:'Might',st:[2,1,2,1],ab:'Hammer and Hex',ad:'Young Dwarves +2 attack, and Ember Dart deals 50% more. Starts with a spellbook.',sk:[],sp:['ember'],fx:{unitAtk:{delver:2},emberPct:1.5}},
+  {id:'perry',name:'Perry',fac:'dwarves',type:'Magic',st:[1,1,2,2],ab:'Ember Speaker',ad:'Dwarf Paladins +2 attack.',sk:[],sp:['ember'],fx:{unitAtk:{paladin:2}}},
+  {id:'letchworth',name:'Letchworth',fac:'merfolk',type:'Magic',st:[0,1,2,2],ab:'Siren Keeper',ad:'Sirens +2 shots and +1 damage.',sk:[],sp:['squall'],fx:{unitShots:{siren:2},unitDmgFlat:{siren:1}}},
 );
 /* artifacts: names and effects from the design bible's trinket and treasure tiers */
 const ITEMS={
@@ -924,12 +925,12 @@ HEROES.forEach(h=>{const k=START_KIT[h.id];if(k){h.sk=[k[0]];h.item=k[1];}});
 for(const h of HEROES){if(h._st)continue;h._st=1;const r=hash(h.id);h.st=h.st.map(v=>v+1);const main=h.type==='Might'?(h.st[0]>=h.st[1]?0:1):(h.st[2]>=h.st[3]?2:3);h.st[main]+=1+(r%2);h.st[(r>>>3)%4]+=1;}
 /* one-line versions of each ability for the hero cards; the full text is under Details */
 const AB_SHORT={bear:'Oak Wardens grow faster',dorothy:'Mend heals 50% more',oliver:'Heath and bog cost less',engelman:'Echoes a second spell',tempest:'Chain Spark hits one more',
-  parker:'Rats and Wraiths +2 speed',shadow:'Raises 15% of the fallen',grimes:'Rune Sentinels +3 defense',boopis:'Hound Packs grow faster',rocky:'Seahorses +2 attack, +2 speed',
+  parker:'Zombies, Werewolves +2 speed',shadow:'Raises 15% of the fallen',grimes:'Earth Elementals +3 defense',boopis:'War Rabbits grow faster',rocky:'Turtles +2 attack, +2 speed',
   monkey:'First stack acts twice',binx:'Sees farther and exactly',omalley:'Plunder pays 50% more',vargas:'Gunners hit harder, shoot more',sheila:'Squall costs half',
-  davis:'Longbows +1 damage, +4 shots',love:'Healing lifts morale',ivan:'Great Forge costs less',rago:'Hierophants +2 attack and shots',dupengeiser:'Raises a scalding geyser',
-  rimmer:'Star Owls +2 attack, +1 speed',schmickle:'Badgers +2 defense, +1 speed',elvis:'Longer charms, +1 morale',necro4:'Bone Thralls grow faster',mer2:'Shellbacks +3 defense',
-  battaglia:'Antler Knights +2 / +2',lawrence:'Better Mend, more Deckhands',michael:'Dryads +2 attack and defense',livingston:'Entangle lasts longer',slack:'Delvers +2 attack, hot Ember',
-  perry:'Firebrand Smiths +2 attack',letchworth:'Eels +2 shots, +1 damage'};
+  davis:'Longbows +1 damage, +4 shots',love:'Healing lifts morale',ivan:'Great Forge costs less',rago:'Vampires +2 attack and speed',dupengeiser:'Raises a scalding geyser',
+  rimmer:'Storm Elementals +2 attack',schmickle:'Boars +2 defense, +1 speed',elvis:'Longer charms, +1 morale',necro4:'Skeletons grow faster',mer2:'Giant Crabs +3 defense',
+  battaglia:'Antler Knights +2 / +2',lawrence:'Better Mend, more Deckhands',michael:'Grove Wardens +2 / +2',livingston:'Entangle lasts longer',slack:'Young Dwarves +2 attack',
+  perry:'Paladins +2 attack',letchworth:'Sirens +2 shots, +1 damage'};
 const HBY=Object.fromEntries(HEROES.map(h=>[h.id,h]));
 
 const RELIC_LIST=[
@@ -960,6 +961,10 @@ const MODE_SHORT={relic:'Find the Seven Relics and bring them home.',conquest:'D
 const DIFF_ICON={easy:'☘',normal:'⚔',hard:'☠'};
 const STAT_TIP={atk:'Attack: every troop in the army hits harder',def:'Defense: every troop in the army takes less damage',pow:'Power: spells hit harder and last longer',lore:'Lore: more mana, so more spells'};
 /* plain-words summary of each banner's special power */
+/* banner cards: two strengths and one weakness */
+const FAC_SW={rangers:[['Tough defenders','Strong top troop'],'Slow army'],wizards:[['Strong spells','Many shooters'],'Fragile troops'],necro:[['Grows every win','Fearless'],'Weak early troops'],
+  centaurs:[['Fastest army','Hits hard in packs'],'Light armour'],pirates:[['Gold rich','Heavy guns'],'Weak up close'],elves:[['Best archers','Fliers and riders'],'Fragile'],
+  dwarves:[['Toughest armour','Strong buildings'],'Slow'],merfolk:[['Fast in water','Charming sirens'],'Slow on land']};
 const FAC_BLURB={rangers:'Troops that hold still get +2 defense.',wizards:"Your hero's first spell each battle casts twice.",necro:'After each win, some fallen foes rise to join you.',
   centaurs:'Stacks side by side get faster and hit harder.',pirates:'Every win pays gold. Starts with a boat.',elves:'Archers that stayed put shoot twice.',dwarves:'The Great Forge makes every dwarf tougher.',merfolk:'Home is a lagoon. Fast in water, slow on land. Every third battle round: +2 speed and attack.'};
 function setMode(m){RELICS=m==='grail'?GRAILS:RELIC_LIST;for(const k in iconCache)if(k.startsWith('relic:'))delete iconCache[k];}
@@ -967,6 +972,8 @@ const altarName=()=>S&&S.mode==='grail'?'Grail Altar':'Relic Hall';
 function goalMet(){if(S.mode==='conquest')return S.rivals.length===0;return(S.goal||[0,1,2,3,4,5,6]).every(i=>delivered(i));}
 const UP_PREFIX={rangers:'Elder',wizards:'Arch',necro:'Dread',centaurs:'Wild',pirates:'Veteran',elves:'Moonlit',dwarves:'Runed',merfolk:'Deep'};
 for(const fk of Object.keys(FAC))for(const k of FAC[fk].units){const b=U[k];U[k+'_u']={...b,name:`${UP_PREFIX[fk]} ${b.name}`,pl:`${UP_PREFIX[fk]} ${b.pl}`,hp:Math.round(b.hp*1.25),atk:b.atk+2,def:b.def+2,min:Math.round(b.min*1.2),max:Math.round(b.max*1.25),spd:b.spd+1,shots:b.shots?b.shots+4:0,cost:Math.round(b.cost*1.35/5)*5,up:true,base:k,desc:b.desc+' Upgraded: tougher, faster and harder-hitting.'};}
+/* a few upgrades get their own name instead of the banner prefix */
+Object.assign(U.cannon_u,{name:'Great Crossbow',pl:'Great Crossbows',g:['cannon','#7a5a32'],desc:'A huge crossbow that hurls spears across the field. Devastating at range. Very slow.'});
 /* mines come in three levels; pay at the mine to raise its output */
 const MINE={saw:{name:'Sawmill',res:'timber',out:[1,2,3]},orepit:{name:'Ore Pit',res:'ore',out:[1,2,3]},gold:{name:'Gold Seam',res:'gold',out:[500,750,1000]},amber:{name:'Amber Spring',res:'amber',out:[1,2,3]}};
 const MINE_UP=[null,{gold:1500,timber:3,ore:3},{gold:3000,timber:6,ore:6,amber:2}];
@@ -1021,6 +1028,7 @@ function drawFig(c,o){
   else if(h==='beard'){c.fillStyle='#b0642a';c.beginPath();c.moveTo(-6,-7);c.quadraticCurveTo(0,8,6,-7);c.closePath();c.fill();c.stroke();c.fillStyle='#8a8a92';c.beginPath();c.arc(0,-10,6.5,Math.PI,0);c.fill();c.stroke();}
   else if(h==='leaf'){c.fillStyle='#5aa040';for(const [x,y] of[[-6,-12],[0,-15],[6,-12]]){c.beginPath();c.ellipse(x,y,3.5,2,x/6,0,7);c.fill();}}
   else if(h==='fin'){c.fillStyle='#f2917a';for(const s of[-1,1]){c.beginPath();c.moveTo(6*s,-8);c.lineTo(13*s,-12);c.lineTo(12*s,-4);c.closePath();c.fill();c.stroke();}}
+  else if(h==='cape'){c.fillStyle='#1a0e14';for(const sd of[-1,1]){c.beginPath();c.moveTo(4*sd,-4);c.lineTo(12*sd,-16);c.lineTo(9*sd,-3);c.closePath();c.fill();c.stroke();}c.fillStyle='#2a1a22';c.beginPath();c.arc(0,-11,6.3,Math.PI,0);c.fill();}
   else if(h==='antler'){c.strokeStyle='#e8d9b2';c.lineWidth=1.6;for(const s of[-1,1]){c.beginPath();c.moveTo(3*s,-13);c.lineTo(8*s,-20);c.moveTo(6*s,-17);c.lineTo(11*s,-17);c.stroke();}c.strokeStyle=dark;c.lineWidth=1.5;}
   c.fillStyle=dark;c.beginPath();c.arc(-2,-8,1,0,7);c.arc(2,-8,1,0,7);c.fill();
   // weapons
@@ -1069,6 +1077,43 @@ function drawGlyph(c,g){
     c.fillStyle='#8ac0a8';c.strokeStyle=dark;c.beginPath();c.arc(15,0,4.5,0,7);c.fill();c.stroke();c.fillStyle=dark;c.beginPath();c.arc(16,-1,1,0,7);c.fill();break;
   case 'eel':c.strokeStyle=a;c.lineWidth=6;c.beginPath();c.moveTo(-14,10);c.bezierCurveTo(-6,-2,-2,16,6,4);c.quadraticCurveTo(10,-4,12,-10);c.stroke();c.strokeStyle=dark;c.lineWidth=1;c.stroke();
     c.fillStyle='#ffe066';c.beginPath();c.moveTo(14,-14);c.lineTo(10,-6);c.lineTo(14,-6);c.lineTo(10,2);c.lineTo(18,-9);c.lineTo(14,-9);c.closePath();c.fill();break;
+  case 'quad':{const o=a;c.fillStyle=o.col;c.beginPath();c.ellipse(-2,4,o.bw||13,o.bh||7,0,0,7);c.fill();c.stroke();
+    c.lineWidth=3;c.strokeStyle=o.col;for(const x of[-11,-5,3,8]){c.beginPath();c.moveTo(x,8);c.lineTo(x+(x<0?-1:1),o.leg||16);c.stroke();}c.lineWidth=1.5;c.strokeStyle=dark;
+    c.beginPath();c.arc(11,-3,o.hr||6,0,7);c.fill();c.stroke();c.fillStyle=dark;c.beginPath();c.arc(13,-4,1.2,0,7);c.fill();break;}
+  case 'rabbit':for(const sd of[-1,1]){c.fillStyle=a;c.beginPath();c.ellipse(4+3*sd,-14,2.6,8,sd*0.2,0,7);c.fill();c.stroke();}
+    c.fillStyle=a;c.beginPath();c.ellipse(-3,6,11,9,0,0,7);c.fill();c.stroke();c.beginPath();c.arc(6,-3,7,0,7);c.fill();c.stroke();
+    c.fillStyle='#f4efe6';c.beginPath();c.arc(-13,6,3.5,0,7);c.fill();c.fillStyle=dark;c.beginPath();c.arc(8,-4,1.4,0,7);c.fill();c.fillStyle='#e88';c.beginPath();c.arc(12,-2,1.3,0,7);c.fill();break;
+  case 'boar':drawGlyph(c,['quad',{col:a,bw:14,bh:9,hr:7,leg:15}]);c.fillStyle='#3a2a1e';c.beginPath();for(let i=0;i<5;i++){c.moveTo(-12+i*5,-4);c.lineTo(-10+i*5,-9);c.lineTo(-8+i*5,-4);}c.fill();
+    c.fillStyle='#f2ead6';for(const y of[-1,2]){c.beginPath();c.moveTo(15,y);c.lineTo(20,y-6);c.lineTo(16,y+2);c.closePath();c.fill();c.stroke();}break;
+  case 'lion':c.fillStyle='#8a4a1e';c.beginPath();c.arc(11,-4,10,0,7);c.fill();c.stroke();drawGlyph(c,['quad',{col:a,bw:14,bh:8,hr:6.5,leg:16}]);
+    c.strokeStyle=a;c.lineWidth=2;c.beginPath();c.moveTo(-15,3);c.quadraticCurveTo(-21,-6,-17,-10);c.stroke();c.fillStyle='#8a4a1e';c.beginPath();c.arc(-17,-10,2.5,0,7);c.fill();break;
+  case 'centaur':drawGlyph(c,['quad',{col:a,bw:12,bh:7,hr:0.1,leg:16}]);c.save();c.translate(8,-8);c.scale(0.8,0.8);drawFig(c,{col:'#6a4a2a',w:'bow',hat:'band'});c.restore();break;
+  case 'rider':{const o=a;drawGlyph(c,['quad',{col:o.horse,bw:13,bh:7,hr:5,leg:16}]);if(o.ram){c.strokeStyle='#8a7a5a';c.lineWidth=2.5;c.beginPath();c.arc(12,-4,5,Math.PI*1.1,Math.PI*2.6);c.stroke();}
+    else{c.fillStyle=o.horse;c.beginPath();c.moveTo(9,0);c.lineTo(13,-9);c.lineTo(17,-6);c.closePath();c.fill();c.stroke();}
+    c.save();c.translate(-1,-10);c.scale(0.8,0.8);drawFig(c,{col:o.col,w:o.w,hat:o.hat,hair:'#e8e0c0'});c.restore();break;}
+  case 'storm':c.fillStyle=a;c.beginPath();c.moveTo(-4,16);c.quadraticCurveTo(-12,6,-8,-2);c.quadraticCurveTo(-16,-12,-4,-16);c.quadraticCurveTo(4,-22,10,-14);c.quadraticCurveTo(18,-6,8,2);c.quadraticCurveTo(10,10,-4,16);c.fill();c.stroke();
+    c.fillStyle='#ffe066';c.beginPath();c.moveTo(2,-12);c.lineTo(-4,0);c.lineTo(1,0);c.lineTo(-3,12);c.lineTo(7,-3);c.lineTo(2,-3);c.closePath();c.fill();c.stroke();
+    c.fillStyle='#fff';c.beginPath();c.arc(-3,-8,1.6,0,7);c.arc(5,-8,1.6,0,7);c.fill();break;
+  case 'dragon':c.fillStyle='rgba(120,90,140,.85)';for(const sd of[-1,1]){c.beginPath();c.moveTo(2*sd,-2);c.lineTo(20*sd,-16);c.lineTo(16*sd,-2);c.lineTo(10*sd,4);c.closePath();c.fill();c.stroke();}
+    c.fillStyle=a;c.beginPath();c.ellipse(0,5,8,11,0,0,7);c.fill();c.stroke();c.beginPath();c.moveTo(-5,-4);c.lineTo(0,-18);c.lineTo(5,-4);c.closePath();c.fill();c.stroke();
+    c.fillStyle='#7fe08a';c.beginPath();c.arc(-2,-11,1.4,0,7);c.arc(2,-11,1.4,0,7);c.fill();c.strokeStyle='#d8d0b8';c.lineWidth=1;c.beginPath();for(const y of[1,5,9]){c.moveTo(-5,y);c.lineTo(5,y);}c.stroke();break;
+  case 'eagle':c.fillStyle=a;for(const sd of[-1,1]){c.beginPath();c.moveTo(4*sd,-2);c.lineTo(21*sd,-12);c.lineTo(18*sd,-2);c.lineTo(8*sd,8);c.closePath();c.fill();c.stroke();}
+    c.beginPath();c.ellipse(0,4,8,12,0,0,7);c.fill();c.stroke();c.fillStyle='#f4efe6';c.beginPath();c.arc(0,-10,6.5,0,7);c.fill();c.stroke();
+    c.fillStyle='#f2b630';c.beginPath();c.moveTo(-2,-8);c.lineTo(2,-8);c.lineTo(0,-3);c.closePath();c.fill();c.fillStyle=dark;c.beginPath();c.arc(-2.5,-11,1.2,0,7);c.arc(2.5,-11,1.2,0,7);c.fill();break;
+  case 'golem':drawGlyph(c,['construct',a]);c.fillStyle='#5fd0a0';c.strokeStyle=dark;c.beginPath();c.moveTo(0,0);c.lineTo(5,5);c.lineTo(0,11);c.lineTo(-5,5);c.closePath();c.fill();c.stroke();break;
+  case 'monkey':c.strokeStyle=a;c.lineWidth=2.5;c.beginPath();c.moveTo(-8,12);c.bezierCurveTo(-20,10,-18,-6,-12,-4);c.stroke();c.lineWidth=1.5;c.strokeStyle=dark;
+    c.fillStyle=a;c.beginPath();c.ellipse(0,7,8,9,0,0,7);c.fill();c.stroke();c.beginPath();c.arc(0,-7,7,0,7);c.fill();c.stroke();for(const sd of[-1,1]){c.beginPath();c.arc(7*sd,-8,2.6,0,7);c.fill();c.stroke();}
+    c.fillStyle='#e2c49a';c.beginPath();c.ellipse(0,-5,4.5,4,0,0,7);c.fill();c.fillStyle=dark;c.beginPath();c.arc(-2,-8,1,0,7);c.arc(2,-8,1,0,7);c.fill();
+    c.fillStyle='#22222a';c.beginPath();c.arc(11,2,4.5,0,7);c.fill();c.strokeStyle='#e8bc3e';c.beginPath();c.moveTo(13,-1);c.lineTo(16,-6);c.stroke();break;
+  case 'crab':c.lineWidth=2;for(const sd of[-1,1])for(const i of[0,1,2]){c.beginPath();c.moveTo(6*sd,6+i*2);c.lineTo(15*sd,10+i*3);c.stroke();}c.lineWidth=1.5;
+    c.fillStyle=a;c.beginPath();c.ellipse(0,4,12,8,0,0,7);c.fill();c.stroke();for(const sd of[-1,1]){c.beginPath();c.arc(14*sd,-8,5,0,7);c.fill();c.stroke();c.fillStyle='#f4e6d6';c.beginPath();c.moveTo(14*sd,-8);c.lineTo(19*sd,-12);c.lineTo(18*sd,-6);c.closePath();c.fill();c.fillStyle=a;}
+    c.fillStyle=dark;c.beginPath();c.arc(-3,-4,1.6,0,7);c.arc(3,-4,1.6,0,7);c.fill();break;
+  case 'turtle':c.fillStyle='#8ab070';c.beginPath();c.arc(15,4,4.5,0,7);c.fill();c.stroke();for(const x of[-10,8])for(const y of[12]){c.beginPath();c.ellipse(x,y,4,3,0,0,7);c.fill();c.stroke();}
+    c.fillStyle=a;c.beginPath();c.arc(0,8,13,Math.PI,0);c.closePath();c.fill();c.stroke();c.strokeStyle='#2a4a30';c.beginPath();c.moveTo(-6,8);c.lineTo(-3,-2);c.lineTo(3,-2);c.lineTo(6,8);c.stroke();c.strokeStyle=dark;
+    c.save();c.translate(0,-10);c.scale(0.75,0.75);drawFig(c,{col:'#2a8aa0',w:'spear',hat:'helm',skin:'#7ac0c0'});c.restore();break;
+  case 'colossus':c.fillStyle=a;c.beginPath();c.roundRect(-12,-8,24,22,5);c.fill();c.stroke();c.beginPath();c.arc(0,-12,7,0,7);c.fill();c.stroke();
+    for(const sd of[-1,1]){c.beginPath();c.roundRect(12*sd-(sd<0?6:0),-6,6,16,3);c.fill();c.stroke();}c.strokeStyle='#f2c0a0';c.lineWidth=2;c.beginPath();for(const [x,y] of[[-6,-2],[4,4],[-2,10]]){c.moveTo(x,y);c.lineTo(x+3,y-4);c.moveTo(x+3,y-4);c.lineTo(x+6,y-1);}c.stroke();
+    c.fillStyle='#bfe8ff';c.beginPath();c.arc(-3,-13,1.6,0,7);c.arc(3,-13,1.6,0,7);c.fill();break;
   case 'seahorse':c.fillStyle=a;c.beginPath();c.moveTo(-2,16);c.bezierCurveTo(-12,10,-8,0,-2,-2);c.bezierCurveTo(-8,-6,-6,-16,2,-16);c.lineTo(12,-12);c.lineTo(4,-8);c.bezierCurveTo(8,0,6,10,-2,16);c.fill();c.stroke();
     c.fillStyle=dark;c.beginPath();c.arc(1,-12,1.5,0,7);c.fill();c.fillStyle='#22a3b4';c.beginPath();c.arc(0,-1,4,0,7);c.fill();break;
   }
@@ -1201,10 +1246,12 @@ const GEMS={ruby:{name:'Ruby',gold:1000},sapphire:{name:'Sapphire',gold:900},eme
 function spriteAt(c,path,x,y,sc,frames=1,fms=150){const a=artImg(path);if(!a.ok)return false;const im=a.img,fw=im.width/frames,f=frames>1?Math.floor(performance.now()/fms)%frames:0;
   c.imageSmoothingEnabled=false;c.drawImage(im,f*fw,0,fw,im.height,Math.round(x-fw*sc/2),Math.round(y-(im.height-4)*sc),Math.round(fw*sc),Math.round(im.height*sc));return true;}
 const unitArt=k=>{const u=U[k];return u?ART_UNITS[u.up?u.base:k]||null:null;};
-const unitSheet=(k,col)=>{const n=unitArt(k);return n?tinted(`units/rangers/${n}/${n}_sheet.png`,`team_masks/units/rangers/${n}/${n}_sheet.png`,col):null;};
+/* sheets live under units/<faction>/<name>/ (rangers, wizards, necro, centaurs, pirates, elves, dwarves, merfolk) */
+const unitFac=k=>{const b=U[k]&&U[k].up?U[k].base:k;return FAC_ORDER.find(f=>FAC[f].units.includes(b))||'rangers';};
+const unitSheet=(k,col)=>{const n=unitArt(k),f=unitFac(k);return n?tinted(`units/${f}/${n}/${n}_sheet.png`,`team_masks/units/${f}/${n}/${n}_sheet.png`,col):null;};
 const heroSheet=(id,col)=>ART_MAP.has(id)?tinted(`heroes/${id}/map/${id}_map_sheet.png`,`team_masks/heroes/${id}/map/${id}_map_sheet.png`,col):null;
 function preloadArt(){for(const g of['meadow','dirt','sand','snow','marsh','cavern','ash','ship_deck'])artImg(`battle/grounds/${g}.png`);for(const n of['split_boulder','basalt_columns','leaning_monolith','stone_arch'])artImg(`terrain/battle/${n}_battle.png`);for(const id of ART_MAP){artImg(`heroes/${id}/map/${id}_map_sheet.png`);artImg(`team_masks/heroes/${id}/map/${id}_map_sheet.png`);}
-  for(const n of Object.values(ART_UNITS)){artImg(`units/rangers/${n}/${n}_sheet.png`);artImg(`team_masks/units/rangers/${n}/${n}_sheet.png`);}}
+  for(const[k,n]of Object.entries(ART_UNITS)){const f=unitFac(k);artImg(`units/${f}/${n}/${n}_sheet.png`);artImg(`team_masks/units/${f}/${n}/${n}_sheet.png`);}}
 function drawCrown(c,x,y,s){c.save();c.translate(x,y);c.scale(s/10,s/10);c.fillStyle='#f2d382';c.strokeStyle='#5a3a0a';c.lineWidth=1.2;c.beginPath();c.moveTo(-8,4);c.lineTo(-9,-3);c.lineTo(-4,1);c.lineTo(0,-5);c.lineTo(4,1);c.lineTo(9,-3);c.lineTo(8,4);c.closePath();c.fill();c.stroke();c.restore();}
 const iconCache={};
 function iconURL(kind,key,size=64){
@@ -1858,7 +1905,7 @@ function newGame(fk,hid,mo={}){
   const rivalFacs=mo.players?mo.players.slice(1).map(p=>p.fk):FAC_ORDER.filter(k=>k!==fk).sort(()=>Math.random()-0.5).slice(0,nR);
   const w=cm?customWorld(cm,rivalFacs):genMap(seed,{type,fac:fk,rivals:rivalFacs});const f=FAC[fk];
   const [t1,t2]=f.units;
-  S={v:3,seed,fac:fk,W,H,mapType:type,size:mo.size||'small',limit:sz.limit,tiles:w.tiles,objs:w.objs,uid:w.uid+10,biome:w.biome||'vale',underY:w.underY||0,rivers:w.rivers||null,bridges:w.bridges||null,explored:new Array(W*H).fill(0),day:1,
+  S={v:3,roster:2,seed,fac:fk,W,H,mapType:type,size:mo.size||'small',limit:sz.limit,tiles:w.tiles,objs:w.objs,uid:w.uid+10,biome:w.biome||'vale',underY:w.underY||0,rivers:w.rivers||null,bridges:w.bridges||null,explored:new Array(W*H).fill(0),day:1,
     res:{...DIFF[mo.diff||'normal'].res},diff:mo.diff||'normal',heroes:[],cur:0,rivals:[],rumours:[],delivered:[],
     town:{x:w.town.x,y:w.town.y,name:f.town,built:{hall1:1,d1:1,d2:1},pool:{[t1]:U[t1].growth,[t2]:U[t2].growth},garrison:[],builtToday:false},
     over:false};
@@ -2829,7 +2876,7 @@ const hireable=()=>{const taken=new Set([...S.heroes.map(y=>y.id),...S.rivals.ma
 /* each banner's own buildings: a horde (more of one troop each week), one that teaches visiting heroes, and a special */
 const FAC_BUILD={
   rangers:[{id:'fb1',name:'Bramble Warren',horde:[0,4]},{id:'fb2',name:"Hunter's Lodge",visit:'atk'},{id:'fb3',name:'Waystone Circle',special:'mpTown',desc:'Heroes who start the day in town get +25% movement that day.'}],
-  wizards:[{id:'fb1',name:'Ink Wells',horde:[0,5]},{id:'fb2',name:'Observatory',visit:'pow'},{id:'fb3',name:'Arcane Conduit',special:'manaRegen',desc:'Every hero regains 2 more mana each day.'}],
+  wizards:[{id:'fb1',name:'Owl Roost',horde:[0,5]},{id:'fb2',name:'Observatory',visit:'pow'},{id:'fb3',name:'Arcane Conduit',special:'manaRegen',desc:'Every hero regains 2 more mana each day.'}],
   necro:[{id:'fb1',name:'Ossuary',horde:[0,5]},{id:'fb2',name:'Whispering Crypt',visit:'lore'},{id:'fb3',name:'Soul Vault',special:'harvest',desc:'Grave Harvest raises 5% more of the fallen.'}],
   centaurs:[{id:'fb1',name:'Den of Plenty',horde:[0,4]},{id:'fb2',name:'Trial Grounds',visit:'atk'},{id:'fb3',name:'Great Paddock',special:'horde2',desc:'+2 of your second-tier troops each week.'}],
   pirates:[{id:'fb1',name:'Grog Hall',horde:[0,4]},{id:'fb2',name:'Gunnery Range',visit:'atk'},{id:'fb3',name:"Smugglers' Cove",special:'goldWeek',desc:'Brings in 1,500 gold at the start of each week.'}],
@@ -3208,7 +3255,7 @@ function onHit(a,d,dm){
   if(!d.alive)return;
   if(a.u.drain&&a.alive){const r=heal(a,Math.round(dm*0.3));if(r>0)floatAt(a,`+${r} rise`,'#a6e08a');}
   if(a.u.charm&&R()<0.3){d.skip=1+(a.side===0?(fx().charmExtra||0):0);floatAt(d,'Charmed','#bfe8ff');logB(`${nm(d)} are charmed by the song.`);}
-  if(a.k==='eel'&&a.side===0&&fx().eelSlow){d.buff.spd-=fx().eelSlow;floatAt(d,`-${fx().eelSlow} speed`,'#bfe8ff');}
+  if(a.k==='siren'&&a.side===0&&fx().eelSlow){d.buff.spd-=fx().eelSlow;floatAt(d,`-${fx().eelSlow} speed`,'#bfe8ff');}
 }
 async function doMelee(a,d,moved=0){
   await lunge(a,d);const half=!!a.u.shots;
@@ -3221,7 +3268,7 @@ async function doMelee(a,d,moved=0){
 async function doShoot(a,d){a.act={row:2,t0:performance.now(),dur:reduced?60:440,n:4};
   const shots=(S.fac==='elves'&&mine0(a)&&!a.movedLast&&a.shots>1)?2:1;
   for(let i=0;i<shots&&d.alive;i++){
-    await projectile(a,d,a.k==='imp'||a.k==='powder'?'#ff8a3c':a.k==='eel'?'#ffe066':'#efe2bb');a.shots--;
+    await projectile(a,d,a.k==='imp'||a.k==='powder'||a.k==='cannon'?'#ff8a3c':a.k==='magus'||a.k==='apprentice'?'#9fd0ff':a.k==='siren'?'#bfe8ff':'#efe2bb');a.shots--;
     const dm=rollDmg(a,d,{ranged:true});const k=applyDmg(d,dm);floatAt(d,`-${dm}`,'#ffd3c4');logB(`${a.n} ${nm(a)} shoot for ${dm}.${k?` ${k} ${d.u.pl} fall.`:''}${i===1?' (Double Volley)':''}`);onHit(a,d,dm);
   }
 }
@@ -3340,7 +3387,7 @@ async function spellEffect(id,target,P){
     const dm=10+6*P;const hits=[target,...bt.stacks.filter(s=>s.alive&&s.side===1&&s!==target&&spot&&hdist(s.c,s.r,spot[0],spot[1])<=1)];
     for(const h of hits){await burst(h,'#e8f4ff');applyDmg(h,dm);floatAt(h,`-${dm}`,'#e8f4ff');}logB(`A scalding geyser erupts, hitting ${hits.length} stack${hits.length>1?'s':''}.`);}
   else if(id==='raise'){const n=4+3*P;let spot=null;for(const c of[0,1,2]){for(const r of[4,3,5,2,6,1,7,0,8]){if(!blocked(c,r)){spot={c,r};break;}}if(spot)break;}
-    if(spot){const ex=bt.stacks.find(s=>s.side===0&&s.alive&&s.k==='thrall');if(ex){ex.n+=n;ex.n0+=n;floatAt(ex,`+${n}`,'#a6e08a');}else{const ns=mkStack('thrall',n,0,spot.c,spot.r,90);ns.acted=true;bt.stacks.push(ns);floatAt(ns,`+${n}`,'#a6e08a');}logB(`${n} Bone Thralls claw out of the ground.`);}}
+    if(spot){const ex=bt.stacks.find(s=>s.side===0&&s.alive&&s.k==='skeleton');if(ex){ex.n+=n;ex.n0+=n;floatAt(ex,`+${n}`,'#a6e08a');}else{const ns=mkStack('skeleton',n,0,spot.c,spot.r,90);ns.acted=true;bt.stacks.push(ns);floatAt(ns,`+${n}`,'#a6e08a');}logB(`${n} Skeletons claw out of the ground.`);}}
   else if(id==='starfall'){const foes=bt.stacks.filter(f=>f.alive&&f.side===1);const dm=10+6*P;await Promise.all(foes.map(f=>burst(f,'#cfe0ff')));for(const f of foes){applyDmg(f,dm);floatAt(f,`-${dm}`,'#cfe0ff');}logB(`Starfall strikes every enemy for ${dm}.`);}
   else if(id==='mend'){await burst(target,'#a6e08a');const amt=Math.round((20+15*P)*(fx().mendPct||1));const raised=heal(target,amt);floatAt(target,`+${amt}`,'#a6e08a');if(fx().healMorale){target.buff.morale+=fx().healMorale;}logB(`Mend restores ${nm(target)}.${raised>0?` ${raised} rise again.`:''}`);}
   else if(id==='swift'){await burst(target,'#cde6ff');target.buff.spd+=3;floatAt(target,'+3 speed','#cde6ff');logB(`Swift Wind hastens ${nm(target)}.`);}
@@ -3362,7 +3409,7 @@ async function endBattle(){
   const merge=l=>{const m={};for(const x of l)m[x.k]=(m[x.k]||0)+x.n;return Object.entries(m).map(([k,n])=>`<li>${n} ${U[k].pl}</li>`).join('')||'<li class="muted">None</li>';};
   const killedHP=bt.stacks.filter(s=>s.side===1).reduce((a,s)=>a+(s.n0-s.n)*s.u.hp,0);const xp=killedHP;
   let extras=[];let thralls=0,plunder=0;
-  if(won&&S.fac==='necro'){thralls=Math.max(1,Math.round(killedHP*((fx().harvest||0.10)+(facSpecial('harvest')?0.05:0))/U.thrall.hp));extras.push(`<b>Grave Harvest:</b> ${thralls} Bone Thralls rise and join you.`);}
+  if(won&&S.fac==='necro'){thralls=Math.max(1,Math.round(killedHP*((fx().harvest||0.10)+(facSpecial('harvest')?0.05:0))/U.skeleton.hp));extras.push(`<b>Grave Harvest:</b> ${thralls} Skeletons rise and join you.`);}
   if(won&&S.fac==='pirates'){plunder=Math.round(xp*0.6*(fx().plunder||1));extras.push(`<b>Plunder:</b> +${fmt(plunder)} gold.`);}
   const o=bt.obj,rv=o.type==='rival'?o.rival:null,h=HERO();
   if(won&&rv&&rv.relics.length)extras.push(`<b>Relics recovered:</b> ${rv.relics.map(r=>RELICS[r].name).join(', ')}.`);
@@ -3376,7 +3423,7 @@ async function endBattle(){
   await showModal({title:won?'Victory':'Defeat',body,buttons:[{label:'Continue',value:1,primary:true}]});
   if(won){
     const army=[];for(const s of bt.stacks.filter(s=>s.side===0&&s.alive).sort((a,b)=>a.slot-b.slot)){if(army.length<7)army.push({k:s.k,n:s.n});else{const ex=army.find(a=>a.k===s.k);if(ex)ex.n+=s.n;}}
-    HERO().army=army;if(thralls){if(!addToArmy('thrall',thralls)){const g=S.town.garrison.find(x=>x.k==='thrall');if(g)g.n+=thralls;else S.town.garrison.push({k:'thrall',n:thralls});}}
+    HERO().army=army;if(thralls){if(!addToArmy('skeleton',thralls)){const g=S.town.garrison.find(x=>x.k==='skeleton');if(g)g.n+=thralls;else S.town.garrison.push({k:'skeleton',n:thralls});}}
     if(plunder)S.res.gold+=plunder;
     if(o.type==='spire'){o.owned=ME();o.ownerName=h.name;o.garrison=[];}
     if(o.type==='camp'){o.owned=ME();o.ownerName=h.name;o.garrison=[];o.pool=firstPool(o);}
@@ -3553,8 +3600,7 @@ async function pickFaction(opt={}){
   while(true){
     const body=`<div class="picks facs">${FAC_ORDER.map(k=>{const f=FAC[k],hs=HEROES.filter(h=>h.fac===k);
       return`<div class="pick fcard" style="--c:${f.col};--c2:${f.col2}" ${(opt.exclude||[]).includes(k)?'aria-disabled="true"':''}><button class="fpick" data-fac="${k}" ${(opt.exclude||[]).includes(k)?'disabled':''} aria-label="Choose the ${f.arch}"></button>
-        <div class="ph"><img src="${iconURL('crest',k,52)}" alt=""><div><h3>${f.arch}</h3><div class="sub">${f.name}</div></div></div>
-        <div class="tags">${f.tags.map(t=>`<span>${t}</span>`).join('')}</div>
+        <div class="ph"><img src="${iconURL('crest',k,52)}" alt=""><div><h3>${f.arch}</h3><div class="sw">${FAC_SW[k][0].map(t=>`<span class="pro">+ ${t}</span>`).join('')}<span class="con">− ${FAC_SW[k][1]}</span></div></div></div>
         <div class="fheroes">${hs.map(h=>`<img src="${iconURL('hero',h.id,84)}" alt="${esc(h.name)}" title="${esc(h.name)} · ${h.type}">`).join('')}</div>
         <details class="ftroops"><summary>Troops ▾</summary><div class="tlist">${f.units.map(u=>`<span><img src="${iconURL('unit',u,48)}" alt=""><b>${U[u].name}</b><em>${U[u].desc}</em></span>`).join('')}</div></details></div>`;}).join('')}</div>`;
     const pr=showModal({title:opt.who?`${opt.who}: choose your banner`:'Choose your banner',body,wide:true,buttons:[]});
@@ -3612,7 +3658,16 @@ async function startNew(){S=null;applyTheme();const mo=await pickMap();if(!mo){t
   if(mo.mode==='multi'){const ps=[];for(let i=0;i<mo.nPlayers;i++)ps.push(await pickFaction({who:`Player ${i+1}`,exclude:ps.map(p=>p.fk)}));
     mo.players=ps;newGame(ps[0].fk,ps[0].hid,mo);afterLoad();save();await handoff();openTown();return;}
   const{fk,hid}=await pickFaction();newGame(fk,hid,mo);afterLoad();save();openTown();}
-function afterLoad(){setMode(S.mode||'relic');if(S.players)loadPlayer(S.pi);rebuildFoot();S.heroes.forEach(x=>{if(x.book===undefined)x.book=x.spells.length>0;});W=S.W||34;H=S.H||26;S.limit=S.limit||112;S.cur=clamp(S.cur||0,0,S.heroes.length-1);renderTerrain();heroDraw.x=HERO().x;heroDraw.y=HERO().y;path=null;sizeMap();centerOn(HERO().x,HERO().y,true);renderUI();}
+/* v17 roster: troops from older saves move to the new troop of the same tier */
+const OLD_ROSTER={wizards:['inkling','hound','sentinel','owl','magus'],necro:['thrall','rats','wraith','barrow','hiero'],centaurs:['hounds','skirm','badger','lancer','bearw'],
+  pirates:['deckhand','powder','duelist','harpoon','cannon'],elves:['sprite','longbow','dryad','dancer','stag'],dwarves:['delver','bolt','anvil','smith','ram'],merfolk:['shell','coral','eel','seahorse','choir']};
+function migrateRoster(st){if(!st||st.roster>=2)return;const M={};for(const[f,old]of Object.entries(OLD_ROSTER))old.forEach((k,i)=>{const n=FAC[f].units[i];M[k]=n;M[k+'_u']=n+'_u';});
+  const fix=k=>M[k]||k;const walk=v=>{if(Array.isArray(v)){v.forEach(walk);return;}if(!v||typeof v!=='object')return;
+    if(typeof v.k==='string'&&typeof v.n==='number'&&M[v.k])v.k=fix(v.k);
+    for(const key of['pool'])if(v[key]&&typeof v[key]==='object'&&!Array.isArray(v[key])){const o={};for(const[k,n]of Object.entries(v[key]))o[fix(k)]=(o[fix(k)]||0)+n;v[key]=o;}
+    if(v.unit&&M[v.unit])v.unit=fix(v.unit);for(const x of Object.values(v))if(x&&typeof x==='object')walk(x);};
+  walk(st);st.roster=2;}
+function afterLoad(){migrateRoster(S);setMode(S.mode||'relic');if(S.players)loadPlayer(S.pi);rebuildFoot();S.heroes.forEach(x=>{if(x.book===undefined)x.book=x.spells.length>0;});W=S.W||34;H=S.H||26;S.limit=S.limit||112;S.cur=clamp(S.cur||0,0,S.heroes.length-1);renderTerrain();heroDraw.x=HERO().x;heroDraw.y=HERO().y;path=null;sizeMap();centerOn(HERO().x,HERO().y,true);renderUI();}
 
 /* -------- map input -------- */
 let drag=null;
@@ -3709,7 +3764,7 @@ function edBlank(size,from){
   else{tiles=new Array(W*H).fill(T.GRASS);for(let y=0;y<H;y++)for(let x=0;x<W;x++)if(!x||!y||x===W-1||y===H-1)tiles[idx(x,y)]=(x+y)%3?T.FOREST:T.CRAG;}
   return{W,H,size,tiles,objs,...extra};}
 function edState(m){W=m.W;H=m.H;const town=m.objs.find(o=>o.type==='town')||{x:-9,y:-9};
-  S={editor:true,v:3,seed:12345,fac:'rangers',W,H,mapType:'custom',size:m.size,tiles:m.tiles,objs:m.objs,uid:1+Math.max(0,...m.objs.map(o=>o.id||0)),explored:new Array(W*H).fill(1),day:1,mode:'relic',
+  S={editor:true,v:3,roster:2,seed:12345,fac:'rangers',W,H,mapType:'custom',size:m.size,tiles:m.tiles,objs:m.objs,uid:1+Math.max(0,...m.objs.map(o=>o.id||0)),explored:new Array(W*H).fill(1),day:1,mode:'relic',
     res:{gold:0,timber:0,ore:0,amber:0},heroes:[],cur:0,rivals:[],rumours:[],delivered:[],underY:m.underY||0,rivers:m.rivers||null,bridges:m.bridges||null,
     town:{x:town.x,y:town.y,name:'Your town',built:{hall1:1},pool:{},garrison:[]},goal:[0,1,2,3,4,5,6]};
   setMode('relic');S.objs.filter(o=>o.type==='camp').forEach((o,i)=>{o.dfac=FAC_ORDER[(i+2)%8];});
@@ -3818,7 +3873,7 @@ function boot(data){
   title();
 }
 window.claude?.hot?.snapshot?.(()=>({save:S&&!S.over?JSON.stringify(S):null}));
-window.__qh={centerOn,rivalTarget,get tcv(){return terrainCv;},MAP_TYPES,rivalInteract,manageSpire,get cam(){return[camX,camY,TS];},openHeroMenu,pickMap,mapPreviewURL,get S(){return S;},startBattle,endDay,walk,planTo,set path(p){path=p;},newGame,afterLoad,HEROES,FAC,RELICS,arriveTown,selectHero,openTown};
+window.__qh={drawUnit,U,FAC_ORDER,migrateRoster,centerOn,rivalTarget,get tcv(){return terrainCv;},MAP_TYPES,rivalInteract,manageSpire,get cam(){return[camX,camY,TS];},openHeroMenu,pickMap,mapPreviewURL,get S(){return S;},startBattle,endDay,walk,planTo,set path(p){path=p;},newGame,afterLoad,HEROES,FAC,RELICS,arriveTown,selectHero,openTown};
 window.claude?.hot?.ready?window.claude.hot.ready(boot):boot(window.claude?.hot?.data??{});
 })();
 </script>
