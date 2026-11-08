@@ -846,6 +846,13 @@ img.upg{filter:sepia(.55) saturate(1.9) hue-rotate(-12deg) brightness(1.06) drop
 .flagprev b{display:grid;place-items:center;width:52px;height:34px;background:var(--fc);clip-path:polygon(0 0,100% 0,86% 50%,100% 100%,0 100%);border-top:2px solid rgba(255,255,255,.25)}.flagprev img{width:24px;height:24px;margin-right:6px;image-rendering:pixelated}
 .hcard .hport{display:block;width:156px;height:156px;overflow:hidden;padding:0;line-height:0}
 .hcard .hport img{display:block;width:112.5%;margin:-7.2% 0 0 -6.25%;image-rendering:pixelated}
+.wrow{grid-template-columns:44px 1fr 112px}
+.wsub{font:700 15px var(--f-display);color:var(--muted);margin:8px 0 4px;text-transform:uppercase;letter-spacing:.06em}
+.wmines{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0}.wmine{display:grid;grid-template-columns:auto auto;align-items:center;gap:0 6px;background:rgba(255,255,255,.35);border:1px solid var(--rule);padding:3px 8px 3px 4px}
+.wmine .mpic,.wmine img{grid-row:span 2;width:64px;height:32px;object-fit:contain;image-rendering:pixelated}.wmine img{width:28px;height:28px;margin:0 10px}
+.mpic{display:block;background-size:200% 100%;background-position:0 0;background-repeat:no-repeat}
+.wmine b{font:700 18px var(--f-display);line-height:1}.wmine small{font-size:12px;color:var(--muted);line-height:1}
+.wtroop{display:grid;justify-items:center;text-align:center;background:radial-gradient(circle,#2a3b85,#101a48);border:2px solid var(--rule);padding:4px;border-radius:3px;color:#f4ecd2}.wtroop img{width:72px;height:72px;image-rendering:pixelated;object-fit:contain}.wtroop small{font-size:11px;opacity:.8}.wtroop b{font:700 14px var(--f-display);color:#ffe08a}
 </style>
 
 <div id="app">
@@ -3287,17 +3294,21 @@ const covFrac=rv=>Object.keys(rv.cov||{}).length/(Math.ceil(W/6)*Math.ceil(H/6))
 /* the weekly report: your kingdom in numbers, and a rough read on each rival */
 async function weeklyReport(){if(S.players||S.over)return;const d=dateParts(),you=allTowns(),mines=S.objs.filter(o=>o.type==='mine'&&o.owned===ME());
   const exp=S.explored.reduce((a,v)=>a+(v?1:0),0)/(W*H),best=Math.max(1,...S.heroes.map(h=>armyPower(h.army,h)));
-  const mineTxt=RES.map(k=>[k,mines.filter(o=>MINE[o.k].res===k).length]).filter(x=>x[1]).map(([k,n])=>`<span class="sc"><img src="${iconURL('res',k,32)}" alt="">${n}</span>`).join('')||'none yet';
+/* a picture of each kind of mine held, with how many */
+  const mineRow=list=>{const by={};for(const o of list)by[o.k]=(by[o.k]||0)+1;const ks=Object.keys(MINE).filter(k=>by[k]);
+    return ks.length?`<div class="wmines">${ks.map(k=>`<span class="wmine" title="${MINE[k].name}: ${by[k]}">${MINE_ART[k]?`<i class="mpic" style="background-image:url(${ART_BASE}map/mines/${MINE_ART[k][0]}.png)"></i>`:`<img src="${iconURL('res',MINE[k].res,40)}" alt="">`}<b>×${by[k]}</b><small>${MINE[k].name}</small></span>`).join('')}</div>`:'<span class="muted">none yet</span>';};
+  const mineTxt=mineRow(mines);
   const covW=f=>f<0.1?'has barely left home':f<0.25?'has scouted the lands near home':f<0.45?'has covered about a third of the land':f<0.65?'has ranged over half the land':'has been almost everywhere';
   const powW=r=>r<0.5?'much weaker than your best army':r<0.85?'a little weaker than your best army':r<1.2?'about even with your best army':r<2?'stronger than your best army':'far stronger than your best army';
-  const rivals=S.rivals.filter(r=>!r.human).map(rv=>{const camp=S.objs.find(o=>o.type==='camp'&&!o.free&&o.fac===rv.fac),hold=S.objs.filter(o=>(o.type==='mine'||o.type==='camp')&&o.owned===rv.fac).length;
+  const rivals=S.rivals.filter(r=>!r.human).map(rv=>{const camp=S.objs.find(o=>o.type==='camp'&&!o.free&&o.fac===rv.fac),hold=S.objs.filter(o=>(o.type==='mine'||o.type==='camp')&&o.owned===rv.fac).length,rmines=S.objs.filter(o=>o.type==='mine'&&o.owned===rv.fac);
     const wealth=(camp&&camp.built&&!camp.owned?Object.keys(camp.built).length:0)+hold*2,ww=wealth<6?'lean':wealth<10?'comfortable':wealth<15?'rich':'overflowing';
     const top=rv.army.slice().sort((a,b)=>FAC[rv.fac].units.indexOf(b.k.replace(/_u$/,''))-FAC[rv.fac].units.indexOf(a.k.replace(/_u$/,'')))[0];
     return`<div class="wrow"><img src="${iconURL('crest',rv.fac,52)}" alt=""><div><b>${esc(rv.name)}</b> <span class="muted">· ${FAC[rv.fac].arch}${camp&&camp.owned===ME()?' · you hold their home':''}</span>
-      <p>Scouts say ${esc(rv.name)} ${covW(covFrac(rv))}. Their coffers look <b>${ww}</b>${hold?` (${hold} mine${hold>1?'s':''} and holdings)`:''}. Their best troops are <b>${top?U[top.k].pl:'none'}</b>, ${powW(armyPower(rv.army,rv)/best)}.</p></div></div>`;}).join('');
+      <p>Scouts say ${esc(rv.name)} ${covW(covFrac(rv))}. Their coffers look <b>${ww}</b>. Their best troops are <b>${top?U[top.k].pl:'none'}</b>, ${powW(armyPower(rv.army,rv)/best)}.</p>${mineRow(rmines)}</div>
+      ${top?`<div class="wtroop" title="Best troop: ${U[top.k].pl}"><img class="${U[top.k].up?'upg':''}" src="${iconURL('unit',top.k,64)}" alt=""><small>Best troop</small><b>${U[top.k].name}</b></div>`:'<div></div>'}</div>`;}).join('');
   await showModal({title:`Weekly report · Month ${d.m}, Week ${d.w}`,body:`<h3 class="gsec">Your kingdom</h3>
     <div class="wgrid"><div><em>Towns</em><b>${you.length}</b></div><div><em>Outposts</em><b>${S.objs.filter(o=>o.type==='camp'&&o.owned===ME()&&!o.built).length}</b></div><div><em>Heroes</em><b>${S.heroes.length}</b></div><div><em>Gold a day</em><b>${fmt(income())}</b></div><div><em>Land explored</em><b>${Math.round(exp*100)}%</b></div><div><em>Best army</em><b>${fmt(best)}</b></div></div>
-    <p>Mines: <span class="scs">${mineTxt}</span></p>
+    <div class="wsub">Your mines</div>${mineTxt}
     <h3 class="gsec">Rivals</h3>${rivals||'<p class="muted">No rival banners remain.</p>'}`,wide:true,buttons:[{label:'Onward',value:1,primary:true}],dismiss:1});}
 async function rivalsTurn(){
   for(const rv of S.rivals)rv._shown=0;
