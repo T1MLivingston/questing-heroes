@@ -15,8 +15,8 @@ This file is a practical checklist, not legal advice. If the game will be sold o
 
 | Component | Source | License | Notes |
 |-----------|--------|---------|-------|
-| Pixelify Sans font | Google Fonts | SIL Open Font License 1.1 | Loaded from fonts.googleapis.com at runtime |
-| VT323 font | Google Fonts | SIL Open Font License 1.1 | Loaded from fonts.googleapis.com at runtime |
+| Alegreya SC font | Google Fonts | SIL Open Font License 1.1 | Loaded from fonts.googleapis.com at runtime |
+| Alegreya font | Google Fonts | SIL Open Font License 1.1 | Loaded from fonts.googleapis.com at runtime |
 
 No other libraries, images or audio are included. Art made later with ChatGPT or other tools should be logged below, with the tool and its terms at the time.
 

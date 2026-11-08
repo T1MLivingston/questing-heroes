@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-Questing Heroes is a browser-based, turn-based fantasy strategy game built with vanilla HTML, CSS and JavaScript. The player picks a map (Wheel & Spoke or Twin Ridges, in three sizes), one of 8 factions and one of 32 heroes (4 per faction; the 2 still-unnamed placeholders are marked `blank`), explores a fog-covered map, grows a town, recruits an army and fights tactical battles on a hex grid. The goal is to recover the Seven Relics, hidden in guarded lairs and hunted by rival AI heroes, and deliver them to the town's Reliquary before the day limit (4, 5 or 6 months by map size).
+Questing Heroes is a browser-based, turn-based fantasy strategy game built with vanilla HTML, CSS and JavaScript. The player picks a game mode, a difficulty (starting resources and rival strength), a map (Wheel & Spoke, Twin Ridges, Underworld or Four Rivers, in three sizes), one of 8 factions and one of 32 heroes (4 per faction; the 2 still-unnamed placeholders are marked `blank`), explores a fog-covered map, grows a town, recruits an army and fights tactical battles on a hex grid. The goal is to recover the Seven Relics, hidden in guarded lairs and hunted by rival AI heroes, and deliver them to the town's Reliquary before the day limit (4, 5 or 6 months by map size).
 
 This is a **private, personal project**. See `LEGAL.md` before publishing anything.
 
@@ -10,8 +10,9 @@ This is a **private, personal project**. See `LEGAL.md` before publishing anythi
 
 - **Frontend**: Single HTML file with inline CSS and JavaScript
 - **Rendering**: HTML5 Canvas 2D API (map and battlefield), DOM for panels and dialogs
-- **Art**: Sprite PNGs in `assets/` where they exist (map terrain and scenery, Rangers units, 5 hero map sprites, 12 hero portraits); everything else is still drawn in code, and the drawn version is the fallback for any missing image
-- **Fonts**: Pixelify Sans (display, numbers, canvas text) and VT323 (body) from Google Fonts (SIL Open Font License), for a big 90s pixel look
+- **Art**: Sprite PNGs in `assets/` where they exist (map terrain, rivers, bridges and scenery, Rangers units, 5 hero map sprites, 12 hero portraits); everything else is still drawn in code, and the drawn version is the fallback for any missing image
+- **Fonts**: Alegreya SC (display, numbers, canvas text) and Alegreya (body) from Google Fonts (SIL Open Font License): a chunky serif
+- **Look**: navy panels with gold as the main UI colour (bevelled gold frames, gold primary buttons). Actions sit in the top bar (Town, Hero, End day, ☰ menu); the right-hand ledger must fit the window without scrolling
 - **No build tools**: open `index.html` in a browser to play
 
 ## File Structure
@@ -41,13 +42,13 @@ The script in `index.html` is split into sections marked with `/* ===== ... ====
 |---------|---------------|
 | DATA | `FAC` (8 factions), `U` (units, neutrals and generated `_u` upgrades), `SP` (spells), `SK` (skills), `HEROES` (32, including 2 placeholders), `ITEMS` (31 artifacts in levels 1-5: Trinket, Treasure, Heirloom, Masterwork, Legendary), `START_KIT` (each hero's starting skill and artifact), `RELICS` (7), `MINE` (three output levels, `MINE_UP` upgrade costs, `mineOut`), `SITES` (weekly sites) |
 | ART | Procedural drawing: `drawRes`, `drawStat`, `drawFig`, `drawGlyph`, `drawUnit`, `drawHeroPortrait`, `drawCrest`, `iconURL` cache |
-| MAP | `MAP_SIZES`, `MAP_TYPES`, `genMap` → `genWheel` or `genRidges`, `makeIsland`/`isleDocks` (pirate islands), `newGame`, `mkHero`, `mkRival`, terrain prerender, camera, `drawMap`, pathfinding (`astar`, `planTo`) |
+| MAP | `MAP_SIZES`, `MAP_TYPES`, `genMap` → `genWheel`, `genRidges`, `genUnder` or `genRivers` (the last two share `fillWorld`, `carveReach`, `mkSpot`, `roadAlong`, `placeRelics`), `makeIsland`/`isleDocks` (pirate islands), `newGame`, `mkHero`, `mkRival`, terrain prerender, camera, `drawMap`, pathfinding (`astar`, `planTo`) |
 | UI | `renderUI` (top bar, hero card, army), `showModal`, toasts, unit cards |
 | Adventure actions | `walk`, `fightPreview`, `gainRelic`, `visit`, `arriveTown`, `endDay`, `addRumour`, `addXP` |
 | Rival heroes | `rivalsTurn`, `rivalTarget`, `rivalInteract`, `autoResolve`, `growRival` |
 | Town screen | `FAC_SPELLS`, `townBuildings`, `townAdvice` (the Suggested step), `townTabs`, `townHTML`, `drawTownView` (clickable picture of the town), `openTown` |
 | BATTLE | `drawBattleHero` (hero beside the field; click to open the spellbook), hex grid helpers, stat functions (`sAtk`, `sDef`, `sSpd`, `sMorale`), `battleLoop`, `playerTurn`, `aiTurn`, `castSpell`, `endBattle`, `drawBattle` |
-| START | `pickMap` (game mode, players, map type and size, with `mapPreviewURL`), `pickFaction`, `pickHero` |
+| START | `pickMap` (game mode, players, difficulty `DIFF`, map type and size, with `mapPreviewURL`), `pickFaction`, `pickHero` |
 | Save and boot | `localStorage` save under `questing-heroes-v4`, `title`, `boot` |
 
 ### Game state
@@ -77,6 +78,10 @@ Everything lives in one object, `S`, so it can be saved as JSON:
 - Twin Ridges: two crag ridges cross the map. The road crosses each through one gap held by a strong `guard` neutral. `genWorld` checks that each guard really seals its ridge.
 - Diagonal moves can't cut corners: both orthogonal neighbours must be passable.
 - Relic lairs are `relic` objects (`r` = relic index). Relics a hero drops on defeat become a `drop` object.
+- Underworld: the top half is the surface, the bottom half the underworld (`S.underY` is the first bedrock row; two rows of protected crag). Portal pairs (`portal` objects with `tx`, `ty`) are the only link. Necromancer homes and the Glass Lair are below. The underworld renders on ash ground with a purple tint.
+- Four Rivers: four rivers (`S.rivers`, lake tiles drawn with the river art) meet in a water ring around the Glass Lair's island. Bridges (`S.bridges`, road tiles with `ori`) cross them; one per river and the four island bridges are guarded. Each home has its own quarter.
+- Portals: `PORT` (rebuilt in `rebuildFoot`) maps a portal tile to its far end. `astar` treats that as an extra neighbour and its heuristic allows for portals; `reachFrom`, `placeSpires` and `carveReach` follow them too. Walking onto a portal as the destination steps through (`visit`); a path can also run through one.
+- Spires (`spire` objects with `owned`, `garrison`): `placeSpires` puts them where blocking their 3×3 area splits the land, else spread along the roads (generators may pre-place some at bridgeheads or portals). A garrisoned spire holds the 8 tiles around it against other banners (`zocFor`); enemies must win a battle (defenders +3 defense) to take it. `manageSpire` moves stacks in and out; rivals claim and assault spires.
 
 ### Sprite art
 
@@ -124,9 +129,11 @@ Debug handle in the browser console: `window.__qh` exposes the state and a few f
 - [ ] Relics: rumours appear weekly, lairs give relics, delivery to the Reliquary, win at 7
 - [ ] Rivals move at end of day, claim mines and relics, and can attack your heroes
 - [ ] Town screen: tabs light up when something can be done, Suggested step and Take me there work, clicking buildings in the picture opens their tab
-- [ ] Tavern hires a second hero; dwelling upgrades and army upgrades work; Library sells a spellbook
+- [ ] Tavern offers two heroes of your banner and two wanderers (+500 gold) each week; hires a second hero; dwelling upgrades and army upgrades work; Library sells a spellbook
 - [ ] Guarded passes block the road until beaten
 - [ ] Level-up choice, end of day income, weekly growth
+- [ ] Click your hero on the map for the quick menu (End day, town, next hero)
+- [ ] Portals carry heroes and rivals between surface and underworld; spires can be garrisoned and stormed
 - [ ] Phone layout (about 400px wide)
 
 ## Code Style Conventions
