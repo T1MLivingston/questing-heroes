@@ -73,9 +73,12 @@ Everything lives in one object, `S`, so it can be saved as JSON:
 - Heroes per banner (4 each): Grimes is a Dwarf, Perry an Elf (Master Archer, replacing Davis) and Sookie a Wizard (Owl Mother, no portrait yet). Heroes with `retired:true` (Davis) stay in `HBY` for old saves but are removed from `HEROES`, so pickers, the tavern and rivals never offer them.
 - Panels (`.card`, `.sheet`, top bar, navy strips) use solid fills inside the pixel border until a smooth texture asset arrives.
 - Player colour: the hero picker offers `PLAYER_COLS` swatches (single player); the pick is `S.col`, read through `teamCol()` (flags, tinted sprites, `--team`, portrait backgrounds). Multiplayer keeps banner colours.
-- Side panel: the portrait fills the width with the name over it, and the four stats sit in a row underneath. The hero sheet (`openHeroSheet`, `.sheetgrid3`) has the hero, portrait and stats on the left, a 3-column equipment grid of tall, narrow slots in the middle, and the details and backpack on the right.
+- Command bar (`.cmdbar`, under the top bar): Town ▾, Hero ▾ and End day. The ▾ buttons open `#pickMenu` (`openPick`): your town and captured holdings, or your heroes with movement left.
+- Side panel: a near-square portrait (whole hero visible) with the name over it, and the four stats in a row underneath, number above label. The hero sheet (`openHeroSheet`, `.sheetgrid3`) has the hero, portrait and stats on the left, a 3-column equipment grid of tall, narrow slots in the middle, and the details and backpack on the right.
 - Minimap: `drawMini` (called from `drawMap` every 200 ms) draws explored land, towns, camps, owned mines, relics, heroes, visible rivals and the view frame in `#mini`; click it to look there, ▾ hides it.
-- `dropPuddles` (end of `genMap`) turns lake bodies under 9 tiles into land unless a dock, water pickup or object sits on or beside them.
+- `dropPuddles` (end of `genMap`) keeps water only if it is part of a river, has an object on it, has a dock (and is 12+ tiles), or is a real lake (60+ tiles); everything else becomes land, and docks left without water are removed.
+- `rockMines` (in `furnishMap`) sets ore pits and gold seams against crags: it moves each up to 6 steps to the foot of rock, or raises a crag beside it, undoing any change that shrinks the reachable land.
+- Battle: big troops (96 px art, every tier 5, ogres, trolls, the drake) draw 40% larger (`BIGK` in `drawBattle`); they still use one hex. Ogres, trolls and drakes also stand larger on the map.
 - Banner cards show `FAC_SW` (two strengths, one weakness) under the name.
 - `ART_REQUEST_TROOPS.md` is the art brief for the troop sprite sheets still to come.
 

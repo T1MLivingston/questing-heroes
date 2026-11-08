@@ -694,6 +694,24 @@ img{image-rendering:auto}
 #miniTog{position:absolute;top:-2px;left:-2px;transform:translateY(-100%);background:rgba(8,12,30,.9);color:#fff3c8;border:2px solid #c9a24a;border-bottom:none;border-radius:3px 3px 0 0;font:700 12px/1 var(--f-display);padding:3px 7px;cursor:pointer}
 #miniwrap.off{padding:0;border:none;background:none}#miniwrap.off #mini{display:none}#miniwrap.off #miniTog{transform:none;position:static;border-bottom:2px solid #c9a24a;border-radius:3px}
 @media (max-width:820px){#miniwrap{transform:scale(.75);transform-origin:bottom right}}
+
+/* v20: thin command bar under the top bar; near-square portrait; stat number above its label */
+#app{grid-template-rows:auto auto minmax(0,1fr)}
+.cmdbar{position:relative;display:flex;gap:8px;align-items:center;padding:0 2px}
+.cmdbar .btn{padding:5px 14px;font-size:16px;display:inline-flex;align-items:center;gap:6px}
+.cmdbar .btn .bi{width:20px;height:20px}
+.cmdbar .split{display:inline-flex}.cmdbar .split .btn:first-child{padding-right:10px}.cmdbar .caret{padding:5px 9px;margin-left:2px}
+.cmdbar #bEnd{margin-left:auto;min-width:200px;justify-content:center}
+.pickmenu{position:absolute;top:calc(100% + 4px);z-index:60;min-width:260px;max-width:340px;display:grid;gap:4px;padding:8px;background:#f1e2b8;border:3px solid #c9a24a;border-radius:4px;box-shadow:0 10px 24px rgba(0,0,0,.45)}
+.pickmenu button{display:flex;gap:10px;align-items:center;text-align:left;background:#fbecc0;border:2px solid var(--rule);border-radius:3px;padding:5px 8px;cursor:pointer;font:inherit;color:var(--text)}
+.pickmenu button:hover,.pickmenu button.on{border-color:var(--blue);background:#fff3d0}
+.pickmenu img{width:40px;height:40px;image-rendering:pixelated;border-radius:2px}
+.pickmenu b{display:block;font:800 16px var(--f-display);color:var(--blue-dk)}.pickmenu small{color:var(--muted)}.pickmenu p{margin:4px 2px;font-size:13px}
+.hportrait{height:272px;place-items:center}.hportrait>img{width:268px;height:268px;margin-bottom:0}
+.hstats .hs{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;padding:3px 2px}
+.hstats .hs b{font-size:26px;line-height:1.05}.hstats .hs .hsl{font-size:12px;justify-content:center}
+@media (max-height:860px){.hportrait{height:226px}.hportrait>img{width:222px;height:222px}}
+@media (max-width:820px){.cmdbar{flex-wrap:wrap}.cmdbar #bEnd{min-width:0;flex:1}}
 </style>
 
 <div id="app">
@@ -705,16 +723,17 @@ img{image-rendering:auto}
     <div class="date" id="date"></div>
     <div class="acts"><button class="btn icon" id="bMenu" title="Game menu"><img class="bi" src="assets/ui/icons/settings.png" alt="Menu"></button></div>
   </div>
+  <div class="cmdbar" id="cmdbar">
+    <div class="split"><button class="btn" id="bTown"><img class="bi" src="assets/ui/icons/town.png" alt="">Town<span class="kbd">T</span></button><button class="btn caret" id="bTownPick" title="Your towns and holdings" aria-label="Choose a town">▾</button></div>
+    <div class="split"><button class="btn" id="bCenter" title="Centre on hero (C), next hero (H)"><img class="bi" src="assets/ui/icons/hero.png" alt="">Hero<span class="kbd">C</span></button><button class="btn caret" id="bHeroPick" title="Choose a hero" aria-label="Choose a hero">▾</button></div>
+    <button class="btn primary" id="bEnd"><img class="bi" src="assets/ui/icons/end_turn.png" alt="">End day<span class="kbd">E</span></button>
+    <div class="pickmenu" id="pickMenu" hidden></div>
+  </div>
   <div class="main">
     <aside class="ledger">
       <div class="card team" id="heroCard"></div>
       <div class="card"><div class="armyhead"><h3>Army</h3><span class="muted" id="armyPow"></span></div><div class="army" id="army"></div></div>
       <div class="card" id="edPanel" hidden></div>
-      <div class="card orders">
-        <button class="btn" id="bTown"><img class="bi" src="assets/ui/icons/town.png" alt="">Town<span class="kbd">T</span></button>
-        <button class="btn" id="bCenter" title="Centre on hero (C), next hero (H)"><img class="bi" src="assets/ui/icons/hero.png" alt="">Hero<span class="kbd">C</span></button>
-        <button class="btn primary wide" id="bEnd"><img class="bi" src="assets/ui/icons/end_turn.png" alt="">End day<span class="kbd">E</span></button>
-      </div>
     </aside>
     <div class="mapwrap"><canvas id="map" aria-label="Adventure map"></canvas><div id="miniwrap" hidden><canvas id="mini" title="Map overview: click to look there"></canvas><button id="miniTog" title="Hide or show the map overview">▾</button></div><div id="hover"></div><div id="hmenu" hidden></div></div>
   </div>
@@ -1866,14 +1885,17 @@ let BIO=BIOMES[0];
 const jit=()=>0.75+R()*0.55;
 const biomeOf=seed=>BIOMES[(Math.abs(seed)>>>3)%BIOMES.length];
 function genMap(seed,opt){BIO=biomeOf(seed);const w=genMap0(seed,opt);w.biome=BIO.k;dropPuddles(w);return w;}
-/* water must be intentional: small ponds cut off from every other body of water, with nothing on or beside them that uses water, become land */
-function dropPuddles(w,min=9){const t=w.tiles,seen=new Uint8Array(t.length),used=new Set();
-  for(const o of w.objs)for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){const x=o.x+dx,y=o.y+dy;if(x>=0&&y>=0&&x<W&&y<H&&(o.type==='dock'||o.type==='flot'||(dx===0&&dy===0)))used.add(y*W+x);}
+/* water must be intentional: a body of water stays only if it is part of a river, has a dock or something on it, or is a real lake (60+ tiles); the rest becomes land */
+function dropPuddles(w,min=60,dockMin=12){const t=w.tiles,seen=new Uint8Array(t.length),keep=new Set(w.rivers||[]),dockAt=new Set();
+  for(const o of w.objs){if(o.type==='dock'){for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){const x=o.x+dx,y=o.y+dy;if(x>=0&&y>=0&&x<W&&y<H)dockAt.add(y*W+x);}}else if(o.x>=0&&o.y>=0&&o.x<W&&o.y<H)keep.add(o.y*W+o.x);}
   for(let i=0;i<t.length;i++){if(t[i]!==T.LAKE||seen[i])continue;const comp=[i],q=[i];seen[i]=1;
     while(q.length){const j=q.pop(),x=j%W,y=(j/W)|0;for(const[dx,dy]of[[1,0],[-1,0],[0,1],[0,-1]]){const nx=x+dx,ny=y+dy;if(nx<0||ny<0||nx>=W||ny>=H)continue;const n=ny*W+nx;if(!seen[n]&&t[n]===T.LAKE){seen[n]=1;comp.push(n);q.push(n);}}}
-    if(comp.length>=min||comp.some(j=>used.has(j)))continue;
+    if(comp.length>=min||comp.some(j=>keep.has(j))||(comp.length>=dockMin&&comp.some(j=>dockAt.has(j))))continue;
     for(const j of comp){const x=j%W,y=(j/W)|0,cnt={};for(const[dx,dy]of[[1,0],[-1,0],[0,1],[0,-1]]){const nx=x+dx,ny=y+dy;if(nx<0||ny<0||nx>=W||ny>=H)continue;const v=t[ny*W+nx];if(v!==T.LAKE&&v!==T.ROAD&&v!==T.CRAG)cnt[v]=(cnt[v]||0)+1;}
-      const best=Object.entries(cnt).sort((a,b)=>b[1]-a[1])[0];t[j]=best?+best[0]:T.GRASS;}}}
+      const best=Object.entries(cnt).sort((a,b)=>b[1]-a[1])[0];t[j]=best?+best[0]:T.GRASS;}}
+  /* a dock left with no water beside it goes too */
+  const wet=(x,y)=>x>=0&&y>=0&&x<W&&y<H&&t[y*W+x]===T.LAKE;
+  w.objs=w.objs.filter(o=>o.type!=='dock'||[[1,0],[-1,0],[0,1],[0,-1],[1,1],[-1,1],[1,-1],[-1,-1]].some(([dx,dy])=>wet(o.x+dx,o.y+dy)));}
 function genMap0(seed,opt){return opt.type==='wheel'?genWheel(seed,opt):opt.type==='under'?genUnder(seed,opt):opt.type==='rivers'?genRivers(seed,opt):genRidges(seed,opt);}
 
 function mkHero(hid,x,y){const h=HBY[hid],f=FAC[h.fac];
@@ -1889,6 +1911,18 @@ function reachFrom(x0,y0,water){const dist=new Map(),q=[[x0,y0]];dist.set(idx(x0
   for(let h=0;h<q.length;h++){const[x,y]=q[h],d=dist.get(idx(x,y));for(let a=-1;a<=1;a++)for(let b=-1;b<=1;b++){if(!a&&!b)continue;const nx=x+a,ny=y+b;if(!ok(nx,ny)||dist.has(idx(nx,ny)))continue;if(a&&b&&(!ok(x+a,y)||!ok(x,y+b)))continue;
     const o=objAt(nx,ny);dist.set(idx(nx,ny),d+1);if(!o||o.type==='town'||o.type==='camp'||o.type==='portal')q.push([nx,ny]);}
     const pj=PORT.get(idx(x,y));if(pj!==undefined&&!dist.has(pj)){dist.set(pj,d+1);q.push([pj%W,(pj/W)|0]);}}return dist;}
+/* ore pits and gold seams belong in stone: move each to the foot of nearby crags, or raise a crag behind it where that blocks nothing */
+function rockMines(home){const crag=(x,y)=>inb(x,y)&&S.tiles[idx(x,y)]===T.CRAG;
+  const backed=(x,y)=>[[-1,-1],[0,-1],[1,-1],[-1,0],[1,0]].some(([dx,dy])=>crag(x+dx,y+dy));
+  const open=(x,y)=>{let n=0;for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++)if((dx||dy)&&inb(x+dx,y+dy)&&passableT(S.tiles[idx(x+dx,y+dy)]))n++;return n;};
+  const count=()=>reachFrom(home.x,home.y+1,true).size;let n0=count();
+  for(const o of S.objs){if(o.type!=='mine'||(o.k!=='orepit'&&o.k!=='gold')||backed(o.x,o.y))continue;
+    let best=null,bd=99;for(const[i,d]of reachFrom(o.x,o.y)){if(d<1||d>6||d>=bd)continue;const x=i%W,y=(i/W)|0,t=S.tiles[i];
+      if(x<2||y<2||x>W-3||y>H-3||t===T.ROAD||t===T.LAKE||!passableT(t)||!crag(x,y-1)||open(x,y)<5||objAt(x,y)||townFoot(x,y))continue;
+      if(S.objs.some(q=>q!==o&&Math.abs(q.x-x)<=1&&Math.abs(q.y-y)<=1))continue;best={x,y};bd=d;}
+    if(best){const ox=o.x,oy=o.y;o.x=best.x;o.y=best.y;const n=count();if(n>=n0){n0=n;continue;}o.x=ox;o.y=oy;}
+    for(const[dx,dy]of[[0,-1],[-1,-1],[1,-1],[-1,0],[1,0]]){const x=o.x+dx,y=o.y+dy;if(x<2||y<2||x>W-3||y>H-3)continue;const i=idx(x,y),t=S.tiles[i];
+      if(t===T.ROAD||t===T.LAKE||t===T.CRAG||objAt(x,y)||townFoot(x,y))continue;S.tiles[i]=T.CRAG;const n=count();if(n===n0-1){n0=n;break;}S.tiles[i]=t;}}}
 function freeTile(dist,dmin,dmax,avoid=2){const c=[];for(const[i,d]of dist){if(d<dmin||d>dmax||!passableT(S.tiles[i]))continue;const x=i%W,y=(i/W)|0;
   if(objAt(x,y)||townFoot(x,y)||S.objs.some(o=>Math.abs(o.x-x)<=avoid-1&&Math.abs(o.y-y)<=avoid-1&&(o.type==='town'||o.type==='neutral'&&o.guard)))continue;
   if(x<1||y<1||x>W-2||y>H-2)continue;c.push({x,y});}return c.length?pick(c):null;}
@@ -1939,6 +1973,7 @@ function furnishMap(bases){
   // mines differ: some start richer than others
   const home=bases[0],maxD=Math.hypot(W,H);
   for(const o of S.objs)if(o.type==='mine'&&!o.lvl){const far=Math.hypot(o.x-home.x,o.y-home.y)/maxD;o.lvl=1+(R()<0.45?1:0)+(far>0.45&&R()<0.4?1:0);}
+  rockMines(home);
   // weekly sites and artifacts, spread by distance from your town
   const dist=reachFrom(home.x,home.y+1,true);let md=0;for(const d of dist.values())md=Math.max(md,d);
   const band=(a,b)=>[Math.round(md*a),Math.round(md*b)];
@@ -2234,7 +2269,7 @@ function drawTown(c,cx,by,fk=S.fac,tw=S.town){
 }
 function flag(c,x,y,col){c.strokeStyle='#1a1610';c.lineWidth=1.2;c.beginPath();c.moveTo(x,y);c.lineTo(x,y-14);c.stroke();c.fillStyle=col;c.beginPath();c.moveTo(x,y-14);c.lineTo(x+10,y-11);c.lineTo(x,y-7);c.closePath();c.fill();}
 function token(c,k,cx,cy,r,ring){
-  {const a=ENEMY_ART[k]&&artImg(`map/guards/${ENEMY_ART[k]}_32.png`);if(a&&a.ok){const fy=cy+r*0.8,sz=Math.round(r*2.7);c.fillStyle='rgba(0,0,0,.35)';c.beginPath();c.ellipse(cx,fy,r*0.95,r*0.32,0,0,7);c.fill();c.strokeStyle=ring;c.lineWidth=2;c.beginPath();c.ellipse(cx,fy,r*1.02,r*0.36,0,0,7);c.stroke();
+  {const a=ENEMY_ART[k]&&artImg(`map/guards/${ENEMY_ART[k]}_32.png`);if(a&&a.ok){const fy=cy+r*0.8,sz=Math.round(r*(['ogre','troll','drake'].includes(k)?3.4:2.7));c.fillStyle='rgba(0,0,0,.35)';c.beginPath();c.ellipse(cx,fy,r*0.95,r*0.32,0,0,7);c.fill();c.strokeStyle=ring;c.lineWidth=2;c.beginPath();c.ellipse(cx,fy,r*1.02,r*0.36,0,0,7);c.stroke();
     c.imageSmoothingEnabled=false;c.drawImage(a.img,Math.round(cx-sz/2),Math.round(fy-sz*0.9),sz,sz);return;}}
   c.fillStyle='rgba(0,0,0,.35)';c.beginPath();c.ellipse(cx,cy+r*0.85,r,r*0.35,0,0,7);c.fill();
   c.fillStyle='#1b211e';c.beginPath();c.arc(cx,cy,r,0,7);c.fill();c.strokeStyle=ring;c.lineWidth=2.4;c.stroke();drawUnit(c,k,cx,cy,r*0.8);
@@ -2502,9 +2537,9 @@ function renderUI(){
   const h=HERO(),hd=H_(),need=xpFor(h.lvl),prev=h.lvl>1?xpFor(h.lvl-1):0;
   const sw=S.heroes.length>1?`<div class="herosw">${S.heroes.map((x,i)=>`<button class="hsel${i===S.cur?' on':''}" data-hsel="${i}" title="${x.name}${x.mp>0?' (can still move)':''}"><img src="${iconURL('hero',x.id,84)}" alt="${x.name}">${x.mp>60?'<i></i>':''}</button>`).join('')}</div>`:'';
   const mm=maxMana(),mx=maxMP();
-  $('#heroCard').innerHTML=sw+`<div class="hgrid">
+  $('#heroCard').innerHTML=`<div class="hgrid">
     <div class="hmain"><div class="hportrait"><img src="${iconURL('hero',h.id,128)}" alt="${esc(h.name)}"><div class="hcap"><div class="hname"><b>${esc(h.name)}</b><button class="rename-ic" data-rename-hero="1" title="Rename ${esc(h.name)}">✎</button></div><div class="label">${hd.type} hero · Level ${h.lvl}</div></div><button class="hbook${h.book?'':' none'}" data-book="1" title="${h.book?'Open the spellbook':'No spellbook yet: buy one at the Lantern Library'}"><img src="${ART_BASE}ui/icons/spellbook.png" alt="">${h.book?`${h.spells.length} spell${h.spells.length===1?'':'s'}`:'No book'}</button></div>
-      <div class="hstats">${['atk','def','pow','lore'].map(k=>`<div class="hs" title="${STAT_TIP[k]}"><span class="hsl"><img src="${iconURL('stat',k,44)}" alt="">${STATN[k]}</span><b>${hst(h,k)}${carry(h,k)?`<em>+${carry(h,k)}</em>`:''}</b></div>`).join('')}</div>
+      <div class="hstats">${['atk','def','pow','lore'].map(k=>`<div class="hs" title="${STAT_TIP[k]}"><b>${hst(h,k)}${carry(h,k)?`<em>+${carry(h,k)}</em>`:''}</b><span class="hsl"><img src="${iconURL('stat',k,44)}" alt="">${STATN[k]}</span></div>`).join('')}</div>
       <div class="hbars">
         <div class="meter"><span>Mana</span><span>${h.mana} / ${mm}</span></div><div class="bar mana"><i style="width:${mm?h.mana/mm*100:0}%"></i></div>
         <div class="meter"><span>Movement</span><span>${fmt(h.mp)} / ${fmt(mx)}</span></div><div class="bar mp"><i style="width:${h.mp/mx*100}%"></i></div>
@@ -3592,7 +3627,9 @@ function drawBattle(){
   drawBattleHero(c,HERO(),team,BL.side/2,BL.h*0.5,false,mineTurn);
   if(bt.enemyHero)drawBattleHero(c,bt.enemyHero,FAC[bt.enemyHero.fac].col,BL.w-BL.side/2,BL.h*0.5,true,false);
   const foeCol=bt.enemyHero?FAC[bt.enemyHero.fac].col:null,spSc=Math.max(1,Math.round(BL.s*1.8/64*2)/2);
+  const BIGK=new Set(['ogre','troll','drake']);
   const drawSprite=(sheet,k,row,fr,px,py,flip,alpha=1)=>{c.save();c.globalAlpha=alpha;c.imageSmoothingEnabled=false;c.translate(Math.round(px),Math.round(py));if(flip)c.scale(-1,1);
+    {const u=U[k],b=u&&u.up?u.base:k,w=sheet.strip?sheet.strip.width/6:sheet.width/4;if(w>64||(u&&u.amber)||BIGK.has(b))c.scale(1.4,1.4);}
     if(sheet.strip){const im=sheet.strip,fw=im.width/6;c.drawImage(im,stripPose(row,fr)*fw,0,fw,64,Math.round(-fw/2*spSc),Math.round(-60*spSc),fw*spSc,64*spSc);c.restore();return;}
     const fw=sheet.width/4;if(row===3&&ENEMY_ART[k])fr=0;
     c.drawImage(sheet,fr*fw,row*64,fw,64,Math.round(-fw/2*spSc),Math.round(-60*spSc),fw*spSc,64*spSc);c.restore();};
@@ -3845,6 +3882,21 @@ $('#bMenu').onclick=async()=>{if(!S||moving||modalOpen)return;closeHeroMenu();
 $('#bEnd').onclick=()=>{closeHeroMenu();endDay();};
 $('#bTown').onclick=()=>{if(!S||moving||modalOpen)return;if(HERO().x===S.town.x&&HERO().y===S.town.y)arriveTown();else openTown();};
 $('#bCenter').onclick=()=>S&&centerOn(HERO().x,HERO().y);
+/* Town ▾ and Hero ▾: a small list under the bar to jump to a town or holding, or to pick a hero */
+function openPick(kind,btn){const m=$('#pickMenu');if(!S||moving||modalOpen)return;if(!m.hidden&&m.dataset.kind===kind){m.hidden=true;return;}
+  let html='';
+  if(kind==='town'){const hold=S.objs.filter(o=>o.type==='camp'&&o.owned===ME());
+    html=`<button data-pk="t"><img src="${iconURL('crest',S.fac,52)}" alt=""><span><b>${esc(S.town.name)}</b><small>${S.town.taken?'held by a rival':'your town · open'}</small></span></button>`+
+      hold.map(o=>`<button data-pk="c:${o.id}"><img src="${iconURL('crest',o.fac||S.fac,52)}" alt=""><span><b>${esc(campName(o))}</b><small>holding · +${fmt(campIncome(o))} gold a day</small></span></button>`).join('')+(hold.length?'':`<p class="muted">Capture camps and free towns to list them here.</p>`);}
+  else html=S.heroes.map((x,i)=>`<button data-pk="h:${i}" class="${i===S.cur?'on':''}"><img src="${iconURL('hero',x.id,84)}" alt=""><span><b>${esc(x.name)}</b><small>Level ${x.lvl} · ${x.mp>60?`${fmt(x.mp)} movement left`:'done for today'}</small></span></button>`).join('')+(S.heroes.length<3?`<p class="muted">Hire more heroes at the Tavern in town.</p>`:'');
+  m.innerHTML=html;m.dataset.kind=kind;const r=btn.getBoundingClientRect(),pr=$('#cmdbar').getBoundingClientRect();m.style.left=(r.left-pr.left-(btn.previousElementSibling?btn.previousElementSibling.offsetWidth:0))+'px';m.hidden=false;}
+$('#bTownPick').onclick=e=>{e.stopPropagation();openPick('town',e.currentTarget);};
+$('#bHeroPick').onclick=e=>{e.stopPropagation();openPick('hero',e.currentTarget);};
+$('#pickMenu').addEventListener('click',e=>{const b=e.target.closest('[data-pk]');if(!b)return;const v=b.dataset.pk;$('#pickMenu').hidden=true;
+  if(v==='t'){centerOn(S.town.x,S.town.y);if(!S.town.taken)$('#bTown').click();}
+  else if(v[0]==='c'){const o=S.objs.find(q=>q.id===+v.slice(2));if(o)centerOn(o.x,o.y);}
+  else selectHero(+v.slice(2));});
+document.addEventListener('click',e=>{if(!e.target.closest('#pickMenu'))$('#pickMenu').hidden=true;});
 addEventListener('keydown',e=>{
   if(e.key==='Escape'&&!$('#hmenu').hidden){closeHeroMenu();return;}
   if(e.key==='Escape'){if(bt&&bt.targeting){bt.targeting=null;updateBattleUI();return;}const m=$('#modal');if(modalOpen&&m._dismiss!==undefined){m._close(m._dismiss);}return;}
