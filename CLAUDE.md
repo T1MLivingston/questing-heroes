@@ -110,6 +110,11 @@ Everything lives in one object, `S`, so it can be saved as JSON:
 - Weekly sites (`site` objects: Wishing Well, Clover Meadow, Woodcutters' Camp, Abandoned Ore Cart, Amber Hollow) refill each week (`o.week` vs `weekNo()`).
 - Map artifacts (`artifact` objects) are placed by walking distance from your town: levels 1-2 close and unguarded, 3-5 farther out with a guard beside them. Rivals pick them up too.
 
+### Equipment
+
+- `SLOT_LIM`/`SLOT_ORDER`: one item per slot (Head, Neck, Cloak, Main hand, Body, Off hand, Feet), two Rings, three Pack items. `giveItem(h, key)` wears an item if its slot is free, otherwise puts it in `h.pack` (the backpack does nothing). `gear()` reads worn items only. `openHeroSheet` shows the slots, the backpack (click to wear or take off, swapping as needed), the ability, skills and what each stat does.
+- Two spellbook functions exist: `viewSpellbook` (map, read-only) and `openSpellbook` (battle, cast). Don't merge the names: the later declaration would win.
+
 ### Spells and spellbooks
 
 - Map sites: `sage` (Sage's Library: each hero picks +2 Attack, Defense, Power or Lore once) and `altar` (Lesser, Greater and Star altars, tiers 1-3, teach one spell; need a spellbook and Lore ≥ tier; tiers 2-3 are guarded). `furnishMap` places them.
@@ -152,7 +157,8 @@ Debug handle in the browser console: `window.__qh` exposes the state and a few f
 - [ ] Tavern offers two heroes of your banner and two wanderers (+500 gold) each week; hires a second hero; dwelling upgrades and army upgrades work; Library sells a spellbook
 - [ ] Guarded passes block the road until beaten
 - [ ] Level-up choice, end of day income, weekly growth
-- [ ] Click your hero on the map for the quick menu (End day, town, next hero)
+- [ ] Click your hero on the map for the quick menu (End day, town, next hero, Hero details)
+- [ ] Hero details: wear and remove items, backpack overflow; Recruit all in town; per-day income in the top bar
 - [ ] Portals carry heroes and rivals between surface and underworld; spires can be garrisoned and stormed
 - [ ] Split a stack, drag stacks to merge or swap, open the spellbook
 - [ ] Sage's Library and spell altars teach as described
