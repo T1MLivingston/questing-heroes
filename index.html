@@ -546,6 +546,32 @@ body{background:radial-gradient(circle at 30% 0,#1d2a5e,#0d1229 70%);color:var(-
 .edfrom{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;margin-top:10px}
 .edrow{display:grid;grid-template-columns:72px 1fr auto auto;gap:8px;align-items:center;margin-bottom:6px}.edrow img{width:72px;border:1px solid var(--rule)}
 .maprow.mine{margin-top:8px}.mmap img{width:40px;height:30px;object-fit:cover;border:1px solid var(--rule)}
+/* town screen: a big picture of the town, then town info with dwellings on the left and garrison / visiting hero rows on the right */
+.tscreen{display:grid;gap:6px}
+.town:has(.tscreen){gap:8px}
+.tresbot .tres{margin:0;padding:6px 10px;background:linear-gradient(#1c2b6b,#101a48);border:3px solid;border-color:#f0c766 #3d2a05 #3d2a05 #f0c766;color:#fff}.tresbot .tres .muted{color:#aab6ea!important}
+.tscreen .tview{width:100%;border:3px solid;border-color:var(--bev-lo) var(--bev-hi) var(--bev-hi) var(--bev-lo);border-radius:2px}
+.tstrip{display:grid;grid-template-columns:minmax(260px,330px) minmax(0,1fr);gap:8px;background:linear-gradient(#1c2b6b,#101a48);border:3px solid;border-color:#f0c766 #3d2a05 #3d2a05 #f0c766;padding:8px;border-radius:2px;color:#f4f2ff}
+.tinfo{display:grid;gap:6px;align-content:start}
+.tihead{display:flex;align-items:center;gap:8px}.tihead img{width:34px;height:34px}.tihead b{font:800 22px var(--f-display);color:#ffe27a}
+.ticons{display:flex;gap:6px;align-items:center}
+.tic{display:grid;justify-items:center;font:800 13px var(--f-display);padding:3px 8px;border:2px solid #f0c766;background:linear-gradient(#fff0c2,#e2b85c);color:#2b1d05;cursor:pointer;border-radius:3px}.tic span{font-size:20px;line-height:1}
+.tgold{display:inline-flex;align-items:center;gap:4px;margin-left:auto;font:800 18px var(--f-display);color:#ffd96a}.tgold img{width:24px;height:24px}.tgold small{font:600 13px var(--f-body);color:#aab6ea;margin-left:2px}
+.tdw{display:grid;grid-template-columns:repeat(3,1fr);gap:5px}
+.dwc{position:relative;aspect-ratio:1.45;display:grid;place-items:center;background:radial-gradient(circle,#2a3b85,#0b1236);border:2px solid #5f8dff;border-radius:3px;cursor:pointer;padding:0;color:#fff}
+.dwc img{width:58px;height:58px;image-rendering:pixelated}.dwc b{position:absolute;right:4px;bottom:1px;font:900 17px var(--f-display);text-shadow:0 2px 0 #000}
+.dwc.off{filter:grayscale(1);opacity:.4;cursor:default}
+.dwc.tav{background:linear-gradient(#7a4f1d,#4a2d0c);border-color:#f0c766}.dwc.tav span{font-size:24px}.dwc.tav b{position:static;font-size:13px}
+.tarmies{display:grid;gap:6px;align-content:start}
+.trow{display:grid;grid-template-columns:72px repeat(7,minmax(0,1fr));gap:5px;align-items:stretch}
+.trow .slot{aspect-ratio:1}
+.tside{display:grid;justify-items:center;align-content:center;background:rgba(255,226,122,.12);border:2px solid #f0c766;border-radius:3px;padding:2px}
+.tside span{font-size:26px;color:#ffe27a;line-height:1}.tside small{font:800 12px var(--f-display);color:#ffe27a;text-align:center;line-height:1.1}
+.tside.hero img{width:52px;height:52px;image-rendering:pixelated}
+.tnohero{grid-column:2/-1;margin:0;align-self:center;color:#aab6ea!important}
+.tstrip .slot.empty{background:rgba(10,15,44,.55);border-color:#2f3f86;opacity:1}
+.thint{margin:0;font-size:14px;color:#aab6ea!important}
+@media (max-width:900px){.tstrip{grid-template-columns:1fr}.trow{grid-template-columns:56px repeat(7,minmax(0,1fr))}}
 </style>
 
 <div id="app">
@@ -2588,13 +2614,22 @@ function townHTML(){
   const locked=(what,id)=>{const b=BY[id];const miss=(b.req||[]).filter(r=>!t.built[r]);return`<div class="bcard"><h4>${what} is not built yet</h4><p>${b.desc}</p><div class="cost">${costHTML(b.cost,S.res)}</div><div>${miss.length?`<span class="tag no">Needs ${miss.map(r=>BY[r].name).join(', ')}</span>`:`<button class="btn sm" data-build="${id}" ${t.builtToday||!canAfford(b.cost)?'disabled':''}>Build the ${b.name}</button>`}</div></div>`;};
   let body='';
   if(townTab==='overview'){
-    const gr={};S.heroes.forEach(x=>{for(const[k,v]of Object.entries((HBY[x.id].fx||{}).growth||{}))gr[k]=(gr[k]||0)+v;});
-    const inTown=S.heroes.filter(x=>x.x===t.x&&x.y===t.y);
-    body=`<div class="tview-wrap"><canvas class="tview" id="townView" width="960" height="300" aria-label="${t.name}: click a building"></canvas><div class="tv-tip" id="tvTip" hidden></div></div>
-      <div class="facts"><div class="bcard"><h4>Heroes in town</h4><p>${inTown.length?inTown.map(x=>x.name).join(', '):'None. Recruits wait in the garrison.'}</p></div>
-      <div class="bcard"><h4>Garrison</h4><p>${t.garrison.length?t.garrison.map(g=>`${g.n} ${U[g.k].pl}`).join(', '):'Empty'}</p></div>
-      <div class="bcard"><h4>Recruits waiting</h4><p>${FAC[S.fac].units.map((k,i)=>t.built['d'+(i+1)]&&t.pool[k]?`${t.pool[k]} ${U[recruitKey(k)].pl}`:null).filter(Boolean).join(', ')||'None until next week'}</p></div>
-      <div class="bcard"><h4>Relic Hall</h4><p>${t.built.reliquary?`${S.delivered.length}/7 relics home`:'Not built'}</p></div></div>`;
+    const f=FAC[S.fac];
+    const vis=here?h:null,fu=FAC[S.fac].units;
+    const slots=(arr,side)=>Array.from({length:7},(_,i)=>{const g=arr[i];return g?`<button class="slot" data-gtx="${side}${i}" title="${g.n} ${U[g.k].pl}${vis?` · click to move to the ${side==='g'?'hero':'garrison'}`:''}"><img src="${iconURL('unit',g.k,64)}" alt="${U[g.k].name}"><b>${g.n}</b></button>`:'<div class="slot empty"></div>';}).join('');
+    body=`<div class="tscreen"><div class="tview-wrap"><canvas class="tview" id="townView" width="960" height="300" aria-label="${esc(t.name)}: click a building. Click the hall to see everything you can build."></canvas><div class="tv-tip" id="tvTip" hidden></div></div>
+      <div class="tstrip">
+        <div class="tinfo">
+          <div class="tihead"><img src="${iconURL('crest',S.fac,52)}" alt=""><b>${esc(t.name)}</b></div>
+          <div class="ticons"><button class="tic" data-tab="build" title="The hall: see everything you can build"><span>🏛</span>Build</button><button class="tic" data-tab="upgrade" title="Upgrade troops"><span>⚒</span>Upgrade</button><span class="tgold"><img src="${iconURL('res','gold',40)}" alt="">+${fmt(income())}<small>a day</small></span></div>
+          <div class="tdw">${fu.map((k,i)=>{const on=t.built['d'+(i+1)],rk=recruitKey(k);return`<button class="dwc${on?'':' off'}" data-dw="${k}" ${on?'':'disabled'} title="${on?`${f.dw[i]}: ${t.pool[k]||0} ${U[rk].pl} to recruit`:`${f.dw[i]} not built`}"><img src="${iconURL('unit',rk,64)}" alt=""><b>${on?t.pool[k]||0:'–'}</b></button>`;}).join('')}<button class="dwc tav${t.built.tavern?'':' off'}" data-tab="tavern" title="Tavern: hire heroes"><span>🍺</span><b>Tavern</b></button></div>
+        </div>
+        <div class="tarmies">
+          <div class="trow"><div class="tside" title="Garrison: troops left in town defend it"><span>⚑</span><small>Garrison</small></div>${slots(t.garrison,'g')}</div>
+          <div class="trow"><div class="tside hero" title="${vis?esc(vis.name)+' is visiting':'No hero in town'}">${vis?`<img src="${iconURL('hero',vis.id,84)}" alt="">`:'<span>·</span>'}<small>${vis?esc(vis.name):'No hero'}</small></div>${vis?slots(vis.army,'h'):'<p class="muted tnohero">No hero is visiting. Recruits wait in the garrison.</p>'}</div>
+          <p class="muted thint">${vis?'Click a stack to move it between the garrison and the hero.':'Bring a hero to the gate to swap troops.'} Click buildings in the picture; the hall shows everything you can build.</p>
+        </div>
+      </div></div>`;
   }else if(townTab==='recruit'){
     const gr={};S.heroes.forEach(x=>{for(const[k,v]of Object.entries((HBY[x.id].fx||{}).growth||{}))gr[k]=(gr[k]||0)+v;});
     const dw=FAC[S.fac].units.map((k,i)=>t.built['d'+(i+1)]?k:null).filter(Boolean).map(k=>{const rk=recruitKey(k),u=U[rk],av=t.pool[k]||0,mx=Math.min(av,maxAfford(rk));
@@ -2635,6 +2670,7 @@ function townHTML(){
       <div class="grid" style="margin-top:8px">${RELICS.map((Rl,i)=>`<div class="bcard${delivered(i)?' built':''}"><div class="rrow"><img src="${iconURL('relic',i,64)}" alt="" style="width:36px;height:36px"><div><h4>${Rl.name}</h4><p>${relicState(i).txt}</p></div></div><p>Home bonus: ${Rl.deliver}.</p></div>`).join('')}</div>
       <h3 style="margin-top:14px">Rumour Board</h3>${rum.length?`<ul style="margin:0;padding-left:18px">${rum.map(r=>`<li><b>${RELICS[r.r].name}</b>: ${r.txt}.</li>`).join('')}</ul>`:'<p class="muted">No fresh rumours. A new one arrives each week.</p>'}`;
   }
+  if(townTab==='overview')return`<div class="town"><nav class="ttabs" aria-label="Town actions">${tabs}</nav>${body}<div class="tresbot">${resBar}</div></div>`;
   return`<div class="town">${resBar}<nav class="ttabs" aria-label="Town actions">${tabs}</nav>${advice}${body}</div>`;
 }
 /* the town itself: buildings stand in place once built; empty lots show what can go up next */
@@ -2669,7 +2705,7 @@ function drawTownView(cv){
   c.fillStyle='#2b1d10';c.beginPath();c.moveTo(466,252);c.lineTo(466,226);c.arc(480,226,14,Math.PI,0);c.lineTo(494,252);c.fill();
   c.fillStyle='#f2c46a';for(let i=0;i<lv+2;i++){c.fillRect(452,262-kh+i*26,10,12);c.fillRect(498,262-kh+i*26,10,12);}
   c.strokeStyle=outline;c.beginPath();c.moveTo(480,244-kh);c.lineTo(480,214-kh);c.stroke();c.fillStyle=roof;c.beginPath();c.moveTo(480,214-kh);c.quadraticCurveTo(496,212-kh+Math.sin(now/400)*3,512,218-kh);c.lineTo(480,228-kh);c.fill();
-  spot(430,214-kh,100,kh+38,'build','hall2',`${t.built.hall3?'High Seat':t.built.hall2?'Council Hall':'Moot Hall'} (+${fmt(income())} gold a day)`);
+  spot(430,214-kh,100,kh+38,'build','hall2',`${t.built.hall3?'High Seat':t.built.hall2?'Council Hall':'Moot Hall'}: click to see everything you can build (+${fmt(income())} gold a day)`);
   const front=[['d1',70,70,55],['d2',160,70,60],['lib1',255,46,130],['tavern',345,74,62],['market',620,100,46],['reliquary',720,76,70],['d3',810,72,64],['d4',900,72,70]];
   for(const[id,x,w,h]of front){const base=252;if(!BY[id])continue;
     if(!t.built[id]){lot(x,base,w,h,id);continue;}
@@ -2711,7 +2747,7 @@ document.addEventListener('click',async e=>{
 async function openTown(){
   if(modalOpen||S.over)return;
   townTab=townAdvice().tab==='overview'?'overview':'overview';townFocus=null;
-  const p=showModal({title:`<img src="${iconURL('crest',S.fac,52)}" alt="" style="width:44px;height:44px;vertical-align:-12px;margin-right:8px;image-rendering:pixelated">${esc(S.town.name)} <button class="btn sm rename" data-rename-town="1" title="Rename your town">✎ Rename</button>`,body:townHTML(),wide:true,buttons:[{label:'Leave town',value:1,primary:true}],dismiss:1});
+  const p=showModal({title:`<img src="${iconURL('crest',S.fac,52)}" alt="" style="width:44px;height:44px;vertical-align:-12px;margin-right:8px;image-rendering:pixelated">${esc(S.town.name)} <button class="btn sm rename" data-rename-town="1" title="Rename your town">✎ Rename</button>`,body:townHTML(),wide:true,top:true,buttons:[{label:'Leave town ▸',value:1,primary:true}],dismiss:1});
   const m=$('#modal'),body=m.querySelector('.body');
   const go=(tab,id)=>{townTab=tab;townFocus=id||null;refresh();};
   const refresh=()=>{body.innerHTML=townHTML();renderUI();bindTownView(body,go);
@@ -2727,6 +2763,10 @@ async function openTown(){
       if(b.id.startsWith('lib')&&here){learnLibrary();if(b.id==='lib1')HERO().mana=maxMana();}
       if(b.id==='stables'&&here&&HERO().mount==='foot'){HERO().mount='horse';toast(`${HERO().name} takes a horse: +40% movement from tomorrow.`);}
       toast(`${b.name} completed.`);refresh();}
+    else if(el.dataset.dw){go('recruit');return;}
+    else if(el.dataset.gtx){if(!heroHere())return;const side=el.dataset.gtx[0],i=+el.dataset.gtx.slice(1),hh=HERO(),from=side==='g'?t.garrison:hh.army,to=side==='g'?hh.army:t.garrison,st=from[i];
+      if(!st||(side==='h'&&hh.army.length<=1)){if(side==='h')toast('A hero must keep at least one stack.');return;}
+      const ex=to.find(a=>a.k===st.k);if(ex)ex.n+=st.n;else if(to.length<7)to.push({...st});else{toast('No free slot there.');return;}from.splice(i,1);refresh();save();}
     else if(el.dataset.recruit){const bk=el.dataset.recruit,k=recruitKey(bk);const inp=body.querySelector('#rc-'+bk);let n=Math.floor(+inp.value||0);n=clamp(n,0,Math.min(t.pool[bk]||0,maxAfford(k)));if(n<1)return;
       pay(unitCost(k,n));t.pool[bk]-=n;const here=heroHere();
       if(here&&addToArmy(k,n))toast(`${n} ${U[k].pl} join the army.`);else{const g=t.garrison.find(x=>x.k===k);if(g)g.n+=n;else t.garrison.push({k,n});toast(here?`The army has no free slot. ${n} ${U[k].pl} wait in the garrison.`:`${n} ${U[k].pl} wait in the garrison.`);}
