@@ -27,6 +27,9 @@ No other libraries, images or audio are included. Art made later with ChatGPT or
 | 7 hero portraits converted from Headshot Workshop 02 (Boopis, Engelman, Grimes, Parker, Rago, Rimmer, Tempest) | Same generator; resized, palette-snapped and framed by a local script | 2026-11-07 | Same as above |
 | Terrain & Scenery Pack 03: 11 ground types, corner overlays, roads, water, 14 scenery props, campfire and torch (`assets/terrain`) | Generated with ChatGPT image generation, palette-snapped, transitions cut from exact grid masks (pack README) | 2026-11-08 | Same as above |
 
+| Headshots Pack 04: 32 hero portraits, including candidate faces for the two unnamed slots (`assets/portraits/heroes`, replacing the earlier 12) | Generated with ChatGPT image generation, palette-normalized and outlined (pack README) | 2026-11-08 | Same as above |
+| Scenery Expansion Pack 05: 5 trees, 4 mountain fillers, 4 rock formations with battle views (`assets/terrain/scenery`, `assets/terrain/battle`) | Generated with ChatGPT image generation, palette-snapped (pack README) | 2026-11-08 | Same as above |
+
 The generated source images (high-res magenta PNGs) are kept outside this repo.
 
 ## Real names
