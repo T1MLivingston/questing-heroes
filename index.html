@@ -695,23 +695,22 @@ img{image-rendering:auto}
 #miniwrap.off{padding:0;border:none;background:none}#miniwrap.off #mini{display:none}#miniwrap.off #miniTog{transform:none;position:static;border-bottom:2px solid #c9a24a;border-radius:3px}
 @media (max-width:820px){#miniwrap{transform:scale(.75);transform-origin:bottom right}}
 
-/* v20: thin command bar under the top bar; near-square portrait; stat number above its label */
-#app{grid-template-rows:auto auto minmax(0,1fr)}
-.cmdbar{position:relative;display:flex;gap:8px;align-items:center;padding:0 2px}
+/* v20: command bar over the map column only; quick icons for towns and heroes; near-square portrait; stat number above its label */
+.mapcol{display:grid;grid-template-rows:auto minmax(0,1fr);gap:8px;min-height:0;min-width:0}
+.cmdbar{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
 .cmdbar .btn{padding:5px 14px;font-size:16px;display:inline-flex;align-items:center;gap:6px}
 .cmdbar .btn .bi{width:20px;height:20px}
-.cmdbar .split{display:inline-flex}.cmdbar .split .btn:first-child{padding-right:10px}.cmdbar .caret{padding:5px 9px;margin-left:2px}
-.cmdbar #bEnd{margin-left:auto;min-width:200px;justify-content:center}
-.pickmenu{position:absolute;top:calc(100% + 4px);z-index:60;min-width:260px;max-width:340px;display:grid;gap:4px;padding:8px;background:#f1e2b8;border:3px solid #c9a24a;border-radius:4px;box-shadow:0 10px 24px rgba(0,0,0,.45)}
-.pickmenu button{display:flex;gap:10px;align-items:center;text-align:left;background:#fbecc0;border:2px solid var(--rule);border-radius:3px;padding:5px 8px;cursor:pointer;font:inherit;color:var(--text)}
-.pickmenu button:hover,.pickmenu button.on{border-color:var(--blue);background:#fff3d0}
-.pickmenu img{width:40px;height:40px;image-rendering:pixelated;border-radius:2px}
-.pickmenu b{display:block;font:800 16px var(--f-display);color:var(--blue-dk)}.pickmenu small{color:var(--muted)}.pickmenu p{margin:4px 2px;font-size:13px}
-.hportrait{height:272px;place-items:center}.hportrait>img{width:268px;height:268px;margin-bottom:0}
+.cmdbar #bEnd{margin-left:auto;min-width:190px;justify-content:center}
+.qicons{display:flex;gap:4px;margin-right:12px}
+.qi{position:relative;width:36px;height:36px;padding:0;border:2px solid #c9a24a;border-radius:4px;background:#1a2450;cursor:pointer;overflow:hidden}
+.qi img{width:100%;height:100%;image-rendering:pixelated;object-fit:cover}
+.qi:hover{border-color:#fff3c8}.qi.on{border-color:#fff3c8;box-shadow:0 0 0 2px var(--blue)}
+.qi.hero i{position:absolute;right:2px;bottom:2px;width:7px;height:7px;border-radius:50%;background:#5fd07a;border:1px solid #102}
+.hportrait{height:300px;place-items:center}.hportrait>img{width:296px;height:296px;margin-bottom:0}
 .hstats .hs{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;padding:3px 2px}
 .hstats .hs b{font-size:26px;line-height:1.05}.hstats .hs .hsl{font-size:12px;justify-content:center}
-@media (max-height:860px){.hportrait{height:226px}.hportrait>img{width:222px;height:222px}}
-@media (max-width:820px){.cmdbar{flex-wrap:wrap}.cmdbar #bEnd{min-width:0;flex:1}}
+@media (max-height:860px){.hportrait{height:168px}.hportrait>img{width:164px;height:164px}}
+@media (max-width:820px){.cmdbar #bEnd{min-width:0;flex:1}.mapcol{order:-1}}
 </style>
 
 <div id="app">
@@ -723,19 +722,20 @@ img{image-rendering:auto}
     <div class="date" id="date"></div>
     <div class="acts"><button class="btn icon" id="bMenu" title="Game menu"><img class="bi" src="assets/ui/icons/settings.png" alt="Menu"></button></div>
   </div>
-  <div class="cmdbar" id="cmdbar">
-    <div class="split"><button class="btn" id="bTown"><img class="bi" src="assets/ui/icons/town.png" alt="">Town<span class="kbd">T</span></button><button class="btn caret" id="bTownPick" title="Your towns and holdings" aria-label="Choose a town">▾</button></div>
-    <div class="split"><button class="btn" id="bCenter" title="Centre on hero (C), next hero (H)"><img class="bi" src="assets/ui/icons/hero.png" alt="">Hero<span class="kbd">C</span></button><button class="btn caret" id="bHeroPick" title="Choose a hero" aria-label="Choose a hero">▾</button></div>
-    <button class="btn primary" id="bEnd"><img class="bi" src="assets/ui/icons/end_turn.png" alt="">End day<span class="kbd">E</span></button>
-    <div class="pickmenu" id="pickMenu" hidden></div>
-  </div>
   <div class="main">
     <aside class="ledger">
       <div class="card team" id="heroCard"></div>
       <div class="card"><div class="armyhead"><h3>Army</h3><span class="muted" id="armyPow"></span></div><div class="army" id="army"></div></div>
       <div class="card" id="edPanel" hidden></div>
     </aside>
+    <div class="mapcol">
+    <div class="cmdbar" id="cmdbar">
+      <button class="btn" id="bTown"><img class="bi" src="assets/ui/icons/town.png" alt="">Town<span class="kbd">T</span></button><div class="qicons" id="qTowns"></div>
+      <button class="btn" id="bCenter" title="Centre on hero (C), next hero (H)"><img class="bi" src="assets/ui/icons/hero.png" alt="">Hero<span class="kbd">C</span></button><div class="qicons" id="qHeroes"></div>
+      <button class="btn primary" id="bEnd"><img class="bi" src="assets/ui/icons/end_turn.png" alt="">End day<span class="kbd">E</span></button>
+    </div>
     <div class="mapwrap"><canvas id="map" aria-label="Adventure map"></canvas><div id="miniwrap" hidden><canvas id="mini" title="Map overview: click to look there"></canvas><button id="miniTog" title="Hide or show the map overview">▾</button></div><div id="hover"></div><div id="hmenu" hidden></div></div>
+    </div>
   </div>
 </div>
 
@@ -2558,7 +2558,7 @@ function renderUI(){
   $('#armyPow').textContent=`Strength ${fmt(armyPower(h.army,h))}`;
   const tn=townTabs().filter(x=>x.id!=='overview').reduce((a,x)=>a+(x.n||0),0);
   $('#bTown').innerHTML=`<img class="bi" src="${ART_BASE}ui/icons/town.png" alt="">Town<span class="kbd">T</span>${tn?`<span class="bdg">${tn}</span>`:''}`;$('#bTown').classList.toggle('need',tn>0);
-  $('#bEnd').classList.toggle('need',S.heroes.every(x=>x.mp<70));
+  $('#bEnd').classList.toggle('need',S.heroes.every(x=>x.mp<70));renderQuick();
 }
 function relicState(i){
   if(delivered(i))return{cls:'done',short:'Home',txt:'safe in the Relic Hall'};
@@ -3882,21 +3882,14 @@ $('#bMenu').onclick=async()=>{if(!S||moving||modalOpen)return;closeHeroMenu();
 $('#bEnd').onclick=()=>{closeHeroMenu();endDay();};
 $('#bTown').onclick=()=>{if(!S||moving||modalOpen)return;if(HERO().x===S.town.x&&HERO().y===S.town.y)arriveTown();else openTown();};
 $('#bCenter').onclick=()=>S&&centerOn(HERO().x,HERO().y);
-/* Town ▾ and Hero ▾: a small list under the bar to jump to a town or holding, or to pick a hero */
-function openPick(kind,btn){const m=$('#pickMenu');if(!S||moving||modalOpen)return;if(!m.hidden&&m.dataset.kind===kind){m.hidden=true;return;}
-  let html='';
-  if(kind==='town'){const hold=S.objs.filter(o=>o.type==='camp'&&o.owned===ME());
-    html=`<button data-pk="t"><img src="${iconURL('crest',S.fac,52)}" alt=""><span><b>${esc(S.town.name)}</b><small>${S.town.taken?'held by a rival':'your town · open'}</small></span></button>`+
-      hold.map(o=>`<button data-pk="c:${o.id}"><img src="${iconURL('crest',o.fac||S.fac,52)}" alt=""><span><b>${esc(campName(o))}</b><small>holding · +${fmt(campIncome(o))} gold a day</small></span></button>`).join('')+(hold.length?'':`<p class="muted">Capture camps and free towns to list them here.</p>`);}
-  else html=S.heroes.map((x,i)=>`<button data-pk="h:${i}" class="${i===S.cur?'on':''}"><img src="${iconURL('hero',x.id,84)}" alt=""><span><b>${esc(x.name)}</b><small>Level ${x.lvl} · ${x.mp>60?`${fmt(x.mp)} movement left`:'done for today'}</small></span></button>`).join('')+(S.heroes.length<3?`<p class="muted">Hire more heroes at the Tavern in town.</p>`:'');
-  m.innerHTML=html;m.dataset.kind=kind;const r=btn.getBoundingClientRect(),pr=$('#cmdbar').getBoundingClientRect();m.style.left=(r.left-pr.left-(btn.previousElementSibling?btn.previousElementSibling.offsetWidth:0))+'px';m.hidden=false;}
-$('#bTownPick').onclick=e=>{e.stopPropagation();openPick('town',e.currentTarget);};
-$('#bHeroPick').onclick=e=>{e.stopPropagation();openPick('hero',e.currentTarget);};
-$('#pickMenu').addEventListener('click',e=>{const b=e.target.closest('[data-pk]');if(!b)return;const v=b.dataset.pk;$('#pickMenu').hidden=true;
+/* quick icons beside Town and Hero: your town and holdings, and each hero; click to go there or select */
+function renderQuick(){if(!S)return;const hold=S.objs.filter(o=>o.type==='camp'&&o.owned===ME());
+  $('#qTowns').innerHTML=`<button class="qi" data-q="t" title="${esc(S.town.name)}${S.town.taken?' (held by a rival)':': open the town'}"><img src="${iconURL('crest',S.fac,52)}" alt=""></button>`+hold.map(o=>`<button class="qi" data-q="c:${o.id}" title="${esc(campName(o))}: +${fmt(campIncome(o))} gold a day"><img src="${iconURL('crest',o.fac||S.fac,52)}" alt=""></button>`).join('');
+  $('#qHeroes').innerHTML=S.heroes.map((x,i)=>`<button class="qi hero${i===S.cur?' on':''}" data-q="h:${i}" title="${esc(x.name)} · level ${x.lvl} · ${x.mp>60?fmt(x.mp)+' movement left':'done for today'}"><img src="${iconURL('hero',x.id,84)}" alt="">${x.mp>60?'<i></i>':''}</button>`).join('');}
+$('#cmdbar').addEventListener('click',e=>{const b=e.target.closest('[data-q]');if(!b||!S||moving||modalOpen)return;const v=b.dataset.q;
   if(v==='t'){centerOn(S.town.x,S.town.y);if(!S.town.taken)$('#bTown').click();}
   else if(v[0]==='c'){const o=S.objs.find(q=>q.id===+v.slice(2));if(o)centerOn(o.x,o.y);}
   else selectHero(+v.slice(2));});
-document.addEventListener('click',e=>{if(!e.target.closest('#pickMenu'))$('#pickMenu').hidden=true;});
 addEventListener('keydown',e=>{
   if(e.key==='Escape'&&!$('#hmenu').hidden){closeHeroMenu();return;}
   if(e.key==='Escape'){if(bt&&bt.targeting){bt.targeting=null;updateBattleUI();return;}const m=$('#modal');if(modalOpen&&m._dismiss!==undefined){m._close(m._dismiss);}return;}
