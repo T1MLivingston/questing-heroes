@@ -42,6 +42,7 @@ No other libraries, images or audio are included. Art made later with ChatGPT or
 | Binx portrait without collar (`assets/portraits/heroes/binx_*.png`) | Supplied by the author (generated pixel portrait); 64 px made by halving locally | 2026-11-08 | Same as above |
 | Shadow portrait (hooded) | Supplied by the author; 128 px upscaled from the 64 px original | 2026-11-08 | Same as above |
 | High Detail Troops A-D: 128 px battle strips with team masks and 128 px recruit cards for 38 troops (`assets/units`, `assets/portraits/units/*_128.png`) | Re-exported from the original generated art on the shared palette (pack READMEs) | 2026-11-08 | Same as above |
+| Groves, Well, Clover & Rocks: 6 tree groves, wishing well, four-leaf clover, 6 rock groups (`assets/terrain/scenery`, `assets/map/sites`) | Generated scenery on the shared palette (pack README) | 2026-11-08 | Same as above |
 | Half-size move cursor (`assets/ui/cursors/move_small.png`) | Downscaled locally from Pack 09's move cursor | 2026-11-08 | Same as above |
 
 The generated source images (high-res magenta PNGs) are kept outside this repo.

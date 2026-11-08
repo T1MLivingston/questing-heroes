@@ -2214,7 +2214,8 @@ let terrainCv=null,terrainPh=null;
 /* Terrain art (assets/terrain, native 32px grid). Until every file loads, or if one fails, the drawn terrain below is used. */
 const TA_N=32,TA_ROW={meadow:0,forest_floor:1,dry_grass:2,dirt:3,sand:4,rocky:5,snow:6,swamp:7,ash:8,cobblestone:9,water:10};
 const TA_EDGES=['dry_grass','dirt','swamp','forest_floor','rocky','sand','ash'];
-const TA_SCEN=['oak','pine','autumn_tree','dead_tree','mountain_gray','mountain_snow','ochre_hill','flowers_meadow','flowers_blue','shrub','reeds','mushrooms','boulder','fallen_log',
+const GROVES=['oak_grove','pine_stand','birch_copse','autumn_grove','old_growth_thicket','crescent_tree_line'],ROCKS=['sandstone_boulders','ochre_rock_ledge','taupe_granite_pair','umber_slate_ledge'],GROUNDS=['brown_rubble_fan','taupe_pebble_scatter'];
+const TA_SCEN=[...GROVES,...ROCKS,...GROUNDS,'oak','pine','autumn_tree','dead_tree','mountain_gray','mountain_snow','ochre_hill','flowers_meadow','flowers_blue','shrub','reeds','mushrooms','boulder','fallen_log',
   'silver_birch','weeping_willow','red_maple','blue_cedar','coastal_palm','ridge_spine','rocky_shoulder','foothill_chain','snowy_saddle','split_boulder','leaning_monolith','basalt_columns','stone_arch','lighthouse','shipwreck'];
 const TA_FILES=['terrain/ground_atlas.png','terrain/water_anim.png','terrain/roads/cobblestone.png',...TA_EDGES.map(f=>`terrain/edges/${f}.png`),...[0,1,2,3].map(p=>`terrain/edges/water_${p}.png`),...[0,1,2,3].map(p=>`terrain/edges/river_${p}.png`),'terrain/scenery/bridge_ew.png','terrain/scenery/bridge_ns.png',...TA_SCEN.map(k=>`terrain/scenery/${k}.png`)];
 let terrArtReady=false;
@@ -2261,7 +2262,7 @@ function renderTerrainArt(){
     const run2=crag(x-1,y)&&crag(x+1,y)&&crag(x+2,y),run1=crag(x-1,y)&&crag(x+1,y);
     if(run2){hills.push({x,y,w:2});P(north(y)?'snowy_saddle':'ridge_spine',x*N+32,y*N+30);}
     else if(run1){hills.push({x,y,w:1});P(under(y)?'basalt_columns':pick2(['rocky_shoulder','foothill_chain']),x*N+16,y*N+30);}
-    else if(!hills.some(p=>Math.max(Math.abs(p.x-x),Math.abs(p.y-y))<=1)){hills.push({x,y,w:0});P(under(y)?pick2(['leaning_monolith','split_boulder']):pick2(['ochre_hill','split_boulder','split_boulder','leaning_monolith']),x*N+16+j(4),y*N+30);}
+    else if(!hills.some(p=>Math.max(Math.abs(p.x-x),Math.abs(p.y-y))<=1)){hills.push({x,y,w:0});P(under(y)?pick2(['leaning_monolith','split_boulder','umber_slate_ledge','taupe_granite_pair']):pick2(['ochre_hill','split_boulder','sandstone_boulders','ochre_rock_ledge','umber_slate_ledge','taupe_granite_pair','leaning_monolith']),x*N+16+j(4),y*N+30);}
     else P('boulder',x*N+16+j(10),y*N+26+j(4));}
   // the waterfront: a wreck out on open water, and the odd lighthouse on a shore
   {let wrecks=Math.round(W/30),lights=Math.round(W/30);for(let k=0;k<600&&(wrecks>0||lights>0);k++){const x=2+Math.floor(g()*(W-4)),y=2+Math.floor(g()*(H-4)),i=idx(x,y);
@@ -2271,7 +2272,17 @@ function renderTerrainArt(){
   {let arches=Math.round(W/22);for(let k=0;k<400&&arches>0;k++){const x=1+Math.floor(g()*(W-2)),y=2+Math.floor(g()*(H-3));if(under(y))continue;
     const ok=[-1,0,1].every(dx=>{const i=idx(x+dx,y);return S.tiles[i]===T.GRASS&&!busy.has(i)&&!busy.has(i-W);});if(!ok)continue;
     P('stone_arch',x*N+16,y*N+30);for(const dx of[-1,0,1])busy.add(idx(x+dx,y));arches--;}}
+  /* groves: one painted stand of trees covers a block of forest (its base rows), and single trees fill the rest */
+  const grove=new Set();
+  {const fz=(x,y)=>inb(x,y)&&S.tiles[idx(x,y)]===T.FOREST&&!under(y)&&!busy.has(idx(x,y))&&!grove.has(idx(x,y));
+    for(let y=H-2;y>=2;y--)for(let x=1;x<W-6;x++){if(hv(x*7,y*13)%5)continue;const zz=S.biome==='autumn'&&hv(x>>2,y>>2)%3?1:S.biome==='high'&&hv(x>>2,y>>2)%2?0:hv(x>>2,y>>2)%6;
+      const k=hv(x,y)%7===0?'old_growth_thicket':hv(x,y)%7===1?'crescent_tree_line':zz===0||zz===3?'pine_stand':zz===1?'autumn_grove':zz===2||zz===4?'birch_copse':'oak_grove';
+      const img=taImg(`scenery/${k}.png`),tw=Math.round((img.width||160)/N),th=Math.round((img.height||128)/N);
+      let ok=true;for(let dy=0;dy<2&&ok;dy++)for(let dx=0;dx<tw&&ok;dx++)if(!fz(x+dx,y-dy))ok=false;if(!ok)continue;
+      for(let dy=0;dy<th;dy++)for(let dx=0;dx<tw;dx++){const xx=x+dx,yy=y-dy;if(inb(xx,yy)&&S.tiles[idx(xx,yy)]===T.FOREST)grove.add(idx(xx,yy));}
+      P(k,x*N+tw*N/2,(y+1)*N);}}
   for(let y=0;y<H;y++)for(let x=0;x<W;x++){const t=S.tiles[idx(x,y)],r=g(),X=x*N+16,Y=y*N+28;
+    if(t===T.FOREST&&grove.has(idx(x,y)))continue;
     if(t===T.FOREST&&under(y)){P(hv(x,y)%4?'dead_tree':'pine',X+j(8),Y+2+j(4));continue;}
     if(t===T.FOREST){
       // groves by region: pine and cedar, oak and birch, maples and autumn trees; willows by marsh, palms on the shore
@@ -2283,12 +2294,12 @@ function renderTerrainArt(){
     if(busy.has(idx(x,y)))continue;
     const edge=near4(x,y,T.FOREST)||near4(x,y,T.CRAG)||lakeNear4(x,y),dk=edge?1:0.2;
     if(t===T.BOG){if(r<0.14*dk)P('reeds',X+j(14),Y+j(8));}
-    else if(t===T.HEATH){if(r<0.06*dk)P('shrub',X+j(14),Y+j(8));else if(r<0.08*dk)P('flowers_blue',X+j(14),Y+j(8));}
+    else if(t===T.HEATH){if(r<0.06*dk)P('shrub',X+j(14),Y+j(8));else if(r<0.08*dk)P('flowers_blue',X+j(14),Y+j(8));else if(r<0.095*dk)P(pick2(GROUNDS),X+j(10),Y+j(6));}
     else if(t===T.GRASS&&under(y)){if(r<0.08)P('mushrooms',X+j(14),Y+j(8));else if(r<0.12)P('boulder',X+j(14),Y+j(8));}
     else if(t===T.GRASS){const fr=near4(x,y,T.FOREST);
       if(fr&&r<0.05)P('mushrooms',X+j(14),Y+j(8));else if(fr&&r<0.08)P('fallen_log',X,Y+j(6));
-      else if(r<0.035*dk)P('flowers_meadow',X+j(14),Y+j(8));else if(r<0.05*dk)P('flowers_blue',X+j(14),Y+j(8));else if(r<0.08*dk)P('shrub',X+j(14),Y+j(8));else if(r<0.1*dk)P('boulder',X+j(14),Y+j(8));}
-    else if(t===T.DIRT&&r<0.06)P('boulder',X+j(14),Y+j(8));}
+      else if(r<0.035*dk)P('flowers_meadow',X+j(14),Y+j(8));else if(r<0.05*dk)P('flowers_blue',X+j(14),Y+j(8));else if(r<0.08*dk)P('shrub',X+j(14),Y+j(8));else if(r<0.1*dk)P(near4(x,y,T.CRAG)&&r<0.093*dk?pick2(['sandstone_boulders','taupe_granite_pair']):'boulder',X+j(14),Y+j(8));}
+    else if(t===T.DIRT&&r<0.06)P(r<0.03?pick2(GROUNDS):'boulder',X+j(14),Y+j(8));}
   props.sort((a,b)=>a.y-b.y);
   for(const p of props){const img=taImg(`scenery/${p.k}.png`);sc.drawImage(img,Math.round(p.x-img.width/2),Math.round(p.y-img.height+4));}
   const lake=(x,y)=>tl(x,y)===T.LAKE&&!RV.has(idx(clamp(x,0,W-1),clamp(y,0,H-1))),anim=taImg('water_anim.png');
@@ -2460,7 +2471,9 @@ function drawObj(c,o){
   case 'flot':{const t=performance.now()/500;c.fillStyle='rgba(200,230,240,.35)';c.beginPath();c.ellipse(cx,cy+12,13,4,0,0,7);c.fill();if(!spriteAt(c,`ocean/${o.k}.png`,cx,cy+12+Math.sin(t+o.y)*1.5,TS/32*0.85,o.k==='floating_chest'?4:1,250)){c.fillStyle='#a07040';c.fillRect(cx-6,cy-4,12,10);}break;}
   case 'gem':{const t=performance.now()/500;c.fillStyle='rgba(0,0,0,.3)';c.beginPath();c.ellipse(cx,cy+12,10,4,0,0,7);c.fill();if(!spriteAt(c,`gems/${o.k}.png`,cx,cy+10+Math.sin(t+o.x)*1.5,TS/32*0.85)){c.fillStyle='#c46bff';c.beginPath();c.arc(cx,cy,7,0,7);c.fill();}break;}
   case 'site':{const spent=o.week===weekNo();c.globalAlpha=spent?0.55:1;c.fillStyle='rgba(0,0,0,.3)';c.beginPath();c.ellipse(cx,cy+12,16,5,0,0,7);c.fill();c.strokeStyle='#26241f';c.lineWidth=1.2;
-    if(o.k==='wish'){c.fillStyle='#8a867a';c.beginPath();c.ellipse(cx,cy+5,12,6,0,0,7);c.fill();c.stroke();c.fillStyle=spent?'#2c3a4a':'#5f9fd0';c.beginPath();c.ellipse(cx,cy+4,8,3.5,0,0,7);c.fill();
+    if(o.k==='wish'&&spriteAt(c,'map/sites/wishing_well.png',cx,cy+TS/2-2,TS/32*0.75)){}
+    else if(o.k==='clover'&&spriteAt(c,'map/sites/four_leaf_clover.png',cx,cy+TS/2-4,TS/32)){}
+    else if(o.k==='wish'){c.fillStyle='#8a867a';c.beginPath();c.ellipse(cx,cy+5,12,6,0,0,7);c.fill();c.stroke();c.fillStyle=spent?'#2c3a4a':'#5f9fd0';c.beginPath();c.ellipse(cx,cy+4,8,3.5,0,0,7);c.fill();
       c.fillStyle='#6b4a2e';c.fillRect(cx-11,cy-14,3,18);c.fillRect(cx+8,cy-14,3,18);c.fillStyle='#8b3a2a';c.beginPath();c.moveTo(cx-15,cy-12);c.lineTo(cx,cy-22);c.lineTo(cx+15,cy-12);c.closePath();c.fill();c.stroke();if(!spent){c.fillStyle='#f2c94c';c.fillRect(cx-2,cy-4,3,3);}}
     else if(o.k==='clover'){c.fillStyle='#4f8a3a';c.beginPath();c.ellipse(cx,cy+6,15,7,0,0,7);c.fill();for(const [dx,dy] of[[-4,-4],[4,-4],[-4,4],[4,4]]){c.fillStyle='#6cc25a';c.beginPath();c.arc(cx+dx,cy-4+dy,4.5,0,7);c.fill();c.stroke();}c.strokeStyle='#2e5a22';c.beginPath();c.moveTo(cx,cy-4);c.lineTo(cx+3,cy+8);c.stroke();}
     else if(o.k==='woodcamp'){drawRes(c,'timber',cx-6,cy+4,9);c.fillStyle='#8a8a92';c.beginPath();c.moveTo(cx+8,cy-10);c.lineTo(cx+15,cy-6);c.lineTo(cx+10,cy-2);c.closePath();c.fill();c.strokeStyle='#5a3a1e';c.lineWidth=2;c.beginPath();c.moveTo(cx+10,cy-6);c.lineTo(cx+4,cy+6);c.stroke();}
