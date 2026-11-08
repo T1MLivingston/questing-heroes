@@ -37,7 +37,7 @@ The generated source images (high-res magenta PNGs) are kept outside this repo.
 
 ## Real names
 
-The heroes are named after people (and possibly pets) from the author's life: Bear, Dorothy, Oliver, Battaglia, Engelman, Tempest, Grimes, Rimmer, Parker, Shadow, Rago, Binx, Boopis, Monkey, Schmickle, O'Malley, Vargas, Sheila, Lawrence, Davis, Love, Michael, Livingston, Ivan, Dupengeiser, Slack, Perry, Rocky, Elvis and Letchworth. Two slots (one Necromancer, one Merfolk) are still placeholders.
+The heroes are named after people (and possibly pets) from the author's life: Bear, Dorothy, Oliver, Battaglia, Engelman, Tempest, Grimes, Rimmer, Parker, Shadow, Rago, Binx, Boopis, Monkey, Schmickle, O'Malley, Vargas, Sheila, Lawrence, Davis, Love, Michael, Livingston, Ivan, Dupengeiser, Slack, Perry, Rocky, Elvis, Letchworth, William IV and Griffiths. The last two names, William IV (Necromancer) and Griffiths (Merfolk), complete the roster.
 
 - Fine for a private game. Before any public release, get each person's OK to use their name, or switch to invented names.
 - Some names match well-known people or fictional characters. A name alone is fine. Don't add likenesses, catchphrases, songs, costumes or other traits that point to a famous person or character.

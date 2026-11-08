@@ -635,6 +635,9 @@ img{image-rendering:auto}
 .brand img,.pick .ph img,.tihead img,.slotrow img,.fheroes img,.mmap img,.hsel img,.rwho img,.hsum img,.res img,.tres img,.yield img,.relbar img,.rl img,.sc img,.cost img{image-rendering:auto!important}
 .hportrait img,.hport,.uimg img,.thero img,.tbanner,.bthumb img{image-rendering:pixelated}
 @media (max-width:1250px){.yield small{display:none}}
+.fheroes{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.fheroes img{width:100%;height:auto;aspect-ratio:1}
+.hcard .hab{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-height:0;font-size:15px;line-height:1.3;align-self:stretch;text-align:center}
 </style>
 
 <div id="app">
@@ -833,8 +836,8 @@ const HEROES=[
 ];
 /* placeholder heroes fill every faction to four; rename them and give them art later */
 HEROES.push(
-  {id:'necro4',name:'Unnamed Necromancer',blank:true,fac:'necro',type:'Might',st:[2,2,1,1],ab:'Bone Collector',ad:'Bone Thralls +3 growth per week.',sk:[],sp:[],fx:{growth:{thrall:3}}},
-  {id:'mer2',name:'Unnamed Merfolk',blank:true,fac:'merfolk',type:'Might',st:[2,2,1,1],ab:'Shell Warden',ad:'Shellbacks +3 defense.',sk:[],sp:[],fx:{unitDef:{shell:3}}},
+  {id:'necro4',name:'William IV',fac:'necro',type:'Might',st:[2,2,1,1],ab:'Bone Collector',ad:'Bone Thralls +3 growth per week.',sk:[],sp:[],fx:{growth:{thrall:3}}},
+  {id:'mer2',name:'Griffiths',fac:'merfolk',type:'Might',st:[2,2,1,1],ab:'Shell Warden',ad:'Shellbacks +3 defense.',sk:[],sp:[],fx:{unitDef:{shell:3}}},
 );
 HEROES.push(
   {id:'battaglia',name:'Battaglia',fac:'rangers',type:'Magic',st:[0,1,3,2],ab:'Champion of the Vale',ad:'Antler Knights +2 attack and +2 defense.',sk:[],sp:[],fx:{unitAtk:{antler:2},unitDef:{antler:2}}},
@@ -900,6 +903,14 @@ const START_KIT={bear:['shieldcraft','buckler'],dorothy:['meditation','breath'],
 HEROES.forEach(h=>{const k=START_KIT[h.id];if(k){h.sk=[k[0]];h.item=k[1];}});
 /* starting stats: one higher across the board, more on each hero's main stat, and a personal extra point */
 for(const h of HEROES){if(h._st)continue;h._st=1;const r=hash(h.id);h.st=h.st.map(v=>v+1);const main=h.type==='Might'?(h.st[0]>=h.st[1]?0:1):(h.st[2]>=h.st[3]?2:3);h.st[main]+=1+(r%2);h.st[(r>>>3)%4]+=1;}
+/* one-line versions of each ability for the hero cards; the full text is under Details */
+const AB_SHORT={bear:'Oak Wardens grow faster',dorothy:'Mend heals 50% more',oliver:'Heath and bog cost less',engelman:'Echoes a second spell',tempest:'Chain Spark hits one more',
+  parker:'Rats and Wraiths +2 speed',shadow:'Raises 15% of the fallen',grimes:'Rune Sentinels +3 defense',boopis:'Hound Packs grow faster',rocky:'Seahorses +2 attack, +2 speed',
+  monkey:'First stack acts twice',binx:'Sees farther and exactly',omalley:'Plunder pays 50% more',vargas:'Gunners hit harder, shoot more',sheila:'Squall costs half',
+  davis:'Longbows +1 damage, +4 shots',love:'Healing lifts morale',ivan:'Great Forge costs less',rago:'Hierophants +2 attack and shots',dupengeiser:'Raises a scalding geyser',
+  rimmer:'Star Owls +2 attack, +1 speed',schmickle:'Badgers +2 defense, +1 speed',elvis:'Longer charms, +1 morale',necro4:'Bone Thralls grow faster',mer2:'Shellbacks +3 defense',
+  battaglia:'Antler Knights +2 / +2',lawrence:'Better Mend, more Deckhands',michael:'Dryads +2 attack and defense',livingston:'Entangle lasts longer',slack:'Delvers +2 attack, hot Ember',
+  perry:'Firebrand Smiths +2 attack',letchworth:'Eels +2 shots, +1 damage'};
 const HBY=Object.fromEntries(HEROES.map(h=>[h.id,h]));
 
 const RELIC_LIST=[
@@ -3492,7 +3503,6 @@ async function pickFaction(opt={}){
       return`<div class="pick fcard" style="--c:${f.col};--c2:${f.col2}" ${(opt.exclude||[]).includes(k)?'aria-disabled="true"':''}><button class="fpick" data-fac="${k}" ${(opt.exclude||[]).includes(k)?'disabled':''} aria-label="Choose the ${f.arch}"></button>
         <div class="ph"><img src="${iconURL('crest',k,52)}" alt=""><div><h3>${f.arch}</h3><div class="sub">${f.name}</div></div></div>
         <div class="tags">${f.tags.map(t=>`<span>${t}</span>`).join('')}</div>
-        <p class="fblurb">${FAC_BLURB[k]}</p>
         <div class="fheroes">${hs.map(h=>`<img src="${iconURL('hero',h.id,84)}" alt="${esc(h.name)}" title="${esc(h.name)} · ${h.type}">`).join('')}</div>
         <details class="ftroops"><summary>Troops ▾</summary><div class="tlist">${f.units.map(u=>`<span><img src="${iconURL('unit',u,48)}" alt=""><b>${U[u].name}</b><em>${U[u].desc}</em></span>`).join('')}</div></details></div>`;}).join('')}</div>`;
     const pr=showModal({title:opt.who?`${opt.who}: choose your banner`:'Choose your banner',body,wide:true,buttons:[]});
@@ -3505,11 +3515,12 @@ async function pickHero(fk,opt={}){
   const f=FAC[fk],list=HEROES.filter(h=>h.fac===fk);
   const book=h=>h.type==='Magic'||h.sp.length>0;
   const body=`<div class="picks heroes4">${list.map(h=>`<div class="pick hcard" style="--c:${f.col};--c2:${f.col2}"><button class="fpick" data-hero="${h.id}" aria-label="Choose ${esc(h.name)}"></button>
+      <h3>${esc(h.name)}</h3>
       <img class="hport" src="${iconURL('hero',h.id,128)}" alt="">
-      <h3>${esc(h.name)}</h3><div class="sub">${h.type} hero <span class="bk${book(h)?'':' none'}" title="${book(h)?'Starts with a spellbook':'No spellbook: buy one at the Lantern Library'}">📖</span></div>
+      <div class="sub">${h.type} hero <span class="bk${book(h)?'':' none'}" title="${book(h)?'Starts with a spellbook':'No spellbook: buy one at the Lantern Library'}">📖</span></div>
       <div class="bigstats">${['atk','def','pow','lore'].map((k,i)=>`<span title="${STAT_TIP[k]}"><em><img src="${iconURL('stat',k,44)}" alt="">${STATN[k]}</em><b>${h.st[i]}</b></span>`).join('')}</div>
-      <p class="hab">★ ${h.ad}</p>
-      <details class="hmore"><summary>Details ▾</summary><div class="hmbox"><ul class="hkit">${h.sk.map(k=>`<li><b>${SK[k].name}:</b> ${SK[k].desc}</li>`).join('')}${h.item?`<li><b>${ITEMS[h.item].name}:</b> ${itemTxt(h.item)}</li>`:''}${book(h)?`<li><b>Spells:</b> ${(h.sp.length?h.sp:['ember']).map(k=>SP[k].name).join(', ')}</li>`:''}</ul>${h.blank?'<p class="muted"><i>Name still to come.</i></p>':''}</div></details></div>`).join('')}</div>`;
+      <p class="hab" title="${esc(h.ad)}">★ ${AB_SHORT[h.id]||h.ad}</p>
+      <details class="hmore"><summary>Details ▾</summary><div class="hmbox"><ul class="hkit"><li><b>★ ${h.ab}:</b> ${h.ad}</li>${h.sk.map(k=>`<li><b>${SK[k].name}:</b> ${SK[k].desc}</li>`).join('')}${h.item?`<li><b>${ITEMS[h.item].name}:</b> ${itemTxt(h.item)}</li>`:''}${book(h)?`<li><b>Spells:</b> ${(h.sp.length?h.sp:['ember']).map(k=>SP[k].name).join(', ')}</li>`:''}</ul>${h.blank?'<p class="muted"><i>Name still to come.</i></p>':''}</div></details></div>`).join('')}</div>`;
   const pr=showModal({title:`<img src="${iconURL('crest',fk,52)}" alt="" style="width:44px;height:44px;vertical-align:-12px;margin-right:8px;image-rendering:pixelated">${opt.who?opt.who+' · ':''}${f.arch}: choose your hero`,body,wide:true,top:true,buttons:[{label:'◂ Back to banners',value:'back'}]});
   const m=$('#modal');let picked=null;
   m.querySelector('.body').addEventListener('click',e=>{if(e.target.closest('details'))return;const c=e.target.closest('.hcard'),b=c&&c.querySelector('[data-hero]');if(b){picked=b.dataset.hero;m._close('hero');}});
