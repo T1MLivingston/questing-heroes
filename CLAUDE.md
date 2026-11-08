@@ -10,7 +10,7 @@ This is a **private, personal project**. See `LEGAL.md` before publishing anythi
 
 - **Frontend**: Single HTML file with inline CSS and JavaScript
 - **Rendering**: HTML5 Canvas 2D API (map and battlefield), DOM for panels and dialogs
-- **Art**: Sprite PNGs in `assets/` where they exist (map terrain, rivers, bridges and scenery, battle rocks, Rangers units, 5 hero map sprites, all 32 hero portraits); everything else is still drawn in code, and the drawn version is the fallback for any missing image
+- **Art**: Sprite PNGs in `assets/` where they exist (map terrain, rivers, bridges and scenery, battle rocks, every troop (Rangers as 4×5 sheets, the rest as Pack 10 strips), 5 hero map sprites, hero portraits); everything else is still drawn in code, and the drawn version is the fallback for any missing image
 - **Fonts**: Alegreya SC (display, numbers, canvas text) and Alegreya (body) from Google Fonts (SIL Open Font License): a chunky serif
 - **Look**: gilded gold panels with dark ink text and royal blue for highlights, selection and primary buttons, on a deep navy page. The map, battle screen, map hover box and toasts stay dark (they reset the colour variables). Actions sit in the top bar (Town, Hero, End day, ☰ menu); the right-hand ledger must fit the window without scrolling
 - **No build tools**: open `index.html` in a browser to play
@@ -72,6 +72,10 @@ Everything lives in one object, `S`, so it can be saved as JSON:
 - Saves from before this roster are migrated by tier in `migrateRoster` (`OLD_ROSTER`, `S.roster` = 2). Grave Harvest and Raise Bones make Skeletons.
 - Heroes per banner (4 each): Grimes is a Dwarf, Perry an Elf (Master Archer, replacing Davis) and Sookie a Wizard (Owl Mother, no portrait yet). Heroes with `retired:true` (Davis) stay in `HBY` for old saves but are removed from `HEROES`, so pickers, the tavern and rivals never offer them.
 - Panels (`.card`, `.sheet`, top bar, navy strips) use solid fills inside the pixel border until a smooth texture asset arrives.
+- Player colour: the hero picker offers `PLAYER_COLS` swatches (single player); the pick is `S.col`, read through `teamCol()` (flags, tinted sprites, `--team`, portrait backgrounds). Multiplayer keeps banner colours.
+- Side panel: the portrait fills the width with the name over it, and the four stats sit in a row underneath. The hero sheet (`openHeroSheet`, `.sheetgrid3`) has the hero, portrait and stats on the left, a 3-column equipment grid of tall, narrow slots in the middle, and the details and backpack on the right.
+- Minimap: `drawMini` (called from `drawMap` every 200 ms) draws explored land, towns, camps, owned mines, relics, heroes, visible rivals and the view frame in `#mini`; click it to look there, ▾ hides it.
+- `dropPuddles` (end of `genMap`) turns lake bodies under 9 tiles into land unless a dock, water pickup or object sits on or beside them.
 - Banner cards show `FAC_SW` (two strengths, one weakness) under the name.
 - `ART_REQUEST_TROOPS.md` is the art brief for the troop sprite sheets still to come.
 
@@ -93,7 +97,7 @@ Everything lives in one object, `S`, so it can be saved as JSON:
 
 ### Sprite art
 
-- Tables near the top of ART: `ART_PORTRAITS` (hero ids with `portraits/heroes/<id>_64|128.png`), `ART_MAP` (heroes with an 8-direction `heroes/<id>/map/<id>_map_sheet.png`, 48×48 frames, rows S, SW, W, NW, N, NE, E, SE) and `ART_UNITS` (game unit key → `units/<faction>/<name>/<name>_sheet.png`, faction from `unitFac`, 64×64 frames, rows idle, move, attack, hit, death).
+- Tables near the top of ART: `ART_PORTRAITS` (hero ids with `portraits/heroes/<id>_64|128.png`), `ART_MAP` (heroes with an 8-direction `heroes/<id>/map/<id>_map_sheet.png`, 48×48 frames, rows S, SW, W, NW, N, NE, E, SE) and `ART_UNITS` (Rangers: game unit key → `units/<faction>/<name>/<name>_sheet.png`, faction from `unitFac`, 64×64 frames, rows idle, move, attack, hit, death) and `ART_STRIPS` (every other troop, Troops Pack 10: `units/<faction>/<name>/<name>_strip.png`, six poses idle, move A, move B, attack, hit, defeat, 64 or 96 px wide, pivot at x centre y 60, no team masks; `stripPose` maps sheet rows onto poses; `cannon_u` has its own Great Crossbow strip). Troop portraits are `portraits/units/<name>_64.png`. The map's move cursor is `ui/cursors/move_small.png` (half size).
 - `tinted()` recolours team pixels from the paired `team_masks/` file to the faction colour. Pixel reads fail on `file://`, so serve the folder (`python3 -m http.server`) to see team colours; otherwise the original colours show.
 - Map terrain (`assets/terrain`, see its README) is prerendered by `renderTerrainArt` at the art's native 32px per tile and scaled to `TS` when drawn. Ground is a meadow base with dual-grid corner overlays per terrain (heath = dry grass, bog = swamp, forest floor, crags = rocky, sand shores, water), cobblestone roads by neighbour connections, then props sorted by their foot: a tree per forest tile, mountains or hills on crags, flowers, reeds and boulders scattered on free tiles. Four canvases (`terrainPh`) hold the four water phases (220 ms). The old drawn terrain is used until all `TA_FILES` load. `drawFire` animates the campfire at camps and the torches at town gates.
 - Towns: `assets/towns/<fac>/1..4.png` (Settlement, Town Hall, City Hall, Capital; 128×96, pivot 64,92, team masks in `team_masks/towns`). `townStage` picks by hall (`hall4` Crown Seat is the capital); `drawTown` draws it on the map, `drawTownView` uses it as the centrepiece, and camps and free towns show their banner's settlement at a smaller scale.

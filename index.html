@@ -658,6 +658,42 @@ img{image-rendering:auto}
 .hdet{display:inline-flex;align-items:center;gap:4px}
 #modal{background:rgba(30,40,70,.32);backdrop-filter:blur(2px);image-rendering:auto}
 .hs .hsl img,.stats img,.sc img,.uad img,.bigstats em img{image-rendering:pixelated!important}
+
+/* v19: portrait on top with the name over it, the four stats in a row underneath */
+.hgrid{grid-template-columns:minmax(0,1fr)}
+.hstats{grid-template-rows:none;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px;margin-top:4px}
+.hstats .hs{padding:2px 4px}.hstats .hs .hsl{justify-content:center;font-size:12px}.hstats .hs b{font-size:23px}
+.hportrait{height:206px;place-items:end center}.hportrait>img{width:244px;height:244px;margin-bottom:-6px}
+.hcap{position:absolute;left:0;right:0;bottom:0;padding:22px 8px 5px;background:linear-gradient(transparent,rgba(8,12,34,.92) 55%);text-align:left}
+.hcap .hname b{color:#fff3c8;text-shadow:0 1px 0 #000}.hcap .label{color:#d9cfa8;margin:0}.hcap .rename-ic{color:#fff3c8}
+.hportrait .hbook{z-index:2}
+@media (max-height:860px){.hportrait{height:166px}.hportrait>img{width:196px;height:196px;margin-bottom:-6px}.hstats .hs b{font-size:22px}}
+
+/* v19 hero sheet: hero on the left, a tall narrow equipment grid in the middle, details on the right */
+.sheetgrid3{display:grid;grid-template-columns:250px auto minmax(0,1fr);gap:16px;align-items:start}
+.sheethero{display:grid;gap:4px;justify-items:center;text-align:center}
+.shport{width:250px;height:250px;border:3px solid var(--team);border-radius:3px;overflow:hidden;display:grid;place-items:center;background:radial-gradient(circle at 50% 40%,color-mix(in srgb,var(--team) 70%,#fff 10%),color-mix(in srgb,var(--team) 35%,#0a0f26))}
+.shport img{width:244px;height:244px;image-rendering:pixelated}
+.shname{font:800 26px/1.1 var(--f-display);color:var(--blue-dk);margin-top:4px}
+.sheethero .hstats{width:100%;grid-template-columns:repeat(2,minmax(0,1fr))}.sheethero .hs{padding:4px 8px}.sheethero .hs b{font-size:26px}
+.sheetgrid3 .doll{grid-template-columns:repeat(3,112px);grid-auto-rows:minmax(132px,auto);gap:8px}
+.sheetgrid3 .dslot{align-content:start;justify-items:stretch;grid-template-rows:auto 1fr}
+.sheetgrid3 .dslot .label{text-align:center}
+.sheetgrid3 .dslot.none{place-items:center}
+.sheetgrid3 .eqempty{align-self:center;justify-self:center;text-align:center;opacity:.7}
+.sheetgrid3 .eqi{text-align:center;justify-items:center}
+@media (max-width:1100px){.sheetgrid3{grid-template-columns:1fr}.sheetgrid3 .doll{justify-content:center}}
+
+.colpick{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 10px}
+.colsw{width:30px;height:30px;border-radius:50%;background:var(--sw);border:3px solid #fff8e0;box-shadow:0 0 0 2px var(--rule);cursor:pointer;padding:0}
+.colsw.on{box-shadow:0 0 0 3px var(--blue-dk);transform:scale(1.12)}
+.hportrait{background:radial-gradient(circle at 50% 40%,color-mix(in srgb,var(--team) 70%,#fff 10%),color-mix(in srgb,var(--team) 35%,#0a0f26))}
+
+#miniwrap{position:absolute;right:8px;bottom:8px;z-index:4;background:rgba(8,12,30,.85);border:2px solid #c9a24a;border-radius:3px;padding:3px;line-height:0}
+#mini{display:block;cursor:pointer;image-rendering:pixelated}
+#miniTog{position:absolute;top:-2px;left:-2px;transform:translateY(-100%);background:rgba(8,12,30,.9);color:#fff3c8;border:2px solid #c9a24a;border-bottom:none;border-radius:3px 3px 0 0;font:700 12px/1 var(--f-display);padding:3px 7px;cursor:pointer}
+#miniwrap.off{padding:0;border:none;background:none}#miniwrap.off #mini{display:none}#miniwrap.off #miniTog{transform:none;position:static;border-bottom:2px solid #c9a24a;border-radius:3px}
+@media (max-width:820px){#miniwrap{transform:scale(.75);transform-origin:bottom right}}
 </style>
 
 <div id="app">
@@ -680,7 +716,7 @@ img{image-rendering:auto}
         <button class="btn primary wide" id="bEnd"><img class="bi" src="assets/ui/icons/end_turn.png" alt="">End day<span class="kbd">E</span></button>
       </div>
     </aside>
-    <div class="mapwrap"><canvas id="map" aria-label="Adventure map"></canvas><div id="hover"></div><div id="hmenu" hidden></div></div>
+    <div class="mapwrap"><canvas id="map" aria-label="Adventure map"></canvas><div id="miniwrap" hidden><canvas id="mini" title="Map overview: click to look there"></canvas><button id="miniTog" title="Hide or show the map overview">▾</button></div><div id="hover"></div><div id="hmenu" hidden></div></div>
   </div>
 </div>
 
@@ -1222,6 +1258,14 @@ const ART_PORTRAITS=new Set(['bear','battaglia','dorothy','oliver','grimes','eng
   'omalley','vargas','sheila','lawrence','davis','michael','love','livingston','ivan','slack','dupengeiser','perry','rocky','elvis','letchworth','mer2']);
 const ART_MAP=new Set(['bear','binx','dorothy','oliver','vargas']);
 const ART_UNITS={thorn:'thornguard',reed:'reedbow',antler:'antler_knight',moth:'moth_seer',oak:'oak_warden'};
+/* Troops Pack 10: six-pose strips (idle, move A, move B, attack, hit, defeat), 64 or 96 px frames, no team masks */
+const ART_STRIPS={owl:'owl_familiar',apprentice:'apprentice_mage',earthel:'earth_elemental',stormel:'storm_elemental',magus:'archmage',
+  skeleton:'skeleton',zombie:'zombie',werewolf:'werewolf',vampire:'vampire',hellkite:'hellkite',
+  rabbit:'war_rabbit',boar:'boar',hounds:'hound',centaur:'centaur',lion:'lion',
+  deckhand:'deckhand',powder:'powder_monkey',duelist:'duelist',gunner:'gunner',cannon:'cannon_crew',cannon_u:'great_crossbow',
+  sprite:'sprite',longbow:'longbow_ranger',dryad:'grove_warden',rider:'elven_rider',eagle:'giant_eagle',
+  delver:'young_dwarf',bolt:'dwarf_crossbowman',paladin:'dwarf_paladin',ramrider:'ram_rider',golem:'gem_golem',
+  spear:'spearfolk',siren:'siren',crab:'giant_crab',turtle:'turtle_knight',colossus:'coral_colossus'};
 const ART_DIRS=['s','sw','w','nw','n','ne','e','se'];
 const dirOf=(dx,dy)=>({'0,1':'s','-1,1':'sw','-1,0':'w','-1,-1':'nw','0,-1':'n','1,-1':'ne','1,0':'e','1,1':'se'})[Math.sign(dx)+','+Math.sign(dy)]||'s';
 const artImgs={};
@@ -1251,9 +1295,14 @@ function spriteAt(c,path,x,y,sc,frames=1,fms=150){const a=artImg(path);if(!a.ok)
 const unitArt=k=>{const u=U[k];return u?ART_UNITS[u.up?u.base:k]||null:null;};
 /* sheets live under units/<faction>/<name>/ (rangers, wizards, necro, centaurs, pirates, elves, dwarves, merfolk) */
 const unitFac=k=>{const b=U[k]&&U[k].up?U[k].base:k;return FAC_ORDER.find(f=>FAC[f].units.includes(b))||'rangers';};
-const unitSheet=(k,col)=>{const n=unitArt(k),f=unitFac(k);return n?tinted(`units/${f}/${n}/${n}_sheet.png`,`team_masks/units/${f}/${n}/${n}_sheet.png`,col):null;};
+const stripArt=k=>{const u=U[k];return u?ART_STRIPS[k]||ART_STRIPS[u.up?u.base:k]||null:null;};
+const stripPath=k=>{const n=stripArt(k);return n?`units/${unitFac(k)}/${n}/${n}_strip.png`:null;};
+/* sheet rows (idle, move, attack, hit, death) and frame 0-3 mapped onto the six strip poses */
+const stripPose=(row,fr)=>row===1?1+(fr%2):row===2?(fr===1||fr===2?3:0):row===3?4:row===4?(fr<1?4:5):0;
+const unitSheet=(k,col)=>{if(!unitArt(k)){const sp=stripPath(k);if(!sp)return null;const a=artImg(sp);return a.ok?{strip:a.img}:null;}const n=unitArt(k),f=unitFac(k);return n?tinted(`units/${f}/${n}/${n}_sheet.png`,`team_masks/units/${f}/${n}/${n}_sheet.png`,col):null;};
 const heroSheet=(id,col)=>ART_MAP.has(id)?tinted(`heroes/${id}/map/${id}_map_sheet.png`,`team_masks/heroes/${id}/map/${id}_map_sheet.png`,col):null;
 function preloadArt(){for(const g of['meadow','dirt','sand','snow','marsh','cavern','ash','ship_deck'])artImg(`battle/grounds/${g}.png`);for(const n of['split_boulder','basalt_columns','leaning_monolith','stone_arch'])artImg(`terrain/battle/${n}_battle.png`);for(const id of ART_MAP){artImg(`heroes/${id}/map/${id}_map_sheet.png`);artImg(`team_masks/heroes/${id}/map/${id}_map_sheet.png`);}
+  for(const k of Object.keys(ART_STRIPS))artImg(stripPath(k));
   for(const[k,n]of Object.entries(ART_UNITS)){const f=unitFac(k);artImg(`units/${f}/${n}/${n}_sheet.png`);artImg(`team_masks/units/${f}/${n}/${n}_sheet.png`);}}
 function drawCrown(c,x,y,s){c.save();c.translate(x,y);c.scale(s/10,s/10);c.fillStyle='#f2d382';c.strokeStyle='#5a3a0a';c.lineWidth=1.2;c.beginPath();c.moveTo(-8,4);c.lineTo(-9,-3);c.lineTo(-4,1);c.lineTo(0,-5);c.lineTo(4,1);c.lineTo(9,-3);c.lineTo(8,4);c.closePath();c.fill();c.stroke();c.restore();}
 const iconCache={};
@@ -1265,7 +1314,7 @@ function iconURL(kind,key,size=64){
   if(kind==='ui')return ART_BASE+`ui/icons/${key}.png`;
   if(kind==='gem')return ART_BASE+`gems/${key}.png`;
   if(kind==='hero'&&ART_PORTRAITS.has(key))return ART_BASE+`portraits/heroes/${key}_${size>80?128:64}.png`;
-  if(kind==='unit'&&unitArt(key))return ART_BASE+`portraits/units/${unitArt(key)}_64.png`;
+  if(kind==='unit'&&(unitArt(key)||stripArt(key)))return ART_BASE+`portraits/units/${unitArt(key)||stripArt(key)}_64.png`;
   const id=kind+':'+key+':'+size;if(iconCache[id])return iconCache[id];
   const cv=document.createElement('canvas');cv.width=size;cv.height=kind==='crest'?Math.round(size*60/52):size;const c=cv.getContext('2d');
   if(kind==='res')drawRes(c,key,size/2,size/2,size*0.42);
@@ -1288,7 +1337,10 @@ const costHTML=(cost,res)=>Object.entries(cost).filter(([,v])=>v>0).map(([k,v])=
 const SC_NAME={atk:'Attack',def:'Defense',pow:'Power',lore:'Lore',morale:'Morale',luck:'Luck',spd:'Speed',hp:'Health',dmg:'Damage',shots:'Shots',move:'Movement'};
 function sc(k,v,bonus){return`<span class="sc${bonus<0?' neg':''}" title="${SC_NAME[k]}"><img src="${iconURL('stat',k,32)}" alt="${SC_NAME[k]}">${v}${bonus?`<em>${bonus>0?'+':''}${bonus}</em>`:''}</span>`;}
 function unitChips(k){const u=U[k];return`<div class="scs">${sc('atk',u.atk)}${sc('def',u.def)}${sc('dmg',u.min+'–'+u.max)}${sc('hp',u.hp)}${sc('spd',u.spd)}${u.shots?sc('shots',u.shots):''}</div>`;}
-function teamCol(){return S&&S.fac?FAC[S.fac].col:'#2f8f88';}
+/* the player picks a colour on the hero screen (single player); it tints flags, portraits and the team highlight */
+const PLAYER_COLS=[['Teal','#2f8f88'],['Royal blue','#4a74d6'],['Violet','#8656b8'],['Amber','#c07a2e'],['Crimson','#b8403a'],['Leaf green','#5fb070'],['Ember','#d66a2c'],['Sea blue','#22a3b4'],['Rose','#c4508a'],['Slate','#5a6a82']];
+let pickedCol=null;
+function teamCol(){return S&&S.col&&!S.players?S.col:S&&S.fac?FAC[S.fac].col:'#2f8f88';}
 
 /* ================= MAP ================= */
 let W=34,H=26;const TS=44;
@@ -1797,7 +1849,15 @@ const BIOMES=[{k:'vale',name:'Green Vale',lake:0,crag:0,forest:0,bog:0,heath:0},
 let BIO=BIOMES[0];
 const jit=()=>0.75+R()*0.55;
 const biomeOf=seed=>BIOMES[(Math.abs(seed)>>>3)%BIOMES.length];
-function genMap(seed,opt){BIO=biomeOf(seed);const w=genMap0(seed,opt);w.biome=BIO.k;return w;}
+function genMap(seed,opt){BIO=biomeOf(seed);const w=genMap0(seed,opt);w.biome=BIO.k;dropPuddles(w);return w;}
+/* water must be intentional: small ponds cut off from every other body of water, with nothing on or beside them that uses water, become land */
+function dropPuddles(w,min=9){const t=w.tiles,seen=new Uint8Array(t.length),used=new Set();
+  for(const o of w.objs)for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){const x=o.x+dx,y=o.y+dy;if(x>=0&&y>=0&&x<W&&y<H&&(o.type==='dock'||o.type==='flot'||(dx===0&&dy===0)))used.add(y*W+x);}
+  for(let i=0;i<t.length;i++){if(t[i]!==T.LAKE||seen[i])continue;const comp=[i],q=[i];seen[i]=1;
+    while(q.length){const j=q.pop(),x=j%W,y=(j/W)|0;for(const[dx,dy]of[[1,0],[-1,0],[0,1],[0,-1]]){const nx=x+dx,ny=y+dy;if(nx<0||ny<0||nx>=W||ny>=H)continue;const n=ny*W+nx;if(!seen[n]&&t[n]===T.LAKE){seen[n]=1;comp.push(n);q.push(n);}}}
+    if(comp.length>=min||comp.some(j=>used.has(j)))continue;
+    for(const j of comp){const x=j%W,y=(j/W)|0,cnt={};for(const[dx,dy]of[[1,0],[-1,0],[0,1],[0,-1]]){const nx=x+dx,ny=y+dy;if(nx<0||ny<0||nx>=W||ny>=H)continue;const v=t[ny*W+nx];if(v!==T.LAKE&&v!==T.ROAD&&v!==T.CRAG)cnt[v]=(cnt[v]||0)+1;}
+      const best=Object.entries(cnt).sort((a,b)=>b[1]-a[1])[0];t[j]=best?+best[0]:T.GRASS;}}}
 function genMap0(seed,opt){return opt.type==='wheel'?genWheel(seed,opt):opt.type==='under'?genUnder(seed,opt):opt.type==='rivers'?genRivers(seed,opt):genRidges(seed,opt);}
 
 function mkHero(hid,x,y){const h=HBY[hid],f=FAC[h.fac];
@@ -2096,6 +2156,24 @@ function renderTerrain(){
 
 /* -------- map view -------- */
 const mapCv=$('#map'),mctx=mapCv.getContext('2d');
+/* map overview in the corner: explored land by terrain, towns, camps, heroes and visible rivals, and the frame of the current view */
+const miniCv=$('#mini');let miniT=0,miniOff=false;
+function drawMini(){if(!S)return;$('#miniwrap').hidden=false;if(miniOff)return;const k=Math.max(2,Math.floor(Math.min(190/W,150/H))),w=W*k,h=H*k;
+  if(miniCv.width!==w*2||miniCv.height!==h*2){miniCv.width=w*2;miniCv.height=h*2;miniCv.style.width=w+'px';miniCv.style.height=h+'px';}
+  const c=miniCv.getContext('2d');c.setTransform(2,0,0,2,0,0);c.fillStyle='#0a0c0b';c.fillRect(0,0,w,h);
+  const all=!!S.editor||!S.explored;
+  for(let y=0;y<H;y++)for(let x=0;x<W;x++){const i=y*W+x;if(!all&&!S.explored[i])continue;const t=S.tiles[i];c.fillStyle=S.underY&&y>=S.underY&&t!==T.LAKE&&t!==T.ROAD?'#4a4250':ED_TCOL[t];c.fillRect(x*k,y*k,k,k);}
+  const dot=(x,y,col,r=k)=>{c.fillStyle=col;c.fillRect(x*k+k/2-r,y*k+k/2-r,r*2,r*2);};
+  for(const o of S.objs){if(!all&&!S.explored[idx(o.x,o.y)])continue;
+    if(o.type==='town')dot(o.x,o.y,ownerCol(o.owner||true),k*1.4);
+    else if(o.type==='camp')dot(o.x,o.y,o.owned?ownerCol(o.owned):'#c9c2ae',k*1.1);
+    else if(o.type==='mine'&&o.owned)dot(o.x,o.y,ownerCol(o.owned),k*0.7);
+    else if(o.type==='relic')dot(o.x,o.y,'#f2d382',k*0.9);}
+  if(S.heroes)for(const hh of S.heroes){dot(hh.x,hh.y,'#000',k*1.2);dot(hh.x,hh.y,teamCol(),k*0.9);}
+  if(S.rivals&&!S.editor)for(const rv of S.rivals)if(seenNow(rv.x,rv.y))dot(rv.x,rv.y,'#e04a3a',k*0.9);
+  c.strokeStyle='#fff3c8';c.lineWidth=1;c.strokeRect(camX/TS*k+0.5,camY/TS*k+0.5,vw/TS*k,vh/TS*k);}
+miniCv.addEventListener('pointerdown',e=>{if(!S)return;e.stopPropagation();const r=miniCv.getBoundingClientRect(),k=r.width/W;centerOn(Math.floor((e.clientX-r.left)/k),Math.floor((e.clientY-r.top)/k));});
+$('#miniTog').addEventListener('click',e=>{e.stopPropagation();miniOff=!miniOff;$('#miniwrap').classList.toggle('off',miniOff);$('#miniTog').textContent=miniOff?'▸ Map':'▾';if(!miniOff)drawMini();});
 let dpr=1,vw=0,vh=0,camX=0,camY=0,camTX=null,camTY=null;
 let path=null,hoverTile=null,moving=false;
 const heroDraw={x:0,y:0};
@@ -2286,6 +2364,7 @@ function drawHero(c,x,y,h=HERO(),col=teamCol()){
 }
 function drawMap(){
   if(!S||!terrainCv)return;
+  {const t=performance.now();if(t-miniT>200){miniT=t;drawMini();}}
   if(camTX!==null){camX+=(camTX-camX)*0.18;camY+=(camTY-camY)*0.18;if(Math.abs(camTX-camX)<0.5&&Math.abs(camTY-camY)<0.5)camTX=camTY=null;}
   clampCam();
   const c=mctx;c.setTransform(dpr,0,0,dpr,0,0);c.imageSmoothingEnabled=false;c.fillStyle='#0a0c0b';c.fillRect(0,0,vw,vh);
@@ -2385,7 +2464,7 @@ function describe(x,y){
 /* -------- UI -------- */
 function applyTheme(){
   const f=S?FAC[S.fac]:FAC.rangers,st=document.documentElement.style;
-  st.setProperty('--team',f.col);st.setProperty('--team-2',f.col2);
+  st.setProperty('--team',teamCol());st.setProperty('--team-2',f.col2);
   $('#crest').src=iconURL('crest',S?S.fac:'rangers',52);
   $('#facline').textContent=S?`${S.players?`Player ${S.pi+1} · `:''}${f.arch} · ${f.name}`:'Choose your banner';
 }
@@ -2401,10 +2480,8 @@ function renderUI(){
   const sw=S.heroes.length>1?`<div class="herosw">${S.heroes.map((x,i)=>`<button class="hsel${i===S.cur?' on':''}" data-hsel="${i}" title="${x.name}${x.mp>0?' (can still move)':''}"><img src="${iconURL('hero',x.id,84)}" alt="${x.name}">${x.mp>60?'<i></i>':''}</button>`).join('')}</div>`:'';
   const mm=maxMana(),mx=maxMP();
   $('#heroCard').innerHTML=sw+`<div class="hgrid">
-    <div class="hstats">${['atk','def','pow','lore'].map(k=>`<div class="hs" title="${STAT_TIP[k]}"><span class="hsl"><img src="${iconURL('stat',k,44)}" alt="">${STATN[k]}</span><b>${hst(h,k)}${carry(h,k)?`<em>+${carry(h,k)}</em>`:''}</b></div>`).join('')}</div>
-    <div class="hmain"><div class="hportrait"><img src="${iconURL('hero',h.id,128)}" alt="${esc(h.name)}"><button class="hbook${h.book?'':' none'}" data-book="1" title="${h.book?'Open the spellbook':'No spellbook yet: buy one at the Lantern Library'}"><img src="${ART_BASE}ui/icons/spellbook.png" alt="">${h.book?`${h.spells.length} spell${h.spells.length===1?'':'s'}`:'No book'}</button></div>
-      <div class="hname"><b>${esc(h.name)}</b><button class="rename-ic" data-rename-hero="1" title="Rename ${esc(h.name)}">✎</button></div>
-      <div class="label">${hd.type} hero · Level ${h.lvl}</div>
+    <div class="hmain"><div class="hportrait"><img src="${iconURL('hero',h.id,128)}" alt="${esc(h.name)}"><div class="hcap"><div class="hname"><b>${esc(h.name)}</b><button class="rename-ic" data-rename-hero="1" title="Rename ${esc(h.name)}">✎</button></div><div class="label">${hd.type} hero · Level ${h.lvl}</div></div><button class="hbook${h.book?'':' none'}" data-book="1" title="${h.book?'Open the spellbook':'No spellbook yet: buy one at the Lantern Library'}"><img src="${ART_BASE}ui/icons/spellbook.png" alt="">${h.book?`${h.spells.length} spell${h.spells.length===1?'':'s'}`:'No book'}</button></div>
+      <div class="hstats">${['atk','def','pow','lore'].map(k=>`<div class="hs" title="${STAT_TIP[k]}"><span class="hsl"><img src="${iconURL('stat',k,44)}" alt="">${STATN[k]}</span><b>${hst(h,k)}${carry(h,k)?`<em>+${carry(h,k)}</em>`:''}</b></div>`).join('')}</div>
       <div class="hbars">
         <div class="meter"><span>Mana</span><span>${h.mana} / ${mm}</span></div><div class="bar mana"><i style="width:${mm?h.mana/mm*100:0}%"></i></div>
         <div class="meter"><span>Movement</span><span>${fmt(h.mp)} / ${fmt(mx)}</span></div><div class="bar mp"><i style="width:${h.mp/mx*100}%"></i></div>
@@ -2454,12 +2531,16 @@ function moveStack(from,to){const a=HERO().army;if(from===to||!a[from])return;
   renderUI();save();}
 function openHeroSheet(){const h=HERO(),hd=H_();h.pack=h.pack||[];
   const itemBox=(k,where)=>{const it=ITEMS[k];return`<button class="eqi" data-eq="${where}:${k}" title="${it.tier}: ${itemTxt(k)}"><span class="igem" style="--ic:${ITEM_COLS[it.lvl]}">◆</span><b>${it.name}</b><small>${itemTxt(k)}</small></button>`;};
-  const body=()=>`<div class="sheetgrid">
+  const body=()=>`<div class="sheetgrid3">
+    <div class="sheethero">
+      <div class="shport"><img src="${iconURL('hero',h.id,128)}" alt=""></div>
+      <b class="shname">${esc(h.name)}</b><small class="label">${hd.type} hero · Level ${h.lvl}${h.book?' · has a spellbook':''}</small>
+      <div class="hstats">${['atk','def','pow','lore'].map(k=>`<div class="hs" title="${STAT_TIP[k]}"><span class="hsl"><img src="${iconURL('stat',k,44)}" alt="">${STATN[k]}</span><b>${hst(h,k)}</b></div>`).join('')}</div>
+    </div>
     <div class="doll">${SLOT_ORDER.map(sl=>{const worn=(h.items||[]).filter(k=>ITEMS[k]&&ITEMS[k].slot===sl);const cap=SLOT_LIM[sl];
-      return`<div class="dslot"><span class="label">${sl}${cap>1?` (${worn.length}/${cap})`:''}</span>${worn.map(k=>itemBox(k,'w')).join('')}${worn.length<cap?'<div class="eqempty">empty</div>':''}</div>`;}).join('')}</div>
+      return`<div class="dslot${worn.length?'':' none'}"><span class="label">${sl}${cap>1?` (${worn.length}/${cap})`:''}</span>${worn.map(k=>itemBox(k,'w')).join('')}${worn.length<cap?'<div class="eqempty">empty</div>':''}</div>`;}).join('')}</div>
     <div class="sheetside">
-      <div class="hsum"><img src="${iconURL('hero',h.id,128)}" alt=""><div><b>${esc(h.name)}</b><small>${hd.type} hero · Level ${h.lvl}${h.book?' · 📖':''}</small></div></div>
-      <p><b>★ Ability:</b> ${hd.ad}</p>
+      <p style="margin-top:0"><b>★ Ability:</b> ${hd.ad}</p>
       ${h.skills.length?`<p><b>Skills:</b> ${h.skills.map(k=>`${SK[k].name} (${SK[k].desc.replace(/\.$/,'')})`).join('; ')}</p>`:''}
       <p><b>Travel:</b> ${travelName()}</p>
       <p class="muted">Attack and Defense make every troop in the army hit harder and take less damage. Power makes spells stronger. Lore sets mana: 10 mana per point, and the hero gets back mana equal to their Lore each day.</p>
@@ -3488,7 +3569,9 @@ function drawBattle(){
   drawBattleHero(c,HERO(),team,BL.side/2,BL.h*0.5,false,mineTurn);
   if(bt.enemyHero)drawBattleHero(c,bt.enemyHero,FAC[bt.enemyHero.fac].col,BL.w-BL.side/2,BL.h*0.5,true,false);
   const foeCol=bt.enemyHero?FAC[bt.enemyHero.fac].col:null,spSc=Math.max(1,Math.round(BL.s*1.8/64*2)/2);
-  const drawSprite=(sheet,k,row,fr,px,py,flip,alpha=1)=>{const big=unitArt(k)==='heartwood_elder',fw=big?96:64;c.save();c.globalAlpha=alpha;c.imageSmoothingEnabled=false;c.translate(Math.round(px),Math.round(py));if(flip)c.scale(-1,1);
+  const drawSprite=(sheet,k,row,fr,px,py,flip,alpha=1)=>{c.save();c.globalAlpha=alpha;c.imageSmoothingEnabled=false;c.translate(Math.round(px),Math.round(py));if(flip)c.scale(-1,1);
+    if(sheet.strip){const im=sheet.strip,fw=im.width/6;c.drawImage(im,stripPose(row,fr)*fw,0,fw,64,Math.round(-fw/2*spSc),Math.round(-60*spSc),fw*spSc,64*spSc);c.restore();return;}
+    const big=unitArt(k)==='heartwood_elder',fw=big?96:64;
     c.drawImage(sheet,fr*fw,row*64,fw,64,Math.round(-(big?48:32)*spSc),Math.round(-60*spSc),fw*spSc,64*spSc);c.restore();};
   for(const cp of bt.corpses){const sh=unitSheet(cp.k,cp.side?foeCol:team);if(!sh)continue;const t=now-cp.t0,p=hc(cp.c,cp.r);if(t>2600)continue;
     drawSprite(sh,cp.k,4,Math.min(3,Math.floor(t/150)),p.x,p.y+BL.s*0.4,cp.side===1,t<1600?1:1-(t-1600)/1000);}
@@ -3622,9 +3705,12 @@ async function pickHero(fk,opt={}){
       <div class="bigstats">${['atk','def','pow','lore'].map((k,i)=>`<span title="${STAT_TIP[k]}"><em><img src="${iconURL('stat',k,44)}" alt="">${STATN[k]}</em><b>${h.st[i]}</b></span>`).join('')}</div>
       <p class="hab" title="${esc(h.ad)}">★ ${AB_SHORT[h.id]||h.ad}</p>
       <details class="hmore"><summary>Details ▾</summary><div class="hmbox"><ul class="hkit"><li><b>★ ${h.ab}:</b> ${h.ad}</li>${h.sk.map(k=>`<li><b>${SK[k].name}:</b> ${SK[k].desc}</li>`).join('')}${h.item?`<li><b>${ITEMS[h.item].name}:</b> ${itemTxt(h.item)}</li>`:''}${book(h)?`<li><b>Spells:</b> ${(h.sp.length?h.sp:['ember']).map(k=>SP[k].name).join(', ')}</li>`:''}</ul>${h.blank?'<p class="muted"><i>Name still to come.</i></p>':''}</div></details></div>`).join('')}</div>`;
-  const pr=showModal({title:`<img src="${iconURL('crest',fk,52)}" alt="" style="width:44px;height:44px;vertical-align:-12px;margin-right:8px;image-rendering:pixelated">${opt.who?opt.who+' · ':''}${f.arch}: choose your hero`,body,wide:true,top:true,buttons:[{label:'◂ Back to banners',value:'back'}]});
+  pickedCol=opt.who?null:f.col;
+  const colRow=opt.who?'':`<div class="colpick"><span class="label">Your colour</span>${PLAYER_COLS.map(([n,c])=>`<button class="colsw${c===f.col?' on':''}" data-col="${c}" title="${n}${c===f.col?' (banner colour)':''}" style="--sw:${c}" aria-label="${n}"></button>`).join('')}</div>`;
+  const pr=showModal({title:`<img src="${iconURL('crest',fk,52)}" alt="" style="width:44px;height:44px;vertical-align:-12px;margin-right:8px;image-rendering:pixelated">${opt.who?opt.who+' · ':''}${f.arch}: choose your hero`,body:colRow+body,wide:true,top:true,buttons:[{label:'◂ Back to banners',value:'back'}]});
   const m=$('#modal');let picked=null;
-  m.querySelector('.body').addEventListener('click',e=>{if(e.target.closest('details'))return;const c=e.target.closest('.hcard'),b=c&&c.querySelector('[data-hero]');if(b){picked=b.dataset.hero;m._close('hero');}});
+  const paint=c=>{m.querySelectorAll('.hcard').forEach(x=>x.style.setProperty('--c',c));m.querySelectorAll('.colsw').forEach(x=>x.classList.toggle('on',x.dataset.col===c));};
+  m.querySelector('.body').addEventListener('click',e=>{const sw=e.target.closest('[data-col]');if(sw){pickedCol=sw.dataset.col;paint(pickedCol);return;}if(e.target.closest('details'))return;const c=e.target.closest('.hcard'),b=c&&c.querySelector('[data-hero]');if(b){picked=b.dataset.hero;m._close('hero');}});
   const v=await pr;return v==='hero'?picked:null;
 }
 
@@ -3660,7 +3746,7 @@ async function defeat(why){S.over=true;clearSave();
 async function startNew(){S=null;applyTheme();const mo=await pickMap();if(!mo){title();return;}if(mo.edit){openEditor();return;}
   if(mo.mode==='multi'){const ps=[];for(let i=0;i<mo.nPlayers;i++)ps.push(await pickFaction({who:`Player ${i+1}`,exclude:ps.map(p=>p.fk)}));
     mo.players=ps;newGame(ps[0].fk,ps[0].hid,mo);afterLoad();save();await handoff();openTown();return;}
-  const{fk,hid}=await pickFaction();newGame(fk,hid,mo);afterLoad();save();openTown();}
+  const{fk,hid}=await pickFaction();newGame(fk,hid,mo);if(pickedCol)S.col=pickedCol;afterLoad();save();openTown();}
 /* v17 roster: troops from older saves move to the new troop of the same tier */
 const OLD_ROSTER={wizards:['inkling','hound','sentinel','owl','magus'],necro:['thrall','rats','wraith','barrow','hiero'],centaurs:['hounds','skirm','badger','lancer','bearw'],
   pirates:['deckhand','powder','duelist','harpoon','cannon'],elves:['sprite','longbow','dryad','dancer','stag'],dwarves:['delver','bolt','anvil','smith','ram'],merfolk:['shell','coral','eel','seahorse','choir']};
@@ -3679,7 +3765,7 @@ function setMapCursor(x,y){let k='pointer';
   if(S&&!S.editor&&inb(x,y)&&!(x===HERO().x&&y===HERO().y)){const o=objAt(x,y);
     if(!S.explored[idx(x,y)])k='unavailable';else if(rivalAt(x,y)||(o&&(o.type==='neutral'||o.type==='relic'||spireFoe(o))))k='target';
     else if(!isFinite(terrainCost(x,y))&&!townFoot(x,y)&&!(o&&o.type==='town'))k='unavailable';else k='move';}
-  const hs={pointer:'3 3',target:'12 12',move:'12 12',unavailable:'12 12'}[k];mapCv.style.cursor=`url(${ART_BASE}ui/cursors/${k}.png) ${hs}, ${k==='unavailable'?'not-allowed':k==='target'?'crosshair':'pointer'}`;}
+  const hs={pointer:'3 3',target:'12 12',move:'6 6',unavailable:'12 12'}[k];mapCv.style.cursor=`url(${ART_BASE}ui/cursors/${k==='move'?'move_small':k}.png) ${hs}, ${k==='unavailable'?'not-allowed':k==='target'?'crosshair':'pointer'}`;}
 const tileOf=e=>{const r=mapCv.getBoundingClientRect();return[Math.floor((e.clientX-r.left+camX)/TS),Math.floor((e.clientY-r.top+camY)/TS)];};
 mapCv.addEventListener('pointerdown',e=>{closeHeroMenu();
   if(S&&S.editor&&e.button===0&&!modalOpen){const[x,y]=tileOf(e);try{mapCv.setPointerCapture(e.pointerId);}catch(_){}edPointer('down',x,y);return;}
@@ -3818,7 +3904,7 @@ $('#edPanel').addEventListener('click',async e=>{const t=e.target.closest('[data
   else if(ac){const a=ac.dataset.eact;
     if(a==='save')edSave();
     else if(a==='play'){const m=edSave();edClose();const mo=await pickMap({custom:m.id});if(!mo){title();return;}if(mo.edit){openEditor();return;}
-      const{fk,hid}=await pickFaction();newGame(fk,hid,mo);afterLoad();save();openTown();}
+      const{fk,hid}=await pickFaction();newGame(fk,hid,mo);if(pickedCol)S.col=pickedCol;afterLoad();save();openTown();}
     else if(a==='exit'){if(!ED.saved){const v=await showModal({title:'Leave the editor?',body:'<p>Your changes are not saved.</p>',buttons:[{label:'Save and leave',value:'s',primary:true},{label:'Leave without saving',value:'l'},{label:'Stay',value:null}],dismiss:null});if(!v)return;if(v==='s')edSave();}
       edClose();title();}}});
 function edClose(){document.getElementById('app').classList.remove('editing');$('#edPanel').hidden=true;S=null;terrainCv=null;terrainPh=null;}

@@ -35,6 +35,8 @@ No other libraries, images or audio are included. Art made later with ChatGPT or
 
 | Seas & Battlefields Pack 08: 8 battle grounds, docks, rowboat, coastal sloop (team mask), lighthouse, shipwreck, 8 ocean pickups (`assets/battle`, `assets/waterfront`, `assets/ocean`) | Generated with ChatGPT image generation, palette-normalized (pack README) | 2026-11-08 | Same as above |
 | UI & Textures Pack 09: parchment and navy panels, buttons, icons, cursors, textures, modal dimmer (`assets/ui`) | Generated with ChatGPT image generation, palette-normalized (pack README) | 2026-11-08 | Same as above |
+| Troops Pack 10: 36 six-pose troop strips and portraits for Wizards, Necromancers, Beast Masters, Pirates (with Great Crossbow), Elves, Dwarves and Merfolk (`assets/units/<faction>`, `assets/portraits/units`) | Generated bitmap sheets, cleaned and palette-snapped (pack README) | 2026-11-08 | Same as above |
+| Half-size move cursor (`assets/ui/cursors/move_small.png`) | Downscaled locally from Pack 09's move cursor | 2026-11-08 | Same as above |
 
 The generated source images (high-res magenta PNGs) are kept outside this repo.
 
