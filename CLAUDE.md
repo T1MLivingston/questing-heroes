@@ -43,7 +43,7 @@ The script in `index.html` is split into sections marked with `/* ===== ... ====
 | DATA | `FAC` (8 factions), `U` (units, neutrals and generated `_u` upgrades), `SP` (spells), `SK` (skills), `HEROES` (32, including 2 placeholders), `ITEMS` (31 artifacts in levels 1-5: Trinket, Treasure, Heirloom, Masterwork, Legendary), `START_KIT` (each hero's starting skill and artifact), `RELICS` (7), `MINE` (three output levels, `MINE_UP` upgrade costs, `mineOut`), `SITES` (weekly sites) |
 | ART | Procedural drawing: `drawRes`, `drawStat`, `drawFig`, `drawGlyph`, `drawUnit`, `drawHeroPortrait`, `drawCrest`, `iconURL` cache |
 | MAP | `MAP_SIZES`, `MAP_TYPES`, `genMap` → `genWheel`, `genRidges`, `genUnder` or `genRivers` (the last two share `fillWorld`, `carveReach`, `mkSpot`, `roadAlong`, `placeRelics`), `makeIsland`/`isleDocks` (pirate islands), `newGame`, `mkHero`, `mkRival`, terrain prerender, camera, `drawMap`, pathfinding (`astar`, `planTo`) |
-| UI | `renderUI` (top bar, hero card, army), `showModal` (`top:true` puts the buttons in the header), toasts, `unitCard` (the one troop card used everywhere: big picture, overview line, attack and defense, a Details fold-out; fixed height), `askName` (rename the town or a hero) |
+| UI | `renderUI` (left-hand ledger as sketched: four stat squares beside a big portrait with mana and movement bars, the army grid with a spellbook tile, then Town / Hero / End day; the relic strip `#objective` sits in the top bar and opens the goal), `moveStack` (drag stacks to merge or swap), split in `showUnit`, `openSpellbook`, `showModal` (`top:true` puts the buttons in the header), toasts, `unitCard` (the one troop card used everywhere: big picture, overview line, attack and defense, a Details fold-out; fixed height), `askName` (rename the town or a hero) |
 | Adventure actions | `walk`, `fightPreview`, `gainRelic`, `visit`, `arriveTown`, `endDay`, `addRumour`, `addXP` |
 | Rival heroes | `rivalsTurn`, `rivalTarget`, `rivalInteract`, `autoResolve`, `growRival` |
 | Town screen | `FAC_SPELLS`, `townBuildings`, `townAdvice` (the Suggested step), `townTabs`, `townHTML`, `drawTownView` (clickable picture of the town), `openTown` |
@@ -98,12 +98,18 @@ Everything lives in one object, `S`, so it can be saved as JSON:
 
 ### Spells and spellbooks
 
+- Map sites: `sage` (Sage's Library: each hero picks +2 Attack, Defense, Power or Lore once) and `altar` (Lesser, Greater and Star altars, tiers 1-3, teach one spell; need a spellbook and Lore ≥ tier; tiers 2-3 are guarded). `furnishMap` places them.
+
 - Magic heroes (and anyone who starts with a spell) carry a spellbook; others buy one for 500 gold at the Lantern Library.
 - `FAC_SPELLS` lists what each banner's mages teach: the Lantern Library teaches the first two, the Star Archive the rest. Wayshrines are set to spells from the same list.
 
 ### Travel
 
 `terrainCost(x, y)` decides movement: lakes need a boat (65 per tile) or the Merfolk swim (110). A horse adds 40% to `maxMP()`. Docks sell boats; Horse Fairs and the Stables building give horses.
+
+## Map editor
+
+`openEditor` (from the title screen) paints terrain and places objects on an `S` with `editor:true` and no heroes, reusing `drawMap` and `renderTerrain`. `ED` holds the tool, brush and pending portal end; `edApply` does one placement, `edCheck` lists what is missing (town, six relic lairs, the Glass Lair) and anything cut off. Maps save to localStorage under `questing-heroes-maps` (`loadMaps`, `storeMaps`). Saved, complete maps appear under "Your maps" in `pickMap`; `newGame` turns one into a world with `customWorld` (camps get the rival banners in order) and runs `furnishMap` unless the map turned extras off.
 
 ## Development Workflow
 
@@ -134,6 +140,9 @@ Debug handle in the browser console: `window.__qh` exposes the state and a few f
 - [ ] Level-up choice, end of day income, weekly growth
 - [ ] Click your hero on the map for the quick menu (End day, town, next hero)
 - [ ] Portals carry heroes and rivals between surface and underworld; spires can be garrisoned and stormed
+- [ ] Split a stack, drag stacks to merge or swap, open the spellbook
+- [ ] Sage's Library and spell altars teach as described
+- [ ] Map editor: paint, place, save, play the saved map
 - [ ] Phone layout (about 400px wide)
 
 ## Code Style Conventions
