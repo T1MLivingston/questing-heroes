@@ -826,8 +826,9 @@ img.upg{filter:sepia(.55) saturate(1.9) hue-rotate(-12deg) brightness(1.06) drop
 .advl{display:grid;gap:8px}.advr{display:grid;grid-template-columns:40px 1fr auto;gap:10px;align-items:center;padding:6px 8px;background:rgba(255,255,255,.35);border:1px solid var(--rule)}.advr img{width:40px}.advr small{display:block;color:var(--muted)}
 @media (max-width:700px){.wgrid{grid-template-columns:repeat(3,1fr)}}
 .tprev{display:block;width:100%;max-width:960px;height:auto;margin:4px auto 8px;image-rendering:pixelated;border:3px solid;border-color:var(--bev-lo) var(--bev-hi) var(--bev-hi) var(--bev-lo)}
-.bthumb.art{width:min(100%,140px);height:auto;aspect-ratio:1/1;margin:0 auto;overflow:hidden;background:radial-gradient(circle,#3a4f9a,#14204f)}.bthumb.art img{display:block;width:100%;height:100%;max-height:none;object-fit:contain}
-.grid .bthumb{width:min(100%,140px);height:auto;aspect-ratio:1/1;margin:0 auto}.grid .bthumb span{font-size:48px}
+.bthumb.art{width:min(100%,110px);height:auto;aspect-ratio:1/1;margin:0 auto;overflow:hidden;background:none}.bthumb.art img{display:block;width:100%;height:100%;max-height:none;object-fit:contain}
+.grid .bthumb{width:min(100%,110px);height:auto;aspect-ratio:1/1;margin:0 auto;background:none}.grid .bthumb span{font-size:44px}
+.hstrip .tdw{grid-template-columns:repeat(6,minmax(0,1fr))}
 </style>
 
 <div id="app">
@@ -2437,7 +2438,7 @@ function centerOn(x,y,instant){const tx=x*TS+TS/2-vw/2,ty=y*TS+TS/2-vh/2;if(inst
 
 /* The town fills a 3 x 3 tile footprint; its gate is the bottom-centre tile. */
 function drawTown(c,cx,by,fk=S.fac,tw=S.town){
-  {const sp=townSprite(fk,townStage(tw),FAC[fk].col);if(sp){const k=TS/32;c.fillStyle='rgba(0,0,0,.3)';c.beginPath();c.ellipse(cx,by-6,74,13,0,0,7);c.fill();c.imageSmoothingEnabled=false;
+  {const sp=townSprite(fk,townStage(tw),FAC[fk].col);if(sp){const k=TS/32;c.imageSmoothingEnabled=false;
     c.drawImage(sp,Math.round(cx-64*k),Math.round(by-92*k),Math.round(128*k),Math.round(96*k));
     const top=by-92*k;c.font='700 12px "Alegreya SC",Georgia,serif';c.textAlign='center';const nmw=c.measureText(tw.name).width+12;
     c.fillStyle='rgba(16,20,19,.85)';c.fillRect(cx-nmw/2,top-8,nmw,17);c.strokeStyle=FAC[fk].col;c.lineWidth=1;c.strokeRect(cx-nmw/2,top-8,nmw,17);c.fillStyle='#f2d382';c.fillText(tw.name,cx,top+5);return;}}
@@ -2494,13 +2495,13 @@ function drawObj(c,o){
   case 'camp':{const col=FAC[o.fac||o.dfac||'necro'].col,gn=(o.garrison||[]).reduce((a,g)=>a+g.n,0);
     // major towns (free ones, and rival homes once captured) stand as real towns, with their name
     if(o.fac&&isMajor(o)&&(o.built||o.free)){const sp=townSprite(o.fac,o.built?townStage(o):2,o.owned?ownerCol(o.owned):o.free?'#9a958a':FAC[o.fac].col);if(sp){const k=TS/32*0.82,by=cy+TS/2-2;
-      c.fillStyle='rgba(0,0,0,.3)';c.beginPath();c.ellipse(cx,cy+14,46,9,0,0,7);c.fill();c.imageSmoothingEnabled=false;c.drawImage(sp,Math.round(cx-64*k),Math.round(by-92*k),Math.round(128*k),Math.round(96*k));
+      c.imageSmoothingEnabled=false;c.drawImage(sp,Math.round(cx-64*k),Math.round(by-92*k),Math.round(128*k),Math.round(96*k));
       const nm=o.owned===ME()||o.name?campName(o):'Free town',top=by-92*k;c.font='700 11px "Alegreya SC",Georgia,serif';c.textAlign='center';c.textBaseline='alphabetic';const nw=c.measureText(nm).width+10;
       c.fillStyle='rgba(16,20,19,.85)';c.fillRect(cx-nw/2,top-6,nw,15);c.strokeStyle=o.owned?ownerCol(o.owned):'#9a958a';c.lineWidth=1;c.strokeRect(cx-nw/2,top-6,nw,15);c.fillStyle='#f2d382';c.fillText(nm,cx,top+5);
       if(o.owned)flag(c,cx+30,cy+6,ownerCol(o.owned));
       if(gn&&!S.editor){c.font='800 12px "Alegreya SC",Georgia,serif';c.textBaseline='middle';const tt=o.owned===ME()?fmt(gn):'?',w=c.measureText(tt).width+10;c.fillStyle='rgba(12,18,48,.92)';c.fillRect(cx-w/2,cy+17,w,14);c.strokeStyle=o.owned?ownerCol(o.owned):'#c45a43';c.lineWidth=1.2;c.strokeRect(cx-w/2,cy+17,w,14);c.fillStyle='#fff';c.fillText(tt,cx,cy+24.5);}
       break;}}
-    {const fk2=o.fac||o.dfac||'necro',sp=townSprite(fk2,o.free?Math.min(3,o.lvl||1):1,o.owned?ownerCol(o.owned):o.free?'#9a958a':FAC[fk2].col);const csp=!o.free&&artImg(`map/buildings/camp_${fk2}.png`);if((csp&&csp.ok)||sp){const k=TS/32*0.62;c.fillStyle='rgba(0,0,0,.3)';c.beginPath();c.ellipse(cx,cy+14,30,7,0,0,7);c.fill();c.imageSmoothingEnabled=false;if(csp&&csp.ok)spriteAt(c,`map/buildings/camp_${fk2}.png`,cx,cy+TS/2-2,TS/32*0.85);else c.drawImage(sp,Math.round(cx-64*k),Math.round(cy+TS/2-2-92*k),Math.round(128*k),Math.round(96*k));
+    {const fk2=o.fac||o.dfac||'necro',sp=townSprite(fk2,o.free?Math.min(3,o.lvl||1):1,o.owned?ownerCol(o.owned):o.free?'#9a958a':FAC[fk2].col);const csp=!o.free&&artImg(`map/buildings/camp_${fk2}.png`);if((csp&&csp.ok)||sp){const k=TS/32*0.62;c.imageSmoothingEnabled=false;if(csp&&csp.ok)spriteAt(c,`map/buildings/camp_${fk2}.png`,cx,cy+TS/2-2,TS/32*0.85);else c.drawImage(sp,Math.round(cx-64*k),Math.round(cy+TS/2-2-92*k),Math.round(128*k),Math.round(96*k));
       if(o.owned)flag(c,cx+24,cy+8,ownerCol(o.owned));
       if(gn&&!S.editor){c.font='800 12px "Alegreya SC",Georgia,serif';c.textAlign='center';c.textBaseline='middle';const tt=o.owned===ME()?fmt(gn):'?',w=c.measureText(tt).width+10;c.fillStyle='rgba(12,18,48,.92)';c.fillRect(cx-w/2,cy+17,w,14);c.strokeStyle=o.owned?ownerCol(o.owned):'#c45a43';c.lineWidth=1.2;c.strokeRect(cx-w/2,cy+17,w,14);c.fillStyle='#fff';c.fillText(tt,cx,cy+24.5);}
       if(!o.free&&!S.editor)drawFire(c,'campfire',cx-26,cy+20,o.x*97+o.y*31);break;}}
@@ -2968,16 +2969,25 @@ function stepHero(n){
 }
 function tween(dur,f){return new Promise(res=>{const t0=performance.now();const step=now=>{const t=Math.min(1,(now-t0)/Math.max(1,dur));f(t);if(t<1)requestAnimationFrame(step);else res();};requestAnimationFrame(step);});}
 function gain(k,n){S.res[k]+=n;}
+/* an outpost (a holding you can't build in): the same strip as a town's garrison section, with its recruits as tiles */
 async function manageHolding(o){const f=FAC[o.fac],h=HERO(),here=h.x===o.x&&h.y===o.y;o.pool=o.pool||{};o.garrison=o.garrison||[];
-  const gsum=()=>o.garrison.map(a=>`${a.n} ${U[a.k].pl}`).join(', ');
-  const body=()=>`<p class="muted" style="margin-top:0">Your outpost: +${fmt(campIncome(o))} gold a day. Its troops muster here each week. ${here?`Recruits join ${esc(h.name)}.`:`No hero is here, so recruits wait in the garrison until a hero comes to collect them.`}</p>${o.garrison.length?`<p><b>⚑ Garrison:</b> ${gsum()}</p>`:''}<div class="ugrid">${f.units.slice(0,campTiers(o)).map(k=>{const av=o.pool[k]||0,mx=Math.min(av,maxAfford(k));
-    return unitCard(k,{cls:mx>0?'sugg':'',foot:`<div class="cost">${costHTML(unitCost(k,1))}<span class="muted">each · ${av} here</span></div><div class="rctl"><button class="btn sm${mx>0?' primary':''}" data-hrec="${k}" ${mx<1?'disabled':''}>Recruit ${mx}</button></div>`});}).join('')}</div>`;
-  const pr=showModal({title:campName(o).replace(/^./,c=>c.toUpperCase()),body:body(),wide:true,buttons:here?[{label:'Garrison',value:'g'},{label:'Done',value:1,primary:true}]:[{label:'Show on map',value:'m'},{label:'Done',value:1,primary:true}],dismiss:1});
+  const tiers=f.units.slice(0,campTiers(o));
+  const slots=(arr,side)=>Array.from({length:7},(_,i)=>{const g=arr[i];if(!g)return'<div class="slot empty"></div>';return`<button class="slot" data-hx="${side}${i}" title="${g.n} ${U[g.k].pl}${here?' · click to move across':''}"><img class="${U[g.k].up?'upg':''}" src="${iconURL('unit',g.k,64)}" alt=""><b>${g.n}</b></button>`;}).join('');
+  const body=()=>`<p class="muted" style="margin:0 0 8px">+${fmt(campIncome(o))} gold a day · its troops muster here each week. ${here?`Recruits join ${esc(h.name)}; click a stack to move it between ${esc(h.name)} and the garrison.`:'No hero is here, so recruits wait in the garrison until a hero comes to collect them.'}</p>
+   <div class="tstrip hstrip"><div class="tvisit"><div class="thero">${here?`<img src="${iconURL('hero',h.id,128)}" alt=""><div><b>${esc(h.name)}</b><small>visiting</small></div>`:'<div><b>No hero here</b><small>Walk a hero in to collect troops.</small></div>'}</div><div class="trow small">${here?slots(h.army,'h'):''}</div></div>
+    <div class="tgarr"><div class="tlabel"><b>⚑ Garrison</b><small>holds the outpost</small></div><div class="trow small">${slots(o.garrison,'g')}</div>
+     <div class="tlabel"><b>Recruits</b><small>click to hire as many as you can afford</small></div>
+     <div class="tdw">${tiers.map(k=>{const av=o.pool[k]||0,mx=Math.min(av,maxAfford(k));return`<button class="dwc${mx>0?'':' off'}" data-hrec="${k}" ${mx<1?'disabled':''} title="${U[k].pl}: ${av} here, ${fmt(unitCost(k,1).gold)} gold each${mx?` · recruit ${mx}`:''}"><img src="${iconURL('unit',k,64)}" alt=""><b>${av}</b></button>`;}).join('')}</div></div></div>`;
+  const pr=showModal({title:`<img src="${iconURL('crest',o.fac,52)}" alt="" style="width:40px;height:40px;vertical-align:-10px;margin-right:8px">${esc(campName(o).replace(/^./,c=>c.toUpperCase()))}`,body:body(),wide:true,buttons:here?[{label:'Done',value:1,primary:true}]:[{label:'Show on map',value:'m'},{label:'Done',value:1,primary:true}],dismiss:1});
   const b=$('#modal').querySelector('.body');
-  b.addEventListener('click',e=>{const el=e.target.closest('[data-hrec]');if(!el)return;const k=el.dataset.hrec,n=Math.min(o.pool[k]||0,maxAfford(k));if(n<1)return;
-    if(here){if(!addToArmy(k,n)){toast('No free army slot.');return;}}else{const g=o.garrison.find(x=>x.k===k);if(g)g.n+=n;else if(o.garrison.length<7)o.garrison.push({k,n});else{toast('The garrison is full.');return;}}
-    pay(unitCost(k,n));o.pool[k]-=n;toast(here?`${n} ${U[k].pl} join ${h.name}.`:`${n} ${U[k].pl} wait in the garrison.`);b.innerHTML=body();renderUI();});
-  const v=await pr;renderUI();save();if(v==='g'&&here)await manageSpire(o);else if(v==='m')centerOn(o.x,o.y);}
+  b.addEventListener('click',e=>{const el=e.target.closest('[data-hrec]');
+    if(el){const k=el.dataset.hrec,n=Math.min(o.pool[k]||0,maxAfford(k));if(n<1)return;
+      if(here){if(!addToArmy(k,n)){toast('No free army slot.');return;}}else{const g=o.garrison.find(x=>x.k===k);if(g)g.n+=n;else if(o.garrison.length<7)o.garrison.push({k,n});else{toast('The garrison is full.');return;}}
+      pay(unitCost(k,n));o.pool[k]-=n;toast(here?`${n} ${U[k].pl} join ${h.name}.`:`${n} ${U[k].pl} wait in the garrison.`);b.innerHTML=body();renderUI();return;}
+    const sl=e.target.closest('[data-hx]');if(!sl||!here)return;const side=sl.dataset.hx[0],i=+sl.dataset.hx.slice(1),from=side==='g'?o.garrison:h.army,to=side==='g'?h.army:o.garrison,st=from[i];
+    if(!st||(side==='h'&&h.army.length<=1)){if(side==='h')toast('A hero must keep at least one stack.');return;}
+    const ex=to.find(a=>a.k===st.k);if(ex)ex.n+=st.n;else if(to.length<7)to.push({...st});else{toast('No free slot there.');return;}from.splice(i,1);b.innerHTML=body();renderUI();});
+  const v=await pr;renderUI();save();if(v==='m')centerOn(o.x,o.y);}
 /* a beaten rogue who held an outpost offers to join */
 async function keeperJoins(id){const hx=HBY[id],h=HERO();if(!hx)return;
   if(S.heroes.length>=heroCap()){toast(`${hx.name} yields the outpost and slips away to the taverns.`);return;}
