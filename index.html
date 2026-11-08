@@ -3589,10 +3589,14 @@ function drawArtTown(cv,TSN){const a=artImg(TSN.atlas);if(!a.ok)return false;con
       :tab==='upgrade'?`${on.includes('forge')?'Great Forge · ':''}${on.some(i=>/^u\d$/.test(i))?`Upgrades built: ${on.filter(i=>/^u\d$/.test(i)).map(i=>f.dw[+i[1]-1]).join(', ')} · upgrade troops here`:''}`:tab==='library'?(t.built.lib2?'Lantern Library and Star Archive':'Lantern Library'):b0.startsWith('wall')?`${WALLS[wallLvl(t)-1].name}: the garrison fights ${['','25%','50%','twice as'][wallLvl(t)]} harder`:B.name;
     piece(id,di>=0?'recruit':tab||'build',di>=0?b0:tab==='upgrade'?null:b0.startsWith('wall')?(t.built.wall3?'wall3':t.built.wall2?'wall3':'wall2'):b0,label);}
   // built buildings that have no picture yet: small signs along the bottom, still clickable
+  // the shared extra buildings stand in the side margins: built ones drawn, unbuilt ones are clickable lots
+  {const xa=artImg(XB_ATLAS),fk=TF();if(xa.ok)for(const[id,[fx,fy]]of Object.entries(XB_SPOT)){const b=BY[id],xc=xbCell(fk,id);if(!b||!xc)continue;used.add(id);
+    const x0=fx-64,y0=fy-120;if(t.built[id]){c.drawImage(xa.img,xc[0],xc[1],128,128,x0,y0,128,128);townSpots.push({x:x0,y:y0,w:128,h:128,tab:id==='reliquary'?'relics':id==='lib2'?'library':'build',id,label:id==='reliquary'?`${b.name}: ${S.delivered.length}/7 relics home`:`${b.name}: ${b.desc}`,pix:xc,atlas:XB_ATLAS});}
+    else townSpots.push({x:x0+16,y:y0+40,w:96,h:80,tab:'build',id,label:`Empty lot: ${b.name}${bAvail(b)?' (can be built)':' (locked)'}`});}}
   // (signs stack down the left margin, outside the painted scene)
   used.add('lib2');const extra=BL.filter(b=>t.built[b.id]&&!used.has(b.id));let sy=8;c.font='700 12px "Alegreya SC",Georgia,serif';c.textBaseline='middle';c.textAlign='left';
-  for(const b of extra){const nm=b.id==='reliquary'?`${b.name} ${S.delivered.length}/7`:b.name,w=Math.min(OX-12,c.measureText(nm).width+14);if(sy>330)break;c.fillStyle='rgba(28,20,10,.85)';c.fillRect(6,sy,w,20);c.strokeStyle='#e8c060';c.lineWidth=1;c.strokeRect(6.5,sy+.5,w-1,19);c.fillStyle='#f6e2a8';c.fillText(nm,13,sy+10,w-14);
-    const di=b.unit?f.units.indexOf(b.unit):-1;townSpots.push({x:6,y:sy,w,h:20,tab:di>=0?'recruit':b.id==='reliquary'?'relics':'build',id:b.id,label:b.desc});sy+=25;}
+  for(const b of extra){const nm=b.id==='reliquary'?`${b.name} ${S.delivered.length}/7`:b.name,w=Math.min(220,c.measureText(nm).width+14);if(sy>330)break;c.fillStyle='rgba(28,20,10,.85)';c.fillRect(OX+6,sy,w,20);c.strokeStyle='#e8c060';c.lineWidth=1;c.strokeRect(OX+6.5,sy+.5,w-1,19);c.fillStyle='#f6e2a8';c.fillText(nm,OX+13,sy+10,w-14);
+    const di=b.unit?f.units.indexOf(b.unit):-1;townSpots.push({x:OX+6,y:sy,w,h:20,tab:di>=0?'recruit':b.id==='reliquary'?'relics':'build',id:b.id,label:b.desc});sy+=25;}
   const gate=TSN.gate||(()=>{const w=TSN.sites.find(z=>z[1][0]==='wall1'),q=w&&P[w[0]];return q?[q[4]+q[2]/2,Math.min(342,q[5]+q[3]-4)]:[320,342];})();
   S.heroes.filter(x=>x.x===t.x&&x.y===t.y).forEach((x,i)=>{c.save();c.translate(OX+gate[0]-14+i*30-TS/2,gate[1]-TS/2-6);const f0=x.face;x.face='s';drawHero(c,0,0,x);x.face=f0;c.restore();});
   return true;}
@@ -3600,8 +3604,15 @@ function drawArtTown(cv,TSN){const a=artImg(TSN.atlas);if(!a.ok)return false;con
 function paintTownPrev(root,tries=0){for(const cv of root.querySelectorAll('canvas.tprev:not([data-done])')){const T=TOWN_SCREEN[cv.dataset.fac],a=T&&artImg(T.atlas);if(!a||!a.ok){if(tries<40)setTimeout(()=>paintTownPrev(root,tries+1),100);continue;}
   const c=cv.getContext('2d');c.imageSmoothingEnabled=false;c.drawImage(a.img,0,0,640,360,0,0,640,360);for(const[id,q]of Object.entries(T.pieces)){if((/_hall_/.test(id)&&!/capital$/.test(id))||T.sites.some(z=>z[0]===id&&z[3]))continue;c.drawImage(a.img,q[0],q[1],q[2],q[3],q[4],q[5],q[2],q[3]);}cv.dataset.done=1;}}
 /* a building's picture from its banner's town atlas, cropped into a square (Build tab); null if the banner has no town art yet */
+/* the six shared extra buildings (Missing Buildings packs A and B): one 128×128 cell per banner (row) and building (column) in towns/extra_buildings.png, foot at (64,120) */
+const XB_ATLAS='towns/extra_buildings.png',XB_ROW=['rangers','wizards','necro','centaurs','pirates','elves','dwarves','merfolk'],XB_COL={reliquary:0,lodge:1,lib2:2,still:3,fb1:4,fb3:5};
+/* where they stand in the town picture: the side margins beside the scene, three a side (canvas x of the foot centre, foot y) */
+const XB_SPOT={reliquary:[80,128],lib2:[80,244],still:[80,356],lodge:[880,128],fb1:[880,244],fb3:[880,356]};
+const xbCell=(fac,id)=>{const r=XB_ROW.indexOf(fac),c=XB_COL[id];return r<0||c===undefined?null:[c*128,r*128];};
 const thumbCache={};
-function bldThumb(fac,id){const T=TOWN_SCREEN[fac];if(!T)return null;const key=fac+'/'+id;if(thumbCache[key])return thumbCache[key];
+function bldThumb(fac,id){const key=fac+'/'+id;if(thumbCache[key])return thumbCache[key];
+  {const xc=xbCell(fac,id);if(xc){const a=artImg(XB_ATLAS);if(!a.ok)return null;const cv=document.createElement('canvas');cv.width=cv.height=128;const c=cv.getContext('2d');c.imageSmoothingEnabled=false;c.drawImage(a.img,xc[0],xc[1],128,128,0,0,128,128);return thumbCache[key]=cv.toDataURL();}}
+  const T=TOWN_SCREEN[fac];if(!T)return null;
   let pid=null;const hn=['settlement','town_hall','city_hall','capital'];
   if(/^hall\d$/.test(id))pid=T.hall+hn[+id[4]-1];
   else{const look=/^u\d$/.test(id)?'d'+id[1]:id,site=T.sites.find(z=>z[1].includes(look))||T.sites.find(z=>z[1].includes(id));if(site)pid=site[0];}
@@ -3692,7 +3703,7 @@ document.addEventListener('click',async e=>{
 },true);
 async function openTown(tw){
   if(modalOpen||S.over)return;
-  tw=tw&&tw!==S.town?tw:null;VT=tw;if(TOWN_SCREEN[TF()])artImg(TOWN_SCREEN[TF()].atlas);
+  tw=tw&&tw!==S.town?tw:null;VT=tw;if(TOWN_SCREEN[TF()])artImg(TOWN_SCREEN[TF()].atlas);artImg(XB_ATLAS);
   if(!tw&&S.town.taken){VT=null;toast(`${esc(TW().taken.name)} holds ${esc(TW().name)}. Defeat them at the gate to take it back.`);return;}
   townTab=townAdvice().tab==='overview'?'overview':'overview';townFocus=null;
   const p=showModal({title:`<img src="${iconURL('crest',TF(),52)}" alt="" style="width:44px;height:44px;vertical-align:-12px;margin-right:8px;image-rendering:pixelated"><span class="tname" data-rename-town="1" title="Double-click to rename">${esc(TW().name)}</span>`,body:townHTML(),wide:true,top:true,buttons:[{label:'Leave town ▸',value:1,primary:true}],dismiss:1});
