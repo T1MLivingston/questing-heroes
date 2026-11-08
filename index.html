@@ -1186,8 +1186,69 @@ function terrainCost(x,y){
 function stepCost(ax,ay,bx,by){const c=terrainCost(bx,by);return Math.round((ax!==bx&&ay!==by)?c*1.414:c);}
 
 /* -------- terrain prerender -------- */
-let terrainCv=null;
+let terrainCv=null,terrainPh=null;
+/* Terrain art (assets/terrain, native 32px grid). Until every file loads, or if one fails, the drawn terrain below is used. */
+const TA_N=32,TA_ROW={meadow:0,forest_floor:1,dry_grass:2,dirt:3,sand:4,rocky:5,snow:6,swamp:7,ash:8,cobblestone:9,water:10};
+const TA_EDGES=['dry_grass','dirt','swamp','forest_floor','rocky','sand'];
+const TA_SCEN=['oak','pine','autumn_tree','dead_tree','mountain_gray','mountain_snow','ochre_hill','flowers_meadow','flowers_blue','shrub','reeds','mushrooms','boulder','fallen_log'];
+const TA_FILES=['terrain/ground_atlas.png','terrain/water_anim.png','terrain/roads/cobblestone.png',...TA_EDGES.map(f=>`terrain/edges/${f}.png`),...[0,1,2,3].map(p=>`terrain/edges/water_${p}.png`),...TA_SCEN.map(k=>`terrain/scenery/${k}.png`)];
+let terrArtReady=false;
+function loadTerrainArt(){let left=0;for(const p of TA_FILES){const a=artImg(p);if(!a.ok){left++;a.img.addEventListener('load',()=>{if(--left===0){terrArtReady=true;if(S&&!bt)renderTerrain();}},{once:true});}}if(!left)terrArtReady=true;artImg('terrain/fire/campfire.png');artImg('terrain/fire/torch.png');}
+const taImg=p=>artImg('terrain/'+p).img;
+function renderTerrainArt(){
+  const N=TA_N,g=mulberry32(S.seed^0x7f4a7c15);
+  const hv=(a,b)=>{let h=Math.imul(a+1013,374761393)^Math.imul(b+7919,668265263)^S.seed;h=Math.imul(h^(h>>>13),1274126177);return(h^(h>>>16))>>>0;};
+  const mk=()=>{const cv=document.createElement('canvas');cv.width=W*N;cv.height=H*N;const c=cv.getContext('2d');c.imageSmoothingEnabled=false;return[cv,c];};
+  const tl=(x,y)=>S.tiles[idx(clamp(x,0,W-1),clamp(y,0,H-1))];
+  const near4=(x,y,t)=>[[1,0],[-1,0],[0,1],[0,-1]].some(([a,b])=>inb(x+a,y+b)&&S.tiles[idx(x+a,y+b)]===t);
+  const atlas=taImg('ground_atlas.png');
+  const cell=(c,img,code,X,Y)=>c.drawImage(img,(code%4)*N,(code>>2)*N,N,N,X,Y,N,N);
+  // dual grid: each overlay cell sits on a tile corner, and its four corners are the four tiles that meet there
+  const corners=(test,draw)=>{for(let vy=0;vy<=H;vy++)for(let vx=0;vx<=W;vx++){
+    const code=(test(vx-1,vy-1)?1:0)|(test(vx,vy-1)?2:0)|(test(vx,vy)?4:0)|(test(vx-1,vy)?8:0);if(code)draw(code,vx*N-N/2,vy*N-N/2,vx,vy);}};
+  const [gcv,gc]=mk();
+  for(let y=0;y<H;y++)for(let x=0;x<W;x++)gc.drawImage(atlas,(hv(x,y)%4)*N,0,N,N,x*N,y*N,N,N);
+  const layers=[['dry_grass',t=>t===T.HEATH],['dirt',t=>t===T.DIRT],['swamp',t=>t===T.BOG],['forest_floor',t=>t===T.FOREST],['rocky',t=>t===T.CRAG],
+    ['sand',(t,x,y)=>t===T.LAKE||(passableT(t)&&near4(clamp(x,0,W-1),clamp(y,0,H-1),T.LAKE))]];
+  for(const [f,is] of layers){const img=taImg(`edges/${f}.png`);
+    corners((x,y)=>is(tl(x,y),x,y),(code,X,Y,vx,vy)=>code===15?gc.drawImage(atlas,(hv(vx,vy)%4)*N,TA_ROW[f]*N,N,N,X,Y,N,N):cell(gc,img,code,X,Y));}
+  // roads and scenery go on their own layer, above the water
+  const [scv,sc]=mk();
+  const road=new Set();for(let i=0;i<W*H;i++)if(S.tiles[i]===T.ROAD)road.add(i);
+  for(const i of[...road]){const x=i%W,y=(i/W)|0;for(const dx of[1,-1]){const nx=x+dx,ny=y+1;if(!inb(nx,ny)||!road.has(idx(nx,ny))||road.has(idx(nx,y))||road.has(idx(x,ny)))continue;
+    road.add(passableT(S.tiles[idx(nx,y)])?idx(nx,y):idx(x,ny));}}// a diagonal step gets a corner tile so the road looks joined
+  const rimg=taImg('roads/cobblestone.png'),R=(x,y)=>inb(x,y)&&road.has(idx(x,y));
+  for(const i of road){const x=i%W,y=(i/W)|0;cell(sc,rimg,(R(x,y-1)?1:0)|(R(x+1,y)?2:0)|(R(x,y+1)?4:0)|(R(x-1,y)?8:0),x*N,y*N);}
+  const busy=new Set(S.objs.map(o=>idx(o.x,o.y)));for(const i of FOOT)busy.add(i);for(const i of road)busy.add(i);
+  const props=[],P=(k,x,y)=>props.push({k,x,y}),j=s=>Math.round((g()-0.5)*s);
+  const crag=(x,y)=>inb(x,y)&&S.tiles[idx(x,y)]===T.CRAG,peaks=[],hills=[];
+  const cr=[];for(let i=0;i<W*H;i++)if(S.tiles[i]===T.CRAG)cr.push(i);
+  for(let i=cr.length-1;i>0;i--){const k=Math.floor(g()*(i+1));[cr[i],cr[k]]=[cr[k],cr[i]];}
+  for(const i of cr){const x=i%W,y=(i/W)|0;
+    if(crag(x-1,y)&&crag(x+1,y)&&!peaks.some(p=>Math.abs(p.x-x)<2&&Math.abs(p.y-y)<2)){peaks.push({x,y});P(y<H*0.34?'mountain_snow':'mountain_gray',x*N+16,y*N+30);}}
+  for(const i of cr){const x=i%W,y=(i/W)|0;if(peaks.some(p=>Math.abs(p.x-x)<=1&&Math.abs(p.y-y)<=1))continue;
+    if(!hills.some(p=>Math.abs(p.x-x)<=1&&Math.abs(p.y-y)<=1)){hills.push({x,y});P('ochre_hill',x*N+16+j(4),y*N+30);}else P('boulder',x*N+16+j(10),y*N+26+j(4));}
+  for(let y=0;y<H;y++)for(let x=0;x<W;x++){const t=S.tiles[idx(x,y)],r=g(),X=x*N+16,Y=y*N+28;
+    if(t===T.FOREST){const z=hv(x>>2,y>>2)%6;let k=(near4(x,y,T.BOG)&&hv(x,y)%2===0)||(z===0&&hv(x,y)%4===0)?'dead_tree':z===1?'autumn_tree':z<4?'pine':'oak';if(r<0.25)k=k==='pine'?'oak':k==='oak'?'pine':k;P(k,X+j(8),Y+2+j(4));continue;}
+    if(busy.has(idx(x,y)))continue;
+    if(t===T.BOG){if(r<0.3)P('reeds',X+j(14),Y+j(8));}
+    else if(t===T.HEATH){if(r<0.14)P('shrub',X+j(14),Y+j(8));else if(r<0.2)P('flowers_blue',X+j(14),Y+j(8));}
+    else if(t===T.GRASS){const fr=near4(x,y,T.FOREST);
+      if(fr&&r<0.05)P('mushrooms',X+j(14),Y+j(8));else if(fr&&r<0.08)P('fallen_log',X,Y+j(6));
+      else if(r<0.1)P('flowers_meadow',X+j(14),Y+j(8));else if(r<0.14)P('flowers_blue',X+j(14),Y+j(8));else if(r<0.17)P('shrub',X+j(14),Y+j(8));else if(r<0.19)P('boulder',X+j(14),Y+j(8));}
+    else if(t===T.DIRT&&r<0.06)P('boulder',X+j(14),Y+j(8));}
+  props.sort((a,b)=>a.y-b.y);
+  for(const p of props){const img=taImg(`scenery/${p.k}.png`);sc.drawImage(img,Math.round(p.x-img.width/2),Math.round(p.y-img.height+4));}
+  const lake=(x,y)=>tl(x,y)===T.LAKE,anim=taImg('water_anim.png');
+  terrainPh=[0,1,2,3].map(ph=>{const [cv,c]=mk();c.drawImage(gcv,0,0);const img=taImg(`edges/water_${ph}.png`);
+    corners(lake,(code,X,Y,vx,vy)=>code===15?c.drawImage(anim,(hv(vx,vy)%4)*N,ph*N,N,N,X,Y,N,N):cell(c,img,code,X,Y));c.drawImage(scv,0,0);return cv;});
+  terrainCv=terrainPh[0];
+}
+function drawFire(c,k,x,y,off=0){const a=artImg(`terrain/fire/${k}.png`);if(!a.ok)return;const d=[140,110,130,150];let t=(performance.now()+off)%530,f=0;while(f<3&&t>=d[f])t-=d[f++];
+  c.imageSmoothingEnabled=false;c.drawImage(a.img,f*32,0,32,32,Math.round(x-22),Math.round(y-38.5),44,44);}
 function renderTerrain(){
+  if(terrArtReady){try{renderTerrainArt();return;}catch(e){console.warn('terrain art',e);}}
+  terrainPh=null;
   const cv=document.createElement('canvas');cv.width=W*TS;cv.height=H*TS;const c=cv.getContext('2d');
   const g=mulberry32(S.seed^0x5bd1e995);
   const base=['#4f6c35','#7b6a46','#a28c5b','#6a5a4f','#3f5139','#4c6a31','#57564f','#2a4b5e'];
@@ -1257,6 +1318,7 @@ function drawTown(c,cx,by,fk=S.fac,tw=S.town){
   // gate
   c.fillStyle='#2b1d10';c.beginPath();c.moveTo(cx-11,by-6);c.lineTo(cx-11,by-22);c.arc(cx,by-22,11,Math.PI,0);c.lineTo(cx+11,by-6);c.closePath();c.fill();
   c.strokeStyle=f.col2;c.lineWidth=1;for(let x=cx-8;x<=cx+8;x+=4){c.beginPath();c.moveTo(x,by-28);c.lineTo(x,by-6);c.stroke();}
+  drawFire(c,'torch',cx-19,by-2,0);drawFire(c,'torch',cx+19,by-2,260);
   // name plate
   c.font='700 12px "Pixelify Sans",monospace';c.textAlign='center';const nmw=c.measureText(tw.name).width+12;
   c.fillStyle='rgba(16,20,19,.85)';c.fillRect(cx-nmw/2,top-6,nmw,17);c.strokeStyle=f.col;c.strokeRect(cx-nmw/2,top-6,nmw,17);c.fillStyle='#f2d382';c.fillText(tw.name,cx,top+7);
@@ -1280,7 +1342,7 @@ function drawObj(c,o){
   case 'drop':drawRelic(c,o.rs[0],cx,cy,10);break;
   case 'camp':{const col=FAC[o.fac].col;c.fillStyle='rgba(0,0,0,.35)';c.beginPath();c.ellipse(cx,cy+13,20,6,0,0,7);c.fill();
     c.fillStyle=col;c.strokeStyle='#1a1610';c.lineWidth=1.2;c.beginPath();c.moveTo(cx-18,cy+12);c.lineTo(cx-4,cy-12);c.lineTo(cx+10,cy+12);c.closePath();c.fill();c.stroke();
-    c.fillStyle='#2b1d10';c.beginPath();c.moveTo(cx-8,cy+12);c.lineTo(cx-4,cy+2);c.lineTo(cx,cy+12);c.closePath();c.fill();flag(c,cx+13,cy+8,col);break;}
+    c.fillStyle='#2b1d10';c.beginPath();c.moveTo(cx-8,cy+12);c.lineTo(cx-4,cy+2);c.lineTo(cx,cy+12);c.closePath();c.fill();flag(c,cx+13,cy+8,col);drawFire(c,'campfire',cx-15,cy+19,o.x*97+o.y*31);break;}
   case 'mine':{
     c.fillStyle='rgba(0,0,0,.3)';c.beginPath();c.ellipse(cx,cy+13,18,5,0,0,7);c.fill();
     if(o.k==='saw'){c.fillStyle='#7a5432';c.strokeStyle='#2a1a0c';c.fillRect(cx-12,cy-4,18,16);c.strokeRect(cx-12,cy-4,18,16);c.fillStyle='#4d3520';c.beginPath();c.moveTo(cx-15,cy-4);c.lineTo(cx-3,cy-14);c.lineTo(cx+9,cy-4);c.closePath();c.fill();drawRes(c,'timber',cx+11,cy+8,7);}
@@ -1359,7 +1421,8 @@ function drawMap(){
   clampCam();
   const c=mctx;c.setTransform(dpr,0,0,dpr,0,0);c.imageSmoothingEnabled=false;c.fillStyle='#0a0c0b';c.fillRect(0,0,vw,vh);
   c.save();c.translate(-Math.round(camX),-Math.round(camY));
-  c.drawImage(terrainCv,0,0);
+  {const tcv=terrainPh?terrainPh[Math.floor(performance.now()/220)%4]:terrainCv,k=tcv.width/(W*TS),sx=Math.max(0,Math.floor(camX*k)),sy=Math.max(0,Math.floor(camY*k)),
+    sw=Math.min(tcv.width-sx,Math.ceil(vw*k)+2),sh=Math.min(tcv.height-sy,Math.ceil(vh*k)+2);if(sw>0&&sh>0)c.drawImage(tcv,sx,sy,sw,sh,sx/k,sy/k,sw/k,sh/k);}
   const x0=Math.max(0,Math.floor(camX/TS)-2),y0=Math.max(0,Math.floor(camY/TS)-1),x1=Math.min(W-1,Math.ceil((camX+vw)/TS)+2),y1=Math.min(H-1,Math.ceil((camY+vh)/TS)+4);
   if(path&&path.length){
     let mp=HERO().mp,px=HERO().x,py=HERO().y,day=0;
@@ -2499,7 +2562,7 @@ async function title(){
   if(v==='c'&&has){S=has;afterLoad();}else startNew();
 }
 function boot(data){
-  preloadArt();applyTheme();sizeMap();requestAnimationFrame(frame);
+  preloadArt();loadTerrainArt();applyTheme();sizeMap();requestAnimationFrame(frame);
   if(data&&data.save){try{S=JSON.parse(data.save);afterLoad();return;}catch(e){}}
   title();
 }

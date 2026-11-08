@@ -10,7 +10,7 @@ This is a **private, personal project**. See `LEGAL.md` before publishing anythi
 
 - **Frontend**: Single HTML file with inline CSS and JavaScript
 - **Rendering**: HTML5 Canvas 2D API (map and battlefield), DOM for panels and dialogs
-- **Art**: Sprite PNGs in `assets/` where they exist (Rangers units, 5 hero map sprites, 12 hero portraits); everything else is still drawn in code, and the drawn version is the fallback for any missing image
+- **Art**: Sprite PNGs in `assets/` where they exist (map terrain and scenery, Rangers units, 5 hero map sprites, 12 hero portraits); everything else is still drawn in code, and the drawn version is the fallback for any missing image
 - **Fonts**: Pixelify Sans (display, numbers, canvas text) and VT323 (body) from Google Fonts (SIL Open Font License), for a big 90s pixel look
 - **No build tools**: open `index.html` in a browser to play
 
@@ -22,7 +22,7 @@ questing-heroes/
 ├── CLAUDE.md     # This file
 ├── LEGAL.md      # Originality notes, third-party notices, pre-publish checklist
 ├── LICENSE       # All rights reserved (personal project)
-├── assets/       # Sprite art: units/, heroes/, portraits/, shields/ (faction crests), team_masks/, manifest.json, palette/
+├── assets/       # Sprite art: terrain/ (ground, edges, roads, scenery, fire), units/, heroes/, portraits/, shields/ (faction crests), team_masks/, manifest.json, palette/
 └── .gitignore
 ```
 
@@ -82,6 +82,7 @@ Everything lives in one object, `S`, so it can be saved as JSON:
 
 - Tables near the top of ART: `ART_PORTRAITS` (hero ids with `portraits/heroes/<id>_64|128.png`), `ART_MAP` (heroes with an 8-direction `heroes/<id>/map/<id>_map_sheet.png`, 48×48 frames, rows S, SW, W, NW, N, NE, E, SE) and `ART_UNITS` (game unit key → `units/rangers/<name>/<name>_sheet.png`, 64×64 frames, rows idle, move, attack, hit, death).
 - `tinted()` recolours team pixels from the paired `team_masks/` file to the faction colour. Pixel reads fail on `file://`, so serve the folder (`python3 -m http.server`) to see team colours; otherwise the original colours show.
+- Map terrain (`assets/terrain`, see its README) is prerendered by `renderTerrainArt` at the art's native 32px per tile and scaled to `TS` when drawn. Ground is a meadow base with dual-grid corner overlays per terrain (heath = dry grass, bog = swamp, forest floor, crags = rocky, sand shores, water), cobblestone roads by neighbour connections, then props sorted by their foot: a tree per forest tile, mountains or hills on crags, flowers, reeds and boulders scattered on free tiles. Four canvases (`terrainPh`) hold the four water phases (220 ms). The old drawn terrain is used until all `TA_FILES` load. `drawFire` animates the campfire at camps and the torches at town gates.
 - Add new art by dropping files in the same layout and adding the id to the matching table. `assets/manifest.json` is the art pack's full registry.
 
 ### Map furniture
