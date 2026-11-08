@@ -43,6 +43,7 @@ No other libraries, images or audio are included. Art made later with ChatGPT or
 | Shadow portrait (hooded) | Supplied by the author; 128 px upscaled from the 64 px original | 2026-11-08 | Same as above |
 | High Detail Troops A-D: 128 px battle strips with team masks and 128 px recruit cards for 38 troops (`assets/units`, `assets/portraits/units/*_128.png`) | Re-exported from the original generated art on the shared palette (pack READMEs) | 2026-11-08 | Same as above |
 | Groves, Well, Clover & Rocks: 6 tree groves, wishing well, four-leaf clover, 6 rock groups (`assets/terrain/scenery`, `assets/map/sites`) | Generated scenery on the shared palette (pack README) | 2026-11-08 | Same as above |
+| Rangers Layered Town: 640×360 town screen background, 11 buildings and 4 hall stages, packed into one atlas (`assets/towns/rangers/screen.png`) | Supplied by the author (generated pixel art, ChatGPT), packed locally | 2026-11-08 | Original town layout and buildings; no other game's town art copied. Review for resemblance before publishing |
 | Half-size move cursor (`assets/ui/cursors/move_small.png`) | Downscaled locally from Pack 09's move cursor | 2026-11-08 | Same as above |
 
 The generated source images (high-res magenta PNGs) are kept outside this repo.

@@ -815,6 +815,7 @@ img.upg{filter:sepia(.55) saturate(1.9) hue-rotate(-12deg) brightness(1.06) drop
 .offer{background:rgba(70,140,70,.14);border-left:4px solid #4f9a4a;padding:6px 10px;margin:10px 0 0}
 .maprow.setup{flex-wrap:wrap;gap:6px}
 .maprow.setup .label{margin-left:10px}
+.tscreen .tview{max-height:calc(100vh - 430px);min-height:180px;width:auto;max-width:100%;margin:0 auto}
 </style>
 
 <div id="app">
@@ -3379,7 +3380,7 @@ function townHTML(){
     const canUp=g=>{const ti=FAC[TF()].units.indexOf(g.k);return ti>=0&&!!t.built['u'+(ti+1)];};
     const slots=(arr,side)=>Array.from({length:7},(_,i)=>{const g=arr[i];if(!g)return'<div class="slot empty"></div>';const up=canUp(g)&&(side==='g'||vis),c=up?upCost(g.k,g.n):null;
       return`<button class="slot" data-gtx="${side}${i}" title="${g.n} ${U[g.k].pl}${vis?` · click to move to the ${side==='g'?'hero':'garrison'}`:''}"><img class="${U[g.k]&&U[g.k].up?'upg':''}" src="${iconURL('unit',g.k,64)}" alt="${U[g.k].name}"><b>${g.n}</b>${up?`<span class="uplus${canAfford(c)?'':' poor'}" data-uplus="${side}${i}" role="button" title="Upgrade to ${U[g.k+'_u'].pl}: ${fmt(c.gold)} gold">+</span>`:''}</button>`;}).join('');
-    body=`<div class="tscreen"><div class="tview-wrap"><canvas class="tview" id="townView" width="960" height="300" aria-label="${esc(t.name)}: click a building. Click the hall to see everything you can build."></canvas><div class="tv-tip" id="tvTip" hidden></div></div>
+    body=`<div class="tscreen"><div class="tview-wrap"><canvas class="tview" id="townView" width="960" height="${TOWN_SCREEN[TF()]?360:300}" aria-label="${esc(t.name)}: click a building. Click the hall to see everything you can build."></canvas><div class="tv-tip" id="tvTip" hidden></div></div>
       <div class="tstrip">
         <div class="tvisit">
           <div class="thero">${vis?`<img src="${iconURL('hero',vis.id,128)}" alt=""><div><b>${esc(vis.name)}</b><small>${H_().type} hero · visiting</small></div>`:'<div><b>No hero in town</b><small>Bring a hero to the gate to swap troops.</small></div>'}</div>
@@ -3440,7 +3441,40 @@ function townHTML(){
   return`<div class="town">${resBar}<nav class="ttabs" aria-label="Town actions">${tabs}</nav>${advice}${body}</div>`;
 }
 /* the town itself: buildings stand in place once built; empty lots show what can go up next */
+/* layered town screens (art packs): a 640×360 scene packed in one atlas, background at (0,0), each building piece as [atlas x, y, w, h, scene x, y].
+   Each site maps to game buildings: when it is built, show the piece; otherwise the site is an invisible lot. Drawn at the centre of a 960×360 canvas; the sides mirror the scene's edges. */
+const TOWN_SCREEN={rangers:{atlas:'towns/rangers/screen.png',pieces:{"ranger_hall_capital":[0,360,170,118,264,29],"watchtower":[171,360,56,102,147,21],"spell_lodge":[0,479,88,87,34,54],"hedge_witch_cottage":[204,567,118,77,482,62],"reedbow_range":[323,567,120,77,4,153],"thornguard_barracks":[251,479,119,85,127,139],"trader_lodge":[371,479,125,83,250,154],"training_yard":[526,567,109,57,381,179],"tavern":[228,360,140,97,494,142],"stables":[0,567,203,80,27,232],"smithy":[89,479,161,86,438,242],"palisade_gate":[369,360,240,91,190,246],"ranger_hall_settlement":[0,648,75,52,314,69],"ranger_hall_town_hall":[444,567,81,75,311,46],"ranger_hall_city_hall":[497,479,124,82,289,39]},
+  sites:[['watchtower',['fb2']],['spell_lodge',['lib1'],'library'],['hedge_witch_cottage',['d4'],'recruit'],['reedbow_range',['d2'],'recruit'],['thornguard_barracks',['d1'],'recruit'],['trader_lodge',['market'],'market'],
+    ['training_yard',['muster']],['tavern',['tavern'],'tavern'],['stables',['d3','stables'],'recruit'],['smithy',['u1','u2','u3','u4','u5'],'upgrade'],['palisade_gate',['wall1','wall2','wall3']]],gate:[320,342]}};
+let townAlpha={};
+function artTownAlpha(path,img){if(townAlpha[path]!==undefined)return townAlpha[path];try{const cv=document.createElement('canvas');cv.width=img.width;cv.height=img.height;const c=cv.getContext('2d');c.drawImage(img,0,0);townAlpha[path]={w:img.width,d:c.getImageData(0,0,img.width,img.height).data};}catch(e){townAlpha[path]=null;}return townAlpha[path];}
+function drawArtTown(cv,TSN){const a=artImg(TSN.atlas);if(!a.ok)return false;const im=a.img,c=cv.getContext('2d'),t=TW(),f=FAC[TF()],BL=townBuildings(),BY=Object.fromEntries(BL.map(b=>[b.id,b])),OX=160,P=TSN.pieces;
+  townSpots=[];c.imageSmoothingEnabled=false;c.clearRect(0,0,cv.width,cv.height);
+  c.drawImage(im,0,0,640,360,OX,0,640,360);
+  c.save();c.translate(OX,0);c.scale(-1,1);c.drawImage(im,0,0,OX,360,0,0,OX,360);c.restore();
+  c.save();c.translate(OX+640+640,0);c.scale(-1,1);c.drawImage(im,640-OX,0,OX,360,640-OX,0,OX,360);c.restore();
+  for(const[x0,x1]of[[0,OX],[OX+640,960]]){const g=c.createLinearGradient(x0,0,x1,0),dk='rgba(10,14,30,.45)',cl='rgba(10,14,30,0)';g.addColorStop(0,x0?cl:dk);g.addColorStop(1,x0?dk:cl);c.fillStyle=g;c.fillRect(x0,0,x1-x0,360);}
+  const piece=(id,tab,bid,label)=>{const q=P[id];c.drawImage(im,q[0],q[1],q[2],q[3],OX+q[4],q[5],q[2],q[3]);townSpots.push({x:OX+q[4],y:q[5],w:q[2],h:q[3],tab,id:bid,label,pix:[q[0],q[1]],atlas:TSN.atlas});};
+  const lot=(id,bid)=>{const q=P[id],b=BY[bid];if(!b)return;townSpots.push({x:OX+q[4],y:q[5],w:q[2],h:q[3],tab:'build',id:bid,label:`Empty lot: ${b.name}${bAvail(b)?' (can be built)':' (locked)'}`});};
+  const used=new Set(['hall1','hall2','hall3','hall4']);
+  const hs=t.built.hall4?'capital':t.built.hall3?'city_hall':t.built.hall2?'town_hall':'settlement',hn=t.built.hall4?'Crown Seat':t.built.hall3?'High Seat':t.built.hall2?'Council Hall':'Moot Hall';
+  piece('ranger_hall_'+hs,'build','hall2',`${hn}: click to see everything you can build (+${fmt(VT?hallGold(t):income())} gold a day)`);
+  const fu=f.units;
+  for(const[id,ids,tab]of TSN.sites){ids.forEach(i=>used.add(i));const on=ids.filter(i=>t.built[i]);
+    if(!on.length){const nx=ids.find(i=>BY[i]);if(nx)lot(id,nx);continue;}
+    const b0=on[0],B=BY[b0]||{name:b0},di=b0[0]==='d'?+b0[1]-1:-1;
+    const label=di>=0?`${f.dw[di]}: recruit ${U[recruitKey(fu[di])].pl}${t.pool[fu[di]]?` (${t.pool[fu[di]]} waiting)`:''}${on.length>1?` · also ${on.slice(1).map(i=>(BY[i]||{name:i}).name).join(', ')}`:''}`
+      :tab==='upgrade'?`Upgrades built: ${on.map(i=>f.dw[+i[1]-1]).join(', ')} · upgrade troops here`:tab==='library'?(t.built.lib2?'Lantern Library and Star Archive':'Lantern Library'):b0.startsWith('wall')?`${WALLS[wallLvl(t)-1].name}: the garrison fights ${['','25%','50%','twice as'][wallLvl(t)]} harder`:B.name;
+    piece(id,di>=0?'recruit':tab||'build',di>=0?b0:tab==='upgrade'?null:b0.startsWith('wall')?(t.built.wall3?'wall3':t.built.wall2?'wall3':'wall2'):b0,label);}
+  // built buildings that have no picture yet: small signs along the bottom, still clickable
+  // (signs stack down the left margin, outside the painted scene)
+  used.add('lib2');const extra=BL.filter(b=>t.built[b.id]&&!used.has(b.id));let sy=8;c.font='700 12px "Alegreya SC",Georgia,serif';c.textBaseline='middle';c.textAlign='left';
+  for(const b of extra){const nm=b.id==='reliquary'?`${b.name} ${S.delivered.length}/7`:b.name,w=Math.min(OX-12,c.measureText(nm).width+14);if(sy>330)break;c.fillStyle='rgba(28,20,10,.85)';c.fillRect(6,sy,w,20);c.strokeStyle='#e8c060';c.lineWidth=1;c.strokeRect(6.5,sy+.5,w-1,19);c.fillStyle='#f6e2a8';c.fillText(nm,13,sy+10,w-14);
+    const di=b.unit?f.units.indexOf(b.unit):-1;townSpots.push({x:6,y:sy,w,h:20,tab:di>=0?'recruit':b.id==='reliquary'?'relics':'build',id:b.id,label:b.desc});sy+=25;}
+  S.heroes.filter(x=>x.x===t.x&&x.y===t.y).forEach((x,i)=>{c.save();c.translate(OX+TSN.gate[0]-14+i*30-TS/2,TSN.gate[1]-TS/2-6);const f0=x.face;x.face='s';drawHero(c,0,0,x);x.face=f0;c.restore();});
+  return true;}
 function drawTownView(cv){
+  {const TSN=TOWN_SCREEN[TF()];if(TSN&&drawArtTown(cv,TSN))return;}
   const c=cv.getContext('2d'),f=FAC[TF()],t=TW(),BL=townBuildings(),BY=Object.fromEntries(BL.map(b=>[b.id,b])),now=performance.now();
   townSpots=[];c.imageSmoothingEnabled=false;
   const tc=shadeRGB(f.col,-0.55),sky=c.createLinearGradient(0,0,0,300);sky.addColorStop(0,'#141c26');sky.addColorStop(0.7,`rgb(${tc})`);sky.addColorStop(1,'#2b2a22');c.fillStyle=sky;c.fillRect(0,0,960,300);
@@ -3499,7 +3533,8 @@ function drawTownView(cv){
 }
 function bindTownView(body,go){
   const cv=body.querySelector('#townView');if(!cv)return;const tip=body.querySelector('#tvTip');
-  const hit=e=>{const r=cv.getBoundingClientRect(),x=(e.clientX-r.left)*960/r.width,y=(e.clientY-r.top)*300/r.height;return{s:townSpots.slice().reverse().find(p=>x>=p.x&&x<=p.x+p.w&&y>=p.y&&y<=p.y+p.h),px:e.clientX-r.left,py:e.clientY-r.top};};
+  const solid=(p,x,y)=>{if(!p.pix)return true;const a=artImg(p.atlas);if(!a.ok)return true;const al=artTownAlpha(p.atlas,a.img);if(!al)return true;const ix=p.pix[0]+Math.floor(x-p.x),iy=p.pix[1]+Math.floor(y-p.y);return al.d[(iy*al.w+ix)*4+3]>20;};
+  const hit=e=>{const r=cv.getBoundingClientRect(),x=(e.clientX-r.left)*cv.width/r.width,y=(e.clientY-r.top)*cv.height/r.height;return{s:townSpots.slice().reverse().find(p=>x>=p.x&&x<p.x+p.w&&y>=p.y&&y<p.y+p.h&&solid(p,x,y)),px:e.clientX-r.left,py:e.clientY-r.top};};
   cv.addEventListener('pointermove',e=>{const{s:sp,px,py}=hit(e);if(sp){tip.hidden=false;tip.textContent=sp.label;tip.style.left=Math.min(px+12,cv.clientWidth-200)+'px';tip.style.top=(py+12)+'px';cv.style.cursor='pointer';}else{tip.hidden=true;cv.style.cursor='default';}});
   cv.addEventListener('pointerleave',()=>{tip.hidden=true;});
   cv.addEventListener('click',e=>{const{s:sp}=hit(e);if(sp)go(sp.tab,sp.id);});
