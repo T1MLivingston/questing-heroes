@@ -79,7 +79,7 @@ Everything lives in one object, `S`, so it can be saved as JSON:
 - `dropPuddles` (end of `genMap`) keeps water only if it is part of a river, has an object on it, has a dock (and is 12+ tiles), or is a real lake (60+ tiles); everything else becomes land, and docks left without water are removed.
 - `rockMines` (in `furnishMap`) sets ore pits and gold seams against crags: it moves each up to 6 steps to the foot of rock, or raises a crag beside it, undoing any change that shrinks the reachable land.
 - Battle: big troops (96 px art, every tier 5, ogres, trolls, the drake) draw 40% larger (`BIGK` in `drawBattle`); they still use one hex. Ogres, trolls and drakes also stand larger on the map.
-- Banner cards show `FAC_SW` (two strengths, one weakness) under the name.
+- Choose your banner (`pickFaction`) is a tall sheet (`.bannersheet`) of `bannerCard`s: crest, ability name, `FAC_SW` strengths and weakness, `FAC_BLURB`, hero faces, troop pictures, Details and Choose. Details shows `bannerDetail`: the banner ability, travel and home town, the four heroes with big portraits, stats and full ability, and all five troops with big pictures, `UNIT_TAGS`, stats, dwelling, cost and upgrade; ‹ › flip to the neighbouring banner.
 - `ART_REQUEST_TROOPS.md` is the art brief for the troop sprite sheets still to come.
 
 - Each faction in `FAC` has 5 units (tiers 1 to 5), dwelling names, a colour palette, a signature mechanic and a travel mode.
