@@ -1440,7 +1440,7 @@ const ART_BASE='assets/';
 const ART_PORTRAITS=new Set(['eden','boone','holmes','tinker','bear','battaglia','dorothy','oliver','grimes','engelman','tempest','rimmer','parker','necro4','shadow','rago','monkey','schmickle','binx','boopis',
   'omalley','vargas','sheila','lawrence','davis','sookie','michael','love','livingston','ivan','slack','dupengeiser','perry','rocky','elvis','letchworth','mer2']);
 const ART_MAP=new Set(['binx','dorothy','oliver','vargas']),MAP_SRC={};
-const ART_UNITS={antler:'antler_knight',moth:'moth_seer',oak:'oak_warden'};
+const ART_UNITS={};
 /* Enemies, Loot & World Pack 02: neutral battle sheets (4x5 like the Rangers, no team masks), 32px map guards, enemy portraits */
 const ENEMY_ART={wolf:'wolf',wight:'wight',imp:'imp',troll:'troll',drake:'drake',bandit:'bandit',skelguard:'skeleton',wildboar:'boar',spider:'spider',ogre:'ogre'};
 const MINE_ART={saw:['sawmill',46,16],orepit:['ore_pit',46,12],gold:['gold_seam',46,22],amber:['amber_spring',46,23]};
@@ -1450,7 +1450,7 @@ const flagFor=col=>{const a=hexRGB(col);let best='neutral',bd=1e9;for(const[k,v]
 /* projectile art by attacker */
 const PROJ_OF=k=>{const b=U[k]&&U[k].up?U[k].base:k;return k==='cannon_u'?'bolt':b==='bolt'||b==='gunner'?'bolt':b==='cannon'?'rock':b==='imp'||b==='powder'?'ember':b==='spider'?'spit':['magus','apprentice','siren','stormel'].includes(b)?'spell_orb':'arrow';};
 /* Troops Pack 10: six-pose strips (idle, move A, move B, attack, hit, defeat), 64 or 96 px frames, no team masks */
-const ART_STRIPS={thorn:'thornguard',reed:'reedbow',owl:'owl_familiar',apprentice:'apprentice_mage',earthel:'earth_elemental',stormel:'storm_elemental',magus:'archmage',
+const ART_STRIPS={thorn:'thornguard',reed:'reedbow',antler:'antler_knight',moth:'moth_seer',oak:'oak_warden',owl:'owl_familiar',apprentice:'apprentice_mage',earthel:'earth_elemental',stormel:'storm_elemental',magus:'archmage',
   skeleton:'skeleton',zombie:'zombie',werewolf:'werewolf',vampire:'vampire',hellkite:'hellkite',
   rabbit:'war_rabbit',boar:'boar',hounds:'hound',centaur:'centaur',lion:'lion',
   deckhand:'deckhand',powder:'powder_monkey',duelist:'duelist',gunner:'gunner',cannon:'cannon_crew',cannon_u:'great_crossbow',
@@ -1489,6 +1489,10 @@ const FLOT={floating_chest:{name:'Floating chest',give:'800-1,400 gold'},salvage
   supply_barrel:{name:'Supply barrel',give:'500 gold and 3 ore'},pearl_shell:{name:'Giant pearl',give:'2 amber'},message_bottle:{name:'Message in a bottle',give:'a rumour, or 600 gold'},
   sea_crystal:{name:'Sea crystal',give:'3 amber'},coral_relic:{name:'Coral relic',give:'an artifact'}};
 const UI_RES={gold:'gold',timber:'wood',ore:'ore'},UI_STAT={atk:'attack',def:'defense',lore:'mana'};
+/* Resources & Map Sites pack: one atlas, map/world_extras.png. key: [x, y, w, h, frames]; drawn bottom-centre on the foot like spriteAt */
+const WX={gem:[0,0,128,64,2],moon:[128,0,128,64,2],fair:[256,0,96,64,1],moonwater_pile:[352,0,48,48,1],gems_pile:[400,0,48,48,1],prison:[0,64,64,64,1],woodcamp:[64,64,64,64,1],orecart:[128,64,64,64,1],amberhollow:[192,64,64,64,1],outpost:[256,64,64,64,1]};
+function wxAt(c,key,x,y,sc,fms=450){const q=WX[key],a=artImg('map/world_extras.png');if(!q||!a.ok)return false;const fw=q[2]/q[4],f=q[4]>1?Math.floor(performance.now()/fms)%q[4]:0;
+  c.imageSmoothingEnabled=false;c.drawImage(a.img,q[0]+f*fw,q[1],fw,q[3],Math.round(x-fw*sc/2),Math.round(y-(q[3]-3)*sc),Math.round(fw*sc),Math.round(q[3]*sc));return true;}
 const PILE_ART=new Set(['gold','timber','ore','amber']);
 const GEMS={ruby:{name:'Ruby',n:3},sapphire:{name:'Sapphire',n:2},emerald:{name:'Emerald',n:2},amethyst:{name:'Amethyst',n:2},moonstone:{name:'Moonstone',n:2,res:'moonwater'}};
 function spriteAt(c,path,x,y,sc,frames=1,fms=150){const a=artImg(path);if(!a.ok)return false;const im=a.img,fw=im.width/frames,f=frames>1?Math.floor(performance.now()/fms)%frames:0;
@@ -1504,8 +1508,12 @@ const stripPose=(row,fr)=>row===1?1+(fr%2):row===2?(fr===1||fr===2?3:0):row===3?
 const mixHex=(a,b,t)=>{const A=hexRGB(a),B=hexRGB(b);return'#'+A.map((v,i)=>Math.round(v+(B[i]-v)*t).toString(16).padStart(2,'0')).join('');};
 const upgCol=col=>mixHex(col||'#2f8f88','#f2c14e',0.72);
 const unitSheet=(k,col)=>{if(U[k]&&U[k].up)col=upgCol(col);if(ENEMY_ART[k]){const a=artImg(`enemies/${ENEMY_ART[k]}/sheet.png`);return a.ok?a.img:null;}if(!unitArt(k)){const sp=stripPath(k);if(!sp)return null;const im=tintedPacked(sp,col,'v');return im?{strip:im}:null;}const n=unitArt(k),f=unitFac(k);return n?tinted(`units/${f}/${n}/${n}_sheet.png`,`team_masks/units/${f}/${n}/${n}_sheet.png`,col):null;};
-const heroSheet=(id,col)=>{if(ART_MAP.has(id)){const m=MAP_SRC[id]||id;return tinted(`heroes/${m}/map/${m}_map_sheet.png`,`team_masks/heroes/${m}/map/${m}_map_sheet.png`,col);}const f=HBY[id]&&HBY[id].fac;if(!f)return null;const a=artImg(`heroes/_banners/${f}_map_sheet.png`);return a.ok?a.img:null;};
-function preloadArt(){for(const g of['meadow','dirt','sand','snow','marsh','cavern','ash','ship_deck'])artImg(`battle/grounds/${g}.png`);for(const n of['split_boulder','basalt_columns','leaning_monolith','stone_arch'])artImg(`terrain/battle/${n}_battle.png`);for(const id0 of ART_MAP){const id=MAP_SRC[id0]||id0;artImg(`heroes/${id}/map/${id}_map_sheet.png`);artImg(`team_masks/heroes/${id}/map/${id}_map_sheet.png`);}
+/* personal walkers (packs 05 and 06): 14 sheets of 192×384 in heroes/walkers.png, 7 a row; each is cut out once into its own canvas */
+const WALKERS=['perry','battaglia','engelman','rimmer','sookie','tempest','bear','boopis','monkey','parker','rago','schmickle','shadow','necro4'],walkCache={};
+const walkerSheet=id=>{const i=WALKERS.indexOf(id);if(i<0)return null;if(walkCache[id])return walkCache[id];const a=artImg('heroes/walkers.png');if(!a.ok)return null;
+  const cv=document.createElement('canvas');cv.width=192;cv.height=384;cv.getContext('2d').drawImage(a.img,(i%7)*192,Math.floor(i/7)*384,192,384,0,0,192,384);return walkCache[id]=cv;};
+const heroSheet=(id,col)=>{if(!ART_MAP.has(id)&&WALKERS.includes(id)){const w=walkerSheet(id);if(w)return w;}if(ART_MAP.has(id)){const m=MAP_SRC[id]||id;return tinted(`heroes/${m}/map/${m}_map_sheet.png`,`team_masks/heroes/${m}/map/${m}_map_sheet.png`,col);}const f=HBY[id]&&HBY[id].fac;if(!f)return null;const a=artImg(`heroes/_banners/${f}_map_sheet.png`);return a.ok?a.img:null;};
+function preloadArt(){artImg('heroes/walkers.png');artImg('map/world_extras.png');artImg('towns/extra_buildings.png');for(const g of['meadow','dirt','sand','snow','marsh','cavern','ash','ship_deck'])artImg(`battle/grounds/${g}.png`);for(const n of['split_boulder','basalt_columns','leaning_monolith','stone_arch'])artImg(`terrain/battle/${n}_battle.png`);for(const id0 of ART_MAP){const id=MAP_SRC[id0]||id0;artImg(`heroes/${id}/map/${id}_map_sheet.png`);artImg(`team_masks/heroes/${id}/map/${id}_map_sheet.png`);}
   for(const k of Object.keys(ART_STRIPS))artImg(stripPath(k));
   for(const n of Object.values(ENEMY_ART)){artImg(`enemies/${n}/sheet.png`);artImg(`map/guards/${n}_32.png`);}
   for(const[n]of Object.values(MINE_ART))artImg(`map/mines/${n}.png`);for(const f of Object.keys(FLAG_COLS))artImg(`map/flags/${f}.png`);for(const p of['arrow','bolt','ember','rock','spit','spell_orb'])artImg(`projectiles/${p}.png`);
@@ -1515,7 +1523,8 @@ const iconCache={};
 function iconURL(kind,key,size=64){
   if(kind==='crest')return ART_BASE+`shields/${key}_96.png`;
   if(kind==='res'&&key==='amber')return ART_BASE+'gems/amber.png';
-  if(kind==='res'&&key==='gems')return ART_BASE+'gems/ruby.png';
+  if(kind==='res'&&key==='gems')return ART_BASE+'ui/icons/gem.png';
+  if(kind==='res'&&key==='moonwater')return ART_BASE+'ui/icons/moonwater.png';
   if(kind==='res'&&UI_RES[key])return ART_BASE+`ui/icons/${UI_RES[key]}.png`;
   if(kind==='stat'&&UI_STAT[key])return ART_BASE+`ui/icons/${UI_STAT[key]}.png`;
   if(kind==='ui')return ART_BASE+`ui/icons/${key}.png`;
@@ -2520,6 +2529,9 @@ function drawObj(c,o){
   case 'drop':drawRelic(c,o.rs[0],cx,cy,10);break;
   case 'camp':{const col=FAC[o.fac||o.dfac||'necro'].col,gn=(o.garrison||[]).reduce((a,g)=>a+g.n,0);
     // major towns (free ones, and rival homes once captured) stand as real towns, with their name
+    if(o.free&&!isMajor(o)&&wxAt(c,'outpost',cx,cy+TS/2-2,TS/32*0.8)){if(o.owned)flag(c,cx+18,cy-2,ownerCol(o.owned));{const sh=artImg(`shields/${o.fac}_96.png`);if(sh.ok)c.drawImage(sh.img,cx-27,cy-16,16,16);}
+      if(gn&&!S.editor){c.font='800 12px "Alegreya SC",Georgia,serif';c.textAlign='center';c.textBaseline='middle';const tt=o.owned===ME()?fmt(gn):'?',w=c.measureText(tt).width+10;c.fillStyle='rgba(12,18,48,.92)';c.fillRect(cx-w/2,cy+17,w,14);c.strokeStyle=o.owned?ownerCol(o.owned):'#c45a43';c.lineWidth=1.2;c.strokeRect(cx-w/2,cy+17,w,14);c.fillStyle='#fff';c.fillText(tt,cx,cy+24.5);}
+      break;}
     if(o.fac&&isMajor(o)&&(o.built||o.free)){const sp=townSprite(o.fac,o.built?townStage(o):2,o.owned?ownerCol(o.owned):o.free?'#9a958a':FAC[o.fac].col);if(sp){const k=TS/32*0.82,by=cy+TS/2-2;
       c.imageSmoothingEnabled=false;c.drawImage(sp,Math.round(cx-64*k),Math.round(by-92*k),Math.round(128*k),Math.round(96*k));
       const nm=o.owned===ME()||o.name?campName(o):'Free town',top=by-92*k;c.font='700 11px "Alegreya SC",Georgia,serif';c.textAlign='center';c.textBaseline='alphabetic';const nw=c.measureText(nm).width+10;
@@ -2543,8 +2555,8 @@ function drawObj(c,o){
     c.fillStyle='#2b1d10';c.beginPath();c.moveTo(cx-8,cy+12);c.lineTo(cx-4,cy+2);c.lineTo(cx,cy+12);c.closePath();c.fill();flag(c,cx+13,cy+8,col);drawFire(c,'campfire',cx-15,cy+19,o.x*97+o.y*31);break;}
   case 'mine':{
     c.fillStyle='rgba(0,0,0,.3)';c.beginPath();c.ellipse(cx,cy+13,18,5,0,0,7);c.fill();
-    {const ma=MINE_ART[o.k],sc=TS/32*0.66,by=cy+TS/2-2;if(o.k==='moon'||o.k==='gem'){const ok=o.k==='moon'?spriteAt(c,'map/sites/moonwell_lit.png',cx,by,TS/32*0.62):spriteAt(c,'map/mines/ore_pit.png',cx,by,sc,2,450);
-        if(ok){if(o.k==='gem'){drawRes(c,'gems',cx-9,cy+9,6);drawRes(c,'gems',cx+10,cy+10,5);}else drawRes(c,'moonwater',cx+13,cy+9,6);
+    {const ma=MINE_ART[o.k],sc=TS/32*0.66,by=cy+TS/2-2;if(o.k==='moon'||o.k==='gem'){const ok=wxAt(c,o.k,cx,by,sc);
+        if(ok){
           for(let i=0;i<(o.lvl||1);i++){c.fillStyle='#f2d382';c.strokeStyle='#120f0b';c.lineWidth=1;c.fillRect(cx-9+i*7,by-1,5,5);c.strokeRect(cx-9+i*7,by-1,5,5);}
           if(o.owned)flag(c,cx+14,cy-8,ownerCol(o.owned));break;}}
       if(ma&&spriteAt(c,`map/mines/${ma[0]}.png`,cx,by,sc,2,450)){
@@ -2557,15 +2569,16 @@ function drawObj(c,o){
       if(o.k==='gold'){c.fillStyle='#f2c94c';for(const [a,b] of[[-10,4],[9,2],[-4,-6],[5,-4]])c.fillRect(cx+a-1.5,cy+b-1.5,3,3);}else drawRes(c,'ore',cx+12,cy+9,6);}
     for(let i=0;i<(o.lvl||1);i++){c.fillStyle='#f2d382';c.strokeStyle='#120f0b';c.lineWidth=1;c.fillRect(cx-9+i*7,cy+15,5,5);c.strokeRect(cx-9+i*7,cy+15,5,5);}
     if(o.owned)flag(c,cx+12,cy-6,ownerCol(o.owned));break;}
-  case 'prison':{c.fillStyle='rgba(0,0,0,.35)';c.beginPath();c.ellipse(cx,cy+14,19,6,0,0,7);c.fill();c.strokeStyle='#1a1610';c.lineWidth=1.4;
+  case 'prison':{if(wxAt(c,'prison',cx,cy+TS/2-2,TS/32*0.75))break;c.fillStyle='rgba(0,0,0,.35)';c.beginPath();c.ellipse(cx,cy+14,19,6,0,0,7);c.fill();c.strokeStyle='#1a1610';c.lineWidth=1.4;
     c.fillStyle='#7d7a72';c.fillRect(cx-16,cy-14,32,28);c.strokeRect(cx-16,cy-14,32,28);c.fillStyle='#5f5c55';for(let i=0;i<4;i++){c.fillRect(cx-16+i*9,cy-20,6,6);c.strokeRect(cx-16+i*9,cy-20,6,6);}
     c.fillStyle='#2a2522';c.fillRect(cx-9,cy-6,18,20);c.strokeStyle='#b8b4aa';c.lineWidth=1.6;c.beginPath();for(const dx of[-6,-2,2,6]){c.moveTo(cx+dx,cy-6);c.lineTo(cx+dx,cy+14);}c.stroke();
     if(o.rogue&&!S.heroes.some(x=>x.id===o.rogue)){c.fillStyle='#f2d382';c.font='800 13px "Alegreya SC",Georgia,serif';c.textAlign='center';c.textBaseline='middle';c.fillText('!',cx,cy-28);}break;}
-  case 'pile':if(PILE_ART.has(o.k)&&spriteAt(c,`map/pickups/${o.k==='timber'?'wood':o.k}.png`,cx,cy+TS/2-4,TS/32,2,400))break;c.fillStyle='rgba(0,0,0,.3)';c.beginPath();c.ellipse(cx,cy+12,11,4,0,0,7);c.fill();drawRes(c,o.k,cx,cy+2,11);break;
+  case 'pile':if(o.k==='moonwater'||o.k==='gems'){if(wxAt(c,o.k+'_pile',cx,cy+TS/2-4,TS/32*0.7))break;}if(PILE_ART.has(o.k)&&spriteAt(c,`map/pickups/${o.k==='timber'?'wood':o.k}.png`,cx,cy+TS/2-4,TS/32,2,400))break;c.fillStyle='rgba(0,0,0,.3)';c.beginPath();c.ellipse(cx,cy+12,11,4,0,0,7);c.fill();drawRes(c,o.k,cx,cy+2,11);break;
   case 'flot':{const t=performance.now()/500;c.fillStyle='rgba(200,230,240,.35)';c.beginPath();c.ellipse(cx,cy+12,13,4,0,0,7);c.fill();if(!spriteAt(c,`ocean/${o.k}.png`,cx,cy+12+Math.sin(t+o.y)*1.5,TS/32*0.85,o.k==='floating_chest'?4:1,250)){c.fillStyle='#a07040';c.fillRect(cx-6,cy-4,12,10);}break;}
   case 'gem':{const t=performance.now()/500;c.fillStyle='rgba(0,0,0,.3)';c.beginPath();c.ellipse(cx,cy+12,10,4,0,0,7);c.fill();if(!spriteAt(c,`gems/${o.k}.png`,cx,cy+10+Math.sin(t+o.x)*1.5,TS/32*0.85)){c.fillStyle='#c46bff';c.beginPath();c.arc(cx,cy,7,0,7);c.fill();}break;}
   case 'site':{const spent=o.week===weekNo();c.globalAlpha=spent?0.55:1;c.fillStyle='rgba(0,0,0,.3)';c.beginPath();c.ellipse(cx,cy+12,16,5,0,0,7);c.fill();c.strokeStyle='#26241f';c.lineWidth=1.2;
     if(o.k==='wish'&&spriteAt(c,'map/sites/wishing_well.png',cx,cy+TS/2-2,TS/32*0.75)){}
+    else if((o.k==='woodcamp'||o.k==='orecart'||o.k==='amberhollow')&&wxAt(c,o.k,cx,cy+TS/2-2,TS/32*0.75)){}
     else if(o.k==='clover'&&spriteAt(c,'map/sites/four_leaf_clover.png',cx,cy+TS/2-4,TS/32)){}
     else if(o.k==='wish'){c.fillStyle='#8a867a';c.beginPath();c.ellipse(cx,cy+5,12,6,0,0,7);c.fill();c.stroke();c.fillStyle=spent?'#2c3a4a':'#5f9fd0';c.beginPath();c.ellipse(cx,cy+4,8,3.5,0,0,7);c.fill();
       c.fillStyle='#6b4a2e';c.fillRect(cx-11,cy-14,3,18);c.fillRect(cx+8,cy-14,3,18);c.fillStyle='#8b3a2a';c.beginPath();c.moveTo(cx-15,cy-12);c.lineTo(cx,cy-22);c.lineTo(cx+15,cy-12);c.closePath();c.fill();c.stroke();if(!spent){c.fillStyle='#f2c94c';c.fillRect(cx-2,cy-4,3,3);}}
@@ -2628,7 +2641,7 @@ function drawObj(c,o){
     if(spriteAt(c,`waterfront/dock_${ew?'ew':'ns'}.png`,cx+dx,cy+TS/2-2+dy,k)){spriteAt(c,'waterfront/rowboat.png',cx+dx*1.6,cy+TS/2+dy*1.6,k*0.9);break;}}
   case 'dock-drawn':c.fillStyle='#7a5432';c.strokeStyle='#2a1a0c';c.fillRect(cx-16,cy+2,32,7);c.strokeRect(cx-16,cy+2,32,7);for(const x of[-14,-4,6])c.fillRect(cx+x,cy+9,3,7);
     c.save();c.translate(cx+2,cy-4);c.scale(0.7,0.7);drawTravelIcon(c,'boat');c.restore();break;
-  case 'fair':c.fillStyle='#8a5a32';c.strokeStyle='#2a1a0c';for(const x of[-16,-6,4,14])c.fillRect(cx+x,cy-2,3,14);c.fillRect(cx-16,cy+1,33,3);c.fillRect(cx-16,cy+7,33,3);
+  case 'fair':if(wxAt(c,'fair',cx,cy+TS/2-2,TS/32*0.75))break;c.fillStyle='#8a5a32';c.strokeStyle='#2a1a0c';for(const x of[-16,-6,4,14])c.fillRect(cx+x,cy-2,3,14);c.fillRect(cx-16,cy+1,33,3);c.fillRect(cx-16,cy+7,33,3);
     c.save();c.translate(cx,cy-6);c.scale(0.75,0.75);drawTravelIcon(c,'horse');c.restore();break;
   }
 }
@@ -3593,8 +3606,8 @@ function drawArtTown(cv,TSN){const a=artImg(TSN.atlas);if(!a.ok)return false;con
     piece(id,di>=0?'recruit':tab||'build',di>=0?b0:tab==='upgrade'?null:b0.startsWith('wall')?(t.built.wall3?'wall3':t.built.wall2?'wall3':'wall2'):b0,label);}
   // built buildings that have no picture yet: small signs along the bottom, still clickable
   // the shared extra buildings stand in the side margins: built ones drawn, unbuilt ones are clickable lots
-  {const xa=artImg(XB_ATLAS),fk=TF();if(xa.ok)for(const[id,[fx,fy]]of Object.entries(XB_SPOT)){const b=BY[id],xc=xbCell(fk,id);if(!b||!xc||TSN.sites.some(z=>z[1].includes(id)))continue;used.add(id);
-    const x0=fx-64,y0=fy-120;if(t.built[id]){c.drawImage(xa.img,xc[0],xc[1],128,128,x0,y0,128,128);townSpots.push({x:x0,y:y0,w:128,h:128,tab:id==='reliquary'?'relics':id==='lib2'?'library':'build',id,label:id==='reliquary'?`${b.name}: ${S.delivered.length}/7 relics home`:`${b.name}: ${b.desc}`,pix:xc,atlas:XB_ATLAS});}
+  {const xa=artImg(XB_ATLAS),fk=TF();if(xa.ok)for(const[id,[fx,fy]]of Object.entries({...XB_SPOT,...(XB_SPOT_FAC[fk]||{})})){const b=BY[id],xc=xbCell(fk,id);if(!b||!xc||TSN.sites.some(z=>z[1].includes(id)))continue;used.add(id);
+    const x0=fx-64,y0=fy-120;if(t.built[id]){c.drawImage(xa.img,xc[0],xc[1],128,128,x0,y0,128,128);townSpots.push({x:x0,y:y0,w:128,h:128,tab:id==='reliquary'?'relics':id==='lib2'?'library':id==='d5'?'recruit':'build',id,label:id==='reliquary'?`${b.name}: ${S.delivered.length}/7 relics home`:`${b.name}: ${b.desc}`,pix:xc,atlas:XB_ATLAS});}
     else townSpots.push({x:x0+16,y:y0+40,w:96,h:80,tab:'build',id,label:`Empty lot: ${b.name}${bAvail(b)?' (can be built)':' (locked)'}`});}}
   // (signs stack down the left margin, outside the painted scene)
   used.add('lib2');const extra=BL.filter(b=>t.built[b.id]&&!used.has(b.id));let sy=8;c.font='700 12px "Alegreya SC",Georgia,serif';c.textBaseline='middle';c.textAlign='left';
@@ -3608,10 +3621,12 @@ function paintTownPrev(root,tries=0){for(const cv of root.querySelectorAll('canv
   const c=cv.getContext('2d');c.imageSmoothingEnabled=false;c.drawImage(a.img,0,0,640,360,0,0,640,360);for(const[id,q]of Object.entries(T.pieces)){if((/_hall_/.test(id)&&!/capital$/.test(id))||T.sites.some(z=>z[0]===id&&z[3]))continue;c.drawImage(a.img,q[0],q[1],q[2],q[3],q[4],q[5],q[2],q[3]);}cv.dataset.done=1;}}
 /* a building's picture from its banner's town atlas, cropped into a square (Build tab); null if the banner has no town art yet */
 /* the six shared extra buildings (Missing Buildings packs A and B): one 128×128 cell per banner (row) and building (column) in towns/extra_buildings.png, foot at (64,120) */
-const XB_ATLAS='towns/extra_buildings.png',XB_ROW=['rangers','wizards','necro','centaurs','pirates','elves','dwarves','merfolk'],XB_COL={reliquary:0,lodge:1,lib2:2,still:3,fb1:4,fb3:5};
+const XB_ATLAS='towns/extra_buildings.png',XB_ROW=['rangers','wizards','necro','centaurs','pirates','elves','dwarves','merfolk'],XB_COL={reliquary:0,lodge:1,lib2:2,still:3,fb1:4,fb3:5,d5:6},XB_ONLY={d5:['rangers']};
 /* where they stand in the town picture: the side margins beside the scene, three a side (canvas x of the foot centre, foot y) */
 const XB_SPOT={reliquary:[80,128],lib2:[80,244],still:[80,356],lodge:[880,128],fb1:[880,244],fb3:[880,356]};
-const xbCell=(fac,id)=>{const r=XB_ROW.indexOf(fac),c=XB_COL[id];return r<0||c===undefined?null:[c*128,r*128];};
+/* Rangers also stand their Heartwood Grove (tier 5) in the right margin, so that side holds four */
+const XB_SPOT_FAC={rangers:{lodge:[880,96],d5:[880,184],fb1:[880,272],fb3:[880,360]}};
+const xbCell=(fac,id)=>{const r=XB_ROW.indexOf(fac),c=XB_COL[id];if(XB_ONLY[id]&&!XB_ONLY[id].includes(fac))return null;return r<0||c===undefined?null:[c*128,r*128];};
 const thumbCache={};
 function bldThumb(fac,id){const key=fac+'/'+id;if(thumbCache[key])return thumbCache[key];
   {const xc=xbCell(fac,id);if(xc){const a=artImg(XB_ATLAS);if(!a.ok)return null;const cv=document.createElement('canvas');cv.width=cv.height=128;const c=cv.getContext('2d');c.imageSmoothingEnabled=false;c.drawImage(a.img,xc[0],xc[1],128,128,0,0,128,128);return thumbCache[key]=cv.toDataURL();}}
