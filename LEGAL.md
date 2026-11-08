@@ -33,6 +33,9 @@ No other libraries, images or audio are included. Art made later with ChatGPT or
 | Banner, Gems & Portals Pack 06: title banner, 6 gems, 3 animated portal gates (`assets/ui`, `assets/gems`, `assets/portals`) | Generated with ChatGPT image generation, palette-normalized (pack README) | 2026-11-08 | Same as above |
 | Buildings & Hero Training Pack 07: 8 factions × 4 town stages with team masks, 24 training stones, Library of Mastery, Spellbook Altar (`assets/towns`, `assets/team_masks/towns`, `assets/sites`) | Generated with ChatGPT image generation, palette-normalized (pack README) | 2026-11-08 | Same as above |
 
+| Seas & Battlefields Pack 08: 8 battle grounds, docks, rowboat, coastal sloop (team mask), lighthouse, shipwreck, 8 ocean pickups (`assets/battle`, `assets/waterfront`, `assets/ocean`) | Generated with ChatGPT image generation, palette-normalized (pack README) | 2026-11-08 | Same as above |
+| UI & Textures Pack 09: parchment and navy panels, buttons, icons, cursors, textures, modal dimmer (`assets/ui`) | Generated with ChatGPT image generation, palette-normalized (pack README) | 2026-11-08 | Same as above |
+
 The generated source images (high-res magenta PNGs) are kept outside this repo.
 
 ## Real names

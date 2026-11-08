@@ -638,6 +638,25 @@ img{image-rendering:auto}
 .fheroes{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
 .fheroes img{width:100%;height:auto;aspect-ratio:1}
 .hcard .hab{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-height:0;font-size:15px;line-height:1.3;align-self:stretch;text-align:center}
+/* Pack 09: framed parchment panels, pixel buttons, icons, dimmer */
+.card,.sheet,.topbar,#hmenu{border:12px solid transparent;border-image:url(assets/ui/panels/parchment.png) 12 round;background:url(assets/ui/textures/parchment.png) repeat;background-size:64px;background-clip:padding-box;image-rendering:pixelated}
+.card.team{border-image:url(assets/ui/panels/parchment.png) 12 round}
+.card{padding:4px 6px}.topbar{padding:0 6px}.sheet header{padding:8px 10px 4px}.sheet .body{padding:2px 10px 8px}.sheet footer{padding:6px 10px 8px}
+.tstrip,.rtop,.tresbot .tres{border:12px solid transparent;border-image:url(assets/ui/panels/navy.png) 12 round;background:url(assets/ui/textures/navy.png) repeat;background-size:64px;background-clip:padding-box}
+.btn{border:none;border-image:url(assets/ui/buttons/normal.png) 8 12 fill / 8px 12px round;background:none;color:#fff3c8;text-shadow:0 1px 0 #000;padding:8px 14px;image-rendering:pixelated}
+.btn:hover:not(:disabled){border-image-source:url(assets/ui/buttons/hover.png);color:#fff}
+.btn:active:not(:disabled){border-image-source:url(assets/ui/buttons/pressed.png)}
+.btn:disabled{border-image-source:url(assets/ui/buttons/disabled.png);filter:none;opacity:.75;color:#c9cbd6}
+.btn.primary{border-image-source:url(assets/ui/buttons/hover.png);color:#fff}
+.btn.primary:hover:not(:disabled){filter:brightness(1.12)}
+.btn .kbd,.btn.primary .kbd{color:rgba(255,243,200,.65)}
+.btn.need,.btn.need:hover{color:#fff}
+.btn .bi{width:24px;height:24px;vertical-align:-6px;margin-right:6px;image-rendering:pixelated}
+.btn.icon .bi{margin:0}
+.hbook img,.booktile img,.hdet img{width:24px;height:24px;image-rendering:pixelated}.booktile img{width:36px;height:36px}
+.hdet{display:inline-flex;align-items:center;gap:4px}
+#modal{background:rgba(6,9,24,.55) url(assets/ui/textures/modal_dim.png) center/cover;image-rendering:pixelated}
+.hs .hsl img,.stats img,.sc img,.uad img,.bigstats em img{image-rendering:pixelated!important}
 </style>
 
 <div id="app">
@@ -647,7 +666,7 @@ img{image-rendering:auto}
     <button class="relbar" id="objective" title="Your goal"></button>
     <div class="yield" id="yield" title="What you earn each day"></div>
     <div class="date" id="date"></div>
-    <div class="acts"><button class="btn icon" id="bMenu" title="Game menu">☰</button></div>
+    <div class="acts"><button class="btn icon" id="bMenu" title="Game menu"><img class="bi" src="assets/ui/icons/settings.png" alt="Menu"></button></div>
   </div>
   <div class="main">
     <aside class="ledger">
@@ -655,9 +674,9 @@ img{image-rendering:auto}
       <div class="card"><div class="armyhead"><h3>Army</h3><span class="muted" id="armyPow"></span></div><div class="army" id="army"></div></div>
       <div class="card" id="edPanel" hidden></div>
       <div class="card orders">
-        <button class="btn" id="bTown">Town<span class="kbd">T</span></button>
-        <button class="btn" id="bCenter" title="Centre on hero (C), next hero (H)">Hero<span class="kbd">C</span></button>
-        <button class="btn primary wide" id="bEnd">End day<span class="kbd">E</span></button>
+        <button class="btn" id="bTown"><img class="bi" src="assets/ui/icons/town.png" alt="">Town<span class="kbd">T</span></button>
+        <button class="btn" id="bCenter" title="Centre on hero (C), next hero (H)"><img class="bi" src="assets/ui/icons/hero.png" alt="">Hero<span class="kbd">C</span></button>
+        <button class="btn primary wide" id="bEnd"><img class="bi" src="assets/ui/icons/end_turn.png" alt="">End day<span class="kbd">E</span></button>
       </div>
     </aside>
     <div class="mapwrap"><canvas id="map" aria-label="Adventure map"></canvas><div id="hover"></div><div id="hmenu" hidden></div></div>
@@ -1174,19 +1193,26 @@ function tinted(path,maskPath,col){
 const BUILD_ART=new Set();// '<fac>/<building id>' once art for that building exists in assets/buildings
 const townStage=tw=>tw&&tw.built?(tw.built.hall4?4:tw.built.hall3?3:tw.built.hall2?2:1):1;
 const townSprite=(fk,stage,col)=>tinted(`towns/${fk}/${stage}.png`,`team_masks/towns/${fk}/${stage}.png`,col);
+const FLOT={floating_chest:{name:'Floating chest',give:'800-1,400 gold'},salvage_crate:{name:'Salvage crate',give:'5 timber and 5 ore'},driftwood:{name:'Driftwood',give:'6 timber'},
+  supply_barrel:{name:'Supply barrel',give:'500 gold and 3 ore'},pearl_shell:{name:'Giant pearl',give:'2 amber'},message_bottle:{name:'Message in a bottle',give:'a rumour, or 600 gold'},
+  sea_crystal:{name:'Sea crystal',give:'3 amber'},coral_relic:{name:'Coral relic',give:'an artifact'}};
+const UI_RES={gold:'gold',timber:'wood',ore:'ore'},UI_STAT={atk:'attack',def:'defense',lore:'mana'};
 const GEMS={ruby:{name:'Ruby',gold:1000},sapphire:{name:'Sapphire',gold:900},emerald:{name:'Emerald',gold:800},amethyst:{name:'Amethyst',gold:700},moonstone:{name:'Moonstone',gold:600}};
 function spriteAt(c,path,x,y,sc,frames=1,fms=150){const a=artImg(path);if(!a.ok)return false;const im=a.img,fw=im.width/frames,f=frames>1?Math.floor(performance.now()/fms)%frames:0;
   c.imageSmoothingEnabled=false;c.drawImage(im,f*fw,0,fw,im.height,Math.round(x-fw*sc/2),Math.round(y-(im.height-4)*sc),Math.round(fw*sc),Math.round(im.height*sc));return true;}
 const unitArt=k=>{const u=U[k];return u?ART_UNITS[u.up?u.base:k]||null:null;};
 const unitSheet=(k,col)=>{const n=unitArt(k);return n?tinted(`units/rangers/${n}/${n}_sheet.png`,`team_masks/units/rangers/${n}/${n}_sheet.png`,col):null;};
 const heroSheet=(id,col)=>ART_MAP.has(id)?tinted(`heroes/${id}/map/${id}_map_sheet.png`,`team_masks/heroes/${id}/map/${id}_map_sheet.png`,col):null;
-function preloadArt(){for(const n of['split_boulder','basalt_columns','leaning_monolith','stone_arch'])artImg(`terrain/battle/${n}_battle.png`);for(const id of ART_MAP){artImg(`heroes/${id}/map/${id}_map_sheet.png`);artImg(`team_masks/heroes/${id}/map/${id}_map_sheet.png`);}
+function preloadArt(){for(const g of['meadow','dirt','sand','snow','marsh','cavern','ash','ship_deck'])artImg(`battle/grounds/${g}.png`);for(const n of['split_boulder','basalt_columns','leaning_monolith','stone_arch'])artImg(`terrain/battle/${n}_battle.png`);for(const id of ART_MAP){artImg(`heroes/${id}/map/${id}_map_sheet.png`);artImg(`team_masks/heroes/${id}/map/${id}_map_sheet.png`);}
   for(const n of Object.values(ART_UNITS)){artImg(`units/rangers/${n}/${n}_sheet.png`);artImg(`team_masks/units/rangers/${n}/${n}_sheet.png`);}}
 function drawCrown(c,x,y,s){c.save();c.translate(x,y);c.scale(s/10,s/10);c.fillStyle='#f2d382';c.strokeStyle='#5a3a0a';c.lineWidth=1.2;c.beginPath();c.moveTo(-8,4);c.lineTo(-9,-3);c.lineTo(-4,1);c.lineTo(0,-5);c.lineTo(4,1);c.lineTo(9,-3);c.lineTo(8,4);c.closePath();c.fill();c.stroke();c.restore();}
 const iconCache={};
 function iconURL(kind,key,size=64){
   if(kind==='crest')return ART_BASE+`shields/${key}_96.png`;
   if(kind==='res'&&key==='amber')return ART_BASE+'gems/amber.png';
+  if(kind==='res'&&UI_RES[key])return ART_BASE+`ui/icons/${UI_RES[key]}.png`;
+  if(kind==='stat'&&UI_STAT[key])return ART_BASE+`ui/icons/${UI_STAT[key]}.png`;
+  if(kind==='ui')return ART_BASE+`ui/icons/${key}.png`;
   if(kind==='gem')return ART_BASE+`gems/${key}.png`;
   if(kind==='hero'&&ART_PORTRAITS.has(key))return ART_BASE+`portraits/heroes/${key}_${size>80?128:64}.png`;
   if(kind==='unit'&&unitArt(key))return ART_BASE+`portraits/units/${unitArt(key)}_64.png`;
@@ -1805,6 +1831,8 @@ function furnishMap(bases){
   for(const[tier,pool,a,b]of ALT)for(let i=0;i<Math.max(1,Math.round((tier===3?0.6:1)*KS));i++){const p=freeTile(dist,...band(a,b),3);if(!p)continue;add({type:'altar',x:p.x,y:p.y,tier,spell:pick(pool)});
     if(tier>1){const g=[[1,0],[-1,0],[0,1],[0,-1]].map(([dx,dy])=>({x:p.x+dx,y:p.y+dy})).find(q=>inb(q.x,q.y)&&passableT(S.tiles[idx(q.x,q.y)])&&!objAt(q.x,q.y)&&!townFoot(q.x,q.y));
       if(g)add({type:'neutral',x:g.x,y:g.y,...(tier===2?{k:'imp',n:ri(18,26)}:{k:'troll',n:ri(12,16)})});}}
+  {const RVs=new Set(S.rivers||[]),wet=[];for(let i=0;i<W*H;i++){if(S.tiles[i]!==T.LAKE||RVs.has(i)||!dist.has(i))continue;const x=i%W,y=(i/W)|0;if(x<2||y<2||x>W-3||y>H-3)continue;if(!S.objs.some(o=>Math.abs(o.x-x)<=1&&Math.abs(o.y-y)<=1))wet.push(i);}
+    const nF=clamp(Math.round(wet.length/45),wet.length?2:0,10),ks=Object.keys(FLOT);for(let k=0;k<nF&&wet.length;k++){const i=wet.splice(Math.floor(R()*wet.length),1)[0];add({type:'flot',k:ks[k%ks.length],x:i%W,y:(i/W)|0});}}
   for(let i=0;i<Math.round(5*KS*jit());i++){const p=freeTile(dist,...band(0.15,0.95),2);if(p)add({type:'gem',k:pick(Object.keys(GEMS)),x:p.x,y:p.y});}
   for(const o of S.objs)if(o.type==='stone'&&!o.style)o.style=pick(FAC_ORDER);
   // free towns: villages of a random banner, held by wild creatures until someone claims them
@@ -1889,7 +1917,7 @@ let terrainCv=null,terrainPh=null;
 const TA_N=32,TA_ROW={meadow:0,forest_floor:1,dry_grass:2,dirt:3,sand:4,rocky:5,snow:6,swamp:7,ash:8,cobblestone:9,water:10};
 const TA_EDGES=['dry_grass','dirt','swamp','forest_floor','rocky','sand','ash'];
 const TA_SCEN=['oak','pine','autumn_tree','dead_tree','mountain_gray','mountain_snow','ochre_hill','flowers_meadow','flowers_blue','shrub','reeds','mushrooms','boulder','fallen_log',
-  'silver_birch','weeping_willow','red_maple','blue_cedar','coastal_palm','ridge_spine','rocky_shoulder','foothill_chain','snowy_saddle','split_boulder','leaning_monolith','basalt_columns','stone_arch'];
+  'silver_birch','weeping_willow','red_maple','blue_cedar','coastal_palm','ridge_spine','rocky_shoulder','foothill_chain','snowy_saddle','split_boulder','leaning_monolith','basalt_columns','stone_arch','lighthouse','shipwreck'];
 const TA_FILES=['terrain/ground_atlas.png','terrain/water_anim.png','terrain/roads/cobblestone.png',...TA_EDGES.map(f=>`terrain/edges/${f}.png`),...[0,1,2,3].map(p=>`terrain/edges/water_${p}.png`),...[0,1,2,3].map(p=>`terrain/edges/river_${p}.png`),'terrain/scenery/bridge_ew.png','terrain/scenery/bridge_ns.png',...TA_SCEN.map(k=>`terrain/scenery/${k}.png`)];
 let terrArtReady=false;
 function loadTerrainArt(){let left=0;for(const p of TA_FILES){const a=artImg(p);if(!a.ok){left++;a.img.addEventListener('load',()=>{if(--left===0){terrArtReady=true;if(S&&!bt)renderTerrain();}},{once:true});}}if(!left)terrArtReady=true;artImg('terrain/fire/campfire.png');artImg('terrain/fire/torch.png');}
@@ -1937,6 +1965,10 @@ function renderTerrainArt(){
     else if(run1){hills.push({x,y,w:1});P(under(y)?'basalt_columns':pick2(['rocky_shoulder','foothill_chain']),x*N+16,y*N+30);}
     else if(!hills.some(p=>Math.max(Math.abs(p.x-x),Math.abs(p.y-y))<=1)){hills.push({x,y,w:0});P(under(y)?pick2(['leaning_monolith','split_boulder']):pick2(['ochre_hill','split_boulder','split_boulder','leaning_monolith']),x*N+16+j(4),y*N+30);}
     else P('boulder',x*N+16+j(10),y*N+26+j(4));}
+  // the waterfront: a wreck out on open water, and the odd lighthouse on a shore
+  {let wrecks=Math.round(W/30),lights=Math.round(W/30);for(let k=0;k<600&&(wrecks>0||lights>0);k++){const x=2+Math.floor(g()*(W-4)),y=2+Math.floor(g()*(H-4)),i=idx(x,y);
+    if(wrecks>0&&S.tiles[i]===T.LAKE&&!RV.has(i)&&[-1,0,1].every(a=>[-1,0,1].every(b=>S.tiles[idx(x+a,y+b)]===T.LAKE))&&!busy.has(i)){P('shipwreck',x*N+16,y*N+28);busy.add(i);wrecks--;}
+    else if(lights>0&&S.tiles[i]===T.GRASS&&!busy.has(i)&&!busy.has(i-W)&&lakeNear4(x,y)&&!under(y)){P('lighthouse',x*N+16,y*N+30);busy.add(i);lights--;}}}
   // a few landmarks on open meadow: stone arches
   {let arches=Math.round(W/22);for(let k=0;k<400&&arches>0;k++){const x=1+Math.floor(g()*(W-2)),y=2+Math.floor(g()*(H-3));if(under(y))continue;
     const ok=[-1,0,1].every(dx=>{const i=idx(x+dx,y);return S.tiles[i]===T.GRASS&&!busy.has(i)&&!busy.has(i-W);});if(!ok)continue;
@@ -2097,6 +2129,7 @@ function drawObj(c,o){
     for(let i=0;i<(o.lvl||1);i++){c.fillStyle='#f2d382';c.strokeStyle='#120f0b';c.lineWidth=1;c.fillRect(cx-9+i*7,cy+15,5,5);c.strokeRect(cx-9+i*7,cy+15,5,5);}
     if(o.owned)flag(c,cx+12,cy-6,ownerCol(o.owned));break;}
   case 'pile':drawRes(c,o.k,cx,cy+2,11);break;
+  case 'flot':{const t=performance.now()/500;c.fillStyle='rgba(200,230,240,.35)';c.beginPath();c.ellipse(cx,cy+12,13,4,0,0,7);c.fill();if(!spriteAt(c,`ocean/${o.k}.png`,cx,cy+12+Math.sin(t+o.y)*1.5,TS/32*0.85,o.k==='floating_chest'?4:1,250)){c.fillStyle='#a07040';c.fillRect(cx-6,cy-4,12,10);}break;}
   case 'gem':{const t=performance.now()/500;c.fillStyle='rgba(0,0,0,.3)';c.beginPath();c.ellipse(cx,cy+12,10,4,0,0,7);c.fill();if(!spriteAt(c,`gems/${o.k}.png`,cx,cy+10+Math.sin(t+o.x)*1.5,TS/32*0.85)){c.fillStyle='#c46bff';c.beginPath();c.arc(cx,cy,7,0,7);c.fill();}break;}
   case 'site':{const spent=o.week===weekNo();c.globalAlpha=spent?0.55:1;c.fillStyle='rgba(0,0,0,.3)';c.beginPath();c.ellipse(cx,cy+12,16,5,0,0,7);c.fill();c.strokeStyle='#26241f';c.lineWidth=1.2;
     if(o.k==='wish'){c.fillStyle='#8a867a';c.beginPath();c.ellipse(cx,cy+5,12,6,0,0,7);c.fill();c.stroke();c.fillStyle=spent?'#2c3a4a':'#5f9fd0';c.beginPath();c.ellipse(cx,cy+4,8,3.5,0,0,7);c.fill();
@@ -2152,7 +2185,10 @@ function drawObj(c,o){
     if(o.owned)flag(c,cx+1,cy-36,col);
     if(n){c.font='800 12px "Alegreya SC",Georgia,serif';c.textAlign='center';c.textBaseline='middle';const t=fmt(n),w=c.measureText(t).width+10;c.fillStyle='rgba(12,18,48,.92)';c.fillRect(cx-w/2,cy+16,w,14);c.strokeStyle=col;c.strokeRect(cx-w/2,cy+16,w,14);c.fillStyle='#fff';c.fillText(t,cx,cy+23.5);}
     break;}
-  case 'dock':c.fillStyle='#7a5432';c.strokeStyle='#2a1a0c';c.fillRect(cx-16,cy+2,32,7);c.strokeRect(cx-16,cy+2,32,7);for(const x of[-14,-4,6])c.fillRect(cx+x,cy+9,3,7);
+  case 'dock':{const k=TS/32*0.55,wet=(a,b)=>inb(o.x+a,o.y+b)&&S.tiles[idx(o.x+a,o.y+b)]===T.LAKE;
+    const ew=wet(1,0)||wet(-1,0),dx=wet(1,0)?TS*0.45:wet(-1,0)?-TS*0.45:0,dy=!ew&&wet(0,1)?TS*0.45:!ew&&wet(0,-1)?-TS*0.45:0;
+    if(spriteAt(c,`waterfront/dock_${ew?'ew':'ns'}.png`,cx+dx,cy+TS/2-2+dy,k)){spriteAt(c,'waterfront/rowboat.png',cx+dx*1.6,cy+TS/2+dy*1.6,k*0.9);break;}}
+  case 'dock-drawn':c.fillStyle='#7a5432';c.strokeStyle='#2a1a0c';c.fillRect(cx-16,cy+2,32,7);c.strokeRect(cx-16,cy+2,32,7);for(const x of[-14,-4,6])c.fillRect(cx+x,cy+9,3,7);
     c.save();c.translate(cx+2,cy-4);c.scale(0.7,0.7);drawTravelIcon(c,'boat');c.restore();break;
   case 'fair':c.fillStyle='#8a5a32';c.strokeStyle='#2a1a0c';for(const x of[-16,-6,4,14])c.fillRect(cx+x,cy-2,3,14);c.fillRect(cx-16,cy+1,33,3);c.fillRect(cx-16,cy+7,33,3);
     c.save();c.translate(cx,cy-6);c.scale(0.75,0.75);drawTravelIcon(c,'horse');c.restore();break;
@@ -2167,7 +2203,9 @@ function drawHero(c,x,y,h=HERO(),col=teamCol()){
   if(sheet){const row=Math.max(0,ART_DIRS.indexOf(h.face||'s')),fr=moving&&!bt&&h===HERO()?Math.floor(performance.now()/120)%4:0;
     c.fillStyle='rgba(0,0,0,.4)';c.beginPath();c.ellipse(cx,cy+15,14,5,0,0,7);c.fill();c.strokeStyle=col;c.lineWidth=2;c.beginPath();c.ellipse(cx,cy+15,14,5,0,0,7);c.stroke();
     c.imageSmoothingEnabled=false;c.drawImage(sheet,fr*48,row*48,48,48,Math.round(cx-24),Math.round(cy+16-44),48,48);return;}
-  if(mode==='boat'){
+  if(mode==='boat'){const sl=tinted('waterfront/coastal_sloop.png','team_masks/waterfront/coastal_sloop.png',col);
+    if(sl){const k=TS/32*0.6,flip=/w/.test(h.face||'');c.fillStyle='rgba(200,230,240,.35)';c.beginPath();c.ellipse(cx,cy+14,22,6,0,0,7);c.fill();c.save();c.translate(cx,0);if(flip)c.scale(-1,1);c.imageSmoothingEnabled=false;
+      c.drawImage(sl,Math.round(-48*k),Math.round(cy+TS/2-2-92*k),Math.round(96*k),Math.round(96*k));c.restore();return;}
     c.fillStyle='rgba(200,230,240,.35)';c.beginPath();c.ellipse(cx,cy+12,20,5,0,0,7);c.fill();
     c.fillStyle='#7a4e24';c.strokeStyle='#1d140b';c.beginPath();c.moveTo(cx-18,cy+2);c.lineTo(cx+18,cy+2);c.lineTo(cx+12,cy+12);c.lineTo(cx-12,cy+12);c.closePath();c.fill();c.stroke();
     c.beginPath();c.moveTo(cx,cy+2);c.lineTo(cx,cy-24);c.stroke();
@@ -2277,6 +2315,7 @@ function describe(x,y){
     const gn=(o.garrison||[]).reduce((a,g)=>a+g.n,0);return o.owned===ME()?`<b>Your ${FAC[o.fac].arch} holding</b> · +500 gold a day · recruits each week${gn?` · ${gn} troops guard it`:''}`:`<b>${campName(o)}</b>${o.owned?' (taken by another banner)':''} · ${gn?`guarded by ${amountWord(gn).toLowerCase()} troops · `:''}walk in to capture it`;}
     case 'mine':return`<b>${MINE[o.k].name}</b> (level ${o.lvl||1}) · +${fmt(mineOut(o))} ${RESNAME[MINE[o.k].res].toLowerCase()} a day · ${o.owned===ME()?'yours':o.owned?`held by ${o.ownerName}`:'unclaimed'}`;
     case 'pile':return`<b>${RESNAME[o.k]}</b> · ${fmt(o.n)}`;
+    case 'flot':return`<b>${FLOT[o.k].name}</b> · ${FLOT[o.k].give} · needs a boat or swimmers`;
     case 'gem':return`<b>${GEMS[o.k].name}</b> · worth ${fmt(GEMS[o.k].gold)} gold`;
     case 'chest':return'<b>Weathered chest</b>';
     case 'site':return`<b>${SITES[o.k].name}</b> · ${o.week===weekNo()?'spent until next week':`once a week: ${SITES[o.k].give}`}`;
@@ -2313,16 +2352,16 @@ function renderUI(){
   const mm=maxMana(),mx=maxMP();
   $('#heroCard').innerHTML=sw+`<div class="hgrid">
     <div class="hstats">${['atk','def','pow','lore'].map(k=>`<div class="hs" title="${STAT_TIP[k]}"><span class="hsl"><img src="${iconURL('stat',k,44)}" alt="">${STATN[k]}</span><b>${hst(h,k)}${carry(h,k)?`<em>+${carry(h,k)}</em>`:''}</b></div>`).join('')}</div>
-    <div class="hmain"><div class="hportrait"><img src="${iconURL('hero',h.id,128)}" alt="${esc(h.name)}"><button class="hbook${h.book?'':' none'}" data-book="1" title="${h.book?'Open the spellbook':'No spellbook yet: buy one at the Lantern Library'}"><span>📖</span>${h.book?`${h.spells.length} spell${h.spells.length===1?'':'s'}`:'No book'}</button></div>
+    <div class="hmain"><div class="hportrait"><img src="${iconURL('hero',h.id,128)}" alt="${esc(h.name)}"><button class="hbook${h.book?'':' none'}" data-book="1" title="${h.book?'Open the spellbook':'No spellbook yet: buy one at the Lantern Library'}"><img src="${ART_BASE}ui/icons/spellbook.png" alt="">${h.book?`${h.spells.length} spell${h.spells.length===1?'':'s'}`:'No book'}</button></div>
       <div class="hname"><b>${esc(h.name)}</b><button class="rename-ic" data-rename-hero="1" title="Rename ${esc(h.name)}">✎</button></div>
       <div class="label">${hd.type} hero · Level ${h.lvl}</div>
       <div class="hbars">
         <div class="meter"><span>Mana</span><span>${h.mana} / ${mm}</span></div><div class="bar mana"><i style="width:${mm?h.mana/mm*100:0}%"></i></div>
         <div class="meter"><span>Movement</span><span>${fmt(h.mp)} / ${fmt(mx)}</span></div><div class="bar mp"><i style="width:${h.mp/mx*100}%"></i></div>
         <div class="bar xp" title="Experience ${fmt(h.xp)} / ${fmt(need)}"><i style="width:${clamp((h.xp-prev)/(need-prev)*100,0,100)}%"></i></div></div></div></div>
-   <div class="chips"><span class="chip trav" title="${travelName()}"><img src="${iconURL('travel',h.boat&&tileAt(h.x,h.y)===T.LAKE?'boat':h.mount,44)}" alt=""></span><button class="chip team hdet" data-hsheet="1" title="Ability, skills, equipment and backpack">Hero details ▸</button>${(h.pack||[]).length?`<span class="chip" title="Items in the backpack">🎒 ${h.pack.length}</span>`:''}${h.relics.map(r=>`<span class="chip team" title="${RELICS[r].carryTxt}">◆ ${RELICS[r].name}</span>`).join('')}</div>`;
+   <div class="chips"><span class="chip trav" title="${travelName()}"><img src="${iconURL('travel',h.boat&&tileAt(h.x,h.y)===T.LAKE?'boat':h.mount,44)}" alt=""></span><button class="chip team hdet" data-hsheet="1" title="Ability, skills, equipment and backpack"><img src="${ART_BASE}ui/icons/inventory.png" alt="">Hero details</button>${(h.pack||[]).length?`<span class="chip" title="Items in the backpack">🎒 ${h.pack.length}</span>`:''}${h.relics.map(r=>`<span class="chip team" title="${RELICS[r].carryTxt}">◆ ${RELICS[r].name}</span>`).join('')}</div>`;
   let a='';for(let i=0;i<7;i++){const s=h.army[i];a+=s?`<button class="slot" draggable="true" data-slot="${i}" title="${s.n} ${U[s.k].pl}: click for details and to split, drag onto another slot to move or merge"><img src="${iconURL('unit',s.k,64)}" alt="${U[s.k].name}"><b>${s.n}</b></button>`:`<div class="slot empty" data-slot="${i}"></div>`;}
-  a+=`<button class="slot booktile${h.book?'':' none'}" data-book="1" title="Spellbook"><span>📖</span><small>Spells</small></button>`;
+  a+=`<button class="slot booktile${h.book?'':' none'}" data-book="1" title="Spellbook"><img src="${ART_BASE}ui/icons/spellbook.png" alt=""><small>Spells</small></button>`;
   $('#army').innerHTML=a;
   const goal=S.goal||[],months=Math.round(S.limit/28);
   const head=S.mode==='grail'?`Grails wanted · ${goal.filter(i=>delivered(i)).length}/${goal.length} on the altar`:S.mode==='conquest'?`Conquest · ${S.rivals.length} rival${S.rivals.length===1?'':'s'} left`:`The Seven Relics · ${S.delivered.length}/7 home`;
@@ -2333,7 +2372,7 @@ function renderUI(){
   $('#objective').title=`${head}. Click for details.`;$('#objective')._txt={head,gtxt};
   $('#armyPow').textContent=`Strength ${fmt(armyPower(h.army,h))}`;
   const tn=townTabs().filter(x=>x.id!=='overview').reduce((a,x)=>a+(x.n||0),0);
-  $('#bTown').innerHTML=`Town<span class="kbd">T</span>${tn?`<span class="bdg">${tn}</span>`:''}`;$('#bTown').classList.toggle('need',tn>0);
+  $('#bTown').innerHTML=`<img class="bi" src="${ART_BASE}ui/icons/town.png" alt="">Town<span class="kbd">T</span>${tn?`<span class="bdg">${tn}</span>`:''}`;$('#bTown').classList.toggle('need',tn>0);
   $('#bEnd').classList.toggle('need',S.heroes.every(x=>x.mp<70));
 }
 function relicState(i){
@@ -2518,6 +2557,13 @@ async function visit(o,last=true,jumped=false){
     if(!last)return false;await manageHolding(o);return true;}
   case 'spire':{if(o.owned!==ME()){o.owned=ME();o.ownerName=h.name;o.garrison=[];toast('Spire claimed. Leave troops in it to hold this road.');renderUI();}
     if(!last)return false;await manageSpire(o);return true;}
+  case 'flot':{S.objs=S.objs.filter(q=>q!==o);let msg='';
+    switch(o.k){case'floating_chest':{const g=ri(8,14)*100;gain('gold',g);msg=`${fmt(g)} gold in a floating chest.`;break;}case'salvage_crate':gain('timber',5);gain('ore',5);msg='Salvage: 5 timber and 5 ore.';break;
+      case'driftwood':gain('timber',6);msg='6 timber of driftwood.';break;case'supply_barrel':gain('gold',500);gain('ore',3);msg='A supply barrel: 500 gold and 3 ore.';break;
+      case'pearl_shell':gain('amber',2);msg='A giant pearl, traded for 2 amber.';break;case'sea_crystal':gain('amber',3);msg='A sea crystal worth 3 amber.';break;
+      case'message_bottle':{const r=addRumour(false,true);if(r)msg='A message in a bottle: '+r.replace(/<\/?b>/g,'');else{gain('gold',600);msg='A message in a bottle points to 600 gold.';}break;}
+      case'coral_relic':{const pool=Object.keys(ITEMS).filter(k=>ITEMS[k].lvl<=3&&!S.heroes.some(x=>(x.items||[]).includes(k)||(x.pack||[]).includes(k)));if(pool.length){const it=pick(pool);giveItem(h,it);msg=`Coral-crusted: the ${ITEMS[it].name} (${itemTxt(it)}).`;}else{gain('gold',800);msg='800 gold in coral.';}break;}}
+    toast(msg);renderUI();return false;}
   case 'gem':{const gm=GEMS[o.k];gain('gold',gm.gold);S.objs=S.objs.filter(q=>q!==o);toast(`<img src="${iconURL('gem',o.k)}" alt="" style="width:20px;vertical-align:-4px"> A ${gm.name.toLowerCase()}! Sold for ${fmt(gm.gold)} gold.`);renderUI();return false;}
   case 'pile':gain(o.k,o.n);S.objs=S.objs.filter(q=>q!==o);toast(`Picked up ${fmt(o.n)} ${RESNAME[o.k].toLowerCase()}.`);renderUI();return false;
   case 'mine':{const m=MINE[o.k];if(o.owned!==ME()){o.owned=ME();o.ownerName=h.name;toast(`${m.name} claimed: +${fmt(mineOut(o))} ${RESNAME[m.res].toLowerCase()} each day.`);if(!last)return false;}
@@ -2707,7 +2753,7 @@ function rivalCost(rv,x,y,goal){
 function rivalTarget(rv){
   const pw=armyPower(rv.army,rv),c=[];zocMap.set(rv,zocFor(rv.fac));
   for(const o of S.objs){let v=0;
-    if(o.type==='pile'||o.type==='gem')v=6;else if(o.type==='artifact')v=8+4*ITEMS[o.item].lvl;else if(o.type==='drop')v=60;else if(o.type==='mine'&&o.owned!==rv.fac)v=o.owned===ME()?16:12;
+    if(o.type==='pile'||o.type==='gem')v=6;else if(o.type==='flot'&&(rv.fac==='pirates'||rv.fac==='merfolk'))v=8;else if(o.type==='artifact')v=8+4*ITEMS[o.item].lvl;else if(o.type==='drop')v=60;else if(o.type==='mine'&&o.owned!==rv.fac)v=o.owned===ME()?16:12;
     else if(o.type==='relic'){if(S.day>7&&stackPower(o.k,o.n)*1.5<pw)v=45;}
     else if(o.type==='neutral'&&o.guard){if(stackPower(o.k,o.n)*1.3<pw)v=14;}
     else if(o.type==='spire'&&o.owned!==rv.fac){if(!o.garrison.length)v=o.owned?14:9;else if(armyPower(o.garrison)*1.4<pw)v=18;}
@@ -2752,7 +2798,7 @@ async function rivalInteract(rv,tg){
     await showModal({title:`${rv.name} attacks!`,body:`<p>The rival ${FAC[rv.fac].arch} hero <b>${rv.name}</b> falls on ${h.name}'s army.</p>`,buttons:[{label:'To battle',value:1,primary:true}]});
     await startBattle({type:'rival',rival:rv,x:h.x,y:h.y});return'stop';}
   const o=tg.o;
-  if(o.type==='pile'||o.type==='gem'){S.objs=S.objs.filter(q=>q!==o);rv.x=o.x;rv.y=o.y;return'go';}
+  if(o.type==='pile'||o.type==='gem'||o.type==='flot'){S.objs=S.objs.filter(q=>q!==o);rv.x=o.x;rv.y=o.y;return'go';}
   if(o.type==='artifact'){S.objs=S.objs.filter(q=>q!==o);(rv.items=rv.items||[]).push(o.item);rv.x=o.x;rv.y=o.y;return'go';}
   if(o.type==='drop'){S.objs=S.objs.filter(q=>q!==o);rv.relics.push(...o.rs);rv.x=o.x;rv.y=o.y;toast(`<b>${rv.name}</b> picked up ${o.rs.map(r=>RELICS[r].name).join(', ')}.`);return'go';}
   if(o.type==='mine'){rv.x=o.x;rv.y=o.y;if(o.owned===ME())toast(`<b>${rv.name}</b> seized your ${MINE[o.k].name}.`);o.owned=rv.fac;o.ownerName=rv.name;return'go';}
@@ -3101,10 +3147,16 @@ function startBattle(o){
   });
 }
 let bgCv=null;
+/* the battle ground matches where the fight happens */
+function battleGround(){const o=bt.obj,t=bt.terr,x=o.x,y=o.y;
+  if(t===T.LAKE)return'ship_deck';if(S.underY&&y>=S.underY)return'cavern';if(t===T.BOG)return'marsh';
+  if([[1,0],[-1,0],[0,1],[0,-1]].some(([a,b])=>inb(x+a,y+b)&&S.tiles[idx(x+a,y+b)]===T.LAKE))return'sand';
+  if(S.biome==='high'&&y<H*0.34)return'snow';if(S.biome==='dry'||t===T.HEATH)return'dirt';if(t===T.DIRT||t===T.ROAD)return'dirt';return'meadow';}
 function renderBG(){
   const cv=document.createElement('canvas');cv.width=btCv.width;cv.height=btCv.height;const c=cv.getContext('2d');c.scale(BL.dpr,BL.dpr);
   const pal={0:['#3d5a2a','#4f7034'],1:['#5e5034','#77663f'],2:['#5e5034','#77663f'],3:['#4f4239','#665446'],4:['#2f3f2e','#3e5139'],7:['#24465a','#2f5a70']}[bt.terr]||['#3d5a2a','#4f7034'];
   const gr=c.createLinearGradient(0,0,0,BL.h);gr.addColorStop(0,pal[1]);gr.addColorStop(1,pal[0]);c.fillStyle=gr;c.fillRect(0,0,BL.w,BL.h);
+  {const gi=artImg(`battle/grounds/${battleGround()}.png`);if(gi.ok){const im=gi.img,sc=Math.max(BL.w/im.width,BL.h/im.height);c.imageSmoothingEnabled=false;c.drawImage(im,Math.round((BL.w-im.width*sc)/2),Math.round((BL.h-im.height*sc)/2),Math.round(im.width*sc),Math.round(im.height*sc));}}
   const g=mulberry32(77);for(let i=0;i<BL.w*BL.h/90;i++){c.fillStyle=`rgba(${g()<0.5?'0,0,0':'255,250,210'},${g()*0.08})`;c.fillRect(Math.round(g()*BL.w),Math.round(g()*BL.h),2,2+Math.round(g()*3));}
   const vg=c.createRadialGradient(BL.w/2,BL.h/2,Math.min(BL.w,BL.h)*0.3,BL.w/2,BL.h/2,Math.max(BL.w,BL.h)*0.7);vg.addColorStop(0,'rgba(0,0,0,0)');vg.addColorStop(1,'rgba(0,0,0,.5)');c.fillStyle=vg;c.fillRect(0,0,BL.w,BL.h);
   bgCv=cv;
@@ -3564,6 +3616,12 @@ function afterLoad(){setMode(S.mode||'relic');if(S.players)loadPlayer(S.pi);rebu
 
 /* -------- map input -------- */
 let drag=null;
+/* the map cursor says what a click would do: attack, move, or nothing */
+function setMapCursor(x,y){let k='pointer';
+  if(S&&!S.editor&&inb(x,y)&&!(x===HERO().x&&y===HERO().y)){const o=objAt(x,y);
+    if(!S.explored[idx(x,y)])k='unavailable';else if(rivalAt(x,y)||(o&&(o.type==='neutral'||o.type==='relic'||spireFoe(o))))k='target';
+    else if(!isFinite(terrainCost(x,y))&&!townFoot(x,y)&&!(o&&o.type==='town'))k='unavailable';else k='move';}
+  const hs={pointer:'3 3',target:'12 12',move:'12 12',unavailable:'12 12'}[k];mapCv.style.cursor=`url(${ART_BASE}ui/cursors/${k}.png) ${hs}, ${k==='unavailable'?'not-allowed':k==='target'?'crosshair':'pointer'}`;}
 const tileOf=e=>{const r=mapCv.getBoundingClientRect();return[Math.floor((e.clientX-r.left+camX)/TS),Math.floor((e.clientY-r.top+camY)/TS)];};
 mapCv.addEventListener('pointerdown',e=>{closeHeroMenu();
   if(S&&S.editor&&e.button===0&&!modalOpen){const[x,y]=tileOf(e);try{mapCv.setPointerCapture(e.pointerId);}catch(_){}edPointer('down',x,y);return;}
@@ -3576,7 +3634,7 @@ mapCv.addEventListener('pointermove',e=>{
     if(drag.moved){camTX=camTY=null;camX=drag.cx-dx;camY=drag.cy-dy;clampCam();}}
   if(!S)return;const tx=Math.floor((e.clientX-r.left+camX)/TS),ty=Math.floor((e.clientY-r.top+camY)/TS);
   if(S.editor&&ED.paint&&!drag)edPointer('move',tx,ty);
-  hoverTile={x:tx,y:ty};$('#hover').innerHTML=describe(tx,ty);
+  hoverTile={x:tx,y:ty};$('#hover').innerHTML=describe(tx,ty);setMapCursor(tx,ty);
 });
 mapCv.addEventListener('pointerleave',()=>{hoverTile=null;$('#hover').innerHTML='';});
 mapCv.addEventListener('pointerup',e=>{
