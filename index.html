@@ -572,6 +572,9 @@ body{background:radial-gradient(circle at 30% 0,#1d2a5e,#0d1229 70%);color:var(-
 .tstrip .slot.empty{background:rgba(10,15,44,.55);border-color:#2f3f86;opacity:1}
 .thint{margin:0;font-size:14px;color:#aab6ea!important}
 @media (max-width:900px){.tstrip{grid-template-columns:1fr}.trow{grid-template-columns:56px repeat(7,minmax(0,1fr))}}
+.tbanner{display:block;width:calc(100% + 36px);margin:-10px -18px 10px;image-rendering:pixelated;border-bottom:3px solid var(--bev-lo)}
+.sheet header h2:empty{display:none}
+.sheet:has(.tbanner) header{padding:0}
 </style>
 
 <div id="app">
@@ -1093,6 +1096,12 @@ function tinted(path,maskPath,col){
     for(let i=0;i<md.length;i+=4)if(md[i+3]>0&&d.data[i+3]>0){const sh=ramp[Math.min(3,Math.round(md[i]/85))];d.data[i]=sh[0];d.data[i+1]=sh[1];d.data[i+2]=sh[2];}
     c.putImageData(d,0,0);return a.tint[col]=cv;}catch(e){return a.tint[col]=a.img;}
 }
+/* Pack 06/07 art: town stages, stones, sites, portals, gems, title banner */
+const townStage=tw=>tw&&tw.built?(tw.built.hall4?4:tw.built.hall3?3:tw.built.hall2?2:1):1;
+const townSprite=(fk,stage,col)=>tinted(`towns/${fk}/${stage}.png`,`team_masks/towns/${fk}/${stage}.png`,col);
+const GEMS={ruby:{name:'Ruby',gold:1000},sapphire:{name:'Sapphire',gold:900},emerald:{name:'Emerald',gold:800},amethyst:{name:'Amethyst',gold:700},moonstone:{name:'Moonstone',gold:600}};
+function spriteAt(c,path,x,y,sc,frames=1,fms=150){const a=artImg(path);if(!a.ok)return false;const im=a.img,fw=im.width/frames,f=frames>1?Math.floor(performance.now()/fms)%frames:0;
+  c.imageSmoothingEnabled=false;c.drawImage(im,f*fw,0,fw,im.height,Math.round(x-fw*sc/2),Math.round(y-(im.height-4)*sc),Math.round(fw*sc),Math.round(im.height*sc));return true;}
 const unitArt=k=>{const u=U[k];return u?ART_UNITS[u.up?u.base:k]||null:null;};
 const unitSheet=(k,col)=>{const n=unitArt(k);return n?tinted(`units/rangers/${n}/${n}_sheet.png`,`team_masks/units/rangers/${n}/${n}_sheet.png`,col):null;};
 const heroSheet=(id,col)=>ART_MAP.has(id)?tinted(`heroes/${id}/map/${id}_map_sheet.png`,`team_masks/heroes/${id}/map/${id}_map_sheet.png`,col):null;
@@ -1102,6 +1111,8 @@ function drawCrown(c,x,y,s){c.save();c.translate(x,y);c.scale(s/10,s/10);c.fillS
 const iconCache={};
 function iconURL(kind,key,size=64){
   if(kind==='crest')return ART_BASE+`shields/${key}_96.png`;
+  if(kind==='res'&&key==='amber')return ART_BASE+'gems/amber.png';
+  if(kind==='gem')return ART_BASE+`gems/${key}.png`;
   if(kind==='hero'&&ART_PORTRAITS.has(key))return ART_BASE+`portraits/heroes/${key}_${size>80?128:64}.png`;
   if(kind==='unit'&&unitArt(key))return ART_BASE+`portraits/units/${unitArt(key)}_64.png`;
   const id=kind+':'+key+':'+size;if(iconCache[id])return iconCache[id];
@@ -1685,6 +1696,8 @@ function furnishMap(bases){
   for(const[tier,pool,a,b]of ALT)for(let i=0;i<Math.max(1,Math.round((tier===3?0.6:1)*KS));i++){const p=freeTile(dist,...band(a,b),3);if(!p)continue;add({type:'altar',x:p.x,y:p.y,tier,spell:pick(pool)});
     if(tier>1){const g=[[1,0],[-1,0],[0,1],[0,-1]].map(([dx,dy])=>({x:p.x+dx,y:p.y+dy})).find(q=>inb(q.x,q.y)&&passableT(S.tiles[idx(q.x,q.y)])&&!objAt(q.x,q.y)&&!townFoot(q.x,q.y));
       if(g)add({type:'neutral',x:g.x,y:g.y,...(tier===2?{k:'imp',n:ri(18,26)}:{k:'troll',n:ri(12,16)})});}}
+  for(let i=0;i<Math.round(5*KS);i++){const p=freeTile(dist,...band(0.15,0.95),2);if(p)add({type:'gem',k:pick(Object.keys(GEMS)),x:p.x,y:p.y});}
+  for(const o of S.objs)if(o.type==='stone'&&!o.style)o.style=pick(FAC_ORDER);
   // free towns: villages of a random banner, held by wild creatures until someone claims them
   for(let i=0;i<(W>=56?4:W>=44?3:2);i++){const p=freeTile(dist,...band(0.3+0.12*i,0.6+0.12*i),4);if(!p)continue;const d=dist.get(idx(p.x,p.y))/Math.max(1,md);
     const g1=neutralAt(clamp(d,0.15,1)),g2=neutralAt(clamp(d+0.1,0.15,1));add({type:'camp',free:true,fac:pick(FAC_ORDER),x:p.x,y:p.y,owned:false,garrison:[{k:g1.k,n:g1.n},{k:g2.k,n:Math.ceil(g2.n/2)}].filter((a,j,arr)=>arr.findIndex(b=>b.k===a.k)===j),pool:{}});}
@@ -1744,7 +1757,7 @@ const maxMana=()=>Math.round(hst(HERO(),'lore')*10*(hasSk('deepres')?1.25:1));
 function maxMP(){const sp=HERO().army.length?Math.min(...HERO().army.map(a=>U[a.k].spd+((fx().unitSpd||{})[a.k]||0))):5;
   let m=900+45*Math.min(sp,9);if(HERO().mount!=='foot')m*=1.4;if(hasSk('forcedmarch'))m*=1.1;m*=1+gear(HERO(),'mpPct')/100;return Math.round(m);}
 const xpFor=l=>Math.round(1000*l*(1+0.12*(l-1)));
-const income=()=>(S.town.taken?0:(S.town.built.hall3?2000:S.town.built.hall2?1000:500))+S.heroes.reduce((a,h)=>a+gear(h,'goldDay'),0)+500*S.objs.filter(o=>o.type==='camp'&&o.owned===ME()).length;
+const income=()=>(S.town.taken?0:(S.town.built.hall4?3000:S.town.built.hall3?2000:S.town.built.hall2?1000:500))+S.heroes.reduce((a,h)=>a+gear(h,'goldDay'),0)+500*S.objs.filter(o=>o.type==='camp'&&o.owned===ME()).length;
 function dateParts(d=S.day){const m=Math.floor((d-1)/28)+1,w=Math.floor(((d-1)%28)/7)+1,dd=(d-1)%7+1;return{m,w,d:dd};}
 const LIMIT=112;
 function terrainCost(x,y){
@@ -1892,6 +1905,10 @@ function centerOn(x,y,instant){const tx=x*TS+TS/2-vw/2,ty=y*TS+TS/2-vh/2;if(inst
 
 /* The town fills a 3 x 3 tile footprint; its gate is the bottom-centre tile. */
 function drawTown(c,cx,by,fk=S.fac,tw=S.town){
+  {const sp=townSprite(fk,townStage(tw),FAC[fk].col);if(sp){const k=TS/32;c.fillStyle='rgba(0,0,0,.3)';c.beginPath();c.ellipse(cx,by-6,74,13,0,0,7);c.fill();c.imageSmoothingEnabled=false;
+    c.drawImage(sp,Math.round(cx-64*k),Math.round(by-92*k),Math.round(128*k),Math.round(96*k));
+    const top=by-92*k;c.font='700 12px "Alegreya SC",Georgia,serif';c.textAlign='center';const nmw=c.measureText(tw.name).width+12;
+    c.fillStyle='rgba(16,20,19,.85)';c.fillRect(cx-nmw/2,top-8,nmw,17);c.strokeStyle=FAC[fk].col;c.lineWidth=1;c.strokeRect(cx-nmw/2,top-8,nmw,17);c.fillStyle='#f2d382';c.fillText(tw.name,cx,top+5);return;}}
   const f=FAC[fk],stage=tw.built.hall3?2:tw.built.hall2?1:0,t=performance.now()/400;
   const L=cx-62,Rr=cx+62,top=by-112;
   c.fillStyle='rgba(0,0,0,.35)';c.beginPath();c.ellipse(cx,by-4,70,14,0,0,7);c.fill();
@@ -1939,6 +1956,10 @@ function drawObj(c,o){
     drawRelic(c,o.r,cx,cy-(o.r===6?24:4),8);token(c,o.k,cx+(o.r===6?0:12),cy+(o.r===6?2:8),o.r===6?15:10,'#c45a43');break;
   case 'drop':drawRelic(c,o.rs[0],cx,cy,10);break;
   case 'camp':{const col=FAC[o.fac||o.dfac||'necro'].col,gn=(o.garrison||[]).reduce((a,g)=>a+g.n,0);
+    {const fk2=o.fac||o.dfac||'necro',sp=townSprite(fk2,1,o.owned?ownerCol(o.owned):o.free?'#9a958a':FAC[fk2].col);if(sp){const k=TS/32*0.62;c.fillStyle='rgba(0,0,0,.3)';c.beginPath();c.ellipse(cx,cy+14,30,7,0,0,7);c.fill();c.imageSmoothingEnabled=false;c.drawImage(sp,Math.round(cx-64*k),Math.round(cy+TS/2-2-92*k),Math.round(128*k),Math.round(96*k));
+      if(o.owned)flag(c,cx+24,cy+8,ownerCol(o.owned));
+      if(gn&&!S.editor){c.font='800 12px "Alegreya SC",Georgia,serif';c.textAlign='center';c.textBaseline='middle';const tt=o.owned===ME()?fmt(gn):'?',w=c.measureText(tt).width+10;c.fillStyle='rgba(12,18,48,.92)';c.fillRect(cx-w/2,cy+17,w,14);c.strokeStyle=o.owned?ownerCol(o.owned):'#c45a43';c.lineWidth=1.2;c.strokeRect(cx-w/2,cy+17,w,14);c.fillStyle='#fff';c.fillText(tt,cx,cy+24.5);}
+      if(!o.free&&!S.editor)drawFire(c,'campfire',cx-26,cy+20,o.x*97+o.y*31);break;}}
     if(o.free){c.fillStyle='rgba(0,0,0,.35)';c.beginPath();c.ellipse(cx,cy+13,22,6,0,0,7);c.fill();c.strokeStyle='#1a1610';c.lineWidth=1.2;
       for(const[dx,hh]of[[-9,14],[6,18]]){c.fillStyle='#cdbf9c';c.fillRect(cx+dx-7,cy+12-hh,14,hh);c.strokeRect(cx+dx-7,cy+12-hh,14,hh);c.fillStyle=o.owned?ownerCol(o.owned):col;c.beginPath();c.moveTo(cx+dx-10,cy+12-hh);c.lineTo(cx+dx,cy+2-hh);c.lineTo(cx+dx+10,cy+12-hh);c.closePath();c.fill();c.stroke();c.fillStyle='#2a1d12';c.fillRect(cx+dx-2,cy+6,4,6);}
       c.fillStyle='#7a5432';for(let x=-20;x<=17;x+=5){c.fillRect(cx+x,cy+8,4,7);}
@@ -1958,6 +1979,7 @@ function drawObj(c,o){
     for(let i=0;i<(o.lvl||1);i++){c.fillStyle='#f2d382';c.strokeStyle='#120f0b';c.lineWidth=1;c.fillRect(cx-9+i*7,cy+15,5,5);c.strokeRect(cx-9+i*7,cy+15,5,5);}
     if(o.owned)flag(c,cx+12,cy-6,ownerCol(o.owned));break;}
   case 'pile':drawRes(c,o.k,cx,cy+2,11);break;
+  case 'gem':{const t=performance.now()/500;c.fillStyle='rgba(0,0,0,.3)';c.beginPath();c.ellipse(cx,cy+12,10,4,0,0,7);c.fill();if(!spriteAt(c,`gems/${o.k}.png`,cx,cy+10+Math.sin(t+o.x)*1.5,TS/32*0.85)){c.fillStyle='#c46bff';c.beginPath();c.arc(cx,cy,7,0,7);c.fill();}break;}
   case 'site':{const spent=o.week===weekNo();c.globalAlpha=spent?0.55:1;c.fillStyle='rgba(0,0,0,.3)';c.beginPath();c.ellipse(cx,cy+12,16,5,0,0,7);c.fill();c.strokeStyle='#26241f';c.lineWidth=1.2;
     if(o.k==='wish'){c.fillStyle='#8a867a';c.beginPath();c.ellipse(cx,cy+5,12,6,0,0,7);c.fill();c.stroke();c.fillStyle=spent?'#2c3a4a':'#5f9fd0';c.beginPath();c.ellipse(cx,cy+4,8,3.5,0,0,7);c.fill();
       c.fillStyle='#6b4a2e';c.fillRect(cx-11,cy-14,3,18);c.fillRect(cx+8,cy-14,3,18);c.fillStyle='#8b3a2a';c.beginPath();c.moveTo(cx-15,cy-12);c.lineTo(cx,cy-22);c.lineTo(cx+15,cy-12);c.closePath();c.fill();c.stroke();if(!spent){c.fillStyle='#f2c94c';c.fillRect(cx-2,cy-4,3,3);}}
@@ -1971,9 +1993,11 @@ function drawObj(c,o){
     c.fillStyle=col;c.beginPath();c.moveTo(cx,cy-12+Math.sin(t)*2);c.lineTo(cx+6,cy-3);c.lineTo(cx,cy+3);c.lineTo(cx-6,cy-3);c.closePath();c.fill();c.stroke();
     c.fillStyle='#120f0b';c.font='700 9px "Alegreya SC",Georgia,serif';c.textAlign='center';c.textBaseline='middle';c.fillText(String(ITEMS[o.item].lvl),cx,cy+8);break;}
   case 'chest':c.fillStyle='#7a4e24';c.strokeStyle='#2a170a';c.beginPath();c.roundRect(cx-11,cy-6,22,15,3);c.fill();c.stroke();c.fillStyle='#d4ab52';c.fillRect(cx-11,cy-1,22,3);c.fillRect(cx-2,cy-2,4,6);break;
-  case 'stone':c.fillStyle='#7f7c74';c.strokeStyle='#26241f';c.beginPath();c.moveTo(cx-7,cy+13);c.lineTo(cx-8,cy-8);c.lineTo(cx-1,cy-16);c.lineTo(cx+7,cy-9);c.lineTo(cx+8,cy+13);c.closePath();c.fill();c.stroke();
+  case 'stone':{const st=o.stat==='pow'?'lore':o.stat,sty=o.style||FAC_ORDER[(o.id||o.x+o.y)%8],used=(o.usedBy||[]).includes(HERO()&&HERO().id);c.globalAlpha=used?0.55:1;const ok=spriteAt(c,`sites/stones/${sty}/${st}.png`,cx,cy+TS/2-2,TS/32*0.7);c.globalAlpha=1;if(ok){if(o.stat==='pow'){c.save();c.translate(cx+12,cy-14);drawStat(c,'pow',0,0,6);c.restore();}break;}}
+    c.fillStyle='#7f7c74';c.strokeStyle='#26241f';c.beginPath();c.moveTo(cx-7,cy+13);c.lineTo(cx-8,cy-8);c.lineTo(cx-1,cy-16);c.lineTo(cx+7,cy-9);c.lineTo(cx+8,cy+13);c.closePath();c.fill();c.stroke();
     if(!o.used){c.save();c.translate(cx,cy-2);drawStat(c,o.stat,0,0,6);c.restore();}break;
   case 'sage':{const used=(o.used||[]).includes(HERO()&&HERO().id);c.globalAlpha=used?0.6:1;
+    if(spriteAt(c,'sites/sage.png',cx,cy+TS/2-2,TS/32*0.85)){c.globalAlpha=1;break;}
     c.fillStyle='rgba(0,0,0,.3)';c.beginPath();c.ellipse(cx,cy+13,19,5,0,0,7);c.fill();c.strokeStyle='#1d1610';c.lineWidth=1.3;
     c.fillStyle='#d8c9a6';c.fillRect(cx-14,cy-6,28,19);c.strokeRect(cx-14,cy-6,28,19);
     c.fillStyle='#2f5bb8';c.beginPath();c.moveTo(cx-18,cy-6);c.lineTo(cx,cy-20);c.lineTo(cx+18,cy-6);c.closePath();c.fill();c.stroke();
@@ -1982,6 +2006,7 @@ function drawObj(c,o){
   case 'altar':{const col=ALTAR_COL[o.tier],t=performance.now()/400;
     c.fillStyle='rgba(0,0,0,.3)';c.beginPath();c.ellipse(cx,cy+12,17,5,0,0,7);c.fill();
     const gr=c.createRadialGradient(cx,cy-8,1,cx,cy-8,18);gr.addColorStop(0,col);gr.addColorStop(1,'rgba(0,0,0,0)');c.globalAlpha=0.55+0.25*Math.sin(t);c.fillStyle=gr;c.beginPath();c.arc(cx,cy-8,18,0,7);c.fill();c.globalAlpha=1;
+    if(spriteAt(c,'sites/altar.png',cx,cy+TS/2-2,TS/32*0.75)){for(let k=0;k<o.tier;k++){c.fillStyle=col;c.strokeStyle='#120f0b';c.lineWidth=1;c.fillRect(cx-9+k*7,cy+14,5,5);c.strokeRect(cx-9+k*7,cy+14,5,5);}break;}
     c.fillStyle='#8d8a96';c.strokeStyle='#1d1a24';c.lineWidth=1.3;c.fillRect(cx-13,cy+1,26,11);c.strokeRect(cx-13,cy+1,26,11);c.fillRect(cx-9,cy-4,18,6);c.strokeRect(cx-9,cy-4,18,6);
     c.fillStyle=col;c.beginPath();c.moveTo(cx,cy-20+Math.sin(t)*1.5);c.lineTo(cx+5,cy-11);c.lineTo(cx,cy-6);c.lineTo(cx-5,cy-11);c.closePath();c.fill();c.stroke();
     for(let k=0;k<o.tier;k++){c.fillStyle=col;c.fillRect(cx-7+k*6,cy+5,4,4);}break;}
@@ -1989,7 +2014,9 @@ function drawObj(c,o){
     {const gr=c.createRadialGradient(cx,cy-8,1,cx,cy-8,10);gr.addColorStop(0,'#e2f0ff');gr.addColorStop(0.5,'#6f8fd8');gr.addColorStop(1,'rgba(111,143,216,0)');c.fillStyle=gr;c.beginPath();c.arc(cx,cy-8,10,0,7);c.fill();}break;
   case 'well':c.fillStyle='#8a867a';c.strokeStyle='#26241f';c.beginPath();c.ellipse(cx,cy+4,14,8,0,0,7);c.fill();c.stroke();c.fillStyle=o.day===S.day?'#2c3a4a':'#7ab3e0';c.beginPath();c.ellipse(cx,cy+3,9,4.5,0,0,7);c.fill();break;
   case 'tower':c.fillStyle='#8f8a7c';c.strokeStyle='#26241f';c.fillRect(cx-6,cy-20,12,32);c.strokeRect(cx-6,cy-20,12,32);for(let i=0;i<3;i++)c.fillRect(cx-6+i*5,cy-24,3,4);c.fillStyle='#14110c';c.fillRect(cx-2,cy-12,4,6);break;
-  case 'portal':{const t=performance.now()/500;c.save();c.translate(cx,cy+2);
+  case 'portal':{const kind=S.underY&&o.y>=S.underY?'arcane':[[1,0],[-1,0],[0,1],[0,-1],[1,1],[-1,-1],[1,-1],[-1,1]].some(([a,b])=>inb(o.x+a,o.y+b)&&S.tiles[idx(o.x+a,o.y+b)]===T.LAKE)?'tidal':S.underY?'woodland':'arcane';
+    c.fillStyle='rgba(0,0,0,.35)';c.beginPath();c.ellipse(cx,cy+16,20,6,0,0,7);c.fill();if(spriteAt(c,`portals/${kind}.png`,cx,cy+TS/2-2,TS/32*0.75,4,150))break;}
+  case 'portal-drawn':{const t=performance.now()/500;c.save();c.translate(cx,cy+2);
     c.fillStyle='rgba(0,0,0,.35)';c.beginPath();c.ellipse(0,13,19,6,0,0,7);c.fill();
     const gl=c.createRadialGradient(0,-4,2,0,-4,26);gl.addColorStop(0,'rgba(214,120,255,.45)');gl.addColorStop(1,'rgba(214,120,255,0)');c.fillStyle=gl;c.beginPath();c.arc(0,-4,26,0,7);c.fill();
     c.fillStyle='#5d566c';c.strokeStyle='#15121c';c.lineWidth=1.4;c.beginPath();c.moveTo(-16,13);c.lineTo(-16,-8);c.arc(0,-8,16,Math.PI,0);c.lineTo(16,13);c.lineTo(10,13);c.lineTo(10,-8);c.arc(0,-8,10,0,Math.PI,true);c.lineTo(-10,13);c.closePath();c.fill();c.stroke();
@@ -2132,10 +2159,11 @@ function describe(x,y){
     const gn=(o.garrison||[]).reduce((a,g)=>a+g.n,0);return o.owned===ME()?`<b>Your ${FAC[o.fac].arch} holding</b> · +500 gold a day · recruits each week${gn?` · ${gn} troops guard it`:''}`:`<b>${campName(o)}</b>${o.owned?' (taken by another banner)':''} · ${gn?`guarded by ${amountWord(gn).toLowerCase()} troops · `:''}walk in to capture it`;}
     case 'mine':return`<b>${MINE[o.k].name}</b> (level ${o.lvl||1}) · +${fmt(mineOut(o))} ${RESNAME[MINE[o.k].res].toLowerCase()} a day · ${o.owned===ME()?'yours':o.owned?`held by ${o.ownerName}`:'unclaimed'}`;
     case 'pile':return`<b>${RESNAME[o.k]}</b> · ${fmt(o.n)}`;
+    case 'gem':return`<b>${GEMS[o.k].name}</b> · worth ${fmt(GEMS[o.k].gold)} gold`;
     case 'chest':return'<b>Weathered chest</b>';
     case 'site':return`<b>${SITES[o.k].name}</b> · ${o.week===weekNo()?'spent until next week':`once a week: ${SITES[o.k].give}`}`;
     case 'artifact':{const it=ITEMS[o.item];return`<b style="color:${ITEM_COLS[it.lvl]}">${it.name}</b> · level ${it.lvl} ${it.tier} · ${itemTxt(o.item)}`;}
-    case 'stone':return`<b>Standing stone of ${STATN[o.stat]}</b> · ${o.used?'spent':'+1 '+STATN[o.stat]}`;
+    case 'stone':return`<b>Training stone of ${STATN[o.stat]}</b> · +1 ${STATN[o.stat]} for each hero, once${(o.usedBy||[]).includes(HERO().id)?' (this hero has trained here)':''}`;
     case 'shrine':return`<b>Wayshrine</b> · teaches ${SP[o.spell].name}`;
     case 'sage':return`<b>Sage's Library</b> · each hero may learn +2 Attack, Defense, Power or Lore${(o.used||[]).includes(HERO().id)?' (already visited)':''}`;
     case 'altar':return`<b>${ALTAR_NAMES[o.tier]}</b> · teaches ${SP[o.spell].name}${o.tier>1?` · needs Lore ${o.tier}`:''} · needs a spellbook`;
@@ -2350,6 +2378,7 @@ async function visit(o,last=true,jumped=false){
     if(!last)return false;await manageHolding(o);return true;}
   case 'spire':{if(o.owned!==ME()){o.owned=ME();o.ownerName=h.name;o.garrison=[];toast('Spire claimed. Leave troops in it to hold this road.');renderUI();}
     if(!last)return false;await manageSpire(o);return true;}
+  case 'gem':{const gm=GEMS[o.k];gain('gold',gm.gold);S.objs=S.objs.filter(q=>q!==o);toast(`<img src="${iconURL('gem',o.k)}" alt="" style="width:20px;vertical-align:-4px"> A ${gm.name.toLowerCase()}! Sold for ${fmt(gm.gold)} gold.`);renderUI();return false;}
   case 'pile':gain(o.k,o.n);S.objs=S.objs.filter(q=>q!==o);toast(`Picked up ${fmt(o.n)} ${RESNAME[o.k].toLowerCase()}.`);renderUI();return false;
   case 'mine':{const m=MINE[o.k];if(o.owned!==ME()){o.owned=ME();o.ownerName=h.name;toast(`${m.name} claimed: +${fmt(mineOut(o))} ${RESNAME[m.res].toLowerCase()} each day.`);if(!last)return false;}
     if(!last||(o.lvl||1)>=3)return false;
@@ -2373,9 +2402,9 @@ async function visit(o,last=true,jumped=false){
     {const free=Object.keys(ITEMS).filter(k=>ITEMS[k].lvl<=2&&!S.heroes.some(x=>(x.items||[]).includes(k)));if(free.length&&R()<0.35){const it=pick(free);(h.items=h.items||[]).push(it);toast(`Wrapped in oilcloth: <b>${ITEMS[it].name}</b> (${itemTxt(it)}).`);}}
     const hid=S.objs.filter(q=>q.type==='relic'&&!S.explored[idx(q.x,q.y)]);if(hid.length&&R()<0.45){const q=pick(hid);reveal(q.x,q.y,2);toast(`Tucked in the lid: a map fragment showing the ${RELICS[q.r].lair}.`);}
     renderUI();return true;}
-  case 'stone':if(o.used){toast('The stone is silent now.');return false;}
-    o.used=true;h[o.stat]++;if(o.stat==='lore')h.mana+=10;
-    await showModal({title:`Standing stone of ${STATN[o.stat]}`,body:`<p>Old runes warm under ${h.name}'s palm.</p><div class="scs">${sc(o.stat,h[o.stat],1)}</div>`,buttons:[{label:'Continue',value:1,primary:true}],dismiss:1});renderUI();return true;
+  case 'stone':if((o.usedBy=o.usedBy||[]).includes(h.id)){toast(`${h.name} has already trained here.`);return false;}
+    o.usedBy.push(h.id);h[o.stat]++;if(o.stat==='lore')h.mana+=10;
+    await showModal({title:`Training stone of ${STATN[o.stat]}`,body:`<p>Old runes warm under ${h.name}'s palm.</p><div class="scs">${sc(o.stat,h[o.stat],1)}</div>`,buttons:[{label:'Continue',value:1,primary:true}],dismiss:1});renderUI();return true;
   case 'sage':{if(!last)return false;if((o.used||[]).includes(h.id)){toast(`The sages have already taught ${h.name} all they can.`);return false;}
     const pr=showModal({title:"Sage's Library",body:`<p>Old scholars offer ${esc(h.name)} one lesson. Choose what to learn:</p><div class="sagepick">${['atk','def','pow','lore'].map(k=>`<button class="mode" data-sg="${k}"><img src="${iconURL('stat',k,44)}" alt=""><b>+2 ${STATN[k]}</b><span>${STAT_TIP[k].split(': ')[1]}</span></button>`).join('')}</div>`,buttons:[{label:'Leave',value:null}],dismiss:null,
       top:false});
@@ -2528,7 +2557,7 @@ function rivalCost(rv,x,y,goal){
 function rivalTarget(rv){
   const pw=armyPower(rv.army,rv),c=[];zocMap.set(rv,zocFor(rv.fac));
   for(const o of S.objs){let v=0;
-    if(o.type==='pile')v=6;else if(o.type==='artifact')v=8+4*ITEMS[o.item].lvl;else if(o.type==='drop')v=60;else if(o.type==='mine'&&o.owned!==rv.fac)v=o.owned===ME()?16:12;
+    if(o.type==='pile'||o.type==='gem')v=6;else if(o.type==='artifact')v=8+4*ITEMS[o.item].lvl;else if(o.type==='drop')v=60;else if(o.type==='mine'&&o.owned!==rv.fac)v=o.owned===ME()?16:12;
     else if(o.type==='relic'){if(S.day>7&&stackPower(o.k,o.n)*1.5<pw)v=45;}
     else if(o.type==='neutral'&&o.guard){if(stackPower(o.k,o.n)*1.3<pw)v=14;}
     else if(o.type==='spire'&&o.owned!==rv.fac){if(!o.garrison.length)v=o.owned?14:9;else if(armyPower(o.garrison)*1.4<pw)v=18;}
@@ -2573,7 +2602,7 @@ async function rivalInteract(rv,tg){
     await showModal({title:`${rv.name} attacks!`,body:`<p>The rival ${FAC[rv.fac].arch} hero <b>${rv.name}</b> falls on ${h.name}'s army.</p>`,buttons:[{label:'To battle',value:1,primary:true}]});
     await startBattle({type:'rival',rival:rv,x:h.x,y:h.y});return'stop';}
   const o=tg.o;
-  if(o.type==='pile'){S.objs=S.objs.filter(q=>q!==o);rv.x=o.x;rv.y=o.y;return'go';}
+  if(o.type==='pile'||o.type==='gem'){S.objs=S.objs.filter(q=>q!==o);rv.x=o.x;rv.y=o.y;return'go';}
   if(o.type==='artifact'){S.objs=S.objs.filter(q=>q!==o);(rv.items=rv.items||[]).push(o.item);rv.x=o.x;rv.y=o.y;return'go';}
   if(o.type==='drop'){S.objs=S.objs.filter(q=>q!==o);rv.relics.push(...o.rs);rv.x=o.x;rv.y=o.y;toast(`<b>${rv.name}</b> picked up ${o.rs.map(r=>RELICS[r].name).join(', ')}.`);return'go';}
   if(o.type==='mine'){rv.x=o.x;rv.y=o.y;if(o.owned===ME())toast(`<b>${rv.name}</b> seized your ${MINE[o.k].name}.`);o.owned=rv.fac;o.ownerName=rv.name;return'go';}
@@ -2625,6 +2654,7 @@ function townBuildings(){
     {id:'hall1',name:'Moot Hall',cost:{},desc:'Brings in 500 gold each day.'},
     {id:'hall2',name:'Council Hall',cost:{gold:2500,timber:5,ore:5},req:['hall1'],desc:'Raises daily gold to 1,000.'},
     {id:'hall3',name:'High Seat',cost:{gold:5000,timber:10,ore:10,amber:5},req:['hall2','lib1'],desc:'Raises daily gold to 2,000.'},
+    {id:'hall4',name:'Crown Seat',cost:{gold:10000,ore:10,amber:10},req:['hall3','wall2'],desc:'Makes this your capital: daily gold rises to 3,000.'},
     {id:'reliquary',name:altarName(),cost:{gold:1500,ore:5},desc:S.mode==='grail'?'Heroes entering town place their grails here. The three the Oracle wants win the game.':S.mode==='conquest'?'Heroes entering town place their relics here for the bonuses.':'Heroes entering town place their relics here. All seven wins the game.'},
     {id:'tavern',name:'Tavern',cost:{gold:800,timber:5},desc:'Hire up to two more heroes: two of your banner and two wanderers from other banners, new each week.'},
   ];
@@ -2773,11 +2803,13 @@ function drawTownView(cv){
   }
   // front row
   const lv=t.built.hall3?2:t.built.hall2?1:0,kh=100+lv*28;
-  c.fillStyle='#b8ae94';c.strokeStyle=outline;c.lineWidth=2;c.fillRect(430,252-kh,100,kh);c.strokeRect(430,252-kh,100,kh);for(let i=0;i<5;i++)c.fillRect(430+i*21,244-kh,12,10);
+  const tsp=townSprite(S.fac,townStage(t),f.col);
+  if(tsp){c.imageSmoothingEnabled=false;c.drawImage(tsp,480-96,262-138,192,144);}
+  else{c.fillStyle='#b8ae94';c.strokeStyle=outline;c.lineWidth=2;c.fillRect(430,252-kh,100,kh);c.strokeRect(430,252-kh,100,kh);for(let i=0;i<5;i++)c.fillRect(430+i*21,244-kh,12,10);
   c.fillStyle='#2b1d10';c.beginPath();c.moveTo(466,252);c.lineTo(466,226);c.arc(480,226,14,Math.PI,0);c.lineTo(494,252);c.fill();
   c.fillStyle='#f2c46a';for(let i=0;i<lv+2;i++){c.fillRect(452,262-kh+i*26,10,12);c.fillRect(498,262-kh+i*26,10,12);}
-  c.strokeStyle=outline;c.beginPath();c.moveTo(480,244-kh);c.lineTo(480,214-kh);c.stroke();c.fillStyle=roof;c.beginPath();c.moveTo(480,214-kh);c.quadraticCurveTo(496,212-kh+Math.sin(now/400)*3,512,218-kh);c.lineTo(480,228-kh);c.fill();
-  spot(430,214-kh,100,kh+38,'build','hall2',`${t.built.hall3?'High Seat':t.built.hall2?'Council Hall':'Moot Hall'}: click to see everything you can build (+${fmt(income())} gold a day)`);
+  c.strokeStyle=outline;c.beginPath();c.moveTo(480,244-kh);c.lineTo(480,214-kh);c.stroke();c.fillStyle=roof;c.beginPath();c.moveTo(480,214-kh);c.quadraticCurveTo(496,212-kh+Math.sin(now/400)*3,512,218-kh);c.lineTo(480,228-kh);c.fill();}
+  if(tsp)spot(392,124,176,138,'build','hall2',`${t.built.hall4?'Crown Seat':t.built.hall3?'High Seat':t.built.hall2?'Council Hall':'Moot Hall'}: click to see everything you can build (+${fmt(income())} gold a day)`);else spot(430,214-kh,100,kh+38,'build','hall2',`${t.built.hall4?'Crown Seat':t.built.hall3?'High Seat':t.built.hall2?'Council Hall':'Moot Hall'}: click to see everything you can build (+${fmt(income())} gold a day)`);
   const front=[['d1',70,70,55],['d2',160,70,60],['lib1',255,46,130],['tavern',345,74,62],['market',620,100,46],['reliquary',720,76,70],['d3',810,72,64],['d4',900,72,70]];
   for(const[id,x,w,h]of front){const base=252;if(!BY[id])continue;
     if(!t.built[id]){lot(x,base,w,h,id);continue;}
@@ -3425,7 +3457,7 @@ const MAPKEY='questing-heroes-maps';
 function loadMaps(){try{return JSON.parse(localStorage.getItem(MAPKEY)||'[]');}catch(e){return[];}}
 function storeMaps(l){try{localStorage.setItem(MAPKEY,JSON.stringify(l));return true;}catch(e){toast('Could not save: browser storage is unavailable.');return false;}}
 const ED_OBJS=[['town','Your town','🏰'],['camp','Rival camp','⛺'],['freetown','Free town','🏘'],['relic','Relic lair','◆'],['lair','Glass Lair','💎'],['monster','Monster','👹'],['guard','Pass guard','🛡'],
-  ['gold','Gold seam','🪙'],['orepit','Ore pit','⛏'],['saw','Sawmill','🪵'],['amber','Amber spring','🟠'],['pile','Resources','💰'],['chest','Chest','🧰'],['artifact','Artifact','✨'],
+  ['gold','Gold seam','🪙'],['orepit','Ore pit','⛏'],['saw','Sawmill','🪵'],['amber','Amber spring','🟠'],['pile','Resources','💰'],['chest','Chest','🧰'],['gem','Gem','💎'],['stone','Training stone','🗿'],['artifact','Artifact','✨'],
   ['spire','Spire','🗼'],['portal','Portal pair','🌀'],['sage',"Sage's Library",'📚'],['altar','Spell altar','🔮'],['site','Weekly site','⛲'],['dock','Dock','⚓'],['fair','Horse fair','🐎'],['shrine','Wayshrine','🕯'],['erase','Erase','✖']];
 const ED_TCOL=['#5f8a3e','#8a7450','#b5a06e','#7d6b5a','#4a5f41','#2f5a2a','#77746c','#2f6385'];
 const ED={tool:'t:0',brush:1,pend:null,paint:null,name:'',id:null,size:'small',extras:true,saved:true};
@@ -3509,6 +3541,8 @@ function edApply(x,y){if(!inb(x,y))return false;const[kind,key]=ED.tool.split(':
   if(MINE[key]){add({type:'mine',k:key,x,y,owned:false,lvl:1});return true;}
   if(key==='pile'){const k=pick(['gold','timber','ore','amber']);add({type:'pile',k,x,y,n:k==='gold'?ri(5,10)*100:k==='amber'?ri(2,4):ri(4,8)});return true;}
   if(key==='chest'){add({type:'chest',x,y});return true;}
+  if(key==='gem'){add({type:'gem',x,y,k:pick(Object.keys(GEMS))});return true;}
+  if(key==='stone'){add({type:'stone',x,y,stat:pick(['atk','def','pow','lore']),style:pick(FAC_ORDER),usedBy:[]});return true;}
   if(key==='artifact'){const l=pick([1,1,2,2,3,4]);add({type:'artifact',x,y,item:pick(Object.keys(ITEMS).filter(k=>ITEMS[k].lvl===l))});return true;}
   if(key==='spire'){add({type:'spire',x,y,owned:false,garrison:[]});return true;}
   if(key==='sage'){add({type:'sage',x,y,used:[]});return true;}
@@ -3531,7 +3565,7 @@ function customPreviewURL(m){const oW=W,oH=H;W=m.W;H=m.H;const url=drawPreview({
 /* -------- boot -------- */
 async function title(){
   const has=loadSave();
-  const v=await showModal({title:'Questing Heroes',body:`<p>Choose how you want to play: hunt the Seven Relics, conquer every rival, chase the roaming Grail Keepers, or pass the device around for a hot-seat game with friends. Then pick your land, your banner and your hero.</p>
+  const v=await showModal({title:'',body:`<img class="tbanner" src="${ART_BASE}ui/banner.png" alt="Questing Heroes"><p>Choose how you want to play: hunt the Seven Relics, conquer every rival, chase the roaming Grail Keepers, or pass the device around for a hot-seat game with friends. Then pick your land, your banner and your hero.</p>
    <p class="muted">Follow the weekly rumours, break through the guarded passes, grow your town, upgrade your troops and hire more heroes. Battles are fought turn by turn on a hex field, and faster stacks act first.</p>`,
    buttons:[{label:'🗺 Map editor',value:'e'},...(has?[{label:`Continue as ${has.heroes[0].name}`,value:'c',primary:true}]:[]),{label:'New campaign',value:'n',primary:!has}]});
   if(v==='e'){openEditor();return;}
