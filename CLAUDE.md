@@ -70,6 +70,8 @@ Everything lives in one object, `S`, so it can be saved as JSON:
 
 - Rosters (tiers 1-5): Rangers Thornguard, Reedbow, Antler Knight, Moth Seer, Oak Warden; Wizards Owl Familiar, Apprentice Mage, Earth Elemental, Storm Elemental, Archmage; Necromancers Skeleton, Zombie, Werewolf, Vampire, Hellkite; Beast Masters War Rabbit, Boar, Hound, Centaur, Lion; Pirates Deckhand, Powder Monkey, Duelist, Gunner, Cannon Crew (upgrade: Great Crossbow); Elves Sprite, Longbow Ranger, Grove Warden, Elven Rider, Giant Eagle; Dwarves Young Dwarf, Dwarf Crossbowman, Dwarf Paladin, Ram Rider, Gem Golem; Merfolk Spearfolk, Siren, Giant Crab, Turtle Knight, Coral Colossus.
 - Saves from before this roster are migrated by tier in `migrateRoster` (`OLD_ROSTER`, `S.roster` = 2). Grave Harvest and Raise Bones make Skeletons.
+- Heroes per banner (4 each): Grimes is a Dwarf, Perry an Elf (Master Archer, replacing Davis) and Sookie a Wizard (Owl Mother, no portrait yet). Heroes with `retired:true` (Davis) stay in `HBY` for old saves but are removed from `HEROES`, so pickers, the tavern and rivals never offer them.
+- Panels (`.card`, `.sheet`, top bar, navy strips) use solid fills inside the pixel border until a smooth texture asset arrives.
 - Banner cards show `FAC_SW` (two strengths, one weakness) under the name.
 - `ART_REQUEST_TROOPS.md` is the art brief for the troop sprite sheets still to come.
 

@@ -69,3 +69,15 @@ Make a pixel-art sprite pack of original fantasy troops for my private game "Que
 ## Also nice to have
 
 - A 64×64 portrait icon per troop, `units/<faction>/<name>/<name>_icon.png`, showing the head and shoulders.
+
+## Hero portraits (same style as the existing 64 and 128 px headshots)
+
+Save to `portraits/heroes/<id>_64.png` and `portraits/heroes/<id>_128.png`: a bust facing slightly left, on a transparent background.
+
+- `sookie`: a new female Wizard with a blue and white robe, a small owl on her shoulder and a warm, clever smile
+- `grimes`: now a Dwarf. An older, bespectacled dwarf scholar-mage with a braided grey beard and runed stone jewellery
+- `perry`: now an Elf archer. A female elf with braided red hair, brass goggles pushed up, a green and silver ranger cloak and a longbow over her shoulder
+
+## Panel textures
+
+- `ui/textures/parchment_smooth.png` and `ui/textures/navy_smooth.png`: 256×256 seamless fills that are soft and low-contrast, with no visible pixel grain, to sit inside the existing pixel borders
