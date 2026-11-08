@@ -575,6 +575,7 @@ body{background:radial-gradient(circle at 30% 0,#1d2a5e,#0d1229 70%);color:var(-
 .tbanner{display:block;width:calc(100% + 36px);margin:-10px -18px 10px;image-rendering:pixelated;border-bottom:3px solid var(--bev-lo)}
 .sheet header h2:empty{display:none}
 .sheet:has(.tbanner) header{padding:0}
+.mbio{font:600 14px var(--f-body);color:var(--muted);text-align:left}
 </style>
 
 <div id="app">
@@ -1146,7 +1147,8 @@ const DIFF={
   normal:{name:'Normal',res:{gold:5000,timber:15,ore:15,amber:4},rv:1,desc:'5,000 gold. Rivals are your match.'},
   hard:{name:'Hard',res:{gold:2500,timber:8,ore:8,amber:2},rv:1.3,desc:'2,500 gold and scarce materials. Rivals start bigger and grow faster.'}};
 const rvMul=()=>DIFF[(S&&S.diff)||'normal'].rv;
-const MAP_SIZES={small:{W:34,H:26,rivals:2,limit:112,label:'Small'},medium:{W:44,H:34,rivals:3,limit:140,label:'Medium'},large:{W:56,H:42,rivals:4,limit:168,label:'Large'}};
+/* sizes sit below the classic genre's 36/72/108/144 squares because our tiles are shown larger; free towns are the neutral towns per map */
+const MAP_SIZES={small:{W:40,H:32,rivals:2,limit:112,label:'Small',towns:3},medium:{W:54,H:42,rivals:3,limit:140,label:'Medium',towns:5},large:{W:68,H:52,rivals:4,limit:168,label:'Large',towns:7},xl:{W:84,H:64,rivals:4,limit:196,label:'Extra large',towns:9}};
 const MAP_TYPES={
   wheel:{name:'Wheel & Spoke',desc:'Every hero starts at the end of a spoke. Spoke roads run in to a walled hub where the Glass Lair waits, and a ring road links the homes. Pirates live on their own island.'},
   ridges:{name:'Twin Ridges',desc:'Two crag ridges split the land into three bands. Push through one guarded pass at a time toward the Glass Lair in the far corner. Pirates live on their own island.'},
@@ -1191,14 +1193,17 @@ function makeNoise(g,scale){
 }
 function astar(sx,sy,tx,ty,cost){
   const N=W*H,g=new Float64Array(N).fill(Infinity),prev=new Int32Array(N).fill(-1),closed=new Uint8Array(N);
-  const start=idx(sx,sy),goal=idx(tx,ty);g[start]=0;const open=[start];
+  const start=idx(sx,sy),goal=idx(tx,ty);g[start]=0;
   const oct=(ax,ay,bx,by)=>{const dx=Math.abs(ax-bx),dy=Math.abs(ay-by);return Math.max(dx,dy)+0.41*Math.min(dx,dy);};
   const pl=[];for(const[a,b]of PORT)pl.push([a%W,(a/W)|0,oct(b%W,(b/W)|0,tx,ty)]);
   // with portals, the guess is the shorter of walking straight there or walking to a portal and on from its far end
   const h=i=>{const x=i%W,y=(i/W)|0;let d=oct(x,y,tx,ty);for(const[ax,ay,bd]of pl){const v=oct(x,y,ax,ay)+bd;if(v<d)d=v;}return d*50;};
-  while(open.length){
-    let bi=0,bf=Infinity;for(let j=0;j<open.length;j++){const f=g[open[j]]+h(open[j]);if(f<bf){bf=f;bi=j;}}
-    const cur=open[bi];open[bi]=open[open.length-1];open.pop();
+  // binary heap of [f, node]; stale entries are skipped when popped
+  const hf=[],hn=[];const push=(f,n)=>{let i=hf.length;hf.push(f);hn.push(n);while(i>0){const p=(i-1)>>1;if(hf[p]<=f)break;hf[i]=hf[p];hn[i]=hn[p];i=p;}hf[i]=f;hn[i]=n;};
+  const pop=()=>{const n=hn[0],lf=hf.pop(),ln=hn.pop();if(hf.length){let i=0;const L=hf.length;while(true){let c=2*i+1;if(c>=L)break;if(c+1<L&&hf[c+1]<hf[c])c++;if(hf[c]>=lf)break;hf[i]=hf[c];hn[i]=hn[c];i=c;}hf[i]=lf;hn[i]=ln;}return n;};
+  const open={push:n=>push(g[n]+h(n),n)};open.push(start);
+  while(hf.length){
+    const cur=pop();
     if(cur===goal)break;if(closed[cur])continue;closed[cur]=1;
     const cx=cur%W,cy=(cur/W)|0;
     for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){
@@ -1220,14 +1225,14 @@ function genRidges(seed,opt){
   const tiles=new Array(W*H);
   for(let y=0;y<H;y++)for(let x=0;x<W;x++){
     const e=0.65*n1(x,y)+0.35*n2(x,y),f=nf(x,y),m=nmo(x,y);let t=T.GRASS;
-    if(e<0.3)t=T.LAKE;else if(e>0.7)t=T.CRAG;else if(f>0.66)t=T.FOREST;else if(m<0.3)t=T.BOG;else if(m>0.68)t=T.HEATH;
+    if(e<0.3+BIO.lake)t=T.LAKE;else if(e>0.7-BIO.crag)t=T.CRAG;else if(f>0.66-BIO.forest)t=T.FOREST;else if(m<0.3+BIO.bog)t=T.BOG;else if(m>0.68-BIO.heath)t=T.HEATH;
     if(x===0||y===0||x===W-1||y===H-1)t=g()<0.5?T.CRAG:T.FOREST;
     tiles[idx(x,y)]=t;
   }
   const town={x:5,y:6},lair={x:W-5,y:H-5};
   for(const p of[town,lair])for(let dy=-3;dy<=2;dy++)for(let dx=-3;dx<=3;dx++){const x=p.x+dx,y=p.y+dy;if(x>0&&y>0&&x<W-1&&y<H-1)tiles[idx(x,y)]=T.GRASS;}
   const carveCost=(x,y)=>(x===0||y===0||x===W-1||y===H-1)?Infinity:(passableT(tiles[idx(x,y)])?TCOST[tiles[idx(x,y)]]:420);
-  const mid={x:ri(13,20),y:ri(10,15)};
+  const mid={x:ri(Math.round(W*0.38),Math.round(W*0.59)),y:ri(Math.round(H*0.38),Math.round(H*0.58))};
   const road=[...(astar(town.x,town.y+1,mid.x,mid.y,carveCost)||[]),...(astar(mid.x,mid.y,lair.x,lair.y,carveCost)||[])];
   for(const p of road)tiles[idx(p.x,p.y)]=T.ROAD;
   tiles[idx(town.x,town.y+1)]=T.ROAD;
@@ -1291,10 +1296,10 @@ function genRidges(seed,opt){
     let guard=null;for(let i=0;i<20&&!guard;i++){const gx=p.x+ri(-1,1),gy=p.y+ri(-1,1);if(inb(gx,gy)&&passableT(tiles[idx(gx,gy)])&&!occupied(gx,gy)&&!(Math.abs(gx-town.x)<3&&Math.abs(gy-town.y)<4))guard={x:gx,y:gy};}
     if(guard&&t>0.15)add({type:'neutral',...guard,...neutralFor(t)});
   }
-  for(let i=0;i<Math.round(11*K2);i++){const t=0.12+R()*0.8;const p=spot(t,ri(-9,9),3);if(p)add({type:'neutral',...p,...neutralFor(t)});}
-  for(let i=0;i<Math.round(18*K2);i++){const t=0.04+R()*0.95;const p=spot(t,ri(-10,10),3,2);if(!p)continue;const k=pick(['gold','gold','timber','ore','timber','ore','amber']);
+  for(let i=0;i<Math.round(11*K2*jit());i++){const t=0.12+R()*0.8;const p=spot(t,ri(-9,9),3);if(p)add({type:'neutral',...p,...neutralFor(t)});}
+  for(let i=0;i<Math.round(18*K2*jit());i++){const t=0.04+R()*0.95;const p=spot(t,ri(-10,10),3,2);if(!p)continue;const k=pick(['gold','gold','timber','ore','timber','ore','amber']);
     add({type:'pile',k,x:p.x,y:p.y,n:k==='gold'?ri(5,10)*100:k==='amber'?ri(2,4):ri(4,8)});}
-  for(let i=0;i<Math.round(6*K2);i++){const p=spot(0.1+R()*0.85,ri(-9,9),3);if(p)add({type:'chest',x:p.x,y:p.y});}
+  for(let i=0;i<Math.round(6*K2*jit());i++){const p=spot(0.1+R()*0.85,ri(-9,9),3);if(p)add({type:'chest',x:p.x,y:p.y});}
   for(let i=0;i<3;i++){const p=spot(0.2+i*0.25,ri(-8,8),3);if(p)add({type:'stone',x:p.x,y:p.y,stat:pick(['atk','def','pow','lore']),used:false});}
   [['mend',0.3],['swift',0.55],['bark',0.7]].forEach(([s,t])=>{const p=spot(t,ri(-8,8),3);if(p)add({type:'shrine',x:p.x,y:p.y,spell:s});});
   for(const t of[0.35,0.7]){const p=spot(t,ri(-7,7),3);if(p)add({type:'well',x:p.x,y:p.y,day:0});}
@@ -1353,7 +1358,7 @@ function genWheel(seed,opt){
   const tiles=new Array(W*H);
   for(let y=0;y<H;y++)for(let x=0;x<W;x++){
     const e=0.65*n1(x,y)+0.35*n2(x,y),f=nf(x,y),m=nmo(x,y);let t=T.GRASS;
-    if(e<0.27)t=T.LAKE;else if(e>0.72)t=T.CRAG;else if(f>0.67)t=T.FOREST;else if(m<0.3)t=T.BOG;else if(m>0.68)t=T.HEATH;
+    if(e<0.27+BIO.lake)t=T.LAKE;else if(e>0.72-BIO.crag)t=T.CRAG;else if(f>0.67-BIO.forest)t=T.FOREST;else if(m<0.3+BIO.bog)t=T.BOG;else if(m>0.68-BIO.heath)t=T.HEATH;
     if(x===0||y===0||x===W-1||y===H-1)t=g()<0.5?T.CRAG:T.FOREST;
     tiles[idx(x,y)]=t;}
   const C={x:Math.floor(W/2),y:Math.floor(H/2)},nS=1+opt.rivals.length,rx=W/2-5,ry=H/2-5,hubR=Math.max(4,Math.round(Math.min(W,H)*0.15));
@@ -1405,9 +1410,9 @@ function genWheel(seed,opt){
   angs.forEach((a,i)=>{const p=spotNear(at(a+Math.PI/nS,0.85).x,at(a+Math.PI/nS,0.85).y,2);if(p){const k=i%2?'amber':'gold';add({type:'mine',k,x:p.x,y:p.y,owned:false});
     const q=spotNear(p.x,p.y,1);if(q)add({type:'neutral',...q,...neutralAt(diff(q.x,q.y))});}});
   const rnd=()=>{const a=R()*Math.PI*2,r=0.25+R()*0.8;return at(a,r);};
-  for(let i=0;i<Math.round(11*K2);i++){const c=rnd(),p=spotNear(c.x,c.y,2);if(p&&diff(p.x,p.y)>0.12)add({type:'neutral',...p,...neutralAt(diff(p.x,p.y))});}
-  for(let i=0;i<Math.round(18*K2);i++){const c=rnd(),p=spotNear(c.x,c.y,2);if(!p)continue;const k=pick(['gold','gold','timber','ore','timber','ore','amber']);add({type:'pile',k,x:p.x,y:p.y,n:k==='gold'?ri(5,10)*100:k==='amber'?ri(2,4):ri(4,8)});}
-  for(let i=0;i<Math.round(6*K2);i++){const c=rnd(),p=spotNear(c.x,c.y,2);if(p)add({type:'chest',x:p.x,y:p.y});}
+  for(let i=0;i<Math.round(11*K2*jit());i++){const c=rnd(),p=spotNear(c.x,c.y,2);if(p&&diff(p.x,p.y)>0.12)add({type:'neutral',...p,...neutralAt(diff(p.x,p.y))});}
+  for(let i=0;i<Math.round(18*K2*jit());i++){const c=rnd(),p=spotNear(c.x,c.y,2);if(!p)continue;const k=pick(['gold','gold','timber','ore','timber','ore','amber']);add({type:'pile',k,x:p.x,y:p.y,n:k==='gold'?ri(5,10)*100:k==='amber'?ri(2,4):ri(4,8)});}
+  for(let i=0;i<Math.round(6*K2*jit());i++){const c=rnd(),p=spotNear(c.x,c.y,2);if(p)add({type:'chest',x:p.x,y:p.y});}
   for(let i=0;i<3;i++){const c=rnd(),p=spotNear(c.x,c.y,2);if(p)add({type:'stone',x:p.x,y:p.y,stat:pick(['atk','def','pow','lore']),used:false});}
   ['mend','swift','bark'].forEach(sp=>{const c=rnd(),p=spotNear(c.x,c.y,2);if(p)add({type:'shrine',x:p.x,y:p.y,spell:sp});});
   for(let i=0;i<2;i++){const c=rnd(),p=spotNear(c.x,c.y,2);if(p)add({type:'well',x:p.x,y:p.y,day:0});}
@@ -1441,9 +1446,9 @@ function fillWorld(ctx){const{add,spot,rnd,town,homes,diff,KS,K2,tiles,occupied,
   for(const h of homes)for(const k of['saw','orepit']){const p=spot(h.x,h.y+1,4);if(p)add({type:'mine',k,x:p.x,y:p.y,owned:false});}
   for(let i=0;i<Math.round(4*KS);i++){const c=rnd(),p=spot(c.x,c.y,2);if(!p)continue;add({type:'mine',k:i%2?'amber':'gold',x:p.x,y:p.y,owned:false});
     const q=spot(p.x,p.y,1);if(q&&diff(q.x,q.y)>0.15)add({type:'neutral',...q,...neutralAt(diff(q.x,q.y))});}
-  for(let i=0;i<Math.round(11*K2);i++){const c=rnd(),p=spot(c.x,c.y,2);if(p&&diff(p.x,p.y)>0.12)add({type:'neutral',...p,...neutralAt(diff(p.x,p.y))});}
-  for(let i=0;i<Math.round(18*K2);i++){const c=rnd(),p=spot(c.x,c.y,2);if(!p)continue;const k=pick(['gold','gold','timber','ore','timber','ore','amber']);add({type:'pile',k,x:p.x,y:p.y,n:k==='gold'?ri(5,10)*100:k==='amber'?ri(2,4):ri(4,8)});}
-  for(let i=0;i<Math.round(6*K2);i++){const c=rnd(),p=spot(c.x,c.y,2);if(p)add({type:'chest',x:p.x,y:p.y});}
+  for(let i=0;i<Math.round(11*K2*jit());i++){const c=rnd(),p=spot(c.x,c.y,2);if(p&&diff(p.x,p.y)>0.12)add({type:'neutral',...p,...neutralAt(diff(p.x,p.y))});}
+  for(let i=0;i<Math.round(18*K2*jit());i++){const c=rnd(),p=spot(c.x,c.y,2);if(!p)continue;const k=pick(['gold','gold','timber','ore','timber','ore','amber']);add({type:'pile',k,x:p.x,y:p.y,n:k==='gold'?ri(5,10)*100:k==='amber'?ri(2,4):ri(4,8)});}
+  for(let i=0;i<Math.round(6*K2*jit());i++){const c=rnd(),p=spot(c.x,c.y,2);if(p)add({type:'chest',x:p.x,y:p.y});}
   for(let i=0;i<3;i++){const c=rnd(),p=spot(c.x,c.y,2);if(p)add({type:'stone',x:p.x,y:p.y,stat:pick(['atk','def','pow','lore']),used:false});}
   ['mend','swift','bark'].forEach(sp=>{const c=rnd(),p=spot(c.x,c.y,2);if(p)add({type:'shrine',x:p.x,y:p.y,spell:sp});});
   for(let i=0;i<2;i++){const c=rnd(),p=spot(c.x,c.y,2);if(p)add({type:'well',x:p.x,y:p.y,day:0});}
@@ -1493,7 +1498,7 @@ function genUnder(seed,opt){
   const g=mulberry32(seed);const saveR=R;R=g;const KS=W/34,K2=KS*KS;
   const tiles=new Array(W*H),wallY=Math.floor(H/2)-1,underY=wallY+2;
   baseNoise(g,tiles,(e,f,m,x,y)=>{if(y===wallY||y===wallY+1)return T.CRAG;
-    if(y<wallY){if(e<0.27)return T.LAKE;if(e>0.72)return T.CRAG;if(f>0.67)return T.FOREST;if(m<0.3)return T.BOG;if(m>0.68)return T.HEATH;return T.GRASS;}
+    if(y<wallY){if(e<0.27+BIO.lake)return T.LAKE;if(e>0.72-BIO.crag)return T.CRAG;if(f>0.67-BIO.forest)return T.FOREST;if(m<0.3+BIO.bog)return T.BOG;if(m>0.68-BIO.heath)return T.HEATH;return T.GRASS;}
     if(e<0.22)return T.LAKE;if(e>0.66)return T.CRAG;if(f>0.7)return T.FOREST;if(m<0.32)return T.DIRT;if(m>0.72)return T.BOG;return T.GRASS;});
   const protect=new Set();for(let x=0;x<W;x++){protect.add(idx(x,wallY));protect.add(idx(x,wallY+1));}
   const all=[opt.fac,...opt.rivals],surf=all.map((f,i)=>({f,i})).filter(q=>q.f!=='necro'),und=all.map((f,i)=>({f,i})).filter(q=>q.f==='necro');
@@ -1546,7 +1551,7 @@ function genUnder(seed,opt){
 function genRivers(seed,opt){
   const g=mulberry32(seed);const saveR=R;R=g;const KS=W/34,K2=KS*KS;
   const tiles=new Array(W*H);
-  baseNoise(g,tiles,(e,f,m)=>e<0.22?T.LAKE:e>0.74?T.CRAG:f>0.68?T.FOREST:m<0.3?T.BOG:m>0.68?T.HEATH:T.GRASS);
+  baseNoise(g,tiles,(e,f,m)=>e<0.22+BIO.lake?T.LAKE:e>0.74-BIO.crag?T.CRAG:f>0.68-BIO.forest?T.FOREST:m<0.3+BIO.bog?T.BOG:m>0.68-BIO.heath?T.HEATH:T.GRASS);
   const cx=Math.round(W/2),cy=Math.round(H/2),river=new Set(),protect=new Set();
   const wet=(x,y)=>{if(!inb(x,y))return;const i=idx(x,y);tiles[i]=T.LAKE;river.add(i);protect.add(i);};
   // the island: 3 x 3 of land inside a ring of water
@@ -1616,7 +1621,15 @@ function genRivers(seed,opt){
   R=saveR;
   return{tiles,objs,town,uid,rivalSpots:homes.slice(1).map(h=>({x:h.x,y:h.y,fac:h.fac})),rivers:[...river],bridges:[...bridges,...isle].map(b=>({i:idx(b.x,b.y),ori:b.ori}))};
 }
-function genMap(seed,opt){return opt.type==='wheel'?genWheel(seed,opt):opt.type==='under'?genUnder(seed,opt):opt.type==='rivers'?genRivers(seed,opt):genRidges(seed,opt);}
+/* every map rolls a biome from its seed: it shifts how much water, crag, forest, bog and heath there is */
+const BIOMES=[{k:'vale',name:'Green Vale',lake:0,crag:0,forest:0,bog:0,heath:0},{k:'wet',name:'Wetlands',lake:0.05,crag:-0.03,forest:0,bog:0.08,heath:-0.04},
+  {k:'high',name:'Highlands',lake:-0.04,crag:0.06,forest:-0.02,bog:-0.05,heath:0.06},{k:'wood',name:'Deepwood',lake:0,crag:-0.02,forest:0.08,bog:0.02,heath:-0.03},
+  {k:'dry',name:'Dry Plains',lake:-0.06,crag:0.01,forest:-0.06,bog:-0.08,heath:0.12},{k:'autumn',name:'Autumn March',lake:0,crag:0,forest:0.04,bog:0,heath:0.03}];
+let BIO=BIOMES[0];
+const jit=()=>0.75+R()*0.55;
+const biomeOf=seed=>BIOMES[(Math.abs(seed)>>>3)%BIOMES.length];
+function genMap(seed,opt){BIO=biomeOf(seed);const w=genMap0(seed,opt);w.biome=BIO.k;return w;}
+function genMap0(seed,opt){return opt.type==='wheel'?genWheel(seed,opt):opt.type==='under'?genUnder(seed,opt):opt.type==='rivers'?genRivers(seed,opt):genRidges(seed,opt);}
 
 function mkHero(hid,x,y){const h=HBY[hid],f=FAC[h.fac];
   const hero={id:hid,name:h.name,fac:h.fac,x,y,lvl:1,xp:0,atk:h.st[0],def:h.st[1],pow:h.st[2],lore:h.st[3],mana:0,mp:0,spells:[...h.sp],skills:[...h.sk],
@@ -1661,8 +1674,11 @@ function placeSpires(bases,add){
     if(best<0)break;picked.push(best);}
   for(const i of picked)add({type:'spire',x:i%W,y:(i/W)|0,owned:false,garrison:[]});
 }
-const firstPool=o=>{const u=FAC[o.fac].units;return{[u[0]]:Math.ceil(U[u[0]].growth/2),[u[1]]:Math.ceil(U[u[1]].growth/2)};};
-const campName=o=>o.free?`free ${FAC[o.fac].arch} town`:`${FAC[o.fac].arch} camp`;
+const campTiers=o=>o.free?(o.lvl||1)+1:2;
+const firstPool=o=>{const u=FAC[o.fac].units,p={};for(let i=0;i<campTiers(o);i++)p[u[i]]=Math.ceil(U[u[i]].growth/2);return p;};
+const campIncome=o=>o.free?[500,750,1000][(o.lvl||1)-1]:500;
+const TOWN_LVL=['','Village','Town','City'],MON_LVL=['','weak','','strong','elite'];
+const campName=o=>o.free?`free ${FAC[o.fac].arch} ${TOWN_LVL[o.lvl||1].toLowerCase()}`:`${FAC[o.fac].arch} camp`;
 const spireFoe=o=>o&&((o.type==='spire'&&o.owned&&o.owned!==ME())||(o.type==='camp'&&o.owned!==ME()&&!S.players))&&(o.garrison||[]).length>0;
 /* a garrisoned spire holds the eight tiles around it: other banners can't walk through them until they take the spire */
 function zocFor(owner){const z=new Set();for(const o of S.objs)if(o.type==='spire'&&o.owned&&o.owned!==owner&&o.garrison.length)for(let a=-1;a<=1;a++)for(let b=-1;b<=1;b++)if((a||b)&&inb(o.x+a,o.y+b))z.add(idx(o.x+a,o.y+b));return z;}
@@ -1696,11 +1712,14 @@ function furnishMap(bases){
   for(const[tier,pool,a,b]of ALT)for(let i=0;i<Math.max(1,Math.round((tier===3?0.6:1)*KS));i++){const p=freeTile(dist,...band(a,b),3);if(!p)continue;add({type:'altar',x:p.x,y:p.y,tier,spell:pick(pool)});
     if(tier>1){const g=[[1,0],[-1,0],[0,1],[0,-1]].map(([dx,dy])=>({x:p.x+dx,y:p.y+dy})).find(q=>inb(q.x,q.y)&&passableT(S.tiles[idx(q.x,q.y)])&&!objAt(q.x,q.y)&&!townFoot(q.x,q.y));
       if(g)add({type:'neutral',x:g.x,y:g.y,...(tier===2?{k:'imp',n:ri(18,26)}:{k:'troll',n:ri(12,16)})});}}
-  for(let i=0;i<Math.round(5*KS);i++){const p=freeTile(dist,...band(0.15,0.95),2);if(p)add({type:'gem',k:pick(Object.keys(GEMS)),x:p.x,y:p.y});}
+  for(let i=0;i<Math.round(5*KS*jit());i++){const p=freeTile(dist,...band(0.15,0.95),2);if(p)add({type:'gem',k:pick(Object.keys(GEMS)),x:p.x,y:p.y});}
   for(const o of S.objs)if(o.type==='stone'&&!o.style)o.style=pick(FAC_ORDER);
   // free towns: villages of a random banner, held by wild creatures until someone claims them
-  for(let i=0;i<(W>=56?4:W>=44?3:2);i++){const p=freeTile(dist,...band(0.3+0.12*i,0.6+0.12*i),4);if(!p)continue;const d=dist.get(idx(p.x,p.y))/Math.max(1,md);
-    const g1=neutralAt(clamp(d,0.15,1)),g2=neutralAt(clamp(d+0.1,0.15,1));add({type:'camp',free:true,fac:pick(FAC_ORDER),x:p.x,y:p.y,owned:false,garrison:[{k:g1.k,n:g1.n},{k:g2.k,n:Math.ceil(g2.n/2)}].filter((a,j,arr)=>arr.findIndex(b=>b.k===a.k)===j),pool:{}});}
+  const nT=(MAP_SIZES[S.size]||{towns:3}).towns;
+  for(let i=0;i<nT;i++){const lo=0.22+0.6*i/nT,p=freeTile(dist,...band(lo,Math.min(1,lo+0.35)),4)||freeTile(dist,...band(0.2,1),3);if(!p)continue;const d=dist.get(idx(p.x,p.y))/Math.max(1,md);
+    // village, town or city: farther out they are bigger, richer and better guarded
+    const lvl=clamp(1+(R()<d?1:0)+(R()<d*0.6?1:0),1,3),gm=[1,1.6,2.4][lvl-1];
+    const g1=neutralAt(clamp(d,0.15,1)),g2=neutralAt(clamp(d+0.1,0.15,1));add({type:'camp',free:true,lvl,fac:pick(FAC_ORDER),x:p.x,y:p.y,owned:false,garrison:[{k:g1.k,n:Math.round(g1.n*gm)},{k:g2.k,n:Math.ceil(g2.n/2*gm)}].filter((a,j,arr)=>arr.findIndex(b=>b.k===a.k)===j),pool:{}});}
   placeSpires(bases,add);
   S.uid=uid;
 }
@@ -1718,13 +1737,16 @@ function newGame(fk,hid,mo={}){
   const rivalFacs=mo.players?mo.players.slice(1).map(p=>p.fk):FAC_ORDER.filter(k=>k!==fk).sort(()=>Math.random()-0.5).slice(0,nR);
   const w=cm?customWorld(cm,rivalFacs):genMap(seed,{type,fac:fk,rivals:rivalFacs});const f=FAC[fk];
   const [t1,t2]=f.units;
-  S={v:3,seed,fac:fk,W,H,mapType:type,size:mo.size||'small',limit:sz.limit,tiles:w.tiles,objs:w.objs,uid:w.uid+10,underY:w.underY||0,rivers:w.rivers||null,bridges:w.bridges||null,explored:new Array(W*H).fill(0),day:1,
+  S={v:3,seed,fac:fk,W,H,mapType:type,size:mo.size||'small',limit:sz.limit,tiles:w.tiles,objs:w.objs,uid:w.uid+10,biome:w.biome||'vale',underY:w.underY||0,rivers:w.rivers||null,bridges:w.bridges||null,explored:new Array(W*H).fill(0),day:1,
     res:{...DIFF[mo.diff||'normal'].res},diff:mo.diff||'normal',heroes:[],cur:0,rivals:[],rumours:[],delivered:[],
     town:{x:w.town.x,y:w.town.y,name:f.town,built:{hall1:1,d1:1,d2:1},pool:{[t1]:U[t1].growth,[t2]:U[t2].growth},garrison:[],builtToday:false},
     over:false};
   const h=mkHero(hid,w.town.x,w.town.y);h.army=[{k:t1,n:Math.round(240/U[t1].hp)},{k:t2,n:Math.round(90/U[t2].hp)}];S.heroes.push(h);
   HERO().mana=maxMana();HERO().mp=maxMP();
   if(!mo.players)w.rivalSpots.forEach(p=>{const rh=pick(HEROES.filter(x=>x.fac===p.fac));S.rivals.push(mkRival(rh.id,p.x,p.y));});
+  // wild monsters roll a level: weak, normal, strong or elite (elites guard loot)
+  {const home=S.town,maxD=Math.hypot(W,H);for(const o of S.objs){if(o.type!=='neutral'||o.guard||o.lvl)continue;const d=Math.hypot(o.x-home.x,o.y-home.y)/maxD,r=Math.random()+d*0.5;
+    o.lvl=r<0.35?1:r<0.85?2:r<1.15?3:4;o.n=Math.max(1,Math.round(o.n*[0,0.6,1,1.4,1.9][o.lvl]));}}
   for(const o of S.objs)if(o.type==='camp'&&o.fac&&!o.free){const u=FAC[o.fac].units;o.garrison=[{k:u[0],n:Math.round(160*rvMul()/U[u[0]].hp)},{k:u[1],n:Math.round(90*rvMul()/U[u[1]].hp)}];}
   S.mode=mo.mode||'relic';setMode(S.mode);
   if(S.mode==='grail'){const rel=S.objs.filter(o=>o.type==='relic'),lair=rel.find(o=>o.r===6),rest=rel.filter(o=>o.r<4);
@@ -1755,9 +1777,9 @@ function reveal(cx,cy,r){for(let y=cy-r;y<=cy+r;y++)for(let x=cx-r;x<=cx+r;x++)i
 const vision=()=>5+(hasSk('farsight')?1:0)+(fx().vision||0)+(S&&S.heroes?gear(HERO(),'vision'):0)+(S&&S.delivered&&delivered(0)?1:0);
 const maxMana=()=>Math.round(hst(HERO(),'lore')*10*(hasSk('deepres')?1.25:1));
 function maxMP(){const sp=HERO().army.length?Math.min(...HERO().army.map(a=>U[a.k].spd+((fx().unitSpd||{})[a.k]||0))):5;
-  let m=900+45*Math.min(sp,9);if(HERO().mount!=='foot')m*=1.4;if(hasSk('forcedmarch'))m*=1.1;m*=1+gear(HERO(),'mpPct')/100;return Math.round(m);}
+  let m=900+45*Math.min(sp,9);if(HERO().mount!=='foot')m*=1.4;if(hasSk('forcedmarch'))m*=1.1;m*=1+gear(HERO(),'mpPct')/100;if(S.event&&S.event.k==='road')m*=1.1;return Math.round(m);}
 const xpFor=l=>Math.round(1000*l*(1+0.12*(l-1)));
-const income=()=>(S.town.taken?0:(S.town.built.hall4?3000:S.town.built.hall3?2000:S.town.built.hall2?1000:500))+S.heroes.reduce((a,h)=>a+gear(h,'goldDay'),0)+500*S.objs.filter(o=>o.type==='camp'&&o.owned===ME()).length;
+const income=()=>(S.town.taken?0:(S.town.built.hall4?3000:S.town.built.hall3?2000:S.town.built.hall2?1000:500))+S.heroes.reduce((a,h)=>a+gear(h,'goldDay'),0)+S.objs.filter(o=>o.type==='camp'&&o.owned===ME()).reduce((a,o)=>a+campIncome(o),0);
 function dateParts(d=S.day){const m=Math.floor((d-1)/28)+1,w=Math.floor(((d-1)%28)/7)+1,dd=(d-1)%7+1;return{m,w,d:dd};}
 const LIMIT=112;
 function terrainCost(x,y){
@@ -1832,7 +1854,7 @@ function renderTerrainArt(){
       // groves by region: pine and cedar, oak and birch, maples and autumn trees; willows by marsh, palms on the shore
       if(lakeNear4(x,y)&&hv(x,y)%2===0){P(hv(x,y)%4===0?'weeping_willow':'coastal_palm',X+j(6),Y+2);continue;}
       if(near4(x,y,T.BOG)){P(hv(x,y)%3===0?'weeping_willow':hv(x,y)%3===1?'dead_tree':'pine',X+j(6),Y+2);continue;}
-      const z=hv(x>>2,y>>2)%6,h2=hv(x,y)%4;
+      const z=S.biome==='autumn'&&hv(x>>2,y>>2)%3?1:S.biome==='high'&&hv(x>>2,y>>2)%2?0:hv(x>>2,y>>2)%6,h2=hv(x,y)%4;
       const k=z===0?(h2?'pine':'blue_cedar'):z===1?(h2<2?'red_maple':'autumn_tree'):z===2?(h2<2?'silver_birch':'oak'):z===3?(h2?'blue_cedar':'pine'):z===4?(h2?'oak':'silver_birch'):(h2===0?'dead_tree':h2===1?'red_maple':'oak');
       P(k,X+j(8),Y+2+j(4));continue;}
     if(busy.has(idx(x,y)))continue;
@@ -1847,7 +1869,9 @@ function renderTerrainArt(){
   for(const p of props){const img=taImg(`scenery/${p.k}.png`);sc.drawImage(img,Math.round(p.x-img.width/2),Math.round(p.y-img.height+4));}
   const lake=(x,y)=>tl(x,y)===T.LAKE&&!RV.has(idx(clamp(x,0,W-1),clamp(y,0,H-1))),anim=taImg('water_anim.png');
   const RC=(x,y)=>!inb(x,y)||RV.has(idx(x,y));
-  terrainPh=[0,1,2,3].map(ph=>{const [cv,c]=mk();c.drawImage(gcv,0,0);const img=taImg(`edges/water_${ph}.png`);
+  // big maps keep fewer water frames in memory
+  const phs=W*H>4500?[0]:W*H>3000?[0,2]:[0,1,2,3];
+  terrainPh=phs.map(ph=>{const [cv,c]=mk();c.drawImage(gcv,0,0);const img=taImg(`edges/water_${ph}.png`);
     corners(lake,(code,X,Y,vx,vy)=>code===15?c.drawImage(anim,(hv(vx,vy)%4)*N,ph*N,N,N,X,Y,N,N):cell(c,img,code,X,Y));
     if(RV.size){const rimg2=taImg(`edges/river_${ph}.png`);for(const i of RV){const x=i%W,y=(i/W)|0;cell(c,rimg2,(RC(x,y-1)?1:0)|(RC(x+1,y)?2:0)|(RC(x,y+1)?4:0)|(RC(x-1,y)?8:0),x*N,y*N);}}
     c.drawImage(scv,0,0);
@@ -1947,7 +1971,7 @@ function drawObj(c,o){
   const cx=o.x*TS+TS/2,cy=o.y*TS+TS/2;c.lineWidth=1.2;
   switch(o.type){
   case 'town':{const td=townData(o);drawTown(c,cx,o.y*TS+TS,td.fac,td.town);break;}
-  case 'neutral':token(c,o.k,cx,cy,o.guard?19:16,'#c45a43');if(o.guard)drawStat(c,'def',cx+15,cy-15,8);break;
+  case 'neutral':token(c,o.k,cx,cy,o.guard?19:16,o.lvl===4?'#ffd24a':o.lvl===3?'#ff8a3d':o.lvl===1?'#8cbc70':'#c45a43');if(o.lvl===4){c.fillStyle='#ffd24a';c.strokeStyle='#120f0b';c.lineWidth=1;c.beginPath();for(let i=0;i<10;i++){const a=-Math.PI/2+i*Math.PI/5,r2=i%2?2.5:5.5;c.lineTo(cx+13+Math.cos(a)*r2,cy-13+Math.sin(a)*r2);}c.closePath();c.fill();c.stroke();}if(o.guard)drawStat(c,'def',cx+15,cy-15,8);break;
   case 'relic':
     if(o.roam){token(c,o.k,cx,cy+2,15,'#c45a43');drawRelic(c,o.r,cx,cy-20,8);break;}
     c.fillStyle='rgba(0,0,0,.4)';c.beginPath();c.ellipse(cx,cy+14,26,8,0,0,7);c.fill();
@@ -1956,7 +1980,7 @@ function drawObj(c,o){
     drawRelic(c,o.r,cx,cy-(o.r===6?24:4),8);token(c,o.k,cx+(o.r===6?0:12),cy+(o.r===6?2:8),o.r===6?15:10,'#c45a43');break;
   case 'drop':drawRelic(c,o.rs[0],cx,cy,10);break;
   case 'camp':{const col=FAC[o.fac||o.dfac||'necro'].col,gn=(o.garrison||[]).reduce((a,g)=>a+g.n,0);
-    {const fk2=o.fac||o.dfac||'necro',sp=townSprite(fk2,1,o.owned?ownerCol(o.owned):o.free?'#9a958a':FAC[fk2].col);if(sp){const k=TS/32*0.62;c.fillStyle='rgba(0,0,0,.3)';c.beginPath();c.ellipse(cx,cy+14,30,7,0,0,7);c.fill();c.imageSmoothingEnabled=false;c.drawImage(sp,Math.round(cx-64*k),Math.round(cy+TS/2-2-92*k),Math.round(128*k),Math.round(96*k));
+    {const fk2=o.fac||o.dfac||'necro',sp=townSprite(fk2,o.free?Math.min(3,o.lvl||1):1,o.owned?ownerCol(o.owned):o.free?'#9a958a':FAC[fk2].col);if(sp){const k=TS/32*0.62;c.fillStyle='rgba(0,0,0,.3)';c.beginPath();c.ellipse(cx,cy+14,30,7,0,0,7);c.fill();c.imageSmoothingEnabled=false;c.drawImage(sp,Math.round(cx-64*k),Math.round(cy+TS/2-2-92*k),Math.round(128*k),Math.round(96*k));
       if(o.owned)flag(c,cx+24,cy+8,ownerCol(o.owned));
       if(gn&&!S.editor){c.font='800 12px "Alegreya SC",Georgia,serif';c.textAlign='center';c.textBaseline='middle';const tt=o.owned===ME()?fmt(gn):'?',w=c.measureText(tt).width+10;c.fillStyle='rgba(12,18,48,.92)';c.fillRect(cx-w/2,cy+17,w,14);c.strokeStyle=o.owned?ownerCol(o.owned):'#c45a43';c.lineWidth=1.2;c.strokeRect(cx-w/2,cy+17,w,14);c.fillStyle='#fff';c.fillText(tt,cx,cy+24.5);}
       if(!o.free&&!S.editor)drawFire(c,'campfire',cx-26,cy+20,o.x*97+o.y*31);break;}}
@@ -2084,7 +2108,7 @@ function drawMap(){
   clampCam();
   const c=mctx;c.setTransform(dpr,0,0,dpr,0,0);c.imageSmoothingEnabled=false;c.fillStyle='#0a0c0b';c.fillRect(0,0,vw,vh);
   c.save();c.translate(-Math.round(camX),-Math.round(camY));
-  {const tcv=terrainPh?terrainPh[Math.floor(performance.now()/220)%4]:terrainCv,k=tcv.width/(W*TS),sx=Math.max(0,Math.floor(camX*k)),sy=Math.max(0,Math.floor(camY*k)),
+  {const tcv=terrainPh?terrainPh[Math.floor(performance.now()/(terrainPh.length===2?440:220))%terrainPh.length]:terrainCv,k=tcv.width/(W*TS),sx=Math.max(0,Math.floor(camX*k)),sy=Math.max(0,Math.floor(camY*k)),
     sw=Math.min(tcv.width-sx,Math.ceil(vw*k)+2),sh=Math.min(tcv.height-sy,Math.ceil(vh*k)+2);if(sw>0&&sh>0)c.drawImage(tcv,sx,sy,sw,sh,sx/k,sy/k,sw/k,sh/k);}
   const x0=Math.max(0,Math.floor(camX/TS)-2),y0=Math.max(0,Math.floor(camY/TS)-1),x1=Math.min(W-1,Math.ceil((camX+vw)/TS)+2),y1=Math.min(H-1,Math.ceil((camY+vh)/TS)+4);
   if(path&&path.length){
@@ -2152,10 +2176,10 @@ function describe(x,y){
   const cnt=n=>fx().exact?`${n}`:amountWord(n);
   switch(o.type){
     case 'town':{const td=townData(o);return`<b>${td.town.name}</b> · ${td.mine?'your town':`${FAC[td.fac].arch} town`}`;}
-    case 'neutral':{const[w,col]=threat(o.k,o.n);return`${o.guard?'<b>Guarded pass</b> · ':''}<b>${cnt(o.n)} ${U[o.k].pl}</b> · <span style="color:${col}">${w}</span>`;}
+    case 'neutral':{const[w,col]=threat(o.k,o.n);return`${o.guard?'<b>Guarded pass</b> · ':''}<b>${cnt(o.n)} ${o.lvl?MON_LVL[o.lvl]+' ':''}${U[o.k].pl}</b> · <span style="color:${col}">${w}</span>${o.lvl===4?' · guards loot':''}`;}
     case 'relic':{const Rl=RELICS[o.r];const[w,col]=threat(o.k,o.n);return`<b>${Rl.lair}</b> · guards the ${Rl.name} · ${cnt(o.n)} ${U[o.k].pl} · <span style="color:${col}">${w}</span>`;}
     case 'drop':return`<b>${o.rs.map(r=>RELICS[r].name).join(', ')}</b> · lying here, unguarded`;
-    case 'camp':{if(o.free&&!o.owned){const gn=(o.garrison||[]).reduce((a,g)=>a+g.n,0);return`<b>Free ${FAC[o.fac].arch} town</b> · unclaimed${gn?` · ${amountWord(gn).toLowerCase()} ${(o.garrison||[]).map(g=>U[g.k].pl).join(' and ')} hold it`:''} · capture it for +500 gold a day and ${FAC[o.fac].arch} recruits`;}
+    case 'camp':{if(o.free&&!o.owned){const gn=(o.garrison||[]).reduce((a,g)=>a+g.n,0);return`<b>Free ${FAC[o.fac].arch} ${TOWN_LVL[o.lvl||1].toLowerCase()}</b> · unclaimed${gn?` · ${amountWord(gn).toLowerCase()} ${(o.garrison||[]).map(g=>U[g.k].pl).join(' and ')} hold it`:''} · capture it for +${fmt(campIncome(o))} gold a day and ${campTiers(o)} kinds of ${FAC[o.fac].arch} recruits`;}
     const gn=(o.garrison||[]).reduce((a,g)=>a+g.n,0);return o.owned===ME()?`<b>Your ${FAC[o.fac].arch} holding</b> · +500 gold a day · recruits each week${gn?` · ${gn} troops guard it`:''}`:`<b>${campName(o)}</b>${o.owned?' (taken by another banner)':''} · ${gn?`guarded by ${amountWord(gn).toLowerCase()} troops · `:''}walk in to capture it`;}
     case 'mine':return`<b>${MINE[o.k].name}</b> (level ${o.lvl||1}) · +${fmt(mineOut(o))} ${RESNAME[MINE[o.k].res].toLowerCase()} a day · ${o.owned===ME()?'yours':o.owned?`held by ${o.ownerName}`:'unclaimed'}`;
     case 'pile':return`<b>${RESNAME[o.k]}</b> · ${fmt(o.n)}`;
@@ -2187,7 +2211,7 @@ function renderUI(){
   if(!S)return;
   applyTheme();
   $('#res').innerHTML=RES.map(k=>`<span class="${k}" title="${RESNAME[k]}"><img src="${iconURL('res',k,40)}" alt="${RESNAME[k]}">${fmt(S.res[k])}</span>`).join('');
-  const d=dateParts();$('#date').innerHTML=`<span>Month ${d.m} · Week ${d.w} · Day ${d.d}</span><em>${S.limit-S.day+1} days left</em>`;
+  const d=dateParts();$('#date').innerHTML=`<span>Month ${d.m} · Week ${d.w} · Day ${d.d}</span><em>${S.event&&S.event.k!=='plain'?`${S.event.name} · `:''}${S.limit-S.day+1} days left</em>`;$('#date').title=S.event?`${S.event.name}: ${S.event.txt}`:'';
   const h=HERO(),hd=H_(),need=xpFor(h.lvl),prev=h.lvl>1?xpFor(h.lvl-1):0;
   const sw=S.heroes.length>1?`<div class="herosw">${S.heroes.map((x,i)=>`<button class="hsel${i===S.cur?' on':''}" data-hsel="${i}" title="${x.name}${x.mp>0?' (can still move)':''}"><img src="${iconURL('hero',x.id,84)}" alt="${x.name}">${x.mp>60?'<i></i>':''}</button>`).join('')}</div>`:'';
   const mm=maxMana(),mx=maxMP();
@@ -2347,7 +2371,7 @@ function stepHero(n){
 function tween(dur,f){return new Promise(res=>{const t0=performance.now();const step=now=>{const t=Math.min(1,(now-t0)/Math.max(1,dur));f(t);if(t<1)requestAnimationFrame(step);else res();};requestAnimationFrame(step);});}
 function gain(k,n){S.res[k]+=n;}
 async function manageHolding(o){const f=FAC[o.fac],h=HERO();o.pool=o.pool||{};
-  const body=()=>`<p class="muted" style="margin-top:0">Captured: +500 gold a day. Its troops muster here each week.</p><div class="ugrid">${f.units.slice(0,2).map(k=>{const av=o.pool[k]||0,mx=Math.min(av,maxAfford(k));
+  const body=()=>`<p class="muted" style="margin-top:0">Captured${o.free?` ${TOWN_LVL[o.lvl||1].toLowerCase()}`:''}: +${fmt(campIncome(o))} gold a day. Its troops muster here each week.</p><div class="ugrid">${f.units.slice(0,campTiers(o)).map(k=>{const av=o.pool[k]||0,mx=Math.min(av,maxAfford(k));
     return unitCard(k,{cls:mx>0?'sugg':'',foot:`<div class="cost">${costHTML(unitCost(k,1))}<span class="muted">each · ${av} here</span></div><div class="rctl"><button class="btn sm${mx>0?' primary':''}" data-hrec="${k}" ${mx<1?'disabled':''}>Recruit ${mx}</button></div>`});}).join('')}</div>`;
   const pr=showModal({title:campName(o).replace(/^./,c=>c.toUpperCase()),body:body(),wide:true,buttons:[{label:'Garrison',value:'g'},{label:'Done',value:1,primary:true}],dismiss:1});
   const b=$('#modal').querySelector('.body');
@@ -2459,19 +2483,28 @@ async function addXP(n){
     h[v]++;if(v==='lore')h.mana+=10;renderUI();
   }
 }
+/* each week rolls an event */
+const EVENTS=[{k:'plain',w:4,name:'A quiet week',txt:'Nothing unusual.'},{k:'bounty',w:2,name:'Week of Plenty',txt:'Every dwelling musters 25% more.'},
+  {k:'unit',w:3,name:'Week of the {u}',txt:'+5 {p} this week.'},{k:'gold',w:2,name:'Golden Week',txt:'Merchants pay a tithe: +1,000 gold.'},
+  {k:'wild',w:2,name:'Week of the Wild',txt:'Wild creatures multiply twice as fast.'},{k:'road',w:2,name:'Fair Winds',txt:'All heroes move 10% farther this week.'},
+  {k:'lean',w:1,name:'Lean Week',txt:'Dwellings muster 25% less.'}];
+function rollEvent(){const tot=EVENTS.reduce((a,e)=>a+e.w,0);let r=Math.random()*tot;const e=EVENTS.find(x=>(r-=x.w)<0)||EVENTS[0];
+  const ev={k:e.k,name:e.name,txt:e.txt};if(e.k==='unit'){const i=ri(0,2),k=FAC[S.fac].units[i];ev.unit=k;ev.name=e.name.replace('{u}',U[k].name);ev.txt=e.txt.replace('{p}',U[k].pl);}return ev;}
 function dayUpkeep(weekly){
   const t=S.town,news=[],inc=income();gain('gold',inc);const msg=[t.taken?`no income: ${esc(t.taken.name)} holds ${esc(t.name)}`:`+${fmt(inc)} gold`];
   if(!t.taken){if(facSpecial('amberDay'))gain('amber',1);if(facSpecial('oreDay'))gain('ore',2);}
-  if(weekly)for(const o of S.objs)if(o.type==='camp'&&o.owned===ME()){const u=FAC[o.fac].units;o.pool=o.pool||{};o.pool[u[0]]=(o.pool[u[0]]||0)+Math.ceil(U[u[0]].growth/2);o.pool[u[1]]=(o.pool[u[1]]||0)+Math.ceil(U[u[1]].growth/2);}
+  if(weekly)for(const o of S.objs)if(o.type==='camp'&&o.owned===ME()){o.pool=o.pool||{};for(const[k,n]of Object.entries(firstPool(o)))o.pool[k]=(o.pool[k]||0)+n;}
   let owned=0;for(const o of S.objs)if(o.type==='mine'&&o.owned===ME()){owned++;gain(MINE[o.k].res,mineOut(o));}
   if(owned)msg.push(`${owned} mine${owned>1?'s':''} paid out`);
   const cur=S.cur;S.heroes.forEach((h,i)=>{S.cur=i;h.mp=maxMP();if(facSpecial('mpTown')&&h.x===t.x&&h.y===t.y)h.mp=Math.round(h.mp*1.25);h.mana=Math.min(maxMana(),h.mana+Math.max(1,hst(h,'lore'))+(hasSk('meditation')?2:0)+gear(h,'manaRegen')+(facSpecial('manaRegen')?2:0));});S.cur=cur;
   t.builtToday=false;
-  if(weekly&&!t.taken){const d=dateParts();const mult=(t.built.muster?1.5:1)*[1,1,1.5,2][wallLvl()],gr={};const fb=FAC_BUILD[S.fac]||[];
+  if(weekly&&!t.taken){const d=dateParts(),ev=S.event||{};const mult=(t.built.muster?1.5:1)*[1,1,1.5,2][wallLvl()]*(ev.k==='bounty'?1.25:ev.k==='lean'?0.75:1),gr={};
+    if(ev.k==='unit'&&ev.unit)gr[ev.unit]=(gr[ev.unit]||0)+5;if(ev.k==='gold'){gain('gold',1000);}const fb=FAC_BUILD[S.fac]||[];
     for(const b of fb)if(b.horde&&t.built[b.id]){const k=FAC[S.fac].units[b.horde[0]];gr[k]=(gr[k]||0)+b.horde[1];}
     if(facSpecial('horde2')){const k=FAC[S.fac].units[1];gr[k]=(gr[k]||0)+2;}
     if(facSpecial('goldWeek')){gain('gold',1500);msg.push('+1,500 gold from the cove');}S.heroes.forEach(h=>{for(const[k,v]of Object.entries((HBY[h.id].fx||{}).growth||{}))gr[k]=(gr[k]||0)+v;});
     FAC[S.fac].units.forEach((k,i)=>{if(t.built['d'+(i+1)])t.pool[k]=(t.pool[k]||0)+Math.round(U[k].growth*mult)+(gr[k]||0)+(i===0&&delivered(1)?2:0);});
+    if(ev.name)news.push(`<b>${ev.name}:</b> ${ev.txt}`);
     news.push(`<b>Week ${d.w} of Month ${d.m}.</b> Dwellings have new recruits. Wild creatures${S.rivals.some(r=>!r.human)?' and rivals':''} grow stronger.`);}
   news.push(`Day ${S.day}: ${msg.join(' · ')}.`);return news;
 }
@@ -2494,7 +2527,8 @@ async function endDay(){
     S.day++;
     if(S.day>S.limit){moving=false;await defeat(S.mode==='grail'?'Time has run out before the Oracle’s grails came home.':S.mode==='conquest'?'Time has run out with rival banners still flying.':'Time has run out with the crown still broken. The Glass Drakes wake, and the land falls to their winter.');return;}
     const weekly=dateParts().d===1;
-    if(weekly){for(const o of S.objs)if(o.type==='neutral')o.n=Math.ceil(o.n*1.1);for(const rv of S.rivals)if(!rv.human)growRival(rv);}
+    if(weekly&&!S.players)S.event=rollEvent();
+    if(weekly){for(const o of S.objs)if(o.type==='neutral')o.n=Math.ceil(o.n*(S.event&&S.event.k==='wild'?1.2:1.1));for(const rv of S.rivals)if(!rv.human)growRival(rv);}
     if(S.mode==='grail')roamKeepers();
     if(S.players){
       for(let j=0;j<S.players.length;j++){if(S.players[j].out)continue;loadPlayer(j);const news=dayUpkeep(weekly);if(weekly){const r=addRumour(false,true);if(r)news.push(r);}S.players[j].news=news;stashPlayer();}
@@ -2568,7 +2602,7 @@ function rivalTarget(rv){
   // rivals want their own camp back, and raid holdings of others
   for(const o of S.objs)if(o.type==='camp'&&o.owned!==rv.fac&&(o.owned||o.free)&&armyPower(o.garrison||[])*1.3<pw)c.push({o,x:o.x,y:o.y,v:!o.free&&o.fac===rv.fac?40:o.free&&!o.owned?16:18});
   c.forEach(q=>q.s=q.v/(Math.hypot(q.x-rv.x,q.y-rv.y)+4));c.sort((a,b)=>b.s-a.s);
-  for(const q of c.slice(0,6)){if(Math.hypot(q.x-rv.x,q.y-rv.y)>Math.max(24,(W+H)/2.2))continue;const p=astar(rv.x,rv.y,q.x,q.y,(x,y,goal)=>rivalCost(rv,x,y,goal));if(p&&p.length){q.path=p;return q;}}
+  for(const q of c.slice(0,6)){if(Math.hypot(q.x-rv.x,q.y-rv.y)>Math.max(26,(W+H)/2))continue;const p=astar(rv.x,rv.y,q.x,q.y,(x,y,goal)=>rivalCost(rv,x,y,goal));if(p&&p.length){q.path=p;return q;}}
   return null;}
 function autoResolve(rv,theirs){const ours=armyPower(rv.army,rv);
   if(ours>theirs){const f=Math.min(0.85,Math.pow(theirs/ours,1.4)*0.75);rv.army.forEach(a=>a.n=Math.max(1,Math.round(a.n*(1-f))));return true;}
@@ -3156,6 +3190,8 @@ async function endBattle(){
   const o=bt.obj,rv=o.type==='rival'?o.rival:null,h=HERO();
   if(won&&rv&&rv.relics.length)extras.push(`<b>Relics recovered:</b> ${rv.relics.map(r=>RELICS[r].name).join(', ')}.`);
   if(!won&&h.relics.length)extras.push(rv?`${rv.name} takes ${h.relics.map(r=>RELICS[r].name).join(', ')}.`:`${h.relics.map(r=>RELICS[r].name).join(', ')} ${h.relics.length>1?'fall':'falls'} to the ground where ${h.name} stood.`);
+  if(won&&o.type==='neutral'&&o.lvl===4){const g=ri(6,12)*100;S.res.gold+=g;const pool=Object.keys(ITEMS).filter(k=>ITEMS[k].lvl<=2&&!S.heroes.some(x=>(x.items||[]).includes(k)));
+    let it=null;if(pool.length&&Math.random()<0.6){it=pick(pool);(h.items=h.items||[]).push(it);}extras.push(`<b>Elite loot:</b> ${fmt(g)} gold${it?` and the ${ITEMS[it].name} (${itemTxt(it)})`:''}.`);}
   if(won&&o.type==='camp')extras.push(`<b>${campName(o)} captured:</b> +500 gold a day, and ${FAC[o.fac].arch} recruits there each week.`);
   if(won&&rv&&S.town.taken&&S.town.taken.id===rv.id)extras.push(`<b>${esc(S.town.name)} is free again.</b>`);
   const body=`<p>${won?`The field is yours. ${h.name} gains ${fmt(xp)} experience.`:`${h.name}'s army is broken, and ${h.name} is lost.${S.heroes.length>1?' Your other heroes fight on.':''}`}</p>${extras.map(x=>`<p>${x}</p>`).join('')}
@@ -3322,8 +3358,8 @@ async function pickMap(opt={}){
       ${mode==='multi'?`<div class="diffs" role="group" aria-label="Players"><span class="label">Players</span>${[2,3,4].map(n=>`<button class="dchip${n===np?' on':''}" data-np="${n}" ${n>MAP_SIZES[size].rivals+1?'disabled':''}>${n}</button>`).join('')}</div>`:''}</div>
     <div class="modes4">${Object.entries(MODES).map(([k,m])=>`<button class="mode${k===mode?' on':''}" data-mode="${k}" title="${m.desc}"><b>${m.n}. ${m.name}</b><span>${MODE_SHORT[k]}</span></button>`).join('')}</div>
     <div class="maprow"><h3>Map</h3>${Object.entries(MAP_SIZES).map(([k,z])=>`<button class="dchip${k===size?' on':''}" data-size="${k}" title="${z.W}×${z.H} tiles · ${z.rivals} rivals · ${Math.round(z.limit/28)} months">${z.label}</button>`).join('')}<button class="dchip" data-reroll="1" title="Roll a new layout">↻ New layout</button>
-      <span class="muted msize">${MAP_SIZES[size].rivals} rivals · ${Math.round(MAP_SIZES[size].limit/28)} months</span></div>
-    <div class="maps4">${Object.entries(MAP_TYPES).map(([k,m])=>`<button class="mapc${k===type?' on':''}" data-map="${k}" title="${m.desc}"><span class="mimg"><img class="mprev" src="${mapPreviewURL(k,size,seed)}" alt="Preview of ${m.name}"><span class="mdesc">${m.desc}</span></span><b>${m.name}</b></button>`).join('')}</div>
+      <span class="muted msize">${MAP_SIZES[size].W}×${MAP_SIZES[size].H} · ${MAP_SIZES[size].rivals} rivals · ${MAP_SIZES[size].towns} free towns · ${Math.round(MAP_SIZES[size].limit/28)} months</span></div>
+    <div class="maps4">${Object.entries(MAP_TYPES).map(([k,m])=>`<button class="mapc${k===type?' on':''}" data-map="${k}" title="${m.desc}"><span class="mimg"><img class="mprev" src="${mapPreviewURL(k,size,seed)}" alt="Preview of ${m.name}"><span class="mdesc">${m.desc}</span></span><b>${m.name}</b><small class="mbio">${biomeOf(seed).name}</small></button>`).join('')}</div>
     ${mine.length?`<div class="maprow mine"><span class="label">Your maps</span>${mine.map(m=>`<button class="dchip mmap${type==='custom:'+m.id?' on':''}" data-map="custom:${m.id}" title="${esc(m.name)} · ${m.W}×${m.H}"><img src="${customPreviewURL(m)}" alt="">${esc(m.name)}</button>`).join('')}</div>`:''}
     <div class="legend"><span><i style="background:${FAC.rangers.col}"></i>Your town</span><span><i style="background:#c0582e;border-radius:50%"></i>Rivals</span><span><i style="background:${RELICS[0].col};border-radius:50%"></i>Relics</span><span><i style="background:${RELICS[6].col};border-radius:50%"></i>Glass Lair</span><span><b style="color:#d9452a">✕</b> Guards</span><span><i style="background:#c46bff;border-radius:50%"></i>Portals</span><span><i style="background:#e8e4f4;border:1px solid #888"></i>Spires</span><span><i style="background:#d9b48a"></i>Docks</span></div>`;
   const p=showModal({title:'Choose your game',body:html(),wide:true,top:true,buttons:[{label:'Back',value:null},{label:'Next: choose banners ▸',value:'go',primary:true}],dismiss:null});

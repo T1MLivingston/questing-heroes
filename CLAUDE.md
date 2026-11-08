@@ -92,6 +92,11 @@ Everything lives in one object, `S`, so it can be saved as JSON:
 - Sites: `sites/stones/<fac>/{atk,def,lore}.png` (stones are faction-styled via `o.style`; each hero trains once per stone, `usedBy`), `sites/sage.png`, `sites/altar.png`. Portals: `portals/{woodland,arcane,tidal}.png` 4-frame strips (surface, underworld, by water). Gems: `gems/*.png` (`GEMS`, `gem` pickups worth gold; amber's icon). Title: `ui/banner.png`. `spriteAt` draws one sprite or strip frame with a bottom-centre pivot.
 - Add new art by dropping files in the same layout and adding the id to the matching table. `assets/manifest.json` is the art pack's full registry.
 
+### Map size and variety
+
+- `MAP_SIZES`: Small 40×32, Medium 54×42, Large 68×52, Extra large 84×64 (the classic genre uses 36/72/108/144 squares; our tiles draw larger). `towns` is the number of free towns. `astar` uses a binary heap. Big maps keep fewer water frames (`terrainPh` length 1-4).
+- Each seed rolls a biome (`BIOMES`, `biomeOf`, `BIO` shifts the terrain thresholds in every generator; shown on the map card). Object counts jitter ±25% (`jit`). Wild monsters get a level 1-4 (weak, normal, strong, elite: `MON_LVL`, size ×0.6-1.9; elites drop gold and maybe an artifact). Free towns are Village, Town or City (`lvl`, `TOWN_LVL`, `campIncome`, `campTiers`). Each week rolls an event (`EVENTS`, `rollEvent`, `S.event`).
+
 ### Town growth, walls and sieges
 
 - `FAC_BUILD[fac]`: three banner-only buildings (`fb1` horde: extra weekly growth for one troop; `fb2` visit: each hero gains +1 to a stat once, on arrival; `fb3` special, checked with `facSpecial`: `mpTown`, `manaRegen`, `harvest`, `horde2`, `goldWeek`, `amberDay`, `oreDay`). Costs in `FB_COST`.
