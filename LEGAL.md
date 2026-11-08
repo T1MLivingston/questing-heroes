@@ -40,6 +40,7 @@ No other libraries, images or audio are included. Art made later with ChatGPT or
 | Portrait Updates Pack 11: Perry, Grimes, Sookie, Bear, Griffiths (`assets/portraits/heroes`) | Generated pixel portraits on the shared palette (pack README) | 2026-11-08 | Same as above |
 | Map & Battle Expansion Pack 12: troop team masks, banner walkers, hex overlays, spell effects, rival camps, spire, relic lairs, Glass Lair, battle hero figures, 31 artifact icons, panel textures (`assets/team_masks/units`, `assets/heroes/_banners`, `assets/battle`, `assets/map/buildings`, `assets/artifacts`, `assets/ui/textures`) | Generated art processed to the shared palette (pack README) | 2026-11-08 | Same as above |
 | Binx portrait without collar (`assets/portraits/heroes/binx_*.png`) | Supplied by the author (generated pixel portrait); 64 px made by halving locally | 2026-11-08 | Same as above |
+| Shadow portrait (hooded) | Supplied by the author; 128 px upscaled from the 64 px original | 2026-11-08 | Same as above |
 | Half-size move cursor (`assets/ui/cursors/move_small.png`) | Downscaled locally from Pack 09's move cursor | 2026-11-08 | Same as above |
 
 The generated source images (high-res magenta PNGs) are kept outside this repo.
@@ -48,7 +49,7 @@ Troop roster (v17): all troop names are generic fantasy words or our own coinage
 
 ## Real names
 
-The heroes are named after people (and possibly pets) from the author's life: Bear, Dorothy, Oliver, Battaglia, Engelman, Tempest, Grimes, Rimmer, Parker, Shadow, Rago, Binx, Boopis, Monkey, Schmickle, O'Malley, Vargas, Sheila, Lawrence, Davis, Love, Michael, Livingston, Ivan, Dupengeiser, Slack, Perry, Rocky, Elvis, Letchworth, William IV and Griffiths. The last two names, William IV (Necromancer) and Griffiths (Merfolk), complete the roster. Sookie (Wizards) was added in v18. Davis is retired (kept in the code only so old saves load).
+The heroes are named after people (and possibly pets) from the author's life: Bear, Dorothy, Oliver, Battaglia, Engelman, Tempest, Grimes, Rimmer, Parker, Shadow, Rago, Binx, Boopis, Monkey, Schmickle, O'Malley, Vargas, Sheila, Lawrence, Davis, Love, Michael, Livingston, Ivan, Dupengeiser, Slack, Perry, Rocky, Elvis, Letchworth, William IV and Griffiths. The last two names, William IV (Necromancer) and Griffiths (Merfolk), complete the roster. Sookie (Wizards) was added in v18; Eden (Rangers) and the rogues Boone, Holmes and Tinker (placeholder) in v24. Davis is retired (kept in the code only so old saves load).
 
 - Fine for a private game. Before any public release, get each person's OK to use their name, or switch to invented names.
 - Some names match well-known people or fictional characters. A name alone is fine. Don't add likenesses, catchphrases, songs, costumes or other traits that point to a famous person or character.
