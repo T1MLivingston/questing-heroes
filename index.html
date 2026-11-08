@@ -107,7 +107,7 @@ button{font:inherit;color:inherit}
 .tv-tip{position:absolute;pointer-events:none;background:rgba(16,20,19,.94);border:1px solid var(--gilt);padding:4px 8px;font-size:13px;border-radius:3px;white-space:nowrap}
 .facts{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;margin-top:10px}
 .bcard.sugg{border-color:var(--gilt-hi);box-shadow:0 0 0 2px rgba(242,211,130,.25)}
-.bcard .ribbon{align-self:flex-start;font-size:11px;letter-spacing:.1em;text-transform:uppercase;background:var(--gilt);color:#1a1a1a;padding:1px 6px;border-radius:2px;font-weight:800}
+.bcard{position:relative}.bcard .ribbon{position:absolute;right:6px;bottom:6px;z-index:1;font-size:11px;letter-spacing:.1em;text-transform:uppercase;background:var(--gilt);color:#1a1a1a;padding:1px 6px;border-radius:2px;font-weight:800}
 .bcard.flash{animation:fl 1.2s ease-out}
 @keyframes fl{from{box-shadow:0 0 0 5px var(--gilt-hi)}}
 @media (prefers-reduced-motion:reduce){.bcard.flash{animation:none}}
@@ -826,6 +826,8 @@ img.upg{filter:sepia(.55) saturate(1.9) hue-rotate(-12deg) brightness(1.06) drop
 .advl{display:grid;gap:8px}.advr{display:grid;grid-template-columns:40px 1fr auto;gap:10px;align-items:center;padding:6px 8px;background:rgba(255,255,255,.35);border:1px solid var(--rule)}.advr img{width:40px}.advr small{display:block;color:var(--muted)}
 @media (max-width:700px){.wgrid{grid-template-columns:repeat(3,1fr)}}
 .tprev{display:block;width:100%;max-width:960px;height:auto;margin:4px auto 8px;image-rendering:pixelated;border:3px solid;border-color:var(--bev-lo) var(--bev-hi) var(--bev-hi) var(--bev-lo)}
+.bthumb.art{width:min(100%,140px);height:auto;aspect-ratio:1/1;margin:0 auto;overflow:hidden;background:radial-gradient(circle,#3a4f9a,#14204f)}.bthumb.art img{display:block;width:100%;height:100%;max-height:none;object-fit:contain}
+.grid .bthumb{width:min(100%,140px);height:auto;aspect-ratio:1/1;margin:0 auto}.grid .bthumb span{font-size:48px}
 </style>
 
 <div id="app">
@@ -1006,7 +1008,7 @@ const SK={
 /* heroes: st = [attack, defense, power, lore]; fx = what the signature ability does */
 const HEROES=[
   {id:'bear',name:'Bear',fac:'centaurs',type:'Might',st:[2,2,1,1],ab:'Great Bear',ad:'Lions +2 attack and +2 defense.',sk:['shieldcraft'],sp:[],fx:{unitAtk:{lion:2},unitDef:{lion:2}}},
-  {id:'eden',name:'Perry',fac:'rangers',type:'Might',st:[2,2,1,1],ab:'Rootkeeper',ad:'Oak Wardens +1 growth per week. Rootbound gives +3 defense instead of +2.',sk:['shieldcraft'],sp:[],fx:{growth:{oak:1},rootbound:3}},
+  {id:'perry',name:'Perry',fac:'rangers',type:'Might',st:[2,2,1,1],ab:'Rootkeeper',ad:'Oak Wardens +1 growth per week. Rootbound gives +3 defense instead of +2.',sk:['shieldcraft'],sp:[],fx:{growth:{oak:1},rootbound:3}},
   {id:'dorothy',name:'Dorothy',fac:'rangers',type:'Magic',st:[0,1,2,2],ab:'Green Mender',ad:'Mend heals 50% more.',sk:[],sp:['mend'],fx:{mendPct:1.5}},
   {id:'oliver',name:'Oliver',fac:'rangers',type:'Might',st:[2,1,1,1],ab:'Trailblazer',ad:'Heath and bog cost 20% less movement.',sk:['forcedmarch'],sp:[],fx:{terrainCut:0.8}},
   {id:'engelman',name:'Engelman',fac:'wizards',type:'Magic',st:[0,1,3,2],ab:'Arcanist',ad:'Spell Echo also works on the second spell each battle.',sk:['arcane'],sp:['ember'],fx:{echo:2}},
@@ -1048,7 +1050,7 @@ HEROES.push(
   {id:'michael',name:'Michael',fac:'elves',type:'Might',st:[2,2,1,1],ab:'Glade Guard',ad:'Grove Wardens +2 attack and +2 defense.',sk:[],sp:[],fx:{unitAtk:{dryad:2},unitDef:{dryad:2}}},
   {id:'livingston',name:'Livingston',fac:'elves',type:'Magic',st:[0,1,2,2],ab:'Rootweaver',ad:'Entangle lasts 1 round longer.',sk:[],sp:['entangle'],fx:{entangleExtra:1}},
   {id:'slack',name:'Slack',fac:'dwarves',type:'Might',st:[2,1,2,1],ab:'Hammer and Hex',ad:'Young Dwarves +2 attack, and Ember Dart deals 50% more. Starts with a spellbook.',sk:[],sp:['ember'],fx:{unitAtk:{delver:2},emberPct:1.5}},
-  {id:'perry',name:'Eden',fac:'elves',type:'Magic',st:[0,1,2,2],ab:'Master Archer',ad:'Longbow Rangers +1 damage and +4 shots.',sk:['steadyaim'],sp:[],fx:{unitDmgFlat:{longbow:1},unitShots:{longbow:4}}},
+  {id:'eden',name:'Eden',fac:'elves',type:'Magic',st:[0,1,2,2],ab:'Master Archer',ad:'Longbow Rangers +1 damage and +4 shots.',sk:['steadyaim'],sp:[],fx:{unitDmgFlat:{longbow:1},unitShots:{longbow:4}}},
   {id:'letchworth',name:'Letchworth',fac:'merfolk',type:'Magic',st:[0,1,2,2],ab:'Siren Keeper',ad:'Sirens +2 shots and +1 damage.',sk:[],sp:['squall'],fx:{unitShots:{siren:2},unitDmgFlat:{siren:1}}},
 );
 /* artifacts: names and effects from the design bible's trinket and treasure tiers */
@@ -1101,25 +1103,25 @@ const FX_TXT={atk:v=>`+${v} Attack`,def:v=>`+${v} Defense`,pow:v=>`+${v} Power`,
   bogFree:()=>'bog and heath cost normal movement',manaRegen:v=>`+${v} mana each day`,goldDay:v=>`+${v} gold each day`,shots:v=>`archers +${v} shots`,costCut:v=>`troops cost ${v}% less`};
 const itemTxt=id=>Object.entries(ITEMS[id].fx).map(([k,v])=>FX_TXT[k](v)).join(', ');
 /* every hero starts with one specific skill and one artifact */
-const START_KIT={bear:['command','sash'],eden:['shieldcraft','buckler'],boone:['steadyaim','bracer'],holmes:['farsight','cloak'],tinker:['forcedmarch','errands'],dorothy:['meditation','breath'],oliver:['forcedmarch','errands'],battaglia:['bladework','cudgel'],
+const START_KIT={bear:['command','sash'],perry:['shieldcraft','buckler'],boone:['steadyaim','bracer'],holmes:['farsight','cloak'],tinker:['forcedmarch','errands'],dorothy:['meditation','breath'],oliver:['forcedmarch','errands'],battaglia:['bladework','cudgel'],
   engelman:['arcane','inkwell'],tempest:['deepres','spark'],grimes:['shieldcraft','candle'],rimmer:['meditation','kettle'],
   shadow:['deepres','spark'],parker:['battleplan','cudgel'],rago:['fortune','rabbit'],necro4:['shieldcraft','kettle'],
   monkey:['bladework','whetstone'],binx:['farsight','cloak'],boopis:['fortune','rabbit'],schmickle:['shieldcraft','mudboots'],
   omalley:['seamanship','ledger'],vargas:['steadyaim','bracer'],sheila:['meditation','breath'],lawrence:['command','sash'],
   davis:['steadyaim','bracer'],love:['deepres','inkwell'],livingston:['farsight','cloak'],michael:['forcedmarch','errands'],
-  ivan:['shieldcraft','buckler'],dupengeiser:['warding','spark'],slack:['bladework','whetstone'],perry:['steadyaim','bracer'],sookie:['meditation','candle'],
+  ivan:['shieldcraft','buckler'],dupengeiser:['warding','spark'],slack:['bladework','whetstone'],eden:['steadyaim','bracer'],sookie:['meditation','candle'],
   elvis:['command','sash'],mer2:['shieldcraft','kettle'],rocky:['forcedmarch','sash'],letchworth:['meditation','breath']};
 HEROES.forEach(h=>{const k=START_KIT[h.id];if(k){h.sk=[k[0]];h.item=k[1];}});
 /* starting stats: one higher across the board, more on each hero's main stat, and a personal extra point */
 for(const h of HEROES){if(h._st)continue;h._st=1;const r=hash(h.id);h.st=h.st.map(v=>v+1);const main=h.type==='Might'?(h.st[0]>=h.st[1]?0:1):(h.st[2]>=h.st[3]?2:3);h.st[main]+=1+(r%2);h.st[(r>>>3)%4]+=1;}
 /* one-line versions of each ability for the hero cards; the full text is under Details */
-const AB_SHORT={bear:'Lions +2 attack and defense',eden:'Oak Wardens grow faster',boone:'First stack acts twice',holmes:'Sees farther and exactly',tinker:'+15% movement',dorothy:'Mend heals 50% more',oliver:'Heath and bog cost less',engelman:'Echoes a second spell',tempest:'Chain Spark hits one more',
+const AB_SHORT={bear:'Lions +2 attack and defense',perry:'Oak Wardens grow faster',boone:'First stack acts twice',holmes:'Sees farther and exactly',tinker:'+15% movement',dorothy:'Mend heals 50% more',oliver:'Heath and bog cost less',engelman:'Echoes a second spell',tempest:'Chain Spark hits one more',
   parker:'Zombies, Werewolves +2 speed',shadow:'Raises 15% of the fallen',grimes:'Gem Golems +3 defense',boopis:'War Rabbits grow faster',rocky:'Turtles +2 attack, +2 speed',
   monkey:'First stack acts twice',binx:'Sees farther and exactly',omalley:'Plunder pays 50% more',vargas:'Gunners hit harder, shoot more',sheila:'Squall costs half',
   davis:'Longbows +1 damage, +4 shots',love:'Healing lifts morale',ivan:'Great Forge costs less',rago:'Vampires +2 attack and speed',dupengeiser:'Raises a scalding geyser',
   rimmer:'Storm Elementals +2 attack',schmickle:'+250 gold a day',elvis:'Longer charms, +1 morale',necro4:'Skeletons grow faster',mer2:'Giant Crabs +3 defense',
   battaglia:'Antler Knights +2 / +2',lawrence:'Better Mend, more Deckhands',michael:'Grove Wardens +2 / +2',livingston:'Entangle lasts longer',slack:'Young Dwarves +2 attack',
-  perry:'Longbows +1 damage, +4 shots',sookie:'Owl Familiars grow faster',letchworth:'Sirens +2 shots, +1 damage'};
+  eden:'Longbows +1 damage, +4 shots',sookie:'Owl Familiars grow faster',letchworth:'Sirens +2 shots, +1 damage'};
 const HBY=Object.fromEntries(HEROES.map(h=>[h.id,h]));
 /* retired heroes stay in HBY so old saves load, but are no longer offered */
 for(let i=HEROES.length-1;i>=0;i--)if(HEROES[i].retired)HEROES.splice(i,1);
@@ -1412,7 +1414,7 @@ function drawRelic(c,i,x,y,r){const Rl=RELICS[i];c.save();c.translate(x,y);c.sca
 const ART_BASE='assets/';
 const ART_PORTRAITS=new Set(['eden','boone','holmes','tinker','bear','battaglia','dorothy','oliver','grimes','engelman','tempest','rimmer','parker','necro4','shadow','rago','monkey','schmickle','binx','boopis',
   'omalley','vargas','sheila','lawrence','davis','sookie','michael','love','livingston','ivan','slack','dupengeiser','perry','rocky','elvis','letchworth','mer2']);
-const ART_MAP=new Set(['eden','binx','dorothy','oliver','vargas']),MAP_SRC={eden:'bear'};
+const ART_MAP=new Set(['binx','dorothy','oliver','vargas']),MAP_SRC={};
 const ART_UNITS={antler:'antler_knight',moth:'moth_seer',oak:'oak_warden'};
 /* Enemies, Loot & World Pack 02: neutral battle sheets (4x5 like the Rangers, no team masks), 32px map guards, enemy portraits */
 const ENEMY_ART={wolf:'wolf',wight:'wight',imp:'imp',troll:'troll',drake:'drake',bandit:'bandit',skelguard:'skeleton',wildboar:'boar',spider:'spider',ogre:'ogre'};
@@ -2207,7 +2209,7 @@ function newGame(fk,hid,mo={}){
   const rivalFacs=mo.players?mo.players.slice(1).map(p=>p.fk):FAC_ORDER.filter(k=>k!==fk).sort(()=>Math.random()-0.5).slice(0,nR);
   const w=cm?customWorld(cm,rivalFacs):genMap(seed,{type,fac:fk,rivals:rivalFacs});const f=FAC[fk];
   const [t1,t2]=f.units;
-  S={v:3,roster:2,seed,fac:fk,W,H,mapType:type,size:mo.size||'small',limit:sz.limit,tiles:w.tiles,objs:w.objs,uid:w.uid+10,biome:w.biome||'vale',underY:w.underY||0,rivers:w.rivers||null,bridges:w.bridges||null,explored:new Array(W*H).fill(0),day:1,
+  S={v:3,roster:2,ids27:1,seed,fac:fk,W,H,mapType:type,size:mo.size||'small',limit:sz.limit,tiles:w.tiles,objs:w.objs,uid:w.uid+10,biome:w.biome||'vale',underY:w.underY||0,rivers:w.rivers||null,bridges:w.bridges||null,explored:new Array(W*H).fill(0),day:1,
     res:{...DIFF[mo.diff||'normal'].res},diff:mo.diff||'normal',heroes:[],cur:0,rivals:[],rumours:[],delivered:[],setup:{majors:mo.majors,outposts:mo.outposts},
     town:{x:w.town.x,y:w.town.y,name:f.town,built:{hall1:1,d1:1,d2:1,lib1:1},pool:{[t1]:U[t1].growth,[t2]:U[t2].growth},garrison:[],builtToday:false},
     over:false};
@@ -3470,7 +3472,8 @@ function townHTML(){
       else if(miss.length)act=`<span class="tag no">Needs ${miss.map(r=>BY[r]?BY[r].name:r).join(', ')}</span>`;
       else act=`<button class="btn sm" data-build="${b.id}" ${t.builtToday||!canAfford(b.cost)?'disabled':''}>Build</button>`;
       const sug=adv.id===b.id&&!built;
-      return`<div class="bcard${built?' built':''}${sug?' sugg':''}" id="bc-${b.id}">${sug?'<span class="ribbon">Suggested</span>':''}<div class="bthumb">${BUILD_ART.has(TF()+'/'+b.id)?`<img src="${ART_BASE}buildings/${TF()}/${b.id}.png" alt="">`:`<span>${b.wall?'🧱':b.unit?'⛺':b.id.startsWith('hall')?'🏛':b.id.startsWith('lib')?'📚':b.unique?'✦':b.id.startsWith('u')?'⚒':'🏠'}</span>`}</div><h4>${b.name}</h4><p>${b.desc}</p>${built?'':`<div class="cost">${costHTML(b.cost,S.res)}</div>`}<div>${act}</div></div>`;}).join('')}</div>`;
+      const th=bldThumb(TF(),b.id);
+      return`<div class="bcard${built?' built':''}${sug?' sugg':''}" id="bc-${b.id}">${sug?'<span class="ribbon">Suggested</span>':''}<div class="bthumb${th?' art':''}">${th?`<img src="${th}" alt="">`:`<span>${b.wall?'🧱':b.unit?'⛺':b.id.startsWith('hall')?'🏛':b.id.startsWith('lib')?'📚':b.unique?'✦':b.id.startsWith('u')?'⚒':'🏠'}</span>`}</div><h4>${b.name}</h4><p>${b.desc}</p>${built?'':`<div class="cost">${costHTML(b.cost,S.res)}</div>`}<div>${act}</div></div>`;}).join('')}</div>`;
   }else if(townTab==='upgrade'){
     const fu=FAC[TF()].units;
     const upg=here?h.army.map((a,i)=>{const ti=fu.indexOf(a.k);if(ti<0||!t.built['u'+(ti+1)])return'';const c=upCost(a.k,a.n);
@@ -3505,7 +3508,17 @@ function townHTML(){
    Each site maps to game buildings: when it is built, show the piece; otherwise the site is an invisible lot. Drawn at the centre of a 960×360 canvas; the sides mirror the scene's edges. */
 const TOWN_SCREEN={rangers:{atlas:'towns/rangers/screen.png',pieces:{"ranger_hall_capital":[0,360,170,118,264,29],"watchtower":[171,360,56,102,147,21],"spell_lodge":[0,479,88,87,34,54],"hedge_witch_cottage":[204,567,118,77,482,62],"reedbow_range":[323,567,120,77,4,153],"thornguard_barracks":[251,479,119,85,127,139],"trader_lodge":[371,479,125,83,250,154],"training_yard":[526,567,109,57,381,179],"tavern":[228,360,140,97,494,142],"stables":[0,567,203,80,27,232],"smithy":[89,479,161,86,438,242],"palisade_gate":[369,360,240,91,190,246],"ranger_hall_settlement":[0,648,75,52,314,69],"ranger_hall_town_hall":[444,567,81,75,311,46],"ranger_hall_city_hall":[497,479,124,82,289,39]},
   sites:[['watchtower',['fb2']],['spell_lodge',['lib1'],'library'],['hedge_witch_cottage',['d4'],'recruit'],['reedbow_range',['d2'],'recruit'],['thornguard_barracks',['d1'],'recruit'],['trader_lodge',['market'],'market'],
-    ['training_yard',['muster']],['tavern',['tavern'],'tavern'],['stables',['d3','stables'],'recruit'],['smithy',['u1','u2','u3','u4','u5'],'upgrade'],['palisade_gate',['wall1','wall2','wall3']]],gate:[320,342]}};
+    ['training_yard',['muster']],['tavern',['tavern'],'tavern'],['stables',['d3','stables'],'recruit'],['smithy',['u1','u2','u3','u4','u5'],'upgrade'],['palisade_gate',['wall1','wall2','wall3']]],gate:[320,342],hall:'ranger_hall_'},
+  pirates:{atlas:'towns/pirates/screen.png',hall:'harbor_hall_',pieces:{"harbor_hall_capital":[129,360,192,112,257,6],"harbor_hall_settlement":[0,723,77,50,306,50],"harbor_hall_town_hall":[128,648,81,71,304,29],"harbor_hall_city_hall":[396,360,149,93,270,7],"lighthouse":[322,360,73,96,136,6],"navigator_lodge":[264,566,90,80,508,33],"deckhand_bunkhouse":[485,566,130,74,21,115],"powder_loft":[226,475,98,83,159,111],"duelist_court":[0,475,121,90,261,115],"gunner_range":[210,648,130,66,377,126],"siege_yard_great_crossbow":[0,648,127,74,510,119],"siege_yard_cannon_crew":[355,566,129,76,509,118],"shipyard":[0,360,128,114,0,206],"tavern":[122,475,103,87,130,189],"harbor_exchange":[444,648,97,62,231,201],"training_deck":[542,648,86,61,336,204],"stables":[341,648,102,65,420,199],"shipsmith":[325,475,122,82,516,197],"sea_gate":[0,566,263,81,186,264]},
+    sites:[['lighthouse',['fb2']],['navigator_lodge',['lib1'],'library'],['deckhand_bunkhouse',['d1'],'recruit'],['powder_loft',['d2'],'recruit'],['duelist_court',['d3'],'recruit'],['gunner_range',['d4'],'recruit'],
+      ['siege_yard_cannon_crew',['d5'],'recruit','siege_yard_great_crossbow','u5'],['shipyard',['fb3']],['tavern',['tavern'],'tavern'],['harbor_exchange',['market'],'market'],['training_deck',['muster']],['stables',['stables']],
+      ['shipsmith',['u1','u2','u3','u4','u5'],'upgrade'],['sea_gate',['wall1','wall2','wall3']]]},
+  necro:{atlas:'towns/necro/screen.png',hall:'ossuary_hall_',pieces:{"ossuary_hall_capital":[0,360,247,127,224,1],"ossuary_hall_settlement":[269,747,74,57,308,53],"ossuary_hall_town_hall":[258,582,110,81,290,29],"ossuary_hall_city_hall":[319,360,189,105,251,5],"watch_spire":[248,360,70,115,140,8],"bone_archive":[369,582,130,79,3,49],"hellkite_hollow":[0,582,139,85,496,33],"skeleton_crypt":[259,668,141,76,2,133],"grave_vault":[142,668,116,77,148,134],"tribute_vault":[0,668,141,78,258,141],"moonfang_den":[401,668,118,67,400,141],"crimson_cloister":[140,582,117,83,521,127],"tavern":[146,488,134,91,3,214],"night_stables":[134,747,134,61,139,216],"ritual_court":[0,747,133,62,359,215],"soul_workshop":[0,488,145,93,493,223],"bone_gate":[281,488,306,91,167,250]},
+    sites:[['watch_spire',['fb2']],['bone_archive',['lib1'],'library'],['hellkite_hollow',['d5'],'recruit'],['skeleton_crypt',['d1'],'recruit'],['grave_vault',['d2'],'recruit'],['tribute_vault',['market'],'market'],
+      ['moonfang_den',['d3'],'recruit'],['crimson_cloister',['d4'],'recruit'],['tavern',['tavern'],'tavern'],['night_stables',['stables']],['ritual_court',['muster']],['soul_workshop',['u1','u2','u3','u4','u5'],'upgrade'],['bone_gate',['wall1','wall2','wall3']]]},
+  merfolk:{atlas:'towns/merfolk/screen.png',hall:'tide_hall_',pieces:{"tide_hall_capital":[0,360,214,127,241,4],"tide_hall_settlement":[462,664,70,57,319,47],"tide_hall_town_hall":[267,580,104,81,302,23],"tide_hall_city_hall":[0,488,142,91,283,13],"beacon_spire":[505,360,66,95,133,17],"tide_library":[516,580,95,76,29,49],"coral_colossus_garden":[282,488,141,84,473,31],"spearfolk_barracks":[0,580,135,83,3,126],"siren_grotto":[0,664,113,74,136,122],"pearl_exchange":[136,580,130,82,251,129],"crab_nursery":[350,664,111,57,383,149],"turtle_sanctuary":[143,488,138,86,500,121],"tavern":[424,488,119,84,14,209],"reef_stables":[114,664,127,63,128,209],"current_training_ring":[242,664,107,59,382,214],"shell_workshop":[372,580,143,80,483,216],"reef_gate":[215,360,289,97,177,239]},
+    sites:[['beacon_spire',['fb2']],['tide_library',['lib1'],'library'],['coral_colossus_garden',['d5'],'recruit'],['spearfolk_barracks',['d1'],'recruit'],['siren_grotto',['d2'],'recruit'],['pearl_exchange',['market'],'market'],
+      ['crab_nursery',['d3'],'recruit'],['turtle_sanctuary',['d4'],'recruit'],['tavern',['tavern'],'tavern'],['reef_stables',['stables']],['current_training_ring',['muster']],['shell_workshop',['u1','u2','u3','u4','u5'],'upgrade'],['reef_gate',['wall1','wall2','wall3']]]}};
 let townAlpha={};
 function artTownAlpha(path,img){if(townAlpha[path]!==undefined)return townAlpha[path];try{const cv=document.createElement('canvas');cv.width=img.width;cv.height=img.height;const c=cv.getContext('2d');c.drawImage(img,0,0);townAlpha[path]={w:img.width,d:c.getImageData(0,0,img.width,img.height).data};}catch(e){townAlpha[path]=null;}return townAlpha[path];}
 function drawArtTown(cv,TSN){const a=artImg(TSN.atlas);if(!a.ok)return false;const im=a.img,c=cv.getContext('2d'),t=TW(),f=FAC[TF()],BL=townBuildings(),BY=Object.fromEntries(BL.map(b=>[b.id,b])),OX=160,P=TSN.pieces;
@@ -3518,9 +3531,9 @@ function drawArtTown(cv,TSN){const a=artImg(TSN.atlas);if(!a.ok)return false;con
   const lot=(id,bid)=>{const q=P[id],b=BY[bid];if(!b)return;townSpots.push({x:OX+q[4],y:q[5],w:q[2],h:q[3],tab:'build',id:bid,label:`Empty lot: ${b.name}${bAvail(b)?' (can be built)':' (locked)'}`});};
   const used=new Set(['hall1','hall2','hall3','hall4']);
   const hs=t.built.hall4?'capital':t.built.hall3?'city_hall':t.built.hall2?'town_hall':'settlement',hn=t.built.hall4?'Crown Seat':t.built.hall3?'High Seat':t.built.hall2?'Council Hall':'Moot Hall';
-  piece('ranger_hall_'+hs,'build','hall2',`${hn}: click to see everything you can build (+${fmt(VT?hallGold(t):income())} gold a day)`);
+  piece(TSN.hall+hs,'build','hall2',`${hn}: click to see everything you can build (+${fmt(VT?hallGold(t):income())} gold a day)`);
   const fu=f.units;
-  for(const[id,ids,tab]of TSN.sites){ids.forEach(i=>used.add(i));const on=ids.filter(i=>t.built[i]);
+  for(const[id0,ids,tab,alt,altIf]of TSN.sites){const id=alt&&t.built[altIf]?alt:id0;ids.forEach(i=>used.add(i));const on=ids.filter(i=>t.built[i]);
     if(!on.length){const nx=ids.find(i=>BY[i]);if(nx)lot(id,nx);continue;}
     const b0=on[0],B=BY[b0]||{name:b0},di=b0[0]==='d'?+b0[1]-1:-1;
     const label=di>=0?`${f.dw[di]}: recruit ${U[recruitKey(fu[di])].pl}${t.pool[fu[di]]?` (${t.pool[fu[di]]} waiting)`:''}${on.length>1?` · also ${on.slice(1).map(i=>(BY[i]||{name:i}).name).join(', ')}`:''}`
@@ -3531,11 +3544,21 @@ function drawArtTown(cv,TSN){const a=artImg(TSN.atlas);if(!a.ok)return false;con
   used.add('lib2');const extra=BL.filter(b=>t.built[b.id]&&!used.has(b.id));let sy=8;c.font='700 12px "Alegreya SC",Georgia,serif';c.textBaseline='middle';c.textAlign='left';
   for(const b of extra){const nm=b.id==='reliquary'?`${b.name} ${S.delivered.length}/7`:b.name,w=Math.min(OX-12,c.measureText(nm).width+14);if(sy>330)break;c.fillStyle='rgba(28,20,10,.85)';c.fillRect(6,sy,w,20);c.strokeStyle='#e8c060';c.lineWidth=1;c.strokeRect(6.5,sy+.5,w-1,19);c.fillStyle='#f6e2a8';c.fillText(nm,13,sy+10,w-14);
     const di=b.unit?f.units.indexOf(b.unit):-1;townSpots.push({x:6,y:sy,w,h:20,tab:di>=0?'recruit':b.id==='reliquary'?'relics':'build',id:b.id,label:b.desc});sy+=25;}
-  S.heroes.filter(x=>x.x===t.x&&x.y===t.y).forEach((x,i)=>{c.save();c.translate(OX+TSN.gate[0]-14+i*30-TS/2,TSN.gate[1]-TS/2-6);const f0=x.face;x.face='s';drawHero(c,0,0,x);x.face=f0;c.restore();});
+  const gate=TSN.gate||(()=>{const w=TSN.sites.find(z=>z[1][0]==='wall1'),q=w&&P[w[0]];return q?[q[4]+q[2]/2,Math.min(342,q[5]+q[3]-4)]:[320,342];})();
+  S.heroes.filter(x=>x.x===t.x&&x.y===t.y).forEach((x,i)=>{c.save();c.translate(OX+gate[0]-14+i*30-TS/2,gate[1]-TS/2-6);const f0=x.face;x.face='s';drawHero(c,0,0,x);x.face=f0;c.restore();});
   return true;}
 /* a banner's home town with every building up (capital hall), for the banner Details page */
 function paintTownPrev(root,tries=0){for(const cv of root.querySelectorAll('canvas.tprev:not([data-done])')){const T=TOWN_SCREEN[cv.dataset.fac],a=T&&artImg(T.atlas);if(!a||!a.ok){if(tries<40)setTimeout(()=>paintTownPrev(root,tries+1),100);continue;}
-  const c=cv.getContext('2d');c.imageSmoothingEnabled=false;c.drawImage(a.img,0,0,640,360,0,0,640,360);for(const[id,q]of Object.entries(T.pieces)){if(/_hall_/.test(id)&&!/capital$/.test(id))continue;c.drawImage(a.img,q[0],q[1],q[2],q[3],q[4],q[5],q[2],q[3]);}cv.dataset.done=1;}}
+  const c=cv.getContext('2d');c.imageSmoothingEnabled=false;c.drawImage(a.img,0,0,640,360,0,0,640,360);for(const[id,q]of Object.entries(T.pieces)){if((/_hall_/.test(id)&&!/capital$/.test(id))||T.sites.some(z=>z[0]===id&&z[3]))continue;c.drawImage(a.img,q[0],q[1],q[2],q[3],q[4],q[5],q[2],q[3]);}cv.dataset.done=1;}}
+/* a building's picture from its banner's town atlas, cropped into a square (Build tab); null if the banner has no town art yet */
+const thumbCache={};
+function bldThumb(fac,id){const T=TOWN_SCREEN[fac];if(!T)return null;const key=fac+'/'+id;if(thumbCache[key])return thumbCache[key];
+  let pid=null;const hn=['settlement','town_hall','city_hall','capital'];
+  if(/^hall\d$/.test(id))pid=T.hall+hn[+id[4]-1];
+  else{const look=/^u\d$/.test(id)?'d'+id[1]:id,site=T.sites.find(z=>z[1].includes(look))||T.sites.find(z=>z[1].includes(id));if(site)pid=site[0];}
+  const q=pid&&T.pieces[pid],a=q&&artImg(T.atlas);if(!q||!a.ok)return null;
+  const S2=Math.max(q[2],q[3])+4,cv=document.createElement('canvas');cv.width=S2;cv.height=S2;const c=cv.getContext('2d');c.imageSmoothingEnabled=false;
+  c.drawImage(a.img,q[0],q[1],q[2],q[3],Math.round((S2-q[2])/2),Math.round((S2-q[3])/2),q[2],q[3]);return thumbCache[key]=cv.toDataURL();}
 function drawTownView(cv){
   {const TSN=TOWN_SCREEN[TF()];if(TSN&&drawArtTown(cv,TSN))return;}
   const c=cv.getContext('2d'),f=FAC[TF()],t=TW(),BL=townBuildings(),BY=Object.fromEntries(BL.map(b=>[b.id,b])),now=performance.now();
@@ -3620,7 +3643,7 @@ document.addEventListener('click',async e=>{
 },true);
 async function openTown(tw){
   if(modalOpen||S.over)return;
-  tw=tw&&tw!==S.town?tw:null;VT=tw;
+  tw=tw&&tw!==S.town?tw:null;VT=tw;if(TOWN_SCREEN[TF()])artImg(TOWN_SCREEN[TF()].atlas);
   if(!tw&&S.town.taken){VT=null;toast(`${esc(TW().taken.name)} holds ${esc(TW().name)}. Defeat them at the gate to take it back.`);return;}
   townTab=townAdvice().tab==='overview'?'overview':'overview';townFocus=null;
   const p=showModal({title:`<img src="${iconURL('crest',TF(),52)}" alt="" style="width:44px;height:44px;vertical-align:-12px;margin-right:8px;image-rendering:pixelated"><span class="tname" data-rename-town="1" title="Double-click to rename">${esc(TW().name)}</span>`,body:townHTML(),wide:true,top:true,buttons:[{label:'Leave town ▸',value:1,primary:true}],dismiss:1});
@@ -4252,7 +4275,8 @@ function migrateRoster(st){if(!st||st.roster>=2)return;const M={};for(const[f,ol
     if(v.unit&&M[v.unit])v.unit=fix(v.unit);for(const x of Object.values(v))if(x&&typeof x==='object')walk(x);};
   walk(st);st.roster=2;}
 /* saves from before v25: new resources, and cities and rival homes you already hold become full towns */
-function migrateTowns(st){const NM={eden:['Eden','Perry'],perry:['Perry','Eden']};for(const h of [...(st.heroes||[]),...(st.rivals||[]),...(st.players||[]).flatMap(q=>q.heroes||[])])if(NM[h.id]&&h.name===NM[h.id][0])h.name=NM[h.id][1];
+function migrateTowns(st){/* v27: the Ranger is now id perry and the Elf id eden (ids match names; new portraits) */
+  if(!st.ids27){st.ids27=1;for(const h of [...(st.heroes||[]),...(st.rivals||[]),...(st.players||[]).flatMap(q=>q.heroes||[])]){if(h.id==='eden'){h.id='perry';if(h.name==='Eden'||h.name==='Perry')h.name='Perry';}else if(h.id==='perry'){h.id='eden';if(h.name==='Perry'||h.name==='Eden')h.name='Eden';}}}
   const fix=r=>{if(r)for(const k of RES)if(r[k]==null)r[k]=0;};fix(st.res);(st.players||[]).forEach(q=>fix(q.res));
   if(st.players)return;for(const o of st.objs)if(o.type==='camp'){if(o.free&&o.lvl===3&&o.major===undefined)o.major=true;if(!o.free&&o.fac&&!o.built&&!o.owned)Object.assign(o,{major:true,built:{hall1:1,hall2:1,d1:1,d2:1,d3:1,lib1:1},name:FAC[o.fac].town,pool:{}});if(isMajor(o)&&o.owned&&o.owned===ME()&&!o.built)makeTown(o);}}
 function afterLoad(){migrateRoster(S);migrateTowns(S);setMode(S.mode||'relic');if(S.players)loadPlayer(S.pi);rebuildFoot();S.heroes.forEach(x=>{if(x.book===undefined)x.book=x.spells.length>0;});W=S.W||34;H=S.H||26;S.limit=S.limit||112;S.cur=clamp(S.cur||0,0,S.heroes.length-1);renderTerrain();heroDraw.x=HERO().x;heroDraw.y=HERO().y;restoreRoute();sizeMap();centerOn(HERO().x,HERO().y,true);renderUI();}
