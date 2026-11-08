@@ -46,10 +46,10 @@ The script in `index.html` is split into sections marked with `/* ===== ... ====
 | UI | `renderUI` (left-hand ledger as sketched: four stat squares beside a big portrait with mana and movement bars, the army grid with a spellbook tile, then Town / Hero / End day; the relic strip `#objective` sits in the top bar and opens the goal), `moveStack` (drag stacks to merge or swap), split in `showUnit`, `openSpellbook`, `showModal` (`top:true` puts the buttons in the header), toasts, `unitCard` (the one troop card used everywhere: big picture, overview line, attack and defense, a Details fold-out; fixed height), `askName` (rename the town or a hero) |
 | Adventure actions | `walk`, `fightPreview`, `gainRelic`, `visit`, `arriveTown`, `endDay`, `addRumour`, `addXP` |
 | Rival heroes | `rivalsTurn`, `rivalTarget`, `rivalInteract`, `autoResolve`, `growRival` |
-| Town screen | `FAC_SPELLS`, `townBuildings`, `townAdvice` (the Suggested step), `townTabs`, `townHTML`, `drawTownView` (clickable picture of the town), `openTown`. The main Town tab is a big town picture (click the hall to see everything you can build), then a strip with the town name, Build/Upgrade buttons, income and the dwelling grid (click to recruit) beside the garrison and visiting-hero rows (click a stack to move it across), and the resources along the bottom |
+| Town screen | `FAC_SPELLS`, `townBuildings`, `townAdvice` (the Suggested step), `townTabs`, `townHTML`, `drawTownView` (clickable picture of the town), `openTown`. The main Town tab is a picture of the town's buildings only (empty lots are invisible but clickable; interior art will replace it; click the hall to see everything you can build), then a strip with the visiting hero large and their army under it, beside the garrison row and the dwelling grid (click to recruit; click a stack to move it across), and the resources along the bottom. Double-click the town name to rename |
 | BATTLE | `drawBattleHero` (hero beside the field; click to open the spellbook), hex grid helpers, stat functions (`sAtk`, `sDef`, `sSpd`, `sMorale`), `battleLoop`, `playerTurn`, `aiTurn`, `castSpell`, `endBattle`, `drawBattle` |
 | START | `pickMap` (difficulty chips with `DIFF_ICON`, `MODE_SHORT` mode cards, size chips beside the Map heading, map cards whose description shows on hover), `pickFaction` (`FAC_BLURB`, hero faces, a Troops fold-out), `pickHero` (big stats with `STAT_TIP` tooltips, abilities as plain effects); each fits one screen |
-| Save and boot | `localStorage` save under `questing-heroes-v4`, `title`, `boot` |
+| Save and boot | Autosave under `questing-heroes-v4` (Continue); named slots under `questing-heroes-slots` (`saveGame`, `loadGame`, from the ☰ menu; Load on the title); `title` offers Load, Continue and New campaign. The map editor opens from the ☰ menu or from "Make your own map" on Choose your game |
 
 ### Game state
 
@@ -68,13 +68,13 @@ Everything lives in one object, `S`, so it can be saved as JSON:
 ### Faction and hero data
 
 - Each faction in `FAC` has 5 units (tiers 1 to 5), dwelling names, a colour palette, a signature mechanic and a travel mode.
-- Each hero in `HEROES` has base stats `st: [atk, def, pow, lore]`, starting skills `sk`, starting spells `sp` and a signature ability. The ability is data in `fx` (for example `unitAtk`, `unitSpd`, `growth`, `harvest`, `echo`), read by the battle and map code via `fx()`.
+- Each hero in `HEROES` has base stats `st: [atk, def, pow, lore]` (raised at load: +1 to all, +1-2 on the main stat, +1 on one stat picked by a hash of the id), starting skills `sk`, starting spells `sp` and a signature ability. The ability is data in `fx` (for example `unitAtk`, `unitSpd`, `growth`, `harvest`, `echo`), read by the battle and map code via `fx()`.
 - Faction mechanics are checked by faction key in the battle stat functions and `endBattle`.
 
 ### Map rules
 
 - Wheel & Spoke: homes sit on a ring, spoke roads lead to a walled hub (the Glass Lair) entered through one straight guarded gateway per spoke, and a ring road joins the homes. Rival homes are `camp` objects.
-- Pirate homes (player or rival) become islands: a ring of water with a dock on each side.
+- Pirate homes (player or rival) become islands: a ring of water with a dock on each side. Merfolk homes become lagoons (`homeIsle`: a wider ring plus `addWaterway`, a channel to the nearest lake). Merfolk swim at 50 per tile (40 with the sea relic) and pay 1.5× on land; rival Merfolk too.
 - Twin Ridges: two crag ridges cross the map. The road crosses each through one gap held by a strong `guard` neutral. `genWorld` checks that each guard really seals its ridge.
 - Diagonal moves can't cut corners: both orthogonal neighbours must be passable.
 - Relic lairs are `relic` objects (`r` = relic index). Relics a hero drops on defeat become a `drop` object.
@@ -119,7 +119,7 @@ Everything lives in one object, `S`, so it can be saved as JSON:
 
 ### Travel
 
-`terrainCost(x, y)` decides movement: lakes need a boat (65 per tile) or the Merfolk swim (110). A horse adds 40% to `maxMP()`. Docks sell boats; Horse Fairs and the Stables building give horses.
+`terrainCost(x, y)` decides movement: lakes need a boat (65 per tile) or the Merfolk swim (50); Merfolk walk land at 1.5×. A horse adds 40% to `maxMP()`. Docks sell boats; Horse Fairs and the Stables building give horses.
 
 ## Map editor
 
