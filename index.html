@@ -853,6 +853,13 @@ img.upg{filter:sepia(.55) saturate(1.9) hue-rotate(-12deg) brightness(1.06) drop
 .mpic{display:block;background-size:200% 100%;background-position:0 0;background-repeat:no-repeat}
 .wmine b{font:700 18px var(--f-display);line-height:1}.wmine small{font-size:12px;color:var(--muted);line-height:1}
 .wtroop{display:grid;justify-items:center;text-align:center;background:radial-gradient(circle,#2a3b85,#101a48);border:2px solid var(--rule);padding:4px;border-radius:3px;color:#f4ecd2}.wtroop img{width:72px;height:72px;image-rendering:pixelated;object-fit:contain}.wtroop small{font-size:11px;opacity:.8}.wtroop b{font:700 14px var(--f-display);color:#ffe08a}
+/* v30: title banner centred; hero picker art toggle; hero pictures fill their square on the chosen colour */
+.sheet:has(.tbanner) .tbanner{width:100%;max-width:100%;margin:0 auto 12px}
+.hcard .hport{background:radial-gradient(circle at 50% 38%,color-mix(in srgb,var(--c) 65%,#fff 25%),color-mix(in srgb,var(--c) 90%,#000 10%))}
+.hcard .hport img{max-width:none;max-height:none;width:112.5%;height:auto;margin:-7.2% 0 0 -6.25%}
+.hpicktop{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:8px}.hpicktop .colpick{margin:0}
+.artpick{display:inline-flex;align-items:center;gap:8px;padding:5px 12px 5px 6px;font:800 16px var(--f-display);color:#f4ecd2;background:linear-gradient(#2d4fb8,#162e7a);border:3px solid #0b1a4f;cursor:pointer}
+.artpick img{width:30px;height:30px;image-rendering:pixelated;background:rgba(255,255,255,.15);border-radius:3px}.artpick .tick{display:none;color:#ffd24a}.artpick.on{border-color:#ffd24a;box-shadow:0 0 0 2px #ffd24a}.artpick.on .tick{display:inline}
 </style>
 
 <div id="app">
@@ -1557,9 +1564,9 @@ function sc(k,v,bonus){return`<span class="sc${bonus<0?' neg':''}" title="${SC_N
 function unitChips(k){const u=U[k];return`<div class="scs">${sc('atk',u.atk)}${sc('def',u.def)}${sc('dmg',u.min+'–'+u.max)}${sc('hp',u.hp)}${sc('spd',u.spd)}${u.shots?sc('shots',u.shots):''}</div>`;}
 /* the player picks a colour on the hero screen (single player); it tints flags, portraits and the team highlight */
 /* each banner starts with its own swatch (BANNER_SW), so no two banners default to the same colour */
-const BANNER_SW={rangers:5,wizards:1,necro:2,centaurs:3,pirates:4,elves:7,dwarves:6,merfolk:0};
-const PLAYER_COLS=[['Teal','#2f8f88'],['Royal blue','#4a74d6'],['Violet','#8656b8'],['Amber','#c07a2e'],['Crimson','#b8403a'],['Leaf green','#5fb070'],['Ember','#d66a2c'],['Sea blue','#22a3b4'],['Rose','#c4508a'],['Slate','#5a6a82']];
-let pickedCol=null;
+const BANNER_SW={rangers:0,wizards:1,necro:6,centaurs:10,pirates:9,elves:11,dwarves:7,merfolk:3};
+const PLAYER_COLS=[['Teal','#2f8f88'],['Sky blue','#5aa7e0'],['Royal blue','#4a74d6'],['Deep blue','#2a4a8a'],['Violet','#8656b8'],['Rose','#c4508a'],['Crimson','#c0392f'],['Dark red','#7e2420'],['Amber','#c07a2e'],['Gold','#d4a836'],['Leaf green','#5fb070'],['Forest green','#2f6b3a']];
+let pickedCol=null,pickedArt=false;
 function teamCol(){return S&&S.col&&!S.players?S.col:S&&S.fac?FAC[S.fac].col:'#2f8f88';}
 
 /* ================= MAP ================= */
@@ -4226,8 +4233,7 @@ async function pickMap(opt={}){
     <h3 class="gsec">Rivals and towns</h3>
     <div class="maprow setup">${mode==='multi'?`<span class="label">Players</span>${[2,3,4,5].map(n=>`<button class="dchip${n===np?' on':''}" data-np="${n}">${n}</button>`).join('')}`:`<span class="label">Rivals</span>${[1,2,3,4,5,6].map(n=>`<button class="dchip${n===NR()?' on':''}" data-nr="${n}" ${n>maxR()?'disabled title="Four Rivers has room for four rivals"':`title="Play against ${n} rival banner${n>1?'s':''}, each with a home town to build up. Picks the recommended map size."`}>${n}</button>`).join('')}`}
       <span class="label" title="Free towns that become full towns once captured: build them up like your home">Great towns</span>${[0,1,2,3,4,5,6].map(n=>`<button class="dchip${n===NM()?' on':''}" data-nm="${n}" title="${n} free great town${n===1?'':'s'}: capture one and build it up like your home">${n}</button>`).join('')}
-      <span class="label" title="Small outposts: gold and a few recruits; some are held by a rogue hero">Outposts</span>${OUTW.map((w,i)=>`<button class="dchip${i===no?' on':''}" data-no="${i}" title="${w} outposts (gold and a few recruits; some held by a rogue)">${w}</button>`).join('')}
-      <button class="dchip${art?' on':''}" data-art="1" title="Each starting hero carries one random artifact">✦ Start with an artifact</button></div>
+      <span class="label" title="Small outposts: gold and a few recruits; some are held by a rogue hero">Outposts</span>${OUTW.map((w,i)=>`<button class="dchip${i===no?' on':''}" data-no="${i}" title="${w} outposts (gold and a few recruits; some held by a rogue)">${w}</button>`).join('')}</div>
     <h3 class="gsec">Map</h3>
     <div class="maprow">${Object.entries(MAP_SIZES).map(([k,z])=>`<button class="dchip${k===size?' on':''}${k===REC_SIZE[mode==='multi'?np-1:NR()]?' rec':''}" data-size="${k}" title="${z.W}×${z.H} tiles · ${Math.round(z.limit/28)} months${k===REC_SIZE[mode==='multi'?np-1:NR()]?' · recommended':''}">${z.label}${k===REC_SIZE[mode==='multi'?np-1:NR()]?' ★':''}</button>`).join('')}<button class="dchip" data-reroll="1" title="Roll a new layout">↻ New layout</button><button class="dchip" data-mkmap="1" title="Open the map editor">🗺 Make your own map</button>
       <span class="muted msize">${MAP_SIZES[size].W}×${MAP_SIZES[size].H} · ${Math.round(MAP_SIZES[size].limit/28)} months</span></div>
@@ -4238,7 +4244,7 @@ async function pickMap(opt={}){
   const body=$('#modal').querySelector('.body');
   body.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
     if(b.dataset.mkmap){$('#modal')._close('edit');return;}
-    if(b.dataset.mode)mode=b.dataset.mode;else if(b.dataset.diff)diff=b.dataset.diff;else if(b.dataset.np){np=+b.dataset.np;size=REC_SIZE[np-1];}else if(b.dataset.map){type=b.dataset.map;if(type==='rivers'&&NR()>4)nr=4;}else if(b.dataset.size){size=b.dataset.size;nm=null;}else if(b.dataset.nr){nr=+b.dataset.nr;size=REC_SIZE[nr];nm=null;}else if(b.dataset.nm)nm=+b.dataset.nm;else if(b.dataset.no)no=+b.dataset.no;else if(b.dataset.art)art=!art;else if(b.dataset.reroll)seed=(Math.random()*1e9)|0;else return;body.innerHTML=html();});
+    if(b.dataset.mode)mode=b.dataset.mode;else if(b.dataset.diff)diff=b.dataset.diff;else if(b.dataset.np){np=+b.dataset.np;size=REC_SIZE[np-1];}else if(b.dataset.map){type=b.dataset.map;if(type==='rivers'&&NR()>4)nr=4;}else if(b.dataset.size){size=b.dataset.size;nm=null;}else if(b.dataset.nr){nr=+b.dataset.nr;size=REC_SIZE[nr];nm=null;}else if(b.dataset.nm)nm=+b.dataset.nm;else if(b.dataset.no)no=+b.dataset.no;else if(b.dataset.reroll)seed=(Math.random()*1e9)|0;else return;body.innerHTML=html();});
   const v=await p;if(v==='edit')return{edit:true};if(v!=='go')return null;
   if(type.startsWith('custom:')){const id=type.slice(7),m=loadMaps().find(x=>x.id===id);if(m)return{type:'custom',custom:id,size:m.size,seed,mode,diff,majors:NM(),outposts:no,artifact:art,nPlayers:mode==='multi'?Math.min(np,1+m.objs.filter(o=>o.type==='camp'&&!o.free).length):1};}
   return{type,size,seed,mode,diff,rivals:Math.min(maxR(),NR()),majors:NM(),outposts:no,artifact:art,nPlayers:mode==='multi'?np:1};
@@ -4304,10 +4310,12 @@ async function pickHero(fk,opt={}){
       <details class="hmore"><summary>Details ▾</summary><div class="hmbox"><ul class="hkit"><li><b>★ ${h.ab}:</b> ${h.ad}</li>${h.sk.map(k=>`<li><b>${SK[k].name}:</b> ${SK[k].desc}</li>`).join('')}${h.item?`<li><b>${ITEMS[h.item].name}:</b> ${itemTxt(h.item)}</li>`:''}${book(h)?`<li><b>Spells:</b> ${(h.sp.length?h.sp:['ember']).map(k=>SP[k].name).join(', ')}</li>`:''}</ul>${h.blank?'<p class="muted"><i>Name still to come.</i></p>':''}</div></details></div>`).join('')}</div>`;
   const defCol=PLAYER_COLS[BANNER_SW[fk]??0][1];pickedCol=opt.who?null:defCol;
   const colRow=opt.who?'':`<div class="colpick"><span class="label">Your colour</span>${PLAYER_COLS.map(([n,c])=>`<button class="colsw${c===defCol?' on':''}" data-col="${c}" title="${n}${c===defCol?' (this banner\'s colour)':''}" style="--sw:${c}" aria-label="${n}"></button>`).join('')}<span class="flagprev" title="Your flag" style="--fc:${defCol}"><i></i><b><img src="${iconURL('crest',fk,52)}" alt=""></b></span></div>`;
-  const pr=showModal({title:`<img src="${iconURL('crest',fk,52)}" alt="" style="width:44px;height:44px;vertical-align:-12px;margin-right:8px;image-rendering:pixelated">${opt.who?opt.who+' · ':''}${f.arch}: choose your hero`,body:colRow+body,wide:true,top:true,buttons:[{label:'◂ Back to banners',value:'back'}]});
+  pickedArt=false;const artRow=opt.who?'':`<button class="artpick" data-artpick="1" title="Your starting hero carries one random artifact (level 1-3)"><img src="${ART_BASE}artifacts/sun_amulet.png" alt=""><span>Start with an artifact</span><b class="tick">✓</b></button>`;
+  const pr=showModal({title:`<img src="${iconURL('crest',fk,52)}" alt="" style="width:44px;height:44px;vertical-align:-12px;margin-right:8px;image-rendering:pixelated">${opt.who?opt.who+' · ':''}${f.arch}: choose your hero`,body:`<div class="hpicktop">${colRow}${artRow}</div>`+body,wide:true,top:true,buttons:[{label:'◂ Back to banners',value:'back'}]});
   const m=$('#modal');let picked=null;
   const paint=c=>{m.querySelectorAll('.hcard').forEach(x=>x.style.setProperty('--c',c));{const fp=m.querySelector('.flagprev');if(fp)fp.style.setProperty('--fc',c);}m.querySelectorAll('.colsw').forEach(x=>x.classList.toggle('on',x.dataset.col===c));};
-  m.querySelector('.body').addEventListener('click',e=>{const sw=e.target.closest('[data-col]');if(sw){pickedCol=sw.dataset.col;paint(pickedCol);return;}if(e.target.closest('details'))return;const c=e.target.closest('.hcard'),b=c&&c.querySelector('[data-hero]');if(b){picked=b.dataset.hero;m._close('hero');}});
+  if(!opt.who)paint(defCol);
+  m.querySelector('.body').addEventListener('click',e=>{const sw=e.target.closest('[data-col]');if(sw){pickedCol=sw.dataset.col;paint(pickedCol);return;}const ap=e.target.closest('[data-artpick]');if(ap){pickedArt=!pickedArt;ap.classList.toggle('on',pickedArt);return;}if(e.target.closest('details'))return;const c=e.target.closest('.hcard'),b=c&&c.querySelector('[data-hero]');if(b){picked=b.dataset.hero;m._close('hero');}});
   const v=await pr;return v==='hero'?picked:null;
 }
 
@@ -4343,7 +4351,7 @@ async function defeat(why){S.over=true;clearSave();
 async function startNew(){S=null;applyTheme();const mo=await pickMap();if(!mo){title();return;}if(mo.edit){openEditor();return;}
   if(mo.mode==='multi'){const ps=[];for(let i=0;i<mo.nPlayers;i++)ps.push(await pickFaction({who:`Player ${i+1}`,exclude:ps.map(p=>p.fk)}));
     mo.players=ps;newGame(ps[0].fk,ps[0].hid,mo);afterLoad();save();await handoff();openTown();return;}
-  const{fk,hid}=await pickFaction();newGame(fk,hid,mo);if(pickedCol)S.col=pickedCol;afterLoad();save();openTown();}
+  const{fk,hid}=await pickFaction();mo.artifact=pickedArt;newGame(fk,hid,mo);if(pickedCol)S.col=pickedCol;afterLoad();save();openTown();}
 /* v17 roster: troops from older saves move to the new troop of the same tier */
 const OLD_ROSTER={wizards:['inkling','hound','sentinel','owl','magus'],necro:['thrall','rats','wraith','barrow','hiero'],centaurs:['hounds','skirm','badger','lancer','bearw'],
   pirates:['deckhand','powder','duelist','harpoon','cannon'],elves:['sprite','longbow','dryad','dancer','stag'],dwarves:['delver','bolt','anvil','smith','ram'],merfolk:['shell','coral','eel','seahorse','choir']};
@@ -4551,7 +4559,7 @@ $('#edPanel').addEventListener('click',async e=>{const t=e.target.closest('[data
   else if(ac){const a=ac.dataset.eact;
     if(a==='save')edSave();
     else if(a==='play'){const m=edSave();edClose();const mo=await pickMap({custom:m.id});if(!mo){title();return;}if(mo.edit){openEditor();return;}
-      const{fk,hid}=await pickFaction();newGame(fk,hid,mo);if(pickedCol)S.col=pickedCol;afterLoad();save();openTown();}
+      const{fk,hid}=await pickFaction();mo.artifact=pickedArt;newGame(fk,hid,mo);if(pickedCol)S.col=pickedCol;afterLoad();save();openTown();}
     else if(a==='exit'){if(!ED.saved){const v=await showModal({title:'Leave the editor?',body:'<p>Your changes are not saved.</p>',buttons:[{label:'Save and leave',value:'s',primary:true},{label:'Leave without saving',value:'l'},{label:'Stay',value:null}],dismiss:null});if(!v)return;if(v==='s')edSave();}
       edClose();title();}}});
 function edClose(){document.getElementById('app').classList.remove('editing');$('#edPanel').hidden=true;S=null;terrainCv=null;terrainPh=null;}
