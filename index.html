@@ -860,6 +860,14 @@ img.upg{filter:sepia(.55) saturate(1.9) hue-rotate(-12deg) brightness(1.06) drop
 .hpicktop{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:8px}.hpicktop .colpick{margin:0}
 .artpick{display:inline-flex;align-items:center;gap:8px;padding:5px 12px 5px 6px;font:800 16px var(--f-display);color:#f4ecd2;background:linear-gradient(#2d4fb8,#162e7a);border:3px solid #0b1a4f;cursor:pointer}
 .artpick img{width:30px;height:30px;image-rendering:pixelated;background:rgba(255,255,255,.15);border-radius:3px}.artpick .tick{display:none;color:#ffd24a}.artpick.on{border-color:#ffd24a;box-shadow:0 0 0 2px #ffd24a}.artpick.on .tick{display:inline}
+.sico{display:inline-block;flex:none;vertical-align:middle;background-image:url(assets/ui/setup_icons.png);background-repeat:no-repeat;image-rendering:pixelated;margin-right:6px}
+.dchip{display:inline-flex;align-items:center}.dchip[data-nr] .sico,.dchip[data-nm] .sico,.dchip[data-np] .sico{margin:0}
+.mode b{display:flex;align-items:center;gap:2px}.legend span{gap:2px}.legend{margin-top:4px}
+#modal header .btn .sico,#modal footer .btn .sico{margin:0 6px}
+.sheet:has(.tbanner) footer .btn{display:inline-flex;align-items:center;justify-content:center}
+.qh-name{color:var(--qh-player-color,#fff2d2)!important;font-weight:900;-webkit-text-stroke:3px #000;paint-order:stroke fill;text-shadow:0 1px 0 #000}
+.hcard h3.qh-name{--qh-player-color:var(--c);letter-spacing:.02em}
+.sheet:has(.gm-top) .gsec{margin:6px 0 4px;padding:3px 12px;font-size:15px}.sheet:has(.gm-top) .mprev{max-height:min(200px,24vh);object-fit:cover}.sheet:has(.gm-top) .maprow{margin:2px 0}
 </style>
 
 <div id="app">
@@ -1536,7 +1544,7 @@ function iconURL(kind,key,size=64){
   if(kind==='stat'&&UI_STAT[key])return ART_BASE+`ui/icons/${UI_STAT[key]}.png`;
   if(kind==='ui')return ART_BASE+`ui/icons/${key}.png`;
   if(kind==='gem')return ART_BASE+`gems/${key}.png`;
-  if(kind==='hero'&&ART_PORTRAITS.has(key))return ART_BASE+`portraits/heroes/${key}_128.png?v=27`;
+  if(kind==='hero'&&ART_PORTRAITS.has(key))return ART_BASE+`portraits/heroes/${key}_128.png?v=30`;
   if(kind==='unit'&&ENEMY_ART[key])return ART_BASE+`portraits/enemies/${ENEMY_ART[key]}_64.png`;
   if(kind==='unit'&&stripArt(key))return ART_BASE+`portraits/units/${stripArt(key)}_128.png`;
   if(kind==='unit'&&unitArt(key))return ART_BASE+`portraits/units/${unitArt(key)}_64.png`;
@@ -2818,7 +2826,7 @@ function renderUI(){
   const sw=S.heroes.length>1?`<div class="herosw">${S.heroes.map((x,i)=>`<button class="hsel${i===S.cur?' on':''}" data-hsel="${i}" title="${x.name}${x.mp>0?' (can still move)':''}"><img src="${iconURL('hero',x.id,84)}" alt="${x.name}">${x.mp>60?'<i></i>':''}</button>`).join('')}</div>`:'';
   const mm=maxMana(),mx=maxMP();
   $('#heroCard').innerHTML=`<div class="hgrid">
-    <div class="hmain"><div class="hportrait"><img src="${iconURL('hero',h.id,128)}" alt="${esc(h.name)}"><div class="hcap"><div class="hname"><b>${esc(h.name)}</b><button class="rename-ic" data-rename-hero="1" title="Rename ${esc(h.name)}">✎</button></div><div class="label">${hd.type} hero · Level ${h.lvl}</div></div><button class="hbook${h.book?'':' none'}" data-book="1" title="${h.book?'Open the spellbook':'No spellbook yet: buy one at the Lantern Library'}"><img src="${ART_BASE}ui/icons/spellbook.png" alt="">${h.book?`${h.spells.length} spell${h.spells.length===1?'':'s'}`:'No book'}</button></div>
+    <div class="hmain"><div class="hportrait"><img src="${iconURL('hero',h.id,128)}" alt="${esc(h.name)}"><div class="hcap"><div class="hname"><b class="qh-name" style="--qh-player-color:${teamCol()}">${esc(h.name)}</b><button class="rename-ic" data-rename-hero="1" title="Rename ${esc(h.name)}">✎</button></div><div class="label">${hd.type} hero · Level ${h.lvl}</div></div><button class="hbook${h.book?'':' none'}" data-book="1" title="${h.book?'Open the spellbook':'No spellbook yet: buy one at the Lantern Library'}"><img src="${ART_BASE}ui/icons/spellbook.png" alt="">${h.book?`${h.spells.length} spell${h.spells.length===1?'':'s'}`:'No book'}</button></div>
       <div class="hstats">${['atk','def','pow','lore'].map(k=>`<div class="hs" title="${STAT_TIP[k]}"><b>${hst(h,k)}${carry(h,k)?`<em>+${carry(h,k)}</em>`:''}</b><span class="hsl"><img src="${iconURL('stat',k,44)}" alt="">${STATN[k]}</span></div>`).join('')}</div>
       <div class="hbars">
         <div class="meter"><span>Mana</span><span>${h.mana} / ${mm}</span></div><div class="bar mana"><i style="width:${mm?h.mana/mm*100:0}%"></i></div>
@@ -4221,26 +4229,29 @@ function drawPreview(w){
   }
   return cv.toDataURL();
 }
+/* Setup Icons pack: 70 icons of 64×64 in ui/setup_icons.png, 10 a row (SICONS order); ico(name, css px) */
+const SICONS=["all_banners","amber","attack","back","banner_blank_1","banner_blank_2","banner_blank_3","banner_blank_4","banner_blank_5","banner_blank_6","choose_banner","conquest","continue","defense","difficulty_easy","difficulty_expert","difficulty_hard","difficulty_normal","dock","gem","glass_lair","gold","grail_quest","guards","health","horse_travel","load_game","lore","luck","map","map_editor","map_extra_large","map_large","map_medium","map_small","moonwater","morale","multiplayer","music","new_campaign","new_layout","next","ore","outpost","outposts_few","outposts_many","outposts_some","portal","power","relic_hunt","rivals_1","rivals_2","rivals_3","rivals_4","rivals_5","rivals_6","settings","speed","spellbook","spire","starting_artifact","town","towns_0","towns_1","towns_2","towns_3","towns_4","towns_5","towns_6","wood"];
+const ico=(n,px=28)=>{const i=SICONS.indexOf(n);if(i<0)return'';const k=px/64;return`<span class="sico" style="width:${px}px;height:${px}px;background-size:${640*k}px ${448*k}px;background-position:-${(i%10)*64*k}px -${Math.floor(i/10)*64*k}px" aria-hidden="true"></span>`;};
 const REC_SIZE={1:'small',2:'medium',3:'large',4:'large',5:'xl',6:'xl'};
 async function pickMap(opt={}){
   const mine=loadMaps().filter(m=>m.objs.some(o=>o.type==='town')&&m.objs.filter(o=>o.type==='relic').length>=7);
   let type=opt.custom?'custom:'+opt.custom:'wheel',size='large',seed=(Math.random()*1e9)|0,mode='relic',np=2,diff='normal',nr=3,nm=4,no=1,art=false;
   const NR=()=>nr??MAP_SIZES[size].rivals,NM=()=>nm??MAP_SIZES[size].majors,OUTW=['Few','Some','Many'];
   const maxR=()=>type==='rivers'?4:6;
-  const html=()=>`<div class="gm-top"><div class="diffs" role="group" aria-label="Difficulty"><span class="label">Difficulty</span>${Object.entries(DIFF).map(([k,d])=>`<button class="dchip${k===diff?' on':''}" data-diff="${k}" title="${d.desc}"><i>${DIFF_ICON[k]}</i>${d.name}</button>`).join('')}</div></div>
+  const html=()=>`<div class="gm-top"><div class="diffs" role="group" aria-label="Difficulty"><span class="label">Difficulty</span>${Object.entries(DIFF).map(([k,d])=>`<button class="dchip${k===diff?' on':''}" data-diff="${k}" title="${d.desc}">${ico('difficulty_'+k)}${d.name}</button>`).join('')}</div></div>
     <h3 class="gsec">Game mode</h3>
-    <div class="modes4">${Object.entries(MODES).map(([k,m])=>`<button class="mode${k===mode?' on':''}" data-mode="${k}" title="${m.desc}"><b>${m.n}. ${m.name}</b><span>${MODE_SHORT[k]}</span></button>`).join('')}</div>
+    <div class="modes4">${Object.entries(MODES).map(([k,m])=>`<button class="mode${k===mode?' on':''}" data-mode="${k}" title="${m.desc}"><b>${ico({relic:'relic_hunt',conquest:'conquest',grail:'grail_quest',multi:'multiplayer'}[k],40)}${m.name}</b><span>${MODE_SHORT[k]}</span></button>`).join('')}</div>
     <h3 class="gsec">Rivals and towns</h3>
-    <div class="maprow setup">${mode==='multi'?`<span class="label">Players</span>${[2,3,4,5].map(n=>`<button class="dchip${n===np?' on':''}" data-np="${n}">${n}</button>`).join('')}`:`<span class="label">Rivals</span>${[1,2,3,4,5,6].map(n=>`<button class="dchip${n===NR()?' on':''}" data-nr="${n}" ${n>maxR()?'disabled title="Four Rivers has room for four rivals"':`title="Play against ${n} rival banner${n>1?'s':''}, each with a home town to build up. Picks the recommended map size."`}>${n}</button>`).join('')}`}
-      <span class="label" title="Free towns that become full towns once captured: build them up like your home">Great towns</span>${[0,1,2,3,4,5,6].map(n=>`<button class="dchip${n===NM()?' on':''}" data-nm="${n}" title="${n} free great town${n===1?'':'s'}: capture one and build it up like your home">${n}</button>`).join('')}
-      <span class="label" title="Small outposts: gold and a few recruits; some are held by a rogue hero">Outposts</span>${OUTW.map((w,i)=>`<button class="dchip${i===no?' on':''}" data-no="${i}" title="${w} outposts (gold and a few recruits; some held by a rogue)">${w}</button>`).join('')}</div>
+    <div class="maprow setup">${mode==='multi'?`<span class="label">Players</span>${[2,3,4,5].map(n=>`<button class="dchip${n===np?' on':''}" data-np="${n}">${ico('rivals_'+Math.min(6,n),28)}</button>`).join('')}`:`<span class="label">Rivals</span>${[1,2,3,4,5,6].map(n=>`<button class="dchip${n===NR()?' on':''}" data-nr="${n}" ${n>maxR()?'disabled title="Four Rivers has room for four rivals"':`title="Play against ${n} rival banner${n>1?'s':''}, each with a home town to build up. Picks the recommended map size."`} aria-label="${n} rivals">${ico('rivals_'+n,32)}</button>`).join('')}`}
+      <span class="label" title="Free towns that become full towns once captured: build them up like your home">Great towns</span>${[0,1,2,3,4,5,6].map(n=>`<button class="dchip${n===NM()?' on':''}" data-nm="${n}" title="${n} free great town${n===1?'':'s'}: capture one and build it up like your home" aria-label="${n} great towns">${ico('towns_'+n,32)}</button>`).join('')}
+      <span class="label" title="Small outposts: gold and a few recruits; some are held by a rogue hero">Outposts</span>${OUTW.map((w,i)=>`<button class="dchip${i===no?' on':''}" data-no="${i}" title="${w} outposts (gold and a few recruits; some held by a rogue)">${ico('outposts_'+w.toLowerCase(),28)}${w}</button>`).join('')}</div>
     <h3 class="gsec">Map</h3>
-    <div class="maprow">${Object.entries(MAP_SIZES).map(([k,z])=>`<button class="dchip${k===size?' on':''}${k===REC_SIZE[mode==='multi'?np-1:NR()]?' rec':''}" data-size="${k}" title="${z.W}×${z.H} tiles · ${Math.round(z.limit/28)} months${k===REC_SIZE[mode==='multi'?np-1:NR()]?' · recommended':''}">${z.label}${k===REC_SIZE[mode==='multi'?np-1:NR()]?' ★':''}</button>`).join('')}<button class="dchip" data-reroll="1" title="Roll a new layout">↻ New layout</button><button class="dchip" data-mkmap="1" title="Open the map editor">🗺 Make your own map</button>
+    <div class="maprow">${Object.entries(MAP_SIZES).map(([k,z])=>`<button class="dchip${k===size?' on':''}${k===REC_SIZE[mode==='multi'?np-1:NR()]?' rec':''}" data-size="${k}" title="${z.W}×${z.H} tiles · ${Math.round(z.limit/28)} months${k===REC_SIZE[mode==='multi'?np-1:NR()]?' · recommended':''}">${ico({small:'map_small',medium:'map_medium',large:'map_large',xl:'map_extra_large'}[k],28)}${z.label}${k===REC_SIZE[mode==='multi'?np-1:NR()]?' ★':''}</button>`).join('')}<button class="dchip" data-reroll="1" title="Roll a new layout">${ico('new_layout',28)}New layout</button><button class="dchip" data-mkmap="1" title="Open the map editor">${ico('map_editor',28)}Make your own map</button>
       <span class="muted msize">${MAP_SIZES[size].W}×${MAP_SIZES[size].H} · ${Math.round(MAP_SIZES[size].limit/28)} months</span></div>
     <div class="maps4">${Object.entries(MAP_TYPES).map(([k,m])=>`<button class="mapc${k===type?' on':''}" data-map="${k}" title="${m.desc}"><span class="mimg"><img class="mprev" src="${mapPreviewURL(k,size,seed,Math.min(k==='rivers'?4:6,mode==='multi'?np-1:NR()))}" alt="Preview of ${m.name}"><span class="mdesc">${m.desc}</span></span><b>${m.name}</b><small class="mbio">${biomeOf(seed).name}</small></button>`).join('')}</div>
     ${mine.length?`<div class="maprow mine"><span class="label">Your maps</span>${mine.map(m=>`<button class="dchip mmap${type==='custom:'+m.id?' on':''}" data-map="custom:${m.id}" title="${esc(m.name)} · ${m.W}×${m.H}"><img src="${customPreviewURL(m)}" alt="">${esc(m.name)}</button>`).join('')}</div>`:''}
-    <div class="legend"><span><i style="background:${FAC.rangers.col}"></i>Your town</span><span><i style="background:#c0582e;border-radius:50%"></i>Rivals</span><span><i style="background:${RELICS[0].col};border-radius:50%"></i>Relics</span><span><i style="background:${RELICS[6].col};border-radius:50%"></i>Glass Lair</span><span><b style="color:#d9452a">✕</b> Guards</span><span><i style="background:#c46bff;border-radius:50%"></i>Portals</span><span><i style="background:#e8e4f4;border:1px solid #888"></i>Spires</span><span><i style="background:#d9b48a"></i>Docks</span></div>`;
-  const p=showModal({title:'Choose your game',body:html(),wide:true,top:true,buttons:[{label:'Back',value:null},{label:'Next: choose banners ▸',value:'go',primary:true}],dismiss:null});
+    <div class="legend">${[['town','Your town'],['banner_blank_2','Rivals'],['relic_hunt','Relics'],['glass_lair','Glass Lair'],['guards','Guards'],['portal','Portals'],['spire','Spires'],['dock','Docks'],['outpost','Outposts']].map(([i,t])=>`<span>${ico(i,24)}${t}</span>`).join('')}</div>`;
+  const p=showModal({title:'Choose your game',body:html(),wide:true,top:true,buttons:[{label:`${ico('back',24)}Back`,value:null},{label:`Next: choose banners${ico('next',24)}`,value:'go',primary:true}],dismiss:null});
   const body=$('#modal').querySelector('.body');
   body.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
     if(b.dataset.mkmap){$('#modal')._close('edit');return;}
@@ -4302,7 +4313,7 @@ async function pickHero(fk,opt={}){
   const f=FAC[fk],list=HEROES.filter(h=>h.fac===fk&&!h.rogue);
   const book=h=>h.type==='Magic'||h.sp.length>0;
   const body=`<div class="picks heroes4">${list.map(h=>`<div class="pick hcard" style="--c:${f.col};--c2:${f.col2}"><button class="fpick" data-hero="${h.id}" aria-label="Choose ${esc(h.name)}"></button>
-      <h3>${esc(h.name)}</h3>
+      <h3 class="qh-name">${esc(h.name)}</h3>
       <span class="hport"><img src="${iconURL('hero',h.id,128)}" alt=""></span>
       <div class="sub">${h.type} hero <span class="bk${book(h)?'':' none'}" title="${book(h)?'Starts with a spellbook':'No spellbook: buy one at the Lantern Library'}">📖</span></div>
       <div class="bigstats">${['atk','def','pow','lore'].map((k,i)=>`<span title="${STAT_TIP[k]}"><em><img src="${iconURL('stat',k,44)}" alt="">${STATN[k]}</em><b>${h.st[i]}</b></span>`).join('')}</div>
@@ -4310,7 +4321,7 @@ async function pickHero(fk,opt={}){
       <details class="hmore"><summary>Details ▾</summary><div class="hmbox"><ul class="hkit"><li><b>★ ${h.ab}:</b> ${h.ad}</li>${h.sk.map(k=>`<li><b>${SK[k].name}:</b> ${SK[k].desc}</li>`).join('')}${h.item?`<li><b>${ITEMS[h.item].name}:</b> ${itemTxt(h.item)}</li>`:''}${book(h)?`<li><b>Spells:</b> ${(h.sp.length?h.sp:['ember']).map(k=>SP[k].name).join(', ')}</li>`:''}</ul>${h.blank?'<p class="muted"><i>Name still to come.</i></p>':''}</div></details></div>`).join('')}</div>`;
   const defCol=PLAYER_COLS[BANNER_SW[fk]??0][1];pickedCol=opt.who?null:defCol;
   const colRow=opt.who?'':`<div class="colpick"><span class="label">Your colour</span>${PLAYER_COLS.map(([n,c])=>`<button class="colsw${c===defCol?' on':''}" data-col="${c}" title="${n}${c===defCol?' (this banner\'s colour)':''}" style="--sw:${c}" aria-label="${n}"></button>`).join('')}<span class="flagprev" title="Your flag" style="--fc:${defCol}"><i></i><b><img src="${iconURL('crest',fk,52)}" alt=""></b></span></div>`;
-  pickedArt=false;const artRow=opt.who?'':`<button class="artpick" data-artpick="1" title="Your starting hero carries one random artifact (level 1-3)"><img src="${ART_BASE}artifacts/sun_amulet.png" alt=""><span>Start with an artifact</span><b class="tick">✓</b></button>`;
+  pickedArt=false;const artRow=opt.who?'':`<button class="artpick" data-artpick="1" title="Your starting hero carries one random artifact (level 1-3)">${ico('starting_artifact',32)}<span>Start with an artifact</span><b class="tick">✓</b></button>`;
   const pr=showModal({title:`<img src="${iconURL('crest',fk,52)}" alt="" style="width:44px;height:44px;vertical-align:-12px;margin-right:8px;image-rendering:pixelated">${opt.who?opt.who+' · ':''}${f.arch}: choose your hero`,body:`<div class="hpicktop">${colRow}${artRow}</div>`+body,wide:true,top:true,buttons:[{label:'◂ Back to banners',value:'back'}]});
   const m=$('#modal');let picked=null;
   const paint=c=>{m.querySelectorAll('.hcard').forEach(x=>x.style.setProperty('--c',c));{const fp=m.querySelector('.flagprev');if(fp)fp.style.setProperty('--fc',c);}m.querySelectorAll('.colsw').forEach(x=>x.classList.toggle('on',x.dataset.col===c));};
@@ -4607,7 +4618,7 @@ async function title(){
   const has=loadSave();
   const v=await showModal({title:'',body:`<img class="tbanner" src="${ART_BASE}ui/banner.png" alt="Questing Heroes"><p>Choose how you want to play: hunt the Seven Relics, conquer every rival, chase the roaming Grail Keepers, or pass the device around for a hot-seat game with friends. Then pick your land, your banner and your hero.</p>
    <p class="muted">Follow the weekly rumours, break through the guarded passes, grow your town, upgrade your troops and hire more heroes. Battles are fought turn by turn on a hex field, and faster stacks act first.</p>`,
-   buttons:[{label:'Load game',value:'l',disabled:!loadSlots().length},...(has?[{label:`Continue as ${esc(has.heroes[0].name)}`,value:'c'}]:[]),{label:'New campaign',value:'n',primary:true}]});
+   buttons:[{label:`${ico('load_game',36)}Load game`,value:'l',disabled:!loadSlots().length},...(has?[{label:`${ico('continue',36)}Continue as ${esc(has.heroes[0].name)}`,value:'c'}]:[]),{label:`${ico('new_campaign',36)}New campaign`,value:'n',primary:true}]});
   if(v==='l'){const r=await loadGame();if(r!=='loaded')title();return;}
   if(v==='c'&&has){S=has;afterLoad();}else startNew();
 }
