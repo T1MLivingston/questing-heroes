@@ -8,7 +8,7 @@ This is a **private, personal project**. See `LEGAL.md` before publishing anythi
 
 ## Technology Stack
 
-- **Frontend**: Single HTML file with inline CSS and JavaScript
+- **Frontend**: `index.html` (markup) + `css/game.css` + plain scripts in `js/` loaded in order (v30 split; no modules, no build: they share one global scope, so later files can use anything declared earlier)
 - **Rendering**: HTML5 Canvas 2D API (map and battlefield), DOM for panels and dialogs
 - **Art**: Sprite PNGs in `assets/` where they exist (map terrain, rivers, bridges and scenery, battle rocks, every troop (Rangers as 4×5 sheets, the rest as Pack 10 strips), 5 hero map sprites, hero portraits); everything else is still drawn in code, and the drawn version is the fallback for any missing image
 - **Fonts**: Alegreya SC (display, numbers, canvas text) and Alegreya (body) from Google Fonts (SIL Open Font License): a chunky serif
@@ -19,7 +19,11 @@ This is a **private, personal project**. See `LEGAL.md` before publishing anythi
 
 ```
 questing-heroes/
-├── index.html    # Complete game (HTML + CSS + JavaScript)
+├── index.html    # Page markup; loads css/game.css and js/*.js in order
+├── css/game.css  # All styles (asset URLs are ../assets/...)
+├── js/           # 00-core helpers, 01-data, 02-art, 03-map (generators, camera, drawing, pathfinding),
+│                 # 04-ui, 05-adventure, 06-rivals, 07-town, 08-battle, 09-start (pickers),
+│                 # 10-save (end states, saves, Hall of Fame), 11-input, 12-editor, 13-boot
 ├── CLAUDE.md     # This file
 ├── ART_REQUEST_TROOPS.md # Brief for the troop sprite pack (delivered as Pack 10)
 ├── ART_REQUEST_TOWNS.md  # Brief for the town buildings pack (Pack 13)
@@ -38,7 +42,7 @@ questing-heroes/
 
 ## Architecture
 
-The script in `index.html` is split into sections marked with `/* ===== ... ===== */` or `/* -------- ... -------- */` comments:
+The script in `js/*.js` (one file per section below; the old single-file markers are kept at the top of each file) is split into sections marked with `/* ===== ... ===== */` or `/* -------- ... -------- */` comments:
 
 | Section | What it holds |
 |---------|---------------|
@@ -152,6 +156,17 @@ Everything lives in one object, `S`, so it can be saved as JSON:
 - Town advisor (`buildAdvisor`, before `endDay`): each town that built nothing today offers its next building (troops first, `autoPick`, built by `doBuild`); Save my gold ends the day; Stop asking sets `S.noAdvisor` (toggle in the ☰ menu).
 - Rival tracking: visible rivals walk step by step during `rivalsTurn` with the camera following; `rv.seen` keeps where you last saw each one, drawn as a faded ghost ("seen day N") on the map and minimap for a week.
 - Resources: gems (Gem Grotto mines, gem pickups, pearls) and moonwater (Moonwater Spring mines, flask piles, sea crystals). One of each rare mine per base, farther out and guarded. Upper buildings, upgrades and mine level 3 cost them. The Alchemist's Still (`still`, any town) unlocks `ALCHEMY` in the Market (3 ore + 250 gold → 1 gem; 2 amber + 250 gold → 1 moonwater); prices in `PRICE`.
+
+### v30 balance and depth
+
+- Rival economy (`06-rivals.js`): `S.rivEco[fac]` = gold and a recruit pool. `rivalEconomy(weekly)` runs each day before `rivalsTurn`: income from the rival's home hall, captured towns and mines (`rivalIncome`); each week its dwellings muster, it buys the best troops (upgraded once `u1`-`u5` are built), hires mercenaries at +30% with spare gold, builds up to two (Expert three) `RIVAL_PLAN` buildings (`RIVAL_COST`), retrains troops, and from week 3 (week 2 on Hard/Expert) hires a second hero (third on Expert). Recruits join a hero near home or wait in the home garrison; rivals come home to collect them (`tg.pickup`). `growRival` now only adds a stat. `DIFF.agg` (`aggMul`) scales how readily rivals attack your heroes, camps and town.
+- Battle AI (`08-battle.js`): the enemy hero (rival or outpost keeper) casts one spell a round from its banner's `FAC_SPELLS` (`enemyCast`, mana = Lore × 10); Warding cuts the damage. Pinned shooters step back to shoot; melee stacks hold the line behind their own archers or walls. Attacking a walled town (`o.built` with a wall level) is a siege: a wall line with one gate (`bt.wall`, drawn in `drawBattle`), defenders +wall level defense, and two towers on Bastion that fire each round (`towersFire`).
+- Economy: weekly army upkeep, 3% of every fielded or garrisoned troop's price (`upkeepNow`, shown in the top bar); unpaid upkeep gives −2 morale for the week (`S.unpaid`), and negative morale can make stacks falter. Captured towns send 60% of their hall's gold (`COLONY`). Market prices rise 12% per unit bought and fall 8% per unit sold within a week (`mkt`, `buyPrice`, `sellPrice`); each alchemy batch costs 100 more gold that week (`alchCost`). Gem and moonwater mines and pickups yield less.
+- Skills: three levels, Basic, Advanced and Expert (`h.skLv`, `skLevel`, `skL`, `SK_TXT`); every skill scales with level. New skills Estates (+250 gold a day per level), Learning (+10% XP) and Sorcery (+15% spell Power). Each level-up offers a stat, then a skill pick: a new skill (up to six, `SK_MAX`) or an upgrade.
+- Spells: Weaken, Frost Lance, Rally and Meteor joined the lists (`SP`, `FAC_SPELLS`, altars).
+- Stats and fame (`10-save.js`): `S.stats` counts battles won and lost, foes slain, towns taken and rival heroes beaten; the victory and defeat screens show them with a score (`scoreOf`, scaled by difficulty) and the rank in the Hall of Fame (`questing-heroes-fame` in localStorage, top 20; open it from the title).
+- New games show a loading bar while the map is generated and painted (`loading`).
+- Hero panel: the portrait grows with the window up to a square (`.hportrait` height clamp), the mana and movement bars carry their labels, and army tiles shrink on short screens.
 
 ### Map furniture
 
