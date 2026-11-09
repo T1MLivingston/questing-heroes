@@ -74,4 +74,4 @@ The heroes are named after people (and possibly pets) from the author's life: Be
 - [ ] Review every sprite made with AI tools for resemblance to existing characters or art, and log it above.
 - [ ] Decide on a license (keep All Rights Reserved, or pick an open-source license on purpose).
 - [ ] If the game collects any data (saves stay in the browser today), add a privacy note.
-- [ ] Make the GitHub repository private, or keep it local until this list is done.
+- [ ] Keep the GitHub repository private (it now also holds all the art) until this list is done.
