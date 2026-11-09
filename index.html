@@ -821,7 +821,7 @@ img.upg{filter:sepia(.55) saturate(1.9) hue-rotate(-12deg) brightness(1.06) drop
 .sheet:has(.tbanner) .body p{font-size:18px}
 .sheet:has(.tbanner) footer{display:flex;justify-content:center;gap:14px;padding:14px 22px 22px}
 .sheet:has(.tbanner) footer .btn{flex:1 1 0;font-size:23px;min-height:62px;padding:12px 10px}
-.wgrid{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin:6px 0}.wgrid div{background:rgba(255,255,255,.35);border:1px solid var(--rule);padding:6px;text-align:center}.wgrid em{display:block;font-style:normal;font-size:13px;color:var(--muted)}.wgrid b{font:700 22px var(--f-display)}
+.wgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin:6px 0}.wgrid div{background:rgba(255,255,255,.35);border:1px solid var(--rule);padding:6px;text-align:center}.wgrid em{display:block;font-style:normal;font-size:13px;color:var(--muted)}.wgrid b{font:700 22px var(--f-display)}
 .wrow{display:grid;grid-template-columns:44px 1fr;gap:10px;align-items:start;margin:8px 0}.wrow img{width:44px}.wrow p{margin:2px 0 0}
 .advl{display:grid;gap:8px}.advr{display:grid;grid-template-columns:40px 1fr auto;gap:10px;align-items:center;padding:6px 8px;background:rgba(255,255,255,.35);border:1px solid var(--rule)}.advr img{width:40px}.advr small{display:block;color:var(--muted)}
 @media (max-width:700px){.wgrid{grid-template-columns:repeat(3,1fr)}}
@@ -868,6 +868,11 @@ img.upg{filter:sepia(.55) saturate(1.9) hue-rotate(-12deg) brightness(1.06) drop
 .qh-name{color:var(--qh-player-color,#fff2d2)!important;font-weight:900;-webkit-text-stroke:3px #000;paint-order:stroke fill;text-shadow:0 1px 0 #000}
 .hcard h3.qh-name{--qh-player-color:var(--c);letter-spacing:.02em}
 .sheet:has(.gm-top) .gsec{margin:6px 0 4px;padding:3px 12px;font-size:15px}.sheet:has(.gm-top) .mprev{max-height:min(200px,24vh);object-fit:cover}.sheet:has(.gm-top) .maprow{margin:2px 0}
+#yield .upk{color:#7a2a1e;font-weight:700;margin-left:6px}#yield .upk.bad{color:#fff;background:#a3271c;padding:0 4px;border-radius:3px}
+.endgrid{grid-template-columns:repeat(7,1fr)}.endscore{display:flex;align-items:baseline;justify-content:center;gap:12px;margin:12px 0 4px;font-family:var(--f-display)}.endscore span{font-size:18px;color:var(--muted)}.endscore b{font-size:40px;color:var(--blue-dk)}.endscore small{font-size:16px;color:#7a5a12}
+.fame{width:100%;border-collapse:collapse;font-size:16px}.fame th{text-align:left;font-family:var(--f-display);border-bottom:2px solid var(--rule);padding:4px}.fame td{padding:4px;border-bottom:1px solid var(--rule)}.fame img{width:20px;height:20px;vertical-align:-4px}
+@media (max-width:700px){.endgrid{grid-template-columns:repeat(3,1fr)}}
+#loadbar{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;background:rgba(8,12,34,.72)}#loadbar[hidden]{display:none}#loadbar .lbox{background:var(--vellum-2);border:4px solid #f0c766;padding:18px 26px;min-width:320px;text-align:center;font-family:var(--f-display);color:var(--blue-dk);font-size:22px}#loadbar .lbar{height:16px;margin-top:12px;background:#1b2550;border:2px solid #0b1a4f}#loadbar .lbar i{display:block;height:100%;width:0;background:linear-gradient(#ffe08a,#d4a836);transition:width .25s}
 </style>
 
 <div id="app">
@@ -1029,6 +1034,10 @@ const SP={
   swift:{name:'Swift Wind',cost:4,target:'ally',desc:()=>'Gives an allied stack +3 speed for the battle.'},
   bark:{name:'Bark Skin',cost:5,target:'ally',desc:()=>'Gives an allied stack +5 defense for the battle.'},
   starfall:{name:'Starfall',cost:12,target:'all',desc:p=>`Deals ${10+6*p} damage to every enemy stack.`},
+  weaken:{name:'Weaken',cost:5,target:'enemy',desc:p=>`An enemy stack loses ${3+Math.floor(p/3)} attack for the battle.`},
+  frost:{name:'Frost Lance',cost:7,target:'enemy',desc:p=>`Deals ${14+9*p} damage and gives -2 speed for the battle.`},
+  rally:{name:'Rally',cost:6,target:'ally',desc:p=>`Heals ${10+8*p} and gives +2 morale for the battle.`},
+  meteor:{name:'Meteor',cost:14,target:'enemy',desc:p=>`Deals ${25+14*p} damage to one stack and half that to enemies beside it.`},
 };
 const SK={
   shieldcraft:{name:'Shieldcraft',rank:'A',desc:'Your troops take 5% less damage.'},
@@ -1044,7 +1053,19 @@ const SK={
   meditation:{name:'Meditation',rank:'B',desc:'+2 mana regained each day.'},
   command:{name:'Command Presence',rank:'A',desc:'+1 morale: a chance of extra turns in battle.'},
   fortune:{name:'Fortune’s Favor',rank:'B',desc:'+1 luck: a chance of double damage.'},
+  estates:{name:'Estates',rank:'B',desc:'+250 gold a day.'},
+  learning:{name:'Learning',rank:'C',desc:'+10% experience from battles.'},
+  sorcery:{name:'Sorcery',rank:'A',desc:'Your spells work at +15% Power.'},
 };
+/* skill levels (v30): Basic, Advanced, Expert. h.skLv[k] holds 2 or 3; a skill without an entry is Basic. Level-ups offer new skills or upgrades. */
+const SK_LV=['','Basic','Advanced','Expert'],SK_MAX=6;
+const SK_TXT={shieldcraft:l=>`Your troops take ${5*l}% less damage.`,bladework:l=>`Your troops deal ${10*l}% more melee damage.`,steadyaim:l=>`Your troops deal ${10*l}% more ranged damage.`,
+  forcedmarch:l=>`+${10*l}% movement on the map.`,arcane:l=>`Spells cost ${l>=3?2:1} less mana (minimum 1).`,deepres:l=>`+${25*l}% maximum mana.`,battleplan:l=>`Your army deploys ${Math.min(2,l)} hex${l>1?'es':''} further forward.`,
+  farsight:l=>`+${l} vision radius.`,seamanship:l=>`Sailing costs ${[0,30,40,50][l]}% less movement.`,warding:l=>`Enemy spells deal ${15*l}% less damage.`,meditation:l=>`+${2*l} mana regained each day.`,
+  command:l=>`+${l} morale: a chance of extra turns in battle.`,fortune:l=>`+${l} luck: a chance of double damage.`,estates:l=>`+${250*l} gold a day.`,learning:l=>`+${10*l}% experience from battles.`,sorcery:l=>`Your spells work at +${15*l}% Power.`};
+const skLevel=(h,k)=>!h||!h.skills.includes(k)?0:((h.skLv||{})[k]||1);
+const skL=k=>S&&S.heroes&&S.heroes[S.cur]?skLevel(HERO(),k):0;
+const skName=(h,k)=>`${SK[k].name}${skLevel(h,k)>1?` (${SK_LV[skLevel(h,k)]})`:''}`;
 /* heroes: st = [attack, defense, power, lore]; fx = what the signature ability does */
 const HEROES=[
   {id:'bear',name:'Bear',fac:'centaurs',type:'Might',st:[2,2,1,1],ab:'Great Bear',ad:'Lions +2 attack and +2 defense.',sk:['shieldcraft'],sp:[],fx:{unitAtk:{lion:2},unitDef:{lion:2}}},
@@ -1209,7 +1230,7 @@ for(const fk of Object.keys(FAC))for(const k of FAC[fk].units){const b=U[k];U[k+
 Object.assign(U.cannon_u,{name:'Great Crossbow',pl:'Great Crossbows',g:['cannon','#7a5a32'],desc:'A huge crossbow that hurls spears across the field. Devastating at range. Very slow.'});
 /* mines come in three levels; pay at the mine to raise its output */
 const MINE={saw:{name:'Sawmill',res:'timber',out:[1,2,3]},orepit:{name:'Ore Pit',res:'ore',out:[1,2,3]},gold:{name:'Gold Seam',res:'gold',out:[500,750,1000]},amber:{name:'Amber Spring',res:'amber',out:[1,2,3]},
-  gem:{name:'Gem Grotto',res:'gems',out:[1,2,2]},moon:{name:'Moonwater Spring',res:'moonwater',out:[1,2,2]}};
+  gem:{name:'Gem Grotto',res:'gems',out:[1,1,2]},moon:{name:'Moonwater Spring',res:'moonwater',out:[1,1,2]}};
 const MINE_UP=[null,{gold:1500,timber:3,ore:3},{gold:3000,timber:6,ore:6,gems:2}];
 const mineOut=o=>MINE[o.k].out[(o.lvl||1)-1]+(delivered(4)?(MINE[o.k].res==='gold'?250:1):0);
 /* weekly sites refill every Monday */
@@ -1509,7 +1530,7 @@ const WX={gem:[0,0,128,64,2],moon:[128,0,128,64,2],fair:[256,0,96,64,1],moonwate
 function wxAt(c,key,x,y,sc,fms=450){const q=WX[key],a=artImg('map/world_extras.png');if(!q||!a.ok)return false;const fw=q[2]/q[4],f=q[4]>1?Math.floor(performance.now()/fms)%q[4]:0;
   c.imageSmoothingEnabled=false;c.drawImage(a.img,q[0]+f*fw,q[1],fw,q[3],Math.round(x-fw*sc/2),Math.round(y-(q[3]-3)*sc),Math.round(fw*sc),Math.round(q[3]*sc));return true;}
 const PILE_ART=new Set(['gold','timber','ore','amber']);
-const GEMS={ruby:{name:'Ruby',n:3},sapphire:{name:'Sapphire',n:2},emerald:{name:'Emerald',n:2},amethyst:{name:'Amethyst',n:2},moonstone:{name:'Moonstone',n:2,res:'moonwater'}};
+const GEMS={ruby:{name:'Ruby',n:2},sapphire:{name:'Sapphire',n:1},emerald:{name:'Emerald',n:1},amethyst:{name:'Amethyst',n:1},moonstone:{name:'Moonstone',n:1,res:'moonwater'}};
 function spriteAt(c,path,x,y,sc,frames=1,fms=150){const a=artImg(path);if(!a.ok)return false;const im=a.img,fw=im.width/frames,f=frames>1?Math.floor(performance.now()/fms)%frames:0;
   c.imageSmoothingEnabled=false;c.drawImage(im,f*fw,0,fw,im.height,Math.round(x-fw*sc/2),Math.round(y-(im.height-4)*sc),Math.round(fw*sc),Math.round(im.height*sc));return true;}
 const unitArt=k=>{const u=U[k];return u?ART_UNITS[u.up?u.base:k]||null:null;};
@@ -1580,10 +1601,11 @@ function teamCol(){return S&&S.col&&!S.players?S.col:S&&S.fac?FAC[S.fac].col:'#2
 /* ================= MAP ================= */
 let W=34,H=26;const TS=44;
 const DIFF={
-  easy:{name:'Easy',res:{gold:10000,timber:25,ore:25,amber:8,gems:6,moonwater:6},rv:0.75,mon:0.8,desc:'10,000 gold and plenty of materials. Rivals start smaller and grow slowly; wild creatures are fewer.'},
-  normal:{name:'Normal',res:{gold:5000,timber:15,ore:15,amber:4,gems:2,moonwater:2},rv:1,mon:1,desc:'5,000 gold. Rivals are your match.'},
-  hard:{name:'Hard',res:{gold:2500,timber:8,ore:8,amber:2,gems:0,moonwater:0},rv:1.3,mon:1.25,desc:'2,500 gold and scarce materials. Rivals start bigger and grow faster; wild creatures are 25% stronger.'},
-  expert:{name:'Expert',res:{gold:1500,timber:5,ore:5,amber:0,gems:0,moonwater:0},rv:1.6,mon:1.5,desc:'1,500 gold and almost no materials. Rivals start far bigger and grow fastest; wild creatures and guards are 50% stronger.'}};
+  easy:{name:'Easy',res:{gold:10000,timber:25,ore:25,amber:8,gems:6,moonwater:6},rv:0.75,mon:0.8,agg:0.7,desc:'10,000 gold and plenty of materials. Rivals start smaller and grow slowly; wild creatures are fewer.'},
+  normal:{name:'Normal',res:{gold:5000,timber:15,ore:15,amber:4,gems:2,moonwater:2},rv:1,mon:1,agg:1,desc:'5,000 gold. Rivals are your match.'},
+  hard:{name:'Hard',res:{gold:2500,timber:8,ore:8,amber:2,gems:0,moonwater:0},rv:1.3,mon:1.25,agg:1.3,desc:'2,500 gold and scarce materials. Rivals start bigger and grow faster; wild creatures are 25% stronger.'},
+  expert:{name:'Expert',res:{gold:1500,timber:5,ore:5,amber:0,gems:0,moonwater:0},rv:1.6,mon:1.5,agg:1.6,desc:'1,500 gold and almost no materials. Rivals start far bigger and grow fastest; wild creatures and guards are 50% stronger.'}};
+const aggMul=()=>DIFF[(S&&S.diff)||'normal'].agg||1;
 const monMul=()=>DIFF[(S&&S.diff)||'normal'].mon||1;
 const rvMul=()=>DIFF[(S&&S.diff)||'normal'].rv;
 /* sizes sit below the classic genre's 36/72/108/144 squares because our tiles are shown larger; free towns are the neutral towns per map */
@@ -2160,6 +2182,8 @@ function placeSpires(bases,add){
     if(best<0)break;picked.push(best);}
   for(const i of picked)add({type:'spire',x:i%W,y:(i/W)|0,owned:false,garrison:[]});
 }
+/* captured towns send home only part of their hall's gold (v30) */
+const COLONY=0.6;
 const isMajor=o=>!!o&&o.type==='camp'&&(!!o.major||(!o.free&&!!o.fac));
 const myMajors=()=>S&&S.objs&&!S.players?S.objs.filter(o=>isMajor(o)&&o.owned===ME()&&o.built):[];
 const allTowns=()=>S&&S.town?[S.town,...myMajors()]:[];
@@ -2174,7 +2198,7 @@ function captureCamp(o,h){o.owned=ME();o.ownerName=h.name;o.garrison=[];if(isMaj
   if(o.keeper){const id=o.keeper;o.keeper=null;S.jailed=(S.jailed||[]).filter(x=>x!==id);return id;}return null;}
 const campTiers=o=>o.station?3:o.free?(o.lvl||1)+1:2;
 const firstPool=o=>{const u=FAC[o.fac].units,p={};for(let i=0;i<campTiers(o);i++)p[u[i]]=Math.ceil(U[u[i]].growth/2);return p;};
-const campIncome=o=>isMajor(o)&&o.built?hallGold(o):o.station?250:o.free?[500,750,1000][(o.lvl||1)-1]:500;
+const campIncome=o=>isMajor(o)&&o.built?Math.round(hallGold(o)*COLONY):o.station?250:o.free?[500,750,1000][(o.lvl||1)-1]:500;
 const TOWN_LVL=['','Village','Town','City'],MON_LVL=['','weak','','strong','elite'];
 const campName=o=>isMajor(o)?(o.name||(o.free?`free ${FAC[o.fac].arch} town`:`${FAC[o.fac].arch} home town`)):o.station?`${FAC[o.fac].arch} recruiting post`:o.free?`${FAC[o.fac].arch} outpost`:`${FAC[o.fac].arch} camp`;
 const spireFoe=o=>o&&((o.type==='spire'&&o.owned&&o.owned!==ME())||(o.type==='camp'&&o.owned!==ME()&&!S.players))&&(o.garrison||[]).length>0;
@@ -2217,14 +2241,14 @@ function furnishMap(bases){
       if(g)add({type:'neutral',x:g.x,y:g.y,...(l===3?{k:'troll',n:ri(5,8)}:l===4?{k:'imp',n:ri(30,40)}:{k:'troll',n:ri(14,18)})});}}
   // sage libraries (choose a +2 stat) and spell altars in three tiers; the stronger ones farther out and guarded
   for(let i=0;i<Math.max(1,Math.round(KS));i++){const p=freeTile(dist,...band(0.25+0.3*i/Math.max(1,KS),0.6+0.2*i/Math.max(1,KS)),3);if(p)add({type:'sage',x:p.x,y:p.y,used:[]});}
-  const ALT=[[1,['swift','bark','ember','mend','entangle'],0.15,0.45],[2,['chain','squall','raise'],0.4,0.75],[3,['starfall'],0.7,1]];
+  const ALT=[[1,['swift','bark','ember','mend','entangle','weaken'],0.15,0.45],[2,['chain','squall','raise','frost','rally'],0.4,0.75],[3,['starfall','meteor'],0.7,1]];
   for(const[tier,pool,a,b]of ALT)for(let i=0;i<Math.max(1,Math.round((tier===3?0.6:1)*KS));i++){const p=freeTile(dist,...band(a,b),3);if(!p)continue;add({type:'altar',x:p.x,y:p.y,tier,spell:pick(pool)});
     if(tier>1){const g=[[1,0],[-1,0],[0,1],[0,-1]].map(([dx,dy])=>({x:p.x+dx,y:p.y+dy})).find(q=>inb(q.x,q.y)&&passableT(S.tiles[idx(q.x,q.y)])&&!objAt(q.x,q.y)&&!townFoot(q.x,q.y));
       if(g)add({type:'neutral',x:g.x,y:g.y,...(tier===2?{k:'imp',n:ri(18,26)}:{k:'troll',n:ri(12,16)})});}}
   {const RVs=new Set(S.rivers||[]),wet=[];for(let i=0;i<W*H;i++){if(S.tiles[i]!==T.LAKE||RVs.has(i)||!dist.has(i))continue;const x=i%W,y=(i/W)|0;if(x<2||y<2||x>W-3||y>H-3)continue;if(!S.objs.some(o=>Math.abs(o.x-x)<=1&&Math.abs(o.y-y)<=1))wet.push(i);}
     const nF=clamp(Math.round(wet.length/45),wet.length?2:0,10),ks=Object.keys(FLOT);for(let k=0;k<nF&&wet.length;k++){const i=wet.splice(Math.floor(R()*wet.length),1)[0];add({type:'flot',k:ks[k%ks.length],x:i%W,y:(i/W)|0});}}
   for(let i=0;i<Math.round(7*KS*jit());i++){const p=freeTile(dist,...band(0.15,0.95),2);if(p)add({type:'gem',k:pick(Object.keys(GEMS)),x:p.x,y:p.y});}
-  for(let i=0;i<Math.round(3*KS*jit());i++){const p=freeTile(dist,...band(0.2,0.95),2);if(p)add({type:'pile',k:'moonwater',n:ri(1,3),x:p.x,y:p.y});}
+  for(let i=0;i<Math.round(3*KS*jit());i++){const p=freeTile(dist,...band(0.2,0.95),2);if(p)add({type:'pile',k:'moonwater',n:ri(1,2),x:p.x,y:p.y});}
   for(const o of S.objs)if(o.type==='stone'&&!o.style)o.style=pick(FAC_ORDER);
   // recruiting posts: every banner gets a small, lightly guarded post of its own troops in its home area
   for(const b of bases){if(!b.fac)continue;const dB=reachFrom(b.x,b.y+1);const p=freeTile(dB,5,10,3)||freeTile(dB,4,14,2);if(!p)continue;const g=neutralAt(0.12);
@@ -2299,17 +2323,17 @@ function newGame(fk,hid,mo={}){
   if(!w.noFurnish){const bases=[{x:S.town.x,y:S.town.y,fac:S.fac},...(S.players?S.players.slice(1).map(q=>({x:q.town.x,y:q.town.y,fac:q.fac})):S.rivals.map(r=>({x:r.x,y:r.y,fac:r.fac})))];furnishMap(bases);}
 }
 function reveal(cx,cy,r){for(let y=cy-r;y<=cy+r;y++)for(let x=cx-r;x<=cx+r;x++)if(inb(x,y)&&(x-cx)**2+(y-cy)**2<=r*r+1)S.explored[idx(x,y)]=1;}
-const vision=()=>5+(hasSk('farsight')?1:0)+(fx().vision||0)+(S&&S.heroes?gear(HERO(),'vision'):0)+(S&&S.delivered&&delivered(0)?1:0);
-const maxMana=()=>Math.round(hst(HERO(),'lore')*10*(hasSk('deepres')?1.25:1));
+const vision=()=>5+skL('farsight')+(fx().vision||0)+(S&&S.heroes?gear(HERO(),'vision'):0)+(S&&S.delivered&&delivered(0)?1:0);
+const maxMana=()=>Math.round(hst(HERO(),'lore')*10*(1+0.25*skL('deepres')));
 function maxMP(){const sp=HERO().army.length?Math.min(...HERO().army.map(a=>U[a.k].spd+((fx().unitSpd||{})[a.k]||0))):5;
-  let m=900+45*Math.min(sp,9);if(HERO().mount!=='foot')m*=1.4;if(hasSk('forcedmarch'))m*=1.1;m*=1+(gear(HERO(),'mpPct')+(fx().mpPct||0))/100;if(S.event&&S.event.k==='road')m*=1.1;return Math.round(m);}
+  let m=900+45*Math.min(sp,9);if(HERO().mount!=='foot')m*=1.4;m*=1+0.1*skL('forcedmarch');m*=1+(gear(HERO(),'mpPct')+(fx().mpPct||0))/100;if(S.event&&S.event.k==='road')m*=1.1;return Math.round(m);}
 const xpFor=l=>Math.round(1000*l*(1+0.12*(l-1)));
-const income=()=>(S.town.taken?0:hallGold(S.town))+S.heroes.reduce((a,h)=>a+gear(h,'goldDay')+((HBY[h.id]&&HBY[h.id].fx||{}).goldDay||0),0)+S.objs.filter(o=>o.type==='camp'&&o.owned===ME()).reduce((a,o)=>a+campIncome(o),0);
+const income=()=>(S.town.taken?0:hallGold(S.town))+S.heroes.reduce((a,h)=>a+250*skLevel(h,'estates')+gear(h,'goldDay')+((HBY[h.id]&&HBY[h.id].fx||{}).goldDay||0),0)+S.objs.filter(o=>o.type==='camp'&&o.owned===ME()).reduce((a,o)=>a+campIncome(o),0);
 function dateParts(d=S.day){const m=Math.floor((d-1)/28)+1,w=Math.floor(((d-1)%28)/7)+1,dd=(d-1)%7+1;return{m,w,d:dd};}
 const LIMIT=112;
 function terrainCost(x,y){
   const t=tileAt(x,y);
-  if(t===T.LAKE){const sea=carry(HERO(),'sea');if(HERO().boat)return hasSk('seamanship')||sea?45:65;if(FAC[S.fac].travel==='swim')return sea?40:50;return Infinity;}
+  if(t===T.LAKE){const sea=carry(HERO(),'sea');if(HERO().boat){const sl=skL('seamanship');return sea?Math.min(45,[65,45,39,33][sl]):[65,45,39,33][sl];}if(FAC[S.fac].travel==='swim')return sea?40:50;return Infinity;}
   if(!passableT(t))return Infinity;
   let c=TCOST[t];if(FAC[S.fac].travel==='swim')c=Math.round(c*1.5);if((t===T.HEATH||t===T.BOG)&&gear(HERO(),'bogFree'))c=100;if((t===T.HEATH||t===T.BOG)&&fx().terrainCut)c*=fx().terrainCut;return c;
 }
@@ -2820,7 +2844,7 @@ function renderUI(){
   applyTheme();
   $('#res').innerHTML=RES.map(k=>`<span class="${k}" title="${RESNAME[k]}"><img src="${iconURL('res',k,40)}" alt="${RESNAME[k]}">${fmt(S.res[k])}</span>`).join('');
   {const y=Object.fromEntries(RES.map(k=>[k,0]));y.gold=income();for(const o of S.objs)if(o.type==='mine'&&o.owned===ME())y[MINE[o.k].res]+=mineOut(o);if(!S.town.taken){if(facSpecial('amberDay'))y.amber+=1;if(facSpecial('oreDay'))y.ore+=2;}
-    $('#yield').innerHTML=`<small>per day</small>${RES.map(k=>y[k]?`<span><img src="${iconURL('res',k,32)}" alt="${RESNAME[k]}">+${fmt(y[k])}</span>`:'').join('')}`;}
+    $('#yield').innerHTML=`<small>per day</small>${RES.map(k=>y[k]?`<span><img src="${iconURL('res',k,32)}" alt="${RESNAME[k]}">+${fmt(y[k])}</span>`:'').join('')}${S.players?'':`<span class="upk${unpaid()?' bad':''}" title="Army upkeep, paid each week (3% of every troop's price)${unpaid()?'. Unpaid this week: −2 morale':''}">−${fmt(upkeepNow())}/wk</span>`}`;}
   const d=dateParts();$('#date').innerHTML=`<span>Month ${d.m} · Week ${d.w} · Day ${d.d}</span><em>${S.event&&S.event.k!=='plain'?`${S.event.name} · `:''}${S.limit-S.day+1} days left</em>`;$('#date').title=S.event?`${S.event.name}: ${S.event.txt}`:'';
   const h=HERO(),hd=H_(),need=xpFor(h.lvl),prev=h.lvl>1?xpFor(h.lvl-1):0;
   const sw=S.heroes.length>1?`<div class="herosw">${S.heroes.map((x,i)=>`<button class="hsel${i===S.cur?' on':''}" data-hsel="${i}" title="${x.name}${x.mp>0?' (can still move)':''}"><img src="${iconURL('hero',x.id,84)}" alt="${x.name}">${x.mp>60?'<i></i>':''}</button>`).join('')}</div>`:'';
@@ -2887,7 +2911,7 @@ function openHeroSheet(){const h=HERO(),hd=H_();h.pack=h.pack||[];
       return`<div class="dslot${worn.length?'':' none'}"><span class="label">${sl}${cap>1?` (${worn.length}/${cap})`:''}</span>${worn.map(k=>itemBox(k,'w')).join('')}${worn.length<cap?'<div class="eqempty">empty</div>':''}</div>`;}).join('')}</div>
     <div class="sheetside">
       <p style="margin-top:0"><b>★ Ability:</b> ${hd.ad}</p>
-      ${h.skills.length?`<p><b>Skills:</b> ${h.skills.map(k=>`${SK[k].name} (${SK[k].desc.replace(/\.$/,'')})`).join('; ')}</p>`:''}
+      ${h.skills.length?`<p><b>Skills:</b> ${h.skills.map(k=>`${SK[k].name} <i>${SK_LV[skLevel(h,k)]}</i> (${SK_TXT[k](skLevel(h,k)).replace(/\.$/,'')})`).join('; ')}</p>`:''}
       <p><b>Travel:</b> ${travelName()}</p>
       <p class="muted">Attack and Defense make every troop in the army hit harder and take less damage. Power makes spells stronger. Lore sets mana: 10 mana per point, and the hero gets back mana equal to their Lore each day.</p>
       <div class="label">Backpack · click an item to wear it</div><div class="pack">${h.pack.length?h.pack.map(k=>itemBox(k,'p')).join(''):'<p class="muted">Empty.</p>'}</div>
@@ -3157,7 +3181,7 @@ async function arriveTown(tw){tw=tw&&tw!==S.town?tw:null;if(!tw&&S.town.taken){t
 function learnLibrary(){const h=HERO(),t=TW();if(!h.book)return;const add=[];if(t.built.lib1)add.push(...libSpells(1));if(t.built.lib2)add.push(...libSpells(2));
   const fresh=add.filter(s=>!h.spells.includes(s));if(fresh.length){h.spells.push(...fresh);toast(`${h.name} learns ${fresh.map(s=>SP[s].name).join(' and ')}.`);}}
 async function addXP(n){
-  const h=HERO();h.xp+=n;
+  const h=HERO();n=Math.round(n*(1+0.1*skLevel(h,'learning')));h.xp+=n;
   while(h.xp>=xpFor(h.lvl)){
     h.lvl++;const keys=['atk','def','pow','lore'];const a=keys.splice(ri(0,3),1)[0],b=keys[ri(0,2)];
     const what={atk:'All troops deal +5% damage per point over the enemy’s defense.',def:'All troops take less damage.',pow:'Spells hit harder and heal more.',lore:'+10 maximum mana.'};
@@ -3165,6 +3189,13 @@ async function addXP(n){
     const v=await showModal({title:`${h.name} reaches level ${h.lvl}`,body:'<p>Choose what your hero has learned.</p>',
       buttons:[{label:card(a),value:a,primary:true},{label:card(b),value:b}]});
     h[v]++;if(v==='lore')h.mana+=10;renderUI();
+    // then a skill: learn a new one or improve one you have
+    const ups=h.skills.filter(k=>skLevel(h,k)<3),news=h.skills.length<SK_MAX?Object.keys(SK).filter(k=>!h.skills.includes(k)):[];
+    const opts=[];const sh=a=>a.slice().sort(()=>Math.random()-0.5);
+    if(news.length)opts.push(sh(news)[0]);if(ups.length)opts.push(sh(ups)[0]);for(const k of sh([...news,...ups]))if(opts.length<2&&!opts.includes(k))opts.push(k);
+    if(opts.length){const sc=k=>{const nl=skLevel(h,k)+1;return`<div style="display:grid;gap:4px;justify-items:center;text-align:center"><b style="font-size:18px">${SK[k].name}</b><span class="tag ${nl>1?'ok':''}">${nl>1?`${SK_LV[nl-1]} → ${SK_LV[nl]}`:'New skill'}</span><span style="font-size:13px;font-family:var(--f-body)">${SK_TXT[k](nl)}</span></div>`;};
+      const w=await showModal({title:`${h.name}: choose a skill`,body:`<p>${h.skills.length<SK_MAX?`Learn something new or sharpen a skill you have. Heroes can know up to ${SK_MAX} skills, each up to Expert.`:'Sharpen one of your skills.'}</p>`,buttons:opts.map((k,i)=>({label:sc(k),value:k,primary:i===0}))});
+      if(!h.skills.includes(w)){h.skills.push(w);}else{h.skLv=h.skLv||{};h.skLv[w]=skLevel(h,w)+1;}if(w==='deepres')h.mana=Math.min(maxMana(),h.mana);renderUI();}
   }
 }
 /* each week rolls an event */
@@ -3174,14 +3205,20 @@ const EVENTS=[{k:'plain',w:4,name:'A quiet week',txt:'Nothing unusual.'},{k:'bou
   {k:'lean',w:1,name:'Lean Week',txt:'Dwellings muster 25% less.'}];
 function rollEvent(){const tot=EVENTS.reduce((a,e)=>a+e.w,0);let r=Math.random()*tot;const e=EVENTS.find(x=>(r-=x.w)<0)||EVENTS[0];
   const ev={k:e.k,name:e.name,txt:e.txt};if(e.k==='unit'){const i=ri(0,2),k=FAC[S.fac].units[i];ev.unit=k;ev.name=e.name.replace('{u}',U[k].name);ev.txt=e.txt.replace('{p}',U[k].pl);}return ev;}
+/* army upkeep (v30): each week every troop you field or garrison costs 3% of its price (wild recruits count by their health) */
+const troopPrice=k=>U[k].cost||U[k].hp*8;
+function upkeepNow(){let g=0;const add=arr=>{for(const a of arr||[])g+=a.n*troopPrice(a.k)*0.03;};
+  S.heroes.forEach(h=>add(h.army));allTowns().forEach(t=>add(t.garrison));S.objs.forEach(o=>{if((o.type==='camp'&&o.owned===ME()&&!o.built)||(o.type==='spire'&&o.owned===ME()))add(o.garrison);});return Math.round(g);}
+const unpaid=()=>!!(S&&S.unpaid===weekNo());
 function dayUpkeep(weekly){
   const t=S.town,news=[],inc=income();gain('gold',inc);const msg=[t.taken?`no income: ${esc(t.taken.name)} holds ${esc(t.name)}`:`+${fmt(inc)} gold`];
   if(!t.taken){if(facSpecial('amberDay'))gain('amber',1);if(facSpecial('oreDay'))gain('ore',2);}
   if(weekly)for(const o of S.objs)if(o.type==='camp'&&o.owned===ME()&&!o.built){o.pool=o.pool||{};for(const[k,n]of Object.entries(firstPool(o)))o.pool[k]=(o.pool[k]||0)+n;}
   let owned=0;for(const o of S.objs)if(o.type==='mine'&&o.owned===ME()){owned++;gain(MINE[o.k].res,mineOut(o));}
   if(owned)msg.push(`${owned} mine${owned>1?'s':''} paid out`);
-  const cur=S.cur;S.heroes.forEach((h,i)=>{S.cur=i;h.mp=maxMP();if(allTowns().some(q=>specialIn(q,'mpTown')&&h.x===q.x&&h.y===q.y))h.mp=Math.round(h.mp*1.25);h.mana=Math.min(maxMana(),h.mana+Math.max(1,hst(h,'lore'))+(hasSk('meditation')?2:0)+gear(h,'manaRegen')+(facSpecial('manaRegen')?2:0));});S.cur=cur;
+  const cur=S.cur;S.heroes.forEach((h,i)=>{S.cur=i;h.mp=maxMP();if(allTowns().some(q=>specialIn(q,'mpTown')&&h.x===q.x&&h.y===q.y))h.mp=Math.round(h.mp*1.25);h.mana=Math.min(maxMana(),h.mana+Math.max(1,hst(h,'lore'))+2*skL('meditation')+gear(h,'manaRegen')+(facSpecial('manaRegen')?2:0));});S.cur=cur;
   for(const q of allTowns())q.builtToday=false;
+  if(weekly&&!S.players){const up=upkeepNow();if(S.res.gold>=up){S.res.gold-=up;if(up)news.push(`Army upkeep: <b>${fmt(up)}</b> gold paid.`);delete S.unpaid;}else{news.push(`<b>Upkeep unpaid!</b> ${fmt(S.res.gold)} of ${fmt(up)} gold. Your troops grumble: −2 morale this week.`);S.res.gold=0;S.unpaid=weekNo();}}
   if(weekly){const d=dateParts(),ev=S.event||{};if(ev.k==='gold')gain('gold',1000);
     for(const q of allTowns()){if(q.taken)continue;const fk=q.fac||S.fac,F=FAC[fk],fb=FAC_BUILD[fk]||[],gr={};
       const mult=(q.built.muster?1.5:1)*[1,1,1.5,2][wallLvl(q)]*(ev.k==='bounty'?1.25:ev.k==='lean'?0.75:1);
@@ -3239,6 +3276,7 @@ async function endDay(){
       if(left<=0){moving=false;await defeat(`${S.town.taken.name} has held ${S.town.name} for a week. Your banner is broken.`);return;}toast(`<b>${left} day${left>1?'s':''}</b> left to retake ${esc(S.town.name)} from ${esc(S.town.taken.name)}.`);}}
     renderUI();
     const keepId=HERO().id;
+    rivalEconomy(weekly);
     await rivalsTurn();
     {const ki=S.heroes.findIndex(q=>q.id===keepId);if(ki>=0)S.cur=ki;}
   }finally{moving=false;}
@@ -3275,16 +3313,42 @@ function addRumour(first,quiet){
   if(quiet)return msg;if(!first)toast(msg);
 }
 /* -------- rival heroes -------- */
-const RIVAL_PLAN=['hall2','d3','wall1','d4','hall3','muster','wall2','d5','hall4','wall3'];
-function growRival(rv){const u=FAC[rv.fac].units,wk=Math.floor((S.day-1)/7);
-  const camp=S.objs.find(o=>o.type==='camp'&&!o.free&&o.fac===rv.fac);if(camp&&camp.owned)return;
-  // a rival builds up its home town too: one step a week (a second one some weeks on Hard), and its walls and dwellings strengthen the garrison
-  if(camp&&camp.built){const next=()=>RIVAL_PLAN.find(b=>!camp.built[b]);for(let i=0;i<(R()<rvMul()-0.7?2:1);i++){const b=next();if(b)camp.built[b]=1;}
-    const k=u[Math.min(4,[1,2,3,4,5].filter(i=>camp.built['d'+i]).length-1)];const g=camp.garrison.find(a=>a.k===k),n=Math.max(1,Math.ceil(U[k].growth/2*[1,1.25,1.5,2][wallLvl(camp)]));if(g)g.n+=n;else if(camp.garrison.length<7)camp.garrison.push({k,n});}
-  if(camp&&camp.garrison){const g=camp.garrison.find(a=>a.k===u[0]);if(g)g.n+=Math.ceil(U[u[0]].growth/2);else camp.garrison.push({k:u[0],n:Math.ceil(U[u[0]].growth/2)});}
-  const add=(k,n)=>{n=Math.round(n*rvMul());if(n<=0)return;const s=rv.army.find(a=>a.k===k);if(s)s.n+=n;else if(rv.army.length<7)rv.army.push({k,n});};
-  add(u[0],U[u[0]].growth);add(u[1],U[u[1]].growth);add(u[2],Math.round(U[u[2]].growth*0.5));if(wk>=2)add(u[3],Math.round(U[u[3]].growth*0.5));if(wk>=4)add(u[4],1);
-  rv[pick(['atk','def','pow','lore'])]++;}
+const RIVAL_PLAN=['hall2','d3','wall1','d4','u1','hall3','u2','muster','wall2','d5','u3','hall4','u4','wall3','u5'];
+function growRival(rv){rv[pick(['atk','def','pow','lore'])]++;rv.lvl=(rv.lvl||1)+1;}
+/* ---- rival economy (v30): each rival banner earns gold from its home town, its holdings and its mines; each week its
+   town musters recruits, it buys the best it can afford and builds one building; it hires a second hero once rich enough.
+   S.rivEco[fac] = {gold, pool:{unit:n}} */
+const RIVAL_COST={hall2:2500,d3:2000,wall1:1500,d4:3000,u1:800,hall3:5000,u2:1200,muster:1500,wall2:3000,d5:6000,u3:2000,hall4:10000,u4:3000,wall3:5000,u5:5000};
+const rivHome=fac=>S.objs.find(o=>o.type==='camp'&&!o.free&&o.fac===fac);
+function rivEco(fac){S.rivEco=S.rivEco||{};return S.rivEco[fac]||(S.rivEco[fac]={gold:Math.round((DIFF[S.diff||'normal'].res.gold||5000)*rvMul()),pool:{}});}
+function rivalIncome(fac){const home=rivHome(fac);let g=home&&!home.owned&&home.built?hallGold(home):0;
+  for(const o of S.objs){if(o.type==='camp'&&o.owned===fac)g+=campIncome(o);else if(o.type==='mine'&&o.owned===fac)g+=MINE[o.k].res==='gold'?mineOut(o):250*mineOut(o);}
+  return Math.round(g*rvMul());}
+function rivalEconomy(weekly){if(S.players)return;const facs=[...new Set(S.rivals.filter(r=>!r.human).map(r=>r.fac))];
+  for(const fac of facs){const e=rivEco(fac),home=rivHome(fac),u=FAC[fac].units;e.gold+=rivalIncome(fac);
+    if(!weekly||!home||home.owned||!home.built)continue;
+    // muster and recruit, strongest first, keeping a little back for building
+    const mult=(home.built.muster?1.5:1)*[1,1,1.5,2][wallLvl(home)]*rvMul();
+    u.forEach((k,i)=>{if(home.built['d'+(i+1)])e.pool[k]=(e.pool[k]||0)+Math.round(U[k].growth*mult);});
+    const reserve=Math.min(e.gold*0.25,RIVAL_COST[RIVAL_PLAN.find(b=>!home.built[b])]||0),bought=[];
+    for(let i=4;i>=0;i--){const k=u[i],rk=home.built['u'+(i+1)]&&U[k+'_u']?k+'_u':k,n=Math.min(e.pool[k]||0,Math.floor((e.gold-reserve)/Math.max(1,U[rk].cost)));if(n<1)continue;e.gold-=n*U[rk].cost;e.pool[k]-=n;bought.push({k:rk,n});}
+    // spare gold hires mercenaries of the banner's built dwellings at 30% over price, up to another week's growth each
+    for(let i=4;i>=0;i--){if(!home.built['d'+(i+1)])continue;const k=u[i],rk=home.built['u'+(i+1)]&&U[k+'_u']?k+'_u':k,price=Math.round(U[rk].cost*1.3),n=Math.min(Math.round(U[k].growth*rvMul()),Math.floor((e.gold-reserve-1500)/price));if(n<1)continue;e.gold-=n*price;const ex=bought.find(b=>b.k===rk);if(ex)ex.n+=n;else bought.push({k:rk,n});}
+    // recruits join a hero standing near home, otherwise they wait in the town (the garrison, which heroes come back to collect)
+    const near=S.rivals.filter(r=>r.fac===fac&&!r.human&&!r.occupy&&Math.max(Math.abs(r.x-home.x),Math.abs(r.y-home.y))<=4)[0];
+    for(const b of bought){const arr=near?near.army:home.garrison;const ex=arr.find(a=>a.k===b.k);if(ex)ex.n+=b.n;else if(arr.length<7)arr.push({k:b.k,n:b.n});else home.garrison.push(b);}
+    // build one building a week if affordable
+    for(let t=0;t<(S.diff==='expert'?3:2);t++){const nb=RIVAL_PLAN.find(b=>!home.built[b]);if(!nb||e.gold<RIVAL_COST[nb])break;e.gold-=RIVAL_COST[nb];home.built[nb]=1;if(nb[0]==='d')e.pool[u[+nb[1]-1]]=(e.pool[u[+nb[1]-1]]||0)+U[u[+nb[1]-1]].growth;}
+    // older troops are retrained once their dwelling is upgraded
+    for(const r of S.rivals.filter(r=>r.fac===fac&&!r.human))for(const a of r.army){const i=u.indexOf(a.k);if(i>=0&&home.built['u'+(i+1)]&&U[a.k+'_u']&&e.gold>=(U[a.k+'_u'].cost-U[a.k].cost)*a.n){e.gold-=(U[a.k+'_u'].cost-U[a.k].cost)*a.n;a.k=a.k+'_u';}}
+    // a second (or third, on Expert) hero once the banner can afford it
+    const mine=S.rivals.filter(r=>r.fac===fac&&!r.human),cap=S.diff==='expert'?3:2,wk=weekNo();
+    if(mine.length<cap&&wk>=(S.diff==='hard'||S.diff==='expert'?2:3)&&e.gold>=3000){
+      const taken=new Set([...S.heroes.map(h=>h.id),...S.rivals.map(r=>r.id)]),hid=(HEROES.find(h=>h.fac===fac&&!h.rogue&&!taken.has(h.id))||{}).id;
+      if(hid){e.gold-=2500;const nr=mkRival(hid,home.x,home.y);nr.army=[{k:u[0],n:Math.round(160*rvMul()/U[u[0]].hp)},{k:u[1],n:Math.round(80*rvMul()/U[u[1]].hp)}];
+        // take some of the waiting garrison along
+        const g=home.garrison.slice(0,2).map(a=>({k:a.k,n:Math.ceil(a.n/2)}));for(const a of g){const src=home.garrison.find(x=>x.k===a.k);src.n-=a.n;const ex=nr.army.find(x=>x.k===a.k);if(ex)ex.n+=a.n;else nr.army.push(a);}
+        home.garrison=home.garrison.filter(a=>a.n>0);S.rivals.push(nr);if(seenNow(home.x,home.y))toast(`<b>${esc(nr.name)}</b> rides out of ${esc(home.name||FAC[fac].town)} to join the ${FAC[fac].arch}.`);}}}}
 function rivalCost(rv,x,y,goal){
   const t=tileAt(x,y);let c;
   if(t===T.LAKE){if(rv.fac==='pirates')c=65;else if(rv.fac==='merfolk')c=50;else return Infinity;}
@@ -3305,11 +3369,12 @@ function rivalTarget(rv){
     else if(o.type==='neutral'&&o.guard){if(stackPower(o.k,o.n)*1.3<pw)v=14;}
     else if(o.type==='spire'&&o.owned!==rv.fac){if(!o.garrison.length)v=o.owned?14:9;else if(armyPower(o.garrison)*1.4<pw)v=18;}
     if(v)c.push({o,x:o.x,y:o.y,v});}
-  for(const h of S.heroes)if(armyPower(h.army,h)*1.25<pw)c.push({heroObj:h,x:h.x,y:h.y,v:20+h.relics.length*30});
+  for(const h of S.heroes)if(armyPower(h.army,h)*1.25/aggMul()<pw)c.push({heroObj:h,x:h.x,y:h.y,v:(20+h.relics.length*30)*aggMul()});
   // a weak town with no hero at home is a target, after the first week
-  if(!S.players&&!S.town.taken&&S.day>7&&!S.heroes.some(h=>h.x===S.town.x&&h.y===S.town.y)&&townDefense()*1.3<pw)c.push({town:true,x:S.town.x,y:S.town.y,v:28});
+  if(!S.players&&!S.town.taken&&S.day>Math.round(7/aggMul())&&!S.heroes.some(h=>h.x===S.town.x&&h.y===S.town.y)&&townDefense()*1.3/aggMul()<pw)c.push({town:true,x:S.town.x,y:S.town.y,v:28*aggMul()});
   // rivals want their own camp back, and raid holdings of others
-  for(const o of S.objs)if(o.type==='camp'&&o.owned!==rv.fac&&(o.owned||o.free)&&armyPower(o.garrison||[])*1.3<pw)c.push({o,x:o.x,y:o.y,v:!o.free&&o.fac===rv.fac?40:o.free&&!o.owned?16:18});
+  for(const o of S.objs)if(o.type==='camp'&&o.owned!==rv.fac&&(o.owned||o.free)&&armyPower(o.garrison||[])*1.3/aggMul()<pw)c.push({o,x:o.x,y:o.y,v:!o.free&&o.fac===rv.fac?40:o.free&&!o.owned?16:18*aggMul()});
+  {const home=rivHome(rv.fac);if(home&&!home.owned&&home.garrison&&home.garrison.length>1&&armyPower(home.garrison)>pw*0.35)c.push({pickup:home,x:home.x,y:home.y,v:22+Math.min(30,armyPower(home.garrison)/Math.max(1,pw)*20)});}
   c.forEach(q=>q.s=q.v/(Math.hypot(q.x-rv.x,q.y-rv.y)+4));c.sort((a,b)=>b.s-a.s);
   for(const q of c.slice(0,6)){if(Math.hypot(q.x-rv.x,q.y-rv.y)>Math.max(26,(W+H)/2))continue;const p=astar(rv.x,rv.y,q.x,q.y,(x,y,goal)=>rivalCost(rv,x,y,goal));if(p&&p.length){q.path=p;return q;}}
   return null;}
@@ -3335,7 +3400,7 @@ async function weeklyReport(){if(S.players||S.over)return;const d=dateParts(),yo
       <p>Scouts say ${esc(rv.name)} ${covW(covFrac(rv))}. Their coffers look <b>${ww}</b>. Their best troops are <b>${top?U[top.k].pl:'none'}</b>, ${powW(armyPower(rv.army,rv)/best)}.</p>${mineRow(rmines)}</div>
       ${top?`<div class="wtroop" title="Best troop: ${U[top.k].pl}"><img class="${U[top.k].up?'upg':''}" src="${iconURL('unit',top.k,64)}" alt=""><small>Best troop</small><b>${U[top.k].name}</b></div>`:'<div></div>'}</div>`;}).join('');
   await showModal({title:`Weekly report · Month ${d.m}, Week ${d.w}`,body:`<h3 class="gsec">Your kingdom</h3>
-    <div class="wgrid"><div><em>Towns</em><b>${you.length}</b></div><div><em>Outposts</em><b>${S.objs.filter(o=>o.type==='camp'&&o.owned===ME()&&!o.built).length}</b></div><div><em>Heroes</em><b>${S.heroes.length}</b></div><div><em>Gold a day</em><b>${fmt(income())}</b></div><div><em>Land explored</em><b>${Math.round(exp*100)}%</b></div><div><em>Best army</em><b>${fmt(best)}</b></div></div>
+    <div class="wgrid"><div><em>Towns</em><b>${you.length}</b></div><div><em>Outposts</em><b>${S.objs.filter(o=>o.type==='camp'&&o.owned===ME()&&!o.built).length}</b></div><div><em>Heroes</em><b>${S.heroes.length}</b></div><div><em>Gold a day</em><b>${fmt(income())}</b></div><div><em>Upkeep a week</em><b>${fmt(upkeepNow())}</b></div><div><em>Land explored</em><b>${Math.round(exp*100)}%</b></div><div><em>Best army</em><b>${fmt(best)}</b></div></div>
     <div class="wsub">Your mines</div>${mineTxt}
     <h3 class="gsec">Rivals</h3>${rivals||'<p class="muted">No rival banners remain.</p>'}`,wide:true,buttons:[{label:'Onward',value:1,primary:true}],dismiss:1});}
 async function rivalsTurn(){
@@ -3360,6 +3425,11 @@ async function rivalsTurn(){
   }
 }
 async function rivalInteract(rv,tg){
+  if(tg.pickup){const home=tg.pickup;rv.x=home.x;rv.y=home.y;
+    // keep the weakest stack home as a token defence; take the rest
+    const g=home.garrison.slice().sort((a,b)=>stackPower(b.k,b.n)-stackPower(a.k,a.n)),keep=g.length>1?g.pop():null;
+    for(const a of g){const ex=rv.army.find(x=>x.k===a.k);if(ex)ex.n+=a.n;else if(rv.army.length<7)rv.army.push({...a});else if(keep){keep.n+=0;}}
+    home.garrison=keep?[keep]:[];return'go';}
   if(tg.town){const t=S.town;if(t.taken||S.heroes.some(h=>h.x===t.x&&h.y===t.y))return'stop';
     const def=townDefense(),lv=wallLvl();centerOn(t.x,t.y,true);
     if(autoResolve(rv,def)){t.garrison=[];t.taken={id:rv.id,name:rv.name,day:S.day};rv.x=t.x;rv.y=t.y;rv.occupy=true;renderUI();
@@ -3390,8 +3460,8 @@ async function rivalInteract(rv,tg){
 
 /* -------- town screen -------- */
 /* each banner's mages teach their own spells: the Library the first two, the Star Archive the rest */
-const FAC_SPELLS={rangers:['mend','swift','entangle','bark','starfall'],wizards:['ember','swift','chain','bark','starfall'],necro:['ember','raise','bark','squall','starfall'],
-  centaurs:['swift','mend','entangle','squall'],pirates:['squall','ember','swift','mend'],elves:['entangle','mend','swift','starfall'],dwarves:['ember','bark','geyser','mend'],merfolk:['squall','mend','chain','swift']};
+const FAC_SPELLS={rangers:['mend','swift','entangle','bark','rally','starfall'],wizards:['ember','swift','chain','frost','bark','meteor','starfall'],necro:['ember','weaken','raise','bark','squall','meteor'],
+  centaurs:['swift','mend','entangle','rally','squall'],pirates:['squall','ember','swift','weaken','mend','meteor'],elves:['entangle','mend','swift','frost','starfall'],dwarves:['ember','bark','geyser','weaken','mend','meteor'],merfolk:['squall','mend','chain','frost','swift','rally']};
 /* towns: S.town is the home town; a captured major town is its camp object (o.major, or a rival's home camp), which carries its own built, pool, garrison and name.
    The town screen works on the viewed town TW() of banner TF(). */
 let VT=null;
@@ -3465,10 +3535,14 @@ function upCost(k,n){const c={gold:Math.max(0,(U[k+'_u'].cost-U[k].cost)*n)};ret
 function maxAfford(k){const c1=unitCost(k,1);let m=Math.floor(S.res.gold/Math.max(1,c1.gold));if(c1.amber)m=Math.min(m,Math.floor(S.res.amber/c1.amber));return m;}
 /* market prices [sell, buy] in gold, and the Alchemist's Still recipes (any town's still works) */
 const PRICE={timber:[100,400],ore:[100,400],amber:[250,900],gems:[300,1100],moonwater:[300,1100]};
+/* market pressure (v30): each unit bought this week raises that good's price 12%, each sold lowers it 8%; each alchemy batch this week costs 100 more gold */
+function mkt(){if(!S.mkt||S.mkt.week!==weekNo())S.mkt={week:weekNo(),b:{},s:{},a:{}};return S.mkt;}
+const buyPrice=k=>Math.round(PRICE[k][1]*(1+0.12*(mkt().b[k]||0))),sellPrice=k=>Math.max(Math.round(PRICE[k][0]*0.4),Math.round(PRICE[k][0]*(1-0.08*(mkt().s[k]||0))));
+const alchCost=id=>({...ALCHEMY[id].cost,gold:ALCHEMY[id].cost.gold+100*(mkt().a[id]||0)});
 const ALCHEMY={gem:{name:'Cut a gem',cost:{gold:250,ore:3},out:'gems'},moon:{name:'Distil moonwater',cost:{gold:250,amber:2},out:'moonwater'}};
 const anyStill=()=>allTowns().some(q=>q.built&&q.built.still);
 function alchemyHTML(){const on=anyStill();return`<h3 class="fd-h" style="margin-top:14px">Alchemist's Still</h3>${on?'':'<p class="muted">Build the Alchemist\'s Still in any of your towns to make gems and moonwater yourself.</p>'}
-  <div class="grid">${Object.entries(ALCHEMY).map(([k,r])=>`<div class="bcard"><h4><img src="${iconURL('res',r.out,32)}" alt="" style="width:18px;vertical-align:-3px"> ${r.name}</h4><div class="cost">${costHTML(r.cost,S.res)}</div><div><button class="btn sm" data-alch="${k}" ${on&&canAfford(r.cost)?'':'disabled'}>Make 1 ${RESNAME[r.out].toLowerCase()}</button></div></div>`).join('')}</div>`;}
+  <div class="grid">${Object.entries(ALCHEMY).map(([k,r])=>`<div class="bcard"><h4><img src="${iconURL('res',r.out,32)}" alt="" style="width:18px;vertical-align:-3px"> ${r.name}</h4><div class="cost">${costHTML(alchCost(k),S.res)}</div><div><button class="btn sm" data-alch="${k}" ${on&&canAfford(alchCost(k))?'':'disabled'}>Make 1 ${RESNAME[r.out].toLowerCase()}</button></div></div>`).join('')}</div>`;}
 const costPlain=c=>Object.entries(c).filter(([,v])=>v>0).map(([k,v])=>`${fmt(v)} ${RESNAME[k].toLowerCase()}`).join(', ');
 const bAvail=b=>!TW().built[b.id]&&!(b.req||[]).some(r=>!TW().built[r]);
 /* the one thing worth doing next */
@@ -3548,7 +3622,7 @@ function townHTML(){
       return unitCard(a.k+'_u',{n:a.n,head:`${U[a.k].pl} → ${U[a.k+'_u'].pl}`,cls:canAfford(c)?'sugg':'',foot:`<div class="cost">${costHTML(c,S.res)}</div><div><button class="btn sm${canAfford(c)?' primary':''}" data-upg="${i}" ${canAfford(c)?'':'disabled'}>Upgrade</button></div>`});}).join(''):'';
     body=upg?`<div class="ugrid">${upg}</div>`:`<p class="muted">${here?`Nothing to upgrade. Build a dwelling upgrade on the Build tab, then upgrade ${h.name}'s troops here.`:'A hero must be in town to upgrade troops.'}</p>`;
   }else if(townTab==='market'){
-    body=t.built.market?`<div class="grid">${RES.filter(k=>k!=='gold').map(k=>{const[sell,buy]=PRICE[k];
+    body=t.built.market?`<div class="grid">${RES.filter(k=>k!=='gold').map(k=>{const sell=sellPrice(k),buy=buyPrice(k);
       return`<div class="bcard"><h4><img src="${iconURL('res',k,32)}" alt="" style="width:18px;vertical-align:-3px"> ${RESNAME[k]} · you have ${S.res[k]}</h4><p>Sell for ${sell} gold each, buy for ${buy}.</p>
         <div class="rctl"><button class="btn sm" data-sell="${k}" data-n="1" ${S.res[k]<1?'disabled':''}>Sell 1</button><button class="btn sm" data-sell="${k}" data-n="5" ${S.res[k]<5?'disabled':''}>Sell 5</button>
         <button class="btn sm" data-buy="${k}" data-n="1" ${S.res.gold<buy?'disabled':''}>Buy 1</button><button class="btn sm" data-buy="${k}" data-n="5" ${S.res.gold<buy*5?'disabled':''}>Buy 5</button></div></div>`;}).join('')}</div>${alchemyHTML()}${mineList()}`:`<div class="grid">${locked('The Barter Yard','market')}</div>`;
@@ -3772,11 +3846,11 @@ async function openTown(tw){
     else if(el.dataset.hire){const hx=HBY[el.dataset.hire];if(!hx||S.res.gold<hireCost(hx)||S.heroes.length>=heroCap())return;S.res.gold-=hireCost(hx);const nh=mkHero(el.dataset.hire,t.x,t.y);const t1=FAC[TF()].units[0];nh.army=[{k:recruitKey(t1),n:Math.round(150/U[t1].hp)}];
       if(delivered(5)){nh.book=true;nh.spells.push('starfall');}const cur=S.cur;S.heroes.push(nh);S.cur=S.heroes.length-1;nh.mana=maxMana();nh.mp=maxMP();S.cur=cur;toast(`${nh.name} joins your banner and waits at the town gate.`);refresh();}
     else if(el.dataset.book){const x=S.heroes.find(q=>q.id===el.dataset.book);if(!x||x.book||S.res.gold<BOOK_COST)return;S.res.gold-=BOOK_COST;x.book=true;const cur=S.cur;S.cur=S.heroes.indexOf(x);learnLibrary();x.mana=maxMana();S.cur=cur;toast(`${x.name} now carries a spellbook.`);refresh();}
-    else if(el.dataset.sell){const k=el.dataset.sell,n=+el.dataset.n||1;if(S.res[k]<n)return;S.res[k]-=n;S.res.gold+=PRICE[k][0]*n;refresh();}
-    else if(el.dataset.alch){const r=ALCHEMY[el.dataset.alch];if(!r||!anyStill()||!canAfford(r.cost))return;pay(r.cost);gain(r.out,1);lootPop(`+1 ${RESNAME[r.out].toLowerCase()}`,iconURL('res',r.out,64));refresh();}
+    else if(el.dataset.sell){const k=el.dataset.sell,n=+el.dataset.n||1;if(S.res[k]<n)return;let g=0;for(let i=0;i<n;i++){g+=sellPrice(k);mkt().s[k]=(mkt().s[k]||0)+1;}S.res[k]-=n;S.res.gold+=g;refresh();}
+    else if(el.dataset.alch){const id=el.dataset.alch,r=ALCHEMY[id];if(!r||!anyStill()||!canAfford(alchCost(id)))return;pay(alchCost(id));mkt().a[id]=(mkt().a[id]||0)+1;gain(r.out,1);lootPop(`+1 ${RESNAME[r.out].toLowerCase()}`,iconURL('res',r.out,64));refresh();}
     else if(el.dataset.mineup){const o=S.objs.find(q=>q.id===+el.dataset.mineup);if(!o||(o.lvl||1)>=3)return;const c=MINE_UP[o.lvl||1];if(!canAfford(c))return;pay(c);o.lvl=(o.lvl||1)+1;lootPop(`${MINE[o.k].name} upgraded to level ${o.lvl}`,iconURL('res',MINE[o.k].res,64));refresh();}
     else if(el.dataset.minego){const o=S.objs.find(q=>q.id===+el.dataset.minego);if(o){$('#modal')._close&&$('#modal')._close(null);centerOn(o.x,o.y);}}
-    else if(el.dataset.buy){const k=el.dataset.buy,n=+el.dataset.n||1,c=PRICE[k][1]*n;if(S.res.gold<c)return;S.res.gold-=c;S.res[k]+=n;refresh();}
+    else if(el.dataset.buy){const k=el.dataset.buy,n=+el.dataset.n||1;let c=0;for(let i=0;i<n;i++)c+=Math.round(PRICE[k][1]*(1+0.12*((mkt().b[k]||0)+i)));if(S.res.gold<c)return;S.res.gold-=c;S.res[k]+=n;mkt().b[k]=(mkt().b[k]||0)+n;refresh();}
   });
   await p;VT=null;save();renderUI();
 }
@@ -3805,10 +3879,10 @@ const hasFriendNear=s=>hnb(s.c,s.r).some(([c,r])=>{const o=stackAt(c,r);return o
 const tide=s=>S.fac==='merfolk'&&mine0(s)&&bt.round%3===0;
 const pack=s=>S.fac==='centaurs'&&mine0(s)&&hasFriendNear(s);
 function sAtk(s){let a=s.u.atk+s.buff.atk;if(s.side===0){const f=fx();a+=hst(HERO(),'atk')+((f.unitAtk||{})[s.k]||0);if(S.fac==='dwarves'&&S.town.built.forge&&mine0(s))a++;}else if(bt&&bt.enemyHero)a+=hst(bt.enemyHero,'atk');if(tide(s))a+=2;if(pack(s))a+=2;return a;}
-function sDef(s){let d=s.u.def+s.buff.def+(s.side===1&&bt&&bt.obj&&bt.obj.type==='spire'?3:0);if(s.side===0){const f=fx();d+=hst(HERO(),'def')+((f.unitDef||{})[s.k]||0);if(S.fac==='dwarves'&&S.town.built.forge&&mine0(s))d++;if(S.fac==='rangers'&&mine0(s)&&s.stood)d+=f.rootbound||2;}else if(bt&&bt.enemyHero)d+=hst(bt.enemyHero,'def');if(s.defending)d=Math.ceil(d*1.3);return d;}
+function sDef(s){let d=s.u.def+s.buff.def+(s.side===1&&bt&&bt.obj&&bt.obj.type==='spire'?3:0)+(s.side===1&&bt&&bt.siege?bt.siege:0);if(s.side===0){const f=fx();d+=hst(HERO(),'def')+((f.unitDef||{})[s.k]||0);if(S.fac==='dwarves'&&S.town.built.forge&&mine0(s))d++;if(S.fac==='rangers'&&mine0(s)&&s.stood)d+=f.rootbound||2;}else if(bt&&bt.enemyHero)d+=hst(bt.enemyHero,'def');if(s.defending)d=Math.ceil(d*1.3);return d;}
 function sSpd(s){let v=s.u.spd+s.buff.spd;if(s.side===0)v+=((fx().unitSpd||{})[s.k]||0);if(tide(s))v+=2;if(pack(s))v+=1;return Math.max(1,v);}
-function sMorale(s){if(s.side!==0)return 0;let m=(hasSk('command')?1:0)+(fx().morale||0)+s.buff.morale+carry(HERO(),'morale')+gear(HERO(),'morale');if(pack(s))m+=fx().packMorale||0;return m;}
-const sLuck=s=>s.side===0?(hasSk('fortune')?1:0)+carry(HERO(),'luck')+gear(HERO(),'luck')+((HERO().luckUntil||0)>=S.day?1:0):0;
+function sMorale(s){if(s.side!==0)return 0;let m=(unpaid()?-2:0)+skL('command')+(fx().morale||0)+s.buff.morale+carry(HERO(),'morale')+gear(HERO(),'morale');if(pack(s))m+=fx().packMorale||0;return m;}
+const sLuck=s=>s.side===0?skL('fortune')+carry(HERO(),'luck')+gear(HERO(),'luck')+((HERO().luckUntil||0)>=S.day?1:0):0;
 const totalHP=s=>s.alive?(s.n-1)*s.u.hp+s.hp:0;
 function mkStack(k,n,side,c,r,slot){const u=U[k];let shots=u.shots||0;if(side===0&&u.shots)shots+=((fx().unitShots||{})[k]||0)+gear(HERO(),'shots');
   return{id:Math.random(),k,u,n,n0:n,hp:u.hp,side,c,r,slot,shots,retLeft:u.retal||1,acted:false,waited:false,defending:false,buff:{atk:0,def:0,spd:0,morale:0},alive:true,anim:null,rooted:0,skip:0,stood:false,movedTurn:false,movedLast:false};}
@@ -3817,15 +3891,20 @@ const rowsFor=n=>n===1?[4]:Array.from({length:n},(_,i)=>Math.round(i*(BR-1)/(n-1
 function keeperHero(o){const h=HBY[o.keeper];if(!h)return null;return{id:h.id,name:h.name,fac:h.fac,atk:h.st[0]+2,def:h.st[1]+2,pow:h.st[2]+1,lore:h.st[3]+1,relics:[],items:[],keeper:true};}
 function startBattle(o){
   return new Promise(resolve=>{
-    const stacks=[];const army=HERO().army;const rows=rowsFor(army.length),col0=hasSk('battleplan')?1:0;
+    const stacks=[];const army=HERO().army;const rows=rowsFor(army.length),col0=Math.min(2,skL('battleplan'));
     army.forEach((a,i)=>stacks.push(mkStack(a.k,a.n,0,col0,rows[i],i)));
     if(o.type==='spire'||o.type==='camp'){const ea=o.garrison;const er=rowsFor(ea.length);ea.forEach((a,i)=>stacks.push(mkStack(a.k,a.n,1,BC-1,er[i],i)));}
     else if(o.type==='rival'){const ea=o.rival.army;const er=rowsFor(ea.length);ea.forEach((a,i)=>stacks.push(mkStack(a.k,a.n,1,BC-1,er[i],i)));}
     else{const k=o.type==='relic'&&o.r===6?o.n:clamp(Math.round(Math.sqrt(o.n)),1,Math.min(5,o.n));
     const er=rowsFor(k);for(let i=0;i<k;i++){const n=Math.floor(o.n/k)+(i<o.n%k?1:0);stacks.push(mkStack(o.k,n,1,BC-1,er[i],i));}}
-    const obst=new Set();const no=ri(3,6);for(let i=0;i<no*4&&obst.size<no;i++){const c=ri(3,BC-4),r=ri(0,BR-1);obst.add(hk(c,r));}
+    const obst=new Set();const no=ri(3,6);
+    // a walled town (v30): a wall line three hexes in front of the defenders with one open gate; Bastion adds two shooting towers
+    const sLv=o.type==='camp'&&o.built?wallLvl(o):0,wallSet=new Set();
+    if(sLv){const wc=BC-3,gate=Math.floor(BR/2);for(let r=0;r<BR;r++)if(r!==gate){obst.add(hk(wc,r));wallSet.add(hk(wc,r));}}
+    else for(let i=0;i<no*4&&obst.size<no;i++){const c=ri(3,BC-4),r=ri(0,BR-1);obst.add(hk(c,r));}
     bt={stacks,obst,round:1,active:null,pending:null,targeting:null,spellCast:false,spellsCast:0,auto:false,over:false,log:[],floats:[],fx:[],resolve,obj:o,terr:tileAt(o.x,o.y),hover:null,mouse:null,
-      title:o.type==='camp'?`Battle for the ${campName(o)}`:o.type==='spire'?'Battle for the spire':o.type==='rival'?`Battle with ${o.rival.name}'s army`:o.type==='relic'?`Battle at the ${RELICS[o.r].lair}`:o.guard?'Battle at the guarded pass':`Battle with ${U[o.k].pl}`,rocks:{},forced:null,firstDone:false,geyserUsed:false,corpses:[],enemyHero:o.type==='rival'?o.rival:o.keeper?keeperHero(o):null};
+      title:o.type==='camp'?`Battle for the ${campName(o)}`:o.type==='spire'?'Battle for the spire':o.type==='rival'?`Battle with ${o.rival.name}'s army`:o.type==='relic'?`Battle at the ${RELICS[o.r].lair}`:o.guard?'Battle at the guarded pass':`Battle with ${U[o.k].pl}`,rocks:{},siege:sLv,wall:wallSet,eMana:0,eCast:false,forced:null,firstDone:false,geyserUsed:false,corpses:[],enemyHero:o.type==='rival'?o.rival:o.keeper?keeperHero(o):null};
+    if(bt.enemyHero)bt.eMana=Math.max(1,bt.enemyHero.lore||1)*10;
     $('#battle').hidden=false;$('#btTitle').textContent=bt.title;
     layoutBattle();renderBG();
     logB(o.type==='spire'||o.type==='camp'?'The garrison stands ready. Round 1.':o.type==='rival'?`${o.rival.name}'s army takes the field. Round 1.`:`${fx().exact?o.n:amountWord(o.n)} ${U[o.k].pl} bar the way. Round 1.`);
@@ -3865,8 +3944,8 @@ function canShoot(s){return s.u.shots&&s.shots>0&&!hnb(s.c,s.r).some(([c,r])=>{c
 function dmgRange(a,d,o={}){
   let m=sAtk(a)>=sDef(d)?Math.min(3,1+0.05*(sAtk(a)-sDef(d))):Math.max(0.3,1-0.025*(sDef(d)-sAtk(a)));
   if(o.half)m*=0.5;if(o.charge)m*=1+0.06*o.charge;
-  if(a.side===0){const f=fx();m*=((f.unitDmgPct||{})[a.k]||1);if(o.ranged&&hasSk('steadyaim'))m*=1.1;if(!o.ranged&&hasSk('bladework'))m*=1.1;}
-  if(d.side===0&&hasSk('shieldcraft'))m*=0.95;
+  if(a.side===0){const f=fx();m*=((f.unitDmgPct||{})[a.k]||1);if(o.ranged)m*=1+0.1*skL('steadyaim');if(!o.ranged)m*=1+0.1*skL('bladework');}
+  if(d.side===0)m*=1-0.05*skL('shieldcraft');
   const flat=a.side===0?((fx().unitDmgFlat||{})[a.k]||0):0;
   return[Math.max(1,Math.round(a.n*(a.u.min+flat)*m)),Math.max(1,Math.round(a.n*(a.u.max+flat)*m))];
 }
@@ -3888,7 +3967,7 @@ async function moveTo(s,c,r,rm){
 async function lunge(a,d){a.act={row:2,t0:performance.now(),dur:reduced?60:440,n:4};const p=hc(a.c,a.r),q=hc(d.c,d.r);await tween(reduced?1:110,t=>{a.anim={x:p.x+(q.x-p.x)*0.35*t,y:p.y+(q.y-p.y)*0.35*t};});await tween(reduced?1:110,t=>{a.anim={x:p.x+(q.x-p.x)*0.35*(1-t),y:p.y+(q.y-p.y)*0.35*(1-t)};});a.anim=null;}
 async function projectile(a,d,col){const p=hc(a.c,a.r),q=hc(d.c,d.r);const f={type:'shot',x:p.x,y:p.y,col,pk:PROJ_OF(a.k),t0:performance.now(),ang:Math.atan2(q.y-p.y,q.x-p.x)};bt.fx.push(f);
   await tween(reduced?1:Math.min(420,Math.hypot(q.x-p.x,q.y-p.y)*1.1),t=>{f.x=p.x+(q.x-p.x)*t;f.y=p.y+(q.y-p.y)*t-Math.sin(t*Math.PI)*BL.s*0.8;});bt.fx=bt.fx.filter(x=>x!==f);}
-const SPELL_FX={ember:'ember_dart',chain:'chain_spark',mend:'mend',swift:'swiftness',bark:'bark_skin',entangle:'entangle',squall:'squall',starfall:'starfall',raise:'raise_bones'};
+const SPELL_FX={ember:'ember_dart',chain:'chain_spark',mend:'mend',swift:'swiftness',bark:'bark_skin',entangle:'entangle',squall:'squall',starfall:'starfall',raise:'raise_bones',frost:'squall',meteor:'starfall',rally:'mend'};
 let curSpell=null;
 async function burst(s,col){const p=hc(s.c,s.r),sp=curSpell&&SPELL_FX[curSpell];const f={type:'burst',x:p.x,y:p.y,col,t:0,sp};bt.fx.push(f);await tween(reduced?1:sp?560:380,t=>{f.t=t;});bt.fx=bt.fx.filter(x=>x!==f);}
 const nm=s=>`<b style="color:${s.side?'var(--foe)':'var(--team)'}">${s.u.pl}</b>`;
@@ -3947,8 +4026,8 @@ function updateBattleUI(){
   if(!bt.hover&&s)$('#btCard').innerHTML=stackCard(s);
 }
 function usableSpells(){return HERO().spells.filter(k=>spellCost(k)<=HERO().mana&&!(k==='geyser'&&bt.geyserUsed));}
-function spellCost(k){let c=SP[k].cost;if(k==='squall'&&fx().squallHalf)c=Math.ceil(c/2);if(hasSk('arcane')&&c>1)c-=1;if(S.delivered&&delivered(3)&&c>1)c-=1;return c;}
-function newRound(){bt.round++;for(const s of bt.stacks){s.acted=false;s.waited=false;s.retLeft=s.u.retal||1;if(s.rooted>0)s.rooted--;}bt.spellCast=false;
+function spellCost(k){let c=SP[k].cost;if(k==='squall'&&fx().squallHalf)c=Math.ceil(c/2);if(skL('arcane')&&c>1)c=Math.max(1,c-(skL('arcane')>=3?2:1));if(S.delivered&&delivered(3)&&c>1)c-=1;return c;}
+function newRound(){bt.round++;for(const s of bt.stacks){s.acted=false;s.waited=false;s.retLeft=s.u.retal||1;if(s.rooted>0)s.rooted--;}bt.spellCast=false;bt.eCast=false;bt.towersDue=bt.siege>=3;
   logB(`Round ${bt.round}.${S.fac==='merfolk'&&bt.round%3===0?' The tide rises: Merfolk +2 speed and +2 attack this round.':''}`);}
 function checkEnd(){const a=bt.stacks.some(s=>s.alive&&s.side===0),b=bt.stacks.some(s=>s.alive&&s.side===1);if(!a||!b){bt.over=true;return true;}return false;}
 async function battleLoop(){
@@ -3959,7 +4038,8 @@ async function battleLoop(){
     updateBattleUI();
     let r;
     if(s.skip>0){s.skip--;logB(`${nm(s)} are charmed and lose their turn.`);floatAt(s,'Charmed','#bfe8ff');await sleep(reduced?50:400);}
-    else if(s.side===0&&!bt.auto)r=await playerTurn(s);else{await sleep(reduced?60:bt.auto?140:380);await aiTurn(s);}
+    else if(s.side===0&&sMorale(s)<0&&R()<-0.06*sMorale(s)){logB(`<b>Low morale!</b> ${nm(s)} falter and lose their turn.`);floatAt(s,'Falters','#e08a8a');await sleep(reduced?50:400);}
+    else if(s.side===0&&!bt.auto)r=await playerTurn(s);else{await sleep(reduced?60:bt.auto?140:380);if(s.side===1){if(bt.towersDue){bt.towersDue=false;await towersFire();if(checkEnd())break;}if(!bt.eCast&&bt.enemyHero){bt.eCast=true;await enemyCast();if(checkEnd())break;}}await aiTurn(s);}
     if(r!=='waited'){s.acted=true;s.stood=!s.movedTurn;s.movedLast=s.movedTurn;}
     bt.active=null;bt.targeting=null;
     if(checkEnd())break;
@@ -3998,17 +4078,38 @@ function hitScore(a,d,o){const[lo,hi]=dmgRange(a,d,o);const dm=Math.min((lo+hi)/
 async function aiTurn(s){
   const foes=bt.stacks.filter(f=>f.alive&&f.side!==s.side);if(!foes.length)return;
   if(canShoot(s)){let t=foes[0],bs=-1;for(const f of foes){const v=hitScore(s,f,{ranged:true});if(v>bs){bs=v;t=f;}}await doShoot(s,t);return;}
-  const rm=reach(s);let best=null,bs=-1;
+  const rm=reach(s);
+  // a pinned shooter with arrows left steps away to shoot next turn, if there is somewhere safe to go
+  if(s.u.shots&&s.shots>0&&rm.size){let safe=null,bd=-1;for(const v of rm.values()){const adj=foes.some(f=>hdist(v.c,v.r,f.c,f.r)<=1);if(adj)continue;const d=Math.min(...foes.map(f=>hdist(v.c,v.r,f.c,f.r)));if(d>bd){bd=d;safe=v;}}
+    if(safe&&R()<0.8){await moveTo(s,safe.c,safe.r,rm);logB(`${nm(s)} fall back to shoot.`);return;}}let best=null,bs=-1;
   for(const f of foes)for(const[c,r]of hnb(f.c,f.r)){const own=c===s.c&&r===s.r;if(!own&&!rm.has(hk(c,r)))continue;const mv=own?0:rm.get(hk(c,r)).d;
     const v=hitScore(s,f,{half:!!s.u.shots,charge:s.u.charge?mv:0})+(f.u.shots?8:0)-mv*0.05;if(v>bs){bs=v;best={f,c,r};}}
   if(best){const mv=await moveTo(s,best.c,best.r,rm);await doMelee(s,best.f,mv);return;}
   if(s.u.shots){s.defending=true;logB(`${nm(s)} hold their ground.`);return;}
+  // if the enemy has no shooters but our side does, wait behind the walls or the archers rather than charging in
+  {const theyShoot=foes.some(f=>f.u.shots&&f.shots>0),weShoot=bt.stacks.some(q=>q.alive&&q.side===s.side&&q.u.shots&&q.shots>0);
+    if((bt.siege&&s.side===1)||(!theyShoot&&weShoot&&bt.round<4)){s.defending=true;logB(`${nm(s)} hold the line.`);return;}}
   const near=(c,r)=>Math.min(...foes.map(f=>hdist(c,r,f.c,f.r)));
   let tgt=null,bd=near(s.c,s.r);for(const v of rm.values()){const d=near(v.c,v.r);if(d<bd){bd=d;tgt=v;}}
   if(tgt){await moveTo(s,tgt.c,tgt.r,rm);logB(`${nm(s)} advance.`);}else{s.defending=true;logB(`${nm(s)} brace their defense.`);}
 }
+/* the enemy hero casts one spell a round from their banner's list (v30); Warding reduces the damage */
+async function enemyCast(){const eh=bt.enemyHero,P=Math.max(1,eh.pow||1),ward=1-0.15*skL('warding');const book=FAC_SPELLS[eh.fac]||[];
+  const mine=bt.stacks.filter(s=>s.alive&&s.side===0),own=bt.stacks.filter(s=>s.alive&&s.side===1);if(!mine.length||!own.length)return;
+  const can=k=>book.includes(k)&&SP[k].cost<=bt.eMana;const worth=s=>unitValue(s)*s.n;const big=mine.slice().sort((a,b)=>worth(b)-worth(a))[0],bigOwn=own.slice().sort((a,b)=>worth(b)-worth(a))[0];
+  const dmgOf={ember:15+10*P,frost:14+9*P,squall:8+6*P,chain:12+8*P,meteor:25+14*P,starfall:10+6*P};
+  const order=['meteor','starfall','frost','chain','ember','squall'].filter(can);let k=order[0];
+  if(!k){const b=['bark','rally','swift','weaken'].find(can);if(!b||R()<0.3)return;k=b;}
+  bt.eMana-=SP[k].cost;curSpell=k;try{
+    if(dmgOf[k]){const dm=Math.round(dmgOf[k]*ward);const hits=k==='starfall'?mine:k==='meteor'?[big,...mine.filter(s=>s!==big&&hdist(s.c,s.r,big.c,big.r)<=1)]:k==='chain'?[big,mine.filter(s=>s!==big).sort((a,b)=>hdist(big.c,big.r,a.c,a.r)-hdist(big.c,big.r,b.c,b.r))[0]].filter(Boolean):[big];
+      let tot=0;for(let i=0;i<hits.length;i++){const t=hits[i],d=(k==='meteor'||k==='chain')&&i>0?Math.round(dm/2):dm;await burst(t,'#ff9a6a');tot+=applyDmg(t,d);floatAt(t,`-${d}`,'#ffb48a');if(k==='squall')t.buff.spd-=3;if(k==='frost')t.buff.spd-=2;}
+      logB(`<b>${esc(eh.name)}</b> casts ${SP[k].name}${hits.length>1?` on ${hits.length} of your stacks`:` on ${nm(big)}`}.${tot?` ${tot} fall.`:''}`);}
+    else if(k==='weaken'){await burst(big,'#b07ad8');big.buff.atk-=3+Math.floor(P/3);floatAt(big,'Weakened','#d0a6f0');logB(`<b>${esc(eh.name)}</b> weakens ${nm(big)}.`);}
+    else{await burst(bigOwn,'#c9a26a');if(k==='bark')bigOwn.buff.def+=5;else if(k==='swift')bigOwn.buff.spd+=3;else{heal(bigOwn,10+8*P);bigOwn.buff.morale+=2;}floatAt(bigOwn,SP[k].name,'#e2c28a');logB(`<b>${esc(eh.name)}</b> casts ${SP[k].name} on ${nm(bigOwn)}.`);}
+  }finally{curSpell=null;}updateBattleUI();}
+async function towersFire(){const mine=bt.stacks.filter(s=>s.alive&&s.side===0);for(let i=0;i<2&&mine.some(s=>s.alive);i++){const t=pick(mine.filter(s=>s.alive)),dm=Math.round((20+8*weekNo())*monMul());await burst(t,'#ffcf6a');const k=applyDmg(t,dm);floatAt(t,`-${dm}`,'#ffcf6a');logB(`A tower shoots ${nm(t)} for ${dm}.${k?` ${k} fall.`:''}`);}updateBattleUI();}
 async function castSpell(id,target){
-  const P=hst(HERO(),'pow');HERO().mana-=spellCost(id);bt.spellCast=true;renderUI();
+  const P=Math.round(hst(HERO(),'pow')*(1+0.15*skL('sorcery')));HERO().mana-=spellCost(id);bt.spellCast=true;renderUI();
   const echoN=S.fac==='wizards'?(fx().echo||1):0;const times=bt.spellsCast<echoN?2:1;bt.spellsCast++;
   for(let i=0;i<times;i++){
     if(i===1){logB('<b>Spell Echo!</b> The spell rings out again.');if(target&&!target.alive)break;}
@@ -4033,6 +4134,11 @@ async function spellEffect0(id,target,P){
   else if(id==='starfall'){const foes=bt.stacks.filter(f=>f.alive&&f.side===1);const dm=10+6*P;await Promise.all(foes.map(f=>burst(f,'#cfe0ff')));for(const f of foes){applyDmg(f,dm);floatAt(f,`-${dm}`,'#cfe0ff');}logB(`Starfall strikes every enemy for ${dm}.`);}
   else if(id==='mend'){await burst(target,'#a6e08a');const amt=Math.round((20+15*P)*(fx().mendPct||1));const raised=heal(target,amt);floatAt(target,`+${amt}`,'#a6e08a');if(fx().healMorale){target.buff.morale+=fx().healMorale;}logB(`Mend restores ${nm(target)}.${raised>0?` ${raised} rise again.`:''}`);}
   else if(id==='swift'){await burst(target,'#cde6ff');target.buff.spd+=3;floatAt(target,'+3 speed','#cde6ff');logB(`Swift Wind hastens ${nm(target)}.`);}
+  else if(id==='weaken'){await burst(target,'#b07ad8');const a=3+Math.floor(P/3);target.buff.atk-=a;floatAt(target,`-${a} attack`,'#d0a6f0');logB(`${nm(target)} are weakened.`);}
+  else if(id==='frost'){await burst(target,'#bfe8ff');const dm=14+9*P,k=applyDmg(target,dm);target.buff.spd-=2;floatAt(target,`-${dm}, -2 speed`,'#bfe8ff');logB(`A frost lance strikes ${nm(target)} for ${dm}.${k?` ${k} fall.`:''}`);}
+  else if(id==='rally'){await burst(target,'#ffe08a');const amt=10+8*P;heal(target,amt);target.buff.morale+=2;floatAt(target,`+${amt}, +2 morale`,'#ffe08a');logB(`${nm(target)} rally.`);}
+  else if(id==='meteor'){const dm=25+14*P;await burst(target,'#ff7a3c');applyDmg(target,dm);floatAt(target,`-${dm}`,'#ffb48a');const nb=bt.stacks.filter(s=>s.alive&&s.side===target.side&&s!==target&&hdist(s.c,s.r,target.c,target.r)<=1);
+    for(const q of nb){await burst(q,'#ff7a3c');const d2=Math.round(dm/2);applyDmg(q,d2);floatAt(q,`-${d2}`,'#ffb48a');}logB(`A meteor crashes down on ${nm(target)}${nb.length?` and ${nb.length} beside it`:''}.`);}
   else if(id==='bark'){await burst(target,'#c9a26a');target.buff.def+=5;floatAt(target,'+5 defense','#e2c28a');if(fx().healMorale)target.buff.morale+=fx().healMorale;logB(`Bark Skin hardens ${nm(target)}.`);}
 }
 function openSpellbook(){
@@ -4047,6 +4153,7 @@ function openSpellbook(){
 }
 async function endBattle(){
   const won=bt.stacks.some(s=>s.alive&&s.side===0);await sleep(reduced?50:500);
+  if(!S.players){const st=stats();if(won)st.won++;else st.lost++;st.slain+=bt.stacks.filter(s=>s.side===1).reduce((a,s)=>a+Math.max(0,s.n0-s.n),0);if(won&&bt.obj.type==='camp')st.towns++;if(won&&bt.obj.type==='rival')st.heroes++;}
   const lost=side=>bt.stacks.filter(s=>s.side===side).map(s=>({k:s.k,n:Math.max(0,s.n0-s.n)})).filter(x=>x.n>0);
   const merge=l=>{const m={};for(const x of l)m[x.k]=(m[x.k]||0)+x.n;return Object.entries(m).map(([k,n])=>`<li>${n} ${U[k].pl}</li>`).join('')||'<li class="muted">None</li>';};
   const killedHP=bt.stacks.filter(s=>s.side===1).reduce((a,s)=>a+(s.n0-s.n)*s.u.hp,0);const xp=killedHP;
@@ -4122,7 +4229,11 @@ function drawBattle(){
   }
   if(attackFrom){const p=hc(attackFrom.c,attackFrom.r);if(!hexImg('hover',attackFrom.c,attackFrom.r)){hexPath(c,p.x,p.y,BL.s*0.97);c.fillStyle='rgba(242,211,130,.35)';c.fill();}
     const q=hc(hovT.c,hovT.r);c.strokeStyle='#f2d382';c.lineWidth=3;c.beginPath();c.moveTo(p.x,p.y);c.lineTo(p.x+(q.x-p.x)*0.6,p.y+(q.y-p.y)*0.6);c.stroke();}
-  for(const k of bt.obst){const p=hc(k%BC,Math.floor(k/BC));if(!bt.rocks[k])bt.rocks[k]={a:Math.random()*6,s:0.6+Math.random()*0.3,img:pick(['split_boulder','split_boulder','basalt_columns','basalt_columns','leaning_monolith','split_boulder','stone_arch'])};const rk=bt.rocks[k],s2=BL.s*rk.s;
+  if(bt.wall&&bt.wall.size){for(const k of bt.wall){const p=hc(k%BC,Math.floor(k/BC)),w=BL.s*1.7,h=BL.s*1.5;c.fillStyle='#8f8a7c';c.strokeStyle='#2b2620';c.lineWidth=2;c.fillRect(p.x-w/2,p.y-h*0.75,w,h);c.strokeRect(p.x-w/2,p.y-h*0.75,w,h);
+      c.fillStyle='#a8a291';for(let i=0;i<3;i++){c.fillRect(p.x-w/2+i*w/3+2,p.y-h*0.75-BL.s*0.3,w/3-4,BL.s*0.3);c.strokeRect(p.x-w/2+i*w/3+2,p.y-h*0.75-BL.s*0.3,w/3-4,BL.s*0.3);}
+      c.strokeStyle='rgba(43,38,32,.5)';c.lineWidth=1;for(let y=p.y-h*0.75+BL.s*0.35;y<p.y+h*0.25;y+=BL.s*0.35){c.beginPath();c.moveTo(p.x-w/2,y);c.lineTo(p.x+w/2,y);c.stroke();}}
+    if(bt.siege>=3)for(const r of[1,BR-2]){const p=hc(BC-2,r);c.fillStyle='#b8b09c';c.strokeStyle='#2b2620';c.lineWidth=2;c.fillRect(p.x-BL.s*0.6,p.y-BL.s*2.2,BL.s*1.2,BL.s*2.4);c.strokeRect(p.x-BL.s*0.6,p.y-BL.s*2.2,BL.s*1.2,BL.s*2.4);c.fillStyle='#7a2a1e';c.beginPath();c.moveTo(p.x-BL.s*0.75,p.y-BL.s*2.2);c.lineTo(p.x,p.y-BL.s*3);c.lineTo(p.x+BL.s*0.75,p.y-BL.s*2.2);c.closePath();c.fill();c.stroke();}}
+  for(const k of bt.obst){if(bt.wall&&bt.wall.has(k))continue;const p=hc(k%BC,Math.floor(k/BC));if(!bt.rocks[k])bt.rocks[k]={a:Math.random()*6,s:0.6+Math.random()*0.3,img:pick(['split_boulder','split_boulder','basalt_columns','basalt_columns','leaning_monolith','split_boulder','stone_arch'])};const rk=bt.rocks[k],s2=BL.s*rk.s;
     {const a=artImg(`terrain/battle/${rk.img}_battle.png`);if(a.ok){const im=a.img,sc2=BL.s*(rk.img==='stone_arch'?2.1:1.9)/Math.max(96,im.width);c.save();c.imageSmoothingEnabled=false;
       c.fillStyle='rgba(0,0,0,.3)';c.beginPath();c.ellipse(p.x,p.y+BL.s*0.42,BL.s*0.9,BL.s*0.3,0,0,7);c.fill();
       c.drawImage(im,Math.round(p.x-im.width*sc2/2),Math.round(p.y+BL.s*0.5-im.height*sc2),Math.round(im.width*sc2),Math.round(im.height*sc2));c.restore();continue;}}
@@ -4352,17 +4463,37 @@ document.addEventListener('click',e=>{const m=$('#modal');if(m.hidden||!m.queryS
   const ld=e.target.closest('[data-lslot]'),dl=e.target.closest('[data-dslot]');
   if(ld){const x=loadSlots().find(q=>q.id===ld.dataset.lslot);if(!x)return;m._close('loaded');S=JSON.parse(x.data);afterLoad();save();toast(`Loaded “${esc(x.name)}”.`);}
   else if(dl){try{localStorage.setItem(SLOTKEY,JSON.stringify(loadSlots().filter(q=>q.id!==dl.dataset.dslot)));}catch(_){}dl.closest('.slotrow').remove();}});
+/* campaign stats (v30) and the Hall of Fame: the best scores across games, kept in localStorage */
+const stats=()=>S.stats||(S.stats={won:0,lost:0,slain:0,towns:0,heroes:0});
+const FAME_KEY='questing-heroes-fame';
+const loadFame=()=>{try{return JSON.parse(localStorage.getItem(FAME_KEY)||'[]');}catch(e){return[];}};
+function scoreOf(win){const st=stats(),dmul={easy:0.6,normal:1,hard:1.4,expert:1.8}[S.diff||'normal'],days=Math.max(1,S.day),left=Math.max(0,S.limit-S.day);
+  const base=(win?5000:0)+left*40+st.won*120+st.towns*400+st.heroes*500+Math.round(st.slain*2)+S.delivered.length*300+allTowns().length*250;
+  return Math.round(base*dmul);}
+function endStats(win){const st=stats(),d=dateParts(),score=scoreOf(win);let rank=0;
+  if(!S.players){const f=loadFame();const rec={score,win,date:new Date().toISOString().slice(0,10),hero:S.heroes[0]?S.heroes[0].name:(HBY[S.heroes0]||{}).name||'',fac:S.fac,mode:S.mode,diff:S.diff||'normal',size:S.size,days:S.day};
+    f.push(rec);f.sort((a,b)=>b.score-a.score);rank=f.indexOf(rec)+1;try{localStorage.setItem(FAME_KEY,JSON.stringify(f.slice(0,20)));}catch(e){}}
+  const cell=(l,v)=>`<div><em>${l}</em><b>${v}</b></div>`;
+  return`<div class="wgrid endgrid">${cell('Days',`${S.day} of ${S.limit}`)}${cell('Battles won',st.won)}${cell('Battles lost',st.lost)}${cell('Foes slain',fmt(st.slain))}${cell('Towns taken',st.towns)}${cell('Rival heroes beaten',st.heroes)}${cell(S.mode==='grail'?'Grails home':'Relics home',S.delivered.length)}</div>
+    <div class="endscore"><span>Score</span><b>${fmt(score)}</b>${rank?`<small>${rank===1?'A new best! ':''}#${rank} in your Hall of Fame</small>`:''}</div>`;}
+function fameHTML(){const f=loadFame();if(!f.length)return'<p class="muted">No campaigns finished yet. Your best scores will appear here.</p>';
+  return`<table class="fame"><tr><th>#</th><th>Score</th><th>Hero</th><th>Result</th><th>Days</th><th>Difficulty</th><th>Date</th></tr>${f.slice(0,10).map((r,i)=>`<tr><td>${i+1}</td><td><b>${fmt(r.score)}</b></td><td><img src="${iconURL('crest',r.fac,52)}" alt=""> ${esc(r.hero)}</td><td>${r.win?'Victory':'Defeat'}</td><td>${r.days}</td><td>${(DIFF[r.diff]||{}).name||r.diff}</td><td>${r.date}</td></tr>`).join('')}</table>`;}
 async function victory(){S.over=true;clearSave();const d=dateParts();
   const vt=S.players?`Player ${S.pi+1} wins!`:S.mode==='grail'?'The Oracle is answered':S.mode==='conquest'?'The last banner standing':'The crown is whole';
-  await showModal({title:vt,body:S.mode==='grail'?`<p>The ${(S.goal||[]).map(i=>RELICS[i].name).join(', ')} stand together on the Grail Altar, and the Oracle's flame burns white. The ${FAC[S.fac].name} fly their banners from every hill.</p>`:S.mode==='conquest'&&!S.players?`<p>No rival banner remains. ${S.town.name} rings its bells for the ${FAC[S.fac].name}.</p>`:`<p>The seventh relic settles into the Relic Hall, and the shards of the crown fuse with a sound like a bell. ${S.town.name} rings out, and the ${FAC[S.fac].name} fly their banners from every hill.</p><p class="muted">Victory on Month ${d.m}, Week ${d.w}, Day ${d.d} · ${S.heroes.map(x=>`${x.name} (level ${x.lvl})`).join(', ')}.</p>`,buttons:[{label:'Begin a new campaign',value:1,primary:true}]});
+  await showModal({title:vt,body:(S.mode==='grail'?`<p>The ${(S.goal||[]).map(i=>RELICS[i].name).join(', ')} stand together on the Grail Altar, and the Oracle's flame burns white. The ${FAC[S.fac].name} fly their banners from every hill.</p>`:S.mode==='conquest'&&!S.players?`<p>No rival banner remains. ${S.town.name} rings its bells for the ${FAC[S.fac].name}.</p>`:`<p>The seventh relic settles into the Relic Hall, and the shards of the crown fuse with a sound like a bell. ${S.town.name} rings out, and the ${FAC[S.fac].name} fly their banners from every hill.</p><p class="muted">Victory on Month ${d.m}, Week ${d.w}, Day ${d.d} · ${S.heroes.map(x=>`${x.name} (level ${x.lvl})`).join(', ')}.</p>`)+endStats(true),wide:true,buttons:[{label:'Begin a new campaign',value:1,primary:true}]});
   startNew();}
 async function defeat(why){S.over=true;clearSave();
-  await showModal({title:'The quest is lost',body:`<p>${why}</p><p class="muted">Every campaign draws a new map. Claim mines early and build your upper dwellings before you push south.</p>`,buttons:[{label:'Begin a new campaign',value:1,primary:true}]});
+  await showModal({title:'The quest is lost',body:`<p>${why}</p><p class="muted">Every campaign draws a new map. Claim mines early and build your upper dwellings before you push south.</p>`+endStats(false),wide:true,buttons:[{label:'Begin a new campaign',value:1,primary:true}]});
   startNew();}
+/* a loading bar while a new map is generated and painted (v30): each step runs after the bar has been drawn */
+async function loading(steps){let el=$('#loadbar');if(!el){el=document.createElement('div');el.id='loadbar';el.innerHTML='<div class="lbox"><b></b><div class="lbar"><i></i></div></div>';document.body.appendChild(el);}
+  el.hidden=false;const paint=()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
+  try{for(let i=0;i<steps.length;i++){el.querySelector('b').textContent=steps[i][0];el.querySelector('i').style.width=`${Math.round(100*(i+0.15)/steps.length)}%`;await paint();steps[i][1]();el.querySelector('i').style.width=`${Math.round(100*(i+1)/steps.length)}%`;await paint();}}
+  finally{el.hidden=true;}}
 async function startNew(){S=null;applyTheme();const mo=await pickMap();if(!mo){title();return;}if(mo.edit){openEditor();return;}
   if(mo.mode==='multi'){const ps=[];for(let i=0;i<mo.nPlayers;i++)ps.push(await pickFaction({who:`Player ${i+1}`,exclude:ps.map(p=>p.fk)}));
-    mo.players=ps;newGame(ps[0].fk,ps[0].hid,mo);afterLoad();save();await handoff();openTown();return;}
-  const{fk,hid}=await pickFaction();mo.artifact=pickedArt;newGame(fk,hid,mo);if(pickedCol)S.col=pickedCol;afterLoad();save();openTown();}
+    mo.players=ps;await loading([['Shaping the land…',()=>newGame(ps[0].fk,ps[0].hid,mo)],['Painting the map…',()=>afterLoad()]]);save();await handoff();openTown();return;}
+  const{fk,hid}=await pickFaction();mo.artifact=pickedArt;await loading([['Shaping the land…',()=>newGame(fk,hid,mo)],['Painting the map…',()=>{if(pickedCol)S.col=pickedCol;afterLoad();}]]);save();openTown();}
 /* v17 roster: troops from older saves move to the new troop of the same tier */
 const OLD_ROSTER={wizards:['inkling','hound','sentinel','owl','magus'],necro:['thrall','rats','wraith','barrow','hiero'],centaurs:['hounds','skirm','badger','lancer','bearw'],
   pirates:['deckhand','powder','duelist','harpoon','cannon'],elves:['sprite','longbow','dryad','dancer','stag'],dwarves:['delver','bolt','anvil','smith','ram'],merfolk:['shell','coral','eel','seahorse','choir']};
@@ -4570,7 +4701,7 @@ $('#edPanel').addEventListener('click',async e=>{const t=e.target.closest('[data
   else if(ac){const a=ac.dataset.eact;
     if(a==='save')edSave();
     else if(a==='play'){const m=edSave();edClose();const mo=await pickMap({custom:m.id});if(!mo){title();return;}if(mo.edit){openEditor();return;}
-      const{fk,hid}=await pickFaction();mo.artifact=pickedArt;newGame(fk,hid,mo);if(pickedCol)S.col=pickedCol;afterLoad();save();openTown();}
+      const{fk,hid}=await pickFaction();mo.artifact=pickedArt;await loading([['Shaping the land…',()=>newGame(fk,hid,mo)],['Painting the map…',()=>{if(pickedCol)S.col=pickedCol;afterLoad();}]]);save();openTown();}
     else if(a==='exit'){if(!ED.saved){const v=await showModal({title:'Leave the editor?',body:'<p>Your changes are not saved.</p>',buttons:[{label:'Save and leave',value:'s',primary:true},{label:'Leave without saving',value:'l'},{label:'Stay',value:null}],dismiss:null});if(!v)return;if(v==='s')edSave();}
       edClose();title();}}});
 function edClose(){document.getElementById('app').classList.remove('editing');$('#edPanel').hidden=true;S=null;terrainCv=null;terrainPh=null;}
@@ -4618,7 +4749,8 @@ async function title(){
   const has=loadSave();
   const v=await showModal({title:'',body:`<img class="tbanner" src="${ART_BASE}ui/banner.png" alt="Questing Heroes"><p>Choose how you want to play: hunt the Seven Relics, conquer every rival, chase the roaming Grail Keepers, or pass the device around for a hot-seat game with friends. Then pick your land, your banner and your hero.</p>
    <p class="muted">Follow the weekly rumours, break through the guarded passes, grow your town, upgrade your troops and hire more heroes. Battles are fought turn by turn on a hex field, and faster stacks act first.</p>`,
-   buttons:[{label:`${ico('load_game',36)}Load game`,value:'l',disabled:!loadSlots().length},...(has?[{label:`${ico('continue',36)}Continue as ${esc(has.heroes[0].name)}`,value:'c'}]:[]),{label:`${ico('new_campaign',36)}New campaign`,value:'n',primary:true}]});
+   buttons:[{label:`${ico('relic_hunt',36)}Hall of Fame`,value:'f'},{label:`${ico('load_game',36)}Load game`,value:'l',disabled:!loadSlots().length},...(has?[{label:`${ico('continue',36)}Continue as ${esc(has.heroes[0].name)}`,value:'c'}]:[]),{label:`${ico('new_campaign',36)}New campaign`,value:'n',primary:true}]});
+  if(v==='f'){await showModal({title:'Hall of Fame',body:fameHTML(),wide:true,buttons:[{label:'Back',value:1,primary:true}],dismiss:1});title();return;}
   if(v==='l'){const r=await loadGame();if(r!=='loaded')title();return;}
   if(v==='c'&&has){S=has;afterLoad();}else startNew();
 }
@@ -4628,7 +4760,7 @@ function boot(data){
   title();
 }
 window.claude?.hot?.snapshot?.(()=>({save:S&&!S.over?JSON.stringify(S):null}));
-window.__qh={drawUnit,U,setPath,weeklyReport,get pathNow(){return path;},joinOffer,fightPreview,manageHolding,heroCap,allTowns,myMajors,growRival,rivalsTurn,townBuildings,get VT(){return VT;},FAC_ORDER,migrateRoster,centerOn,rivalTarget,get tcv(){return terrainCv;},MAP_TYPES,rivalInteract,manageSpire,get cam(){return[camX,camY,TS];},openHeroMenu,pickMap,mapPreviewURL,get S(){return S;},startBattle,endDay,walk,planTo,set path(p){path=p;},newGame,afterLoad,HEROES,FAC,RELICS,arriveTown,selectHero,openTown};
+window.__qh={drawUnit,U,enemyCast,get bt(){return bt;},armyPower,addXP,setPath,weeklyReport,get pathNow(){return path;},joinOffer,fightPreview,manageHolding,heroCap,allTowns,myMajors,growRival,rivalsTurn,townBuildings,get VT(){return VT;},FAC_ORDER,migrateRoster,centerOn,rivalTarget,get tcv(){return terrainCv;},MAP_TYPES,rivalInteract,manageSpire,get cam(){return[camX,camY,TS];},openHeroMenu,pickMap,mapPreviewURL,get S(){return S;},startBattle,endDay,walk,planTo,set path(p){path=p;},newGame,afterLoad,HEROES,FAC,RELICS,arriveTown,selectHero,openTown};
 window.claude?.hot?.ready?window.claude.hot.ready(boot):boot(window.claude?.hot?.data??{});
 })();
 </script>
