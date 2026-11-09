@@ -4,7 +4,7 @@ function applyTheme(){
   const f=S?FAC[S.fac]:FAC.rangers,st=document.documentElement.style;
   st.setProperty('--team',teamCol());st.setProperty('--team-2',f.col2);
   $('#crest').src=iconURL('crest',S?S.fac:'rangers',52);
-  $('#facline').textContent=S?`${S.players?`Player ${S.pi+1} · `:''}${f.arch} · ${f.name}`:'Choose your banner';
+  $('#facline').textContent=S?`${S.players?`Player ${S.pi+1} · `:''}${f.arch}`:'Choose your banner';
 }
 const travelName=()=>{const h=HERO();return(h.mount==='hooves'?'Hooves':h.mount==='horse'?'On horseback':'On foot')+(h.boat?' · has a boat':FAC[S.fac].travel==='swim'?' · swims lakes':'');};
 function renderUI(){

@@ -168,6 +168,12 @@ Everything lives in one object, `S`, so it can be saved as JSON:
 - New games show a loading bar while the map is generated and painted (`loading`).
 - Hero panel: the portrait grows with the window up to a square (`.hportrait` height clamp), the mana and movement bars carry their labels, and army tiles shrink on short screens.
 
+### v33 town and bar tidy-up
+
+- Build tab cards share one layout: picture, name, a one-line `short` (set at the end of `townBuildings`: gold, growth, upgrade or effect), a Details fold-out with the full `desc`, then cost and the Build button pinned to the bottom (`.bshort`, `.bdet`, `.bfoot`).
+- The town screen offers **Next town: <name>** beside Leave town when you hold more than one town (`nextTowns(tw)`: the towns after this one, skipping any held by a rival).
+- The top bar shows only the banner (no faction title like "Saltwind Corsairs"); below 1560 px the brand text hides and the relic strip shrinks so the ☰ menu and End day never leave the window. Command bar buttons are 48 px tall.
+
 ### Map furniture
 
 - `furnishMap(bases)` runs after generation: every base (your town, rival camps, other players' towns) gets a sawmill, ore pit, amber spring and gold seam within a short walk (`reachFrom`, `freeTile`). Mines start at level 1-3, and the owner can pay at the mine to raise it (the prompt shows only when the mine is your destination).

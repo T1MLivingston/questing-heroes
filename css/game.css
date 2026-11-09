@@ -872,3 +872,24 @@ img.upg{filter:sepia(.55) saturate(1.9) hue-rotate(-12deg) brightness(1.06) drop
 .hbars .lbar2{position:relative;height:18px;margin:3px 0}.hbars .lbar2 i{height:100%}
 .hbars .lbar2 span{position:absolute;inset:0;display:flex;justify-content:space-between;align-items:center;padding:0 6px;font:700 12px/1 var(--f-body);color:#fff;text-shadow:0 1px 0 #000,0 0 2px #000}.hbars .lbar2 b{font-weight:800}
 #army .slot{aspect-ratio:auto;height:clamp(56px,calc((100vh - 560px)/6),82px)}#army{grid-template-columns:repeat(4,minmax(0,1fr))!important}#army .slot{overflow:hidden}#army .slot img{height:88%;width:88%;max-width:none;object-fit:contain}
+
+/* v33: bigger command-bar buttons; build cards share one layout (short line, Details fold-out, cost and button at the bottom) */
+.cmdbar{gap:8px}
+.cmdbar .btn{padding:9px 20px;font-size:20px;gap:8px;min-height:48px}
+.cmdbar .btn .bi{width:26px;height:26px}
+.cmdbar #bEnd{min-width:210px}
+.qi{width:46px;height:46px}
+.bcard .bshort{min-height:2.6em;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;color:var(--ink,#2a1d10)}
+.bcard .bdet summary{cursor:pointer;font-family:var(--f-display);font-size:14px;color:var(--blue,#2c49b8);letter-spacing:.04em;list-style:none}
+.bcard .bdet summary::-webkit-details-marker{display:none}
+.bcard .bdet summary::after{content:' ▾'}.bcard .bdet[open] summary::after{content:' ▴'}
+.bcard .bdet p{margin-top:4px;font-size:15px}
+.bcard .bfoot{margin-top:auto;display:flex;flex-direction:column;gap:6px;min-height:68px;justify-content:flex-end}
+.bcard .bthumb{flex:none}
+/* v33: the top bar never pushes the menu off-screen: the relic strip shrinks first, then the brand text goes */
+.topbar{min-width:0;max-width:100%}
+.topbar>*{min-width:0}
+.topbar .relbar{flex:1 1 auto;overflow:hidden}
+.topbar .acts{flex:none;margin-left:auto}
+@media (max-width:1560px){.brand div{display:none}}
+.bcard .bfoot>div:last-child{min-height:34px;display:flex;align-items:center}

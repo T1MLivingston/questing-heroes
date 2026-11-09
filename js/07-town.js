@@ -61,6 +61,17 @@ function townBuildings(){
   for(const w of WALLS)L.push({...w,wall:true});
   (FAC_BUILD[fk]||[]).forEach((b,i)=>{const desc=b.horde?`+${b.horde[1]} ${U[f.units[b.horde[0]]].pl} each week.`:b.visit?`Each hero who visits learns +1 ${STATN[b.visit]}, once.`:b.desc;
     L.push({id:b.id,name:b.name,cost:FB_COST[i],req:b.horde?['d'+(b.horde[0]+1)]:i===2?['hall2']:[],desc,unique:true});});
+  const SHORT={hall1:'+500 gold a day',hall2:'+1,000 gold a day',hall3:'+2,000 gold a day',hall4:'+3,000 gold a day',
+    reliquary:S.mode==='conquest'?'Holds relics for their bonuses':'Deliver relics here to win',tavern:'Hire more heroes',lodge:'Room for a fifth hero',
+    still:'Make gems and moonwater',muster:'+50% recruits each week',stables:'+40% movement on horseback',forge:'+1 attack and defense for all troops',
+    lib1:'Spellbooks and 2 spells',lib2:`Teaches ${libSpells(2).length} more spells`,market:'Trade goods and gold',
+    wall1:'Garrison +25% in a siege',wall2:'+50% growth · garrison +50%',wall3:'+100% growth · towers fire'};
+  for(const b of L){if(SHORT[b.id])b.short=SHORT[b.id];
+    else if(/^d\d$/.test(b.id))b.short=`${U[b.unit].growth} ${U[b.unit].growth===1?U[b.unit].name:U[b.unit].pl} a week`;
+    else if(/^u\d$/.test(b.id)){const k=f.units[+b.id[1]-1];b.short=`${U[k].pl} become ${U[k+'_u'].pl}`;}
+    else if(b.unique){const fb=(FAC_BUILD[fk]||[]).find(x=>x.id===b.id)||{};b.short=fb.horde?`+${fb.horde[1]} ${U[f.units[fb.horde[0]]].pl} a week`:fb.visit?`Visitors +1 ${STATN[fb.visit]}`:
+      ({mpTown:'+25% movement from town',manaRegen:'+2 mana a day',harvest:'Raise 5% more dead',horde2:'+2 tier-two troops a week',goldWeek:'+1,500 gold a week',amberDay:'+1 amber a day',oreDay:'+2 ore a day'})[fb.special]||b.desc;}
+    else b.short=b.desc;}
   return L;
 }
 function canAfford(cost){return Object.entries(cost).every(([k,v])=>S.res[k]>=v);}
@@ -156,7 +167,7 @@ function townHTML(){
       else act=`<button class="btn sm" data-build="${b.id}" ${t.builtToday||!canAfford(b.cost)?'disabled':''}>Build</button>`;
       const sug=adv.id===b.id&&!built;
       const th=bldThumb(TF(),b.id);
-      return`<div class="bcard${built?' built':''}${sug?' sugg':''}" id="bc-${b.id}">${sug?'<span class="ribbon">Suggested</span>':''}<div class="bthumb${th?' art':''}">${th?`<img src="${th}" alt="">`:`<span>${b.wall?'🧱':b.unit?'⛺':b.id.startsWith('hall')?'🏛':b.id.startsWith('lib')?'📚':b.unique?'✦':b.id.startsWith('u')?'⚒':'🏠'}</span>`}</div><h4>${b.name}</h4><p>${b.desc}</p>${built?'':`<div class="cost">${costHTML(b.cost,S.res)}</div>`}<div>${act}</div></div>`;}).join('')}</div>`;
+      return`<div class="bcard${built?' built':''}${sug?' sugg':''}" id="bc-${b.id}">${sug?'<span class="ribbon">Suggested</span>':''}<div class="bthumb${th?' art':''}">${th?`<img src="${th}" alt="">`:`<span>${b.wall?'🧱':b.unit?'⛺':b.id.startsWith('hall')?'🏛':b.id.startsWith('lib')?'📚':b.unique?'✦':b.id.startsWith('u')?'⚒':'🏠'}</span>`}</div><h4>${b.name}</h4><p class="bshort">${b.short||b.desc}</p><details class="bdet"><summary>Details</summary><p>${b.desc}</p></details><div class="bfoot">${built?'':`<div class="cost">${costHTML(b.cost,S.res)}</div>`}<div>${act}</div></div></div>`;}).join('')}</div>`;
   }else if(townTab==='upgrade'){
     const fu=FAC[TF()].units;
     const upg=here?h.army.map((a,i)=>{const ti=fu.indexOf(a.k);if(ti<0||!t.built['u'+(ti+1)])return'';const c=upCost(a.k,a.n);
@@ -354,7 +365,7 @@ async function openTown(tw){
   tw=tw&&tw!==S.town?tw:null;VT=tw;if(TOWN_SCREEN[TF()])artImg(TOWN_SCREEN[TF()].atlas);artImg(XB_ATLAS);
   if(!tw&&S.town.taken){VT=null;toast(`${esc(TW().taken.name)} holds ${esc(TW().name)}. Defeat them at the gate to take it back.`);return;}
   townTab=townAdvice().tab==='overview'?'overview':'overview';townFocus=null;
-  const p=showModal({title:`<img src="${iconURL('crest',TF(),52)}" alt="" style="width:44px;height:44px;vertical-align:-12px;margin-right:8px;image-rendering:pixelated"><span class="tname" data-rename-town="1" title="Double-click to rename">${esc(TW().name)}</span>`,body:townHTML(),wide:true,top:true,buttons:[{label:'Leave town ▸',value:1,primary:true}],dismiss:1});
+  const p=showModal({title:`<img src="${iconURL('crest',TF(),52)}" alt="" style="width:44px;height:44px;vertical-align:-12px;margin-right:8px;image-rendering:pixelated"><span class="tname" data-rename-town="1" title="Double-click to rename">${esc(TW().name)}</span>`,body:townHTML(),wide:true,top:true,buttons:[...(nextTowns(tw).length?[{label:`Next town: ${esc(nextTowns(tw)[0].name)} ▸`,value:'next'}]:[]),{label:'Leave town ▸',value:1,primary:true}],dismiss:1});
   const m=$('#modal'),body=m.querySelector('.body');
   const go=(tab,id)=>{townTab=tab;townFocus=id||null;refresh();};
   const refresh=()=>{body.innerHTML=townHTML();renderUI();bindTownView(body,go);
@@ -393,5 +404,8 @@ async function openTown(tw){
     else if(el.dataset.minego){const o=S.objs.find(q=>q.id===+el.dataset.minego);if(o){$('#modal')._close&&$('#modal')._close(null);centerOn(o.x,o.y);}}
     else if(el.dataset.buy){const k=el.dataset.buy,n=+el.dataset.n||1;let c=0;for(let i=0;i<n;i++)c+=Math.round(PRICE[k][1]*(1+0.12*((mkt().b[k]||0)+i)));if(S.res.gold<c)return;S.res.gold-=c;S.res[k]+=n;mkt().b[k]=(mkt().b[k]||0)+n;refresh();}
   });
-  await p;VT=null;save();renderUI();
+  const res=await p;VT=null;save();renderUI();
+  if(res==='next'){const nx=nextTowns(tw)[0];if(nx){await sleep(30);openTown(nx===S.town?null:nx);}}
 }
+/* the towns after this one, in order, that can be opened (not held by a rival) */
+function nextTowns(tw){const all=allTowns().filter(t=>!t.taken),cur=tw||S.town,i=all.indexOf(cur);return i<0?[]:[...all.slice(i+1),...all.slice(0,i)];}
