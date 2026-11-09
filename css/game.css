@@ -893,3 +893,22 @@ img.upg{filter:sepia(.55) saturate(1.9) hue-rotate(-12deg) brightness(1.06) drop
 .topbar .acts{flex:none;margin-left:auto}
 @media (max-width:1560px){.brand div{display:none}}
 .bcard .bfoot>div:last-child{min-height:34px;display:flex;align-items:center}
+
+/* v34 Choose your game: light plaques instead of blue squares; difficulty, rivals and towns stand bare (icon + name);
+   modes show a big centred icon, the name and one short line; bigger map cards */
+.sheet:has(.gm-top) .dchip,.sheet:has(.gm-top) .mode,.sheet:has(.gm-top) .mapc{background:linear-gradient(#fbefc8,#e9cf8a);color:#2a1d10;border:3px solid;border-color:#fff6d6 #9a7330 #9a7330 #fff6d6;border-radius:6px;box-shadow:0 2px 0 rgba(60,40,10,.35)}
+.sheet:has(.gm-top) .mode b,.sheet:has(.gm-top) .mapc b{color:#1b2f7a}.sheet:has(.gm-top) .mode span,.sheet:has(.gm-top) .mapc small{color:#5a4524}
+.sheet:has(.gm-top) .dchip.on,.sheet:has(.gm-top) .mode.on,.sheet:has(.gm-top) .mapc.on{background:linear-gradient(#fff8dc,#f3d98f);border-color:#ffd24a;box-shadow:0 0 0 3px #e0a92a,0 0 12px rgba(255,200,60,.7)}
+.sheet:has(.gm-top) .dchip.bare{background:none;border:3px solid transparent;box-shadow:none;padding:2px 6px;gap:6px;border-radius:8px}
+.sheet:has(.gm-top) .dchip.bare:hover{background:rgba(255,240,190,.55)}
+.sheet:has(.gm-top) .dchip.bare.on{background:rgba(255,236,170,.75);border-color:#e0a92a;box-shadow:0 0 10px rgba(255,200,60,.6)}
+.sheet:has(.gm-top) .dchip.rand{font-size:16px;padding:6px 12px}
+.sheet:has(.gm-top) .dchip.rec:not(.on){box-shadow:inset 0 0 0 2px #e0a92a}
+.modes4.modes3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.modes3 .mode{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:2px;padding:8px 10px}
+.modes3 .mode b{font-size:22px;justify-content:center}.modes3 .mode span{font-size:15px}
+.sheet:has(.gm-top) .mprev{max-height:min(250px,29vh)}
+.fd-ab{font-size:16px;margin-top:4px;max-width:720px}
+.sheet:has(.gm-top) .maprow.setup{flex-wrap:wrap;row-gap:2px}
+.sheet:has(.gm-top) .rowbrk{flex-basis:100%;height:0}
+.sheet:has(.gm-top) .maprow.setup .dchip.bare{padding:1px 3px}

@@ -10,7 +10,7 @@ const aggMul=()=>DIFF[(S&&S.diff)||'normal'].agg||1;
 const monMul=()=>DIFF[(S&&S.diff)||'normal'].mon||1;
 const rvMul=()=>DIFF[(S&&S.diff)||'normal'].rv;
 /* sizes sit below the classic genre's 36/72/108/144 squares because our tiles are shown larger; free towns are the neutral towns per map */
-const MAP_SIZES={small:{W:54,H:42,rivals:2,limit:140,label:'Small',majors:1,outposts:3},medium:{W:68,H:52,rivals:3,limit:168,label:'Medium',majors:2,outposts:4},large:{W:84,H:64,rivals:4,limit:196,label:'Large',majors:3,outposts:5},xl:{W:100,H:76,rivals:5,limit:224,label:'Extra large',majors:4,outposts:6}};
+const MAP_SIZES={small:{W:60,H:46,rivals:2,limit:140,label:'Small',majors:1,outposts:3},medium:{W:74,H:57,rivals:3,limit:168,label:'Medium',majors:2,outposts:4},large:{W:92,H:70,rivals:4,limit:196,label:'Large',majors:3,outposts:5},xl:{W:110,H:84,rivals:5,limit:224,label:'Extra large',majors:4,outposts:6}};
 const MAP_TYPES={
   wheel:{name:'Wheel & Spoke',desc:'Every hero starts at the end of a spoke. Spoke roads run in to a walled hub where the Glass Lair waits, and a ring road links the homes. Pirates live on their own island.'},
   ridges:{name:'Twin Ridges',desc:'Two crag ridges split the land into three bands. Push through one guarded pass at a time toward the Glass Lair in the far corner. Pirates live on their own island.'},

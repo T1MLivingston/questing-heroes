@@ -14,7 +14,7 @@ const FAC={
   necro:{arch:'Necromancers',name:'Hollow Court',town:'Grimhollow',col:'#8656b8',col2:'#d8d0b8',pal:['#8656b8','#d8d0b8','#3d4a46','#7fd0a0'],
     tags:['Army grows','Slow start','Relentless'],mech:'Grave Harvest',mechDesc:'After each victory, 10% of the fallen enemies rise as Skeletons in your army.',
     units:['skeleton','zombie','werewolf','vampire','hellkite'],dw:['Bone Pit','Grave Field','Moonlit Kennel','Blood Manor','Hellkite Roost'],travel:'foot'},
-  centaurs:{arch:'Beast Masters',name:'Wildhoof Covenant',town:'Hoofmeet Downs',col:'#c07a2e',col2:'#ead49a',pal:['#c07a2e','#ead49a','#6b4a2e','#4f6c35'],
+  centaurs:{arch:'Beastmasters',name:'Wildhoof Covenant',town:'Hoofmeet Downs',col:'#c07a2e',col2:'#ead49a',pal:['#c07a2e','#ead49a','#6b4a2e','#4f6c35'],
     tags:['Fast','Flanking','Combos'],mech:'Pack Bond',mechDesc:'Your stacks standing next to another of your stacks gain +1 speed and +2 attack.',
     units:['rabbit','boar','hounds','centaur','lion'],dw:['Warren','Boar Wallow','Kennel Ring','Centaur Camp','Pride Rock'],travel:'hooves'},
   pirates:{arch:'Pirates',name:'Saltwind Corsairs',town:'Port Brigand',col:'#b8403a',col2:'#ecdcaa',pal:['#b8403a','#ecdcaa','#22303a','#c9a24a'],
@@ -278,7 +278,7 @@ const MODES={
   grail:{n:3,name:'Grail Quest',desc:'The Oracle names three of the five Grails. Each is carried by a Grail Keeper that roams the land. Hunt down the ones you need and bring them to your Grail Altar.'},
   multi:{n:4,name:'Multiplayer',desc:'Two to four players take turns on one device, each with a banner, town and heroes. First to bring the Seven Relics home wins.'}};
 const ALTAR_NAMES={1:'Lesser Spell Altar',2:'Greater Spell Altar',3:'Star Altar'},ALTAR_COL={1:'#7fb4ff',2:'#c46bff',3:'#ffd24a'};
-const MODE_SHORT={relic:'Find the Seven Relics and bring them home.',conquest:'Defeat every rival hero.',grail:'Hunt the Grail Keepers the Oracle names.',multi:'2–5 players take turns on one device.'};
+const MODE_SHORT={relic:'Find the 7 relics',conquest:'Be the last hero standing',grail:'Hunt the Grail Keepers the Oracle names.',multi:'Take turns on one device'};
 const DIFF_ICON={easy:'☘',normal:'⚔',hard:'☠',expert:'♛'};
 const STAT_TIP={atk:'Attack: every troop in the army hits harder',def:'Defense: every troop in the army takes less damage',pow:'Power: spells hit harder and last longer',lore:'Lore: more mana, so more spells'};
 /* plain-words summary of each banner's special power */
