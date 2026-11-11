@@ -167,7 +167,7 @@ function townHTML(){
       else act=`<button class="btn sm" data-build="${b.id}" ${t.builtToday||!canAfford(b.cost)?'disabled':''}>Build</button>`;
       const sug=adv.id===b.id&&!built;
       const th=bldThumb(TF(),b.id);
-      return`<div class="bcard${built?' built':''}${sug?' sugg':''}" id="bc-${b.id}">${sug?'<span class="ribbon">Suggested</span>':''}<div class="bthumb${th?' art':''}">${th?`<img src="${th}" alt="">`:`<span>${b.wall?'🧱':b.unit?'⛺':b.id.startsWith('hall')?'🏛':b.id.startsWith('lib')?'📚':b.unique?'✦':b.id.startsWith('u')?'⚒':'🏠'}</span>`}</div><h4>${b.name}</h4><p class="bshort">${b.short||b.desc}</p><details class="bdet"><summary>Details</summary><p>${b.desc}</p></details><div class="bfoot">${built?'':`<div class="cost">${costHTML(b.cost,S.res)}</div>`}<div>${act}</div></div></div>`;}).join('')}</div>`;
+      return`<div class="bcard${built?' built':''}${sug?' sugg':''}" id="bc-${b.id}">${sug?'<span class="ribbon">Suggested</span>':''}<div class="bthumb${th?' art':''}">${th&&th.css?`<span class="xbcrop" style="${th.css}"></span>`:th?`<img src="${th}" alt="">`:`<span>${b.wall?'🧱':b.unit?'⛺':b.id.startsWith('hall')?'🏛':b.id.startsWith('lib')?'📚':b.unique?'✦':b.id.startsWith('u')?'⚒':'🏠'}</span>`}</div><h4>${b.name}</h4><p class="bshort">${b.short||b.desc}</p><details class="bdet"><summary>Details</summary><p>${b.desc}</p></details><div class="bfoot">${built?'':`<div class="cost">${costHTML(b.cost,S.res)}</div>`}<div>${act}</div></div></div>`;}).join('')}</div>`;
   }else if(townTab==='upgrade'){
     const fu=FAC[TF()].units;
     const upg=here?h.army.map((a,i)=>{const ti=fu.indexOf(a.k);if(ti<0||!t.built['u'+(ti+1)])return'';const c=upCost(a.k,a.n);
@@ -270,14 +270,19 @@ const XB_SPOT_FAC={rangers:{lodge:[880,96],d5:[880,184],fb1:[880,272],fb3:[880,3
 const xbCell=(fac,id)=>{const r=XB_ROW.indexOf(fac),c=XB_COL[id];if(XB_ONLY[id]&&!XB_ONLY[id].includes(fac))return null;return r<0||c===undefined?null:[c*128,r*128];};
 const thumbCache={};
 function bldThumb(fac,id){const key=fac+'/'+id;if(thumbCache[key])return thumbCache[key];
-  {const xc=xbCell(fac,id);if(xc){const a=artImg(XB_ATLAS);if(!a.ok)return null;const cv=document.createElement('canvas');cv.width=cv.height=128;const c=cv.getContext('2d');c.imageSmoothingEnabled=false;c.drawImage(a.img,xc[0],xc[1],128,128,0,0,128,128);return thumbCache[key]=cv.toDataURL();}}
+  {const xc=xbCell(fac,id);if(xc){const a=artImg(XB_ATLAS);if(!a.ok)return null;const cv=document.createElement('canvas');cv.width=cv.height=128;const c=cv.getContext('2d');c.imageSmoothingEnabled=false;c.drawImage(a.img,xc[0],xc[1],128,128,0,0,128,128);return thumbCache[key]=thumbOut(cv,XB_ATLAS,a.img,xc[0],xc[1],128,128,128);}}
   const T=TOWN_SCREEN[fac];if(!T)return null;
   let pid=null;const hn=['settlement','town_hall','city_hall','capital'];
   if(/^hall\d$/.test(id))pid=T.hall+hn[+id[4]-1];
   else{const look=/^u\d$/.test(id)?'d'+id[1]:id,site=T.sites.find(z=>z[1].includes(look))||T.sites.find(z=>z[1].includes(id));if(site)pid=site[0];}
   const q=pid&&T.pieces[pid],a=q&&artImg(T.atlas);if(!q||!a.ok)return null;
   const S2=Math.max(q[2],q[3])+4,cv=document.createElement('canvas');cv.width=S2;cv.height=S2;const c=cv.getContext('2d');c.imageSmoothingEnabled=false;
-  c.drawImage(a.img,q[0],q[1],q[2],q[3],Math.round((S2-q[2])/2),Math.round((S2-q[3])/2),q[2],q[3]);return thumbCache[key]=cv.toDataURL();}
+  c.drawImage(a.img,q[0],q[1],q[2],q[3],Math.round((S2-q[2])/2),Math.round((S2-q[3])/2),q[2],q[3]);return thumbCache[key]=thumbOut(cv,T.atlas,a.img,q[0],q[1],q[2],q[3],S2);}
+/* a building picture as a data URL; when the page runs from file:// the browser refuses to export canvases that hold our art,
+   so fall back to a CSS crop of the atlas itself ({css}: the caller renders a span instead of an img) */
+function thumbOut(cv,path,img,sx,sy,sw,sh,box){try{return cv.toDataURL();}catch(e){
+  const px=(a,b)=>b>0?a/b*100:0;
+  return{css:`width:${sw/box*100}%;height:${sh/box*100}%;background-image:url('${ART_BASE+path}');background-repeat:no-repeat;background-size:${img.width/sw*100}% ${img.height/sh*100}%;background-position:${px(sx,img.width-sw)}% ${px(sy,img.height-sh)}%;image-rendering:pixelated`};}}
 function drawTownView(cv){
   {const TSN=TOWN_SCREEN[TF()];if(TSN&&drawArtTown(cv,TSN))return;}
   const c=cv.getContext('2d'),f=FAC[TF()],t=TW(),BL=townBuildings(),BY=Object.fromEntries(BL.map(b=>[b.id,b])),now=performance.now();
