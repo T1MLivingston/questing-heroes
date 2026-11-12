@@ -56,6 +56,7 @@ No other libraries, images or audio are included. Art made later with ChatGPT or
 | Tavern Recruits: 19 hero portraits (`assets/portraits/heroes/*_128.png`, `recruits.png`), cut from the supplied preview sheet with the backdrop removed | Supplied by the author (generated pixel art, ChatGPT) | 2026-11-12 | Original invented characters, not real people |
 | Pirates and Beasts recruits: 6 hero portraits (Inkwake, Saltjaw, Pip Quickline, Zahara, Tembor, Virel) | Supplied by the author (generated pixel art, ChatGPT) | 2026-11-12 | Original invented characters |
 | 16 Faction Recruits: portraits of Nessa Holt, Reedcall, Sera Venn, Gliss, Murmur, Rattleclaw, Silka, Flintback, Bess Bell, Rusk Hookhorn, Aster, Thornfrill, Harlan Chalk, Morel, Iona Shoal, Nerka | Supplied by the author (generated pixel art, ChatGPT) | 2026-11-12 | Original invented characters |
+| City Scenes: redrawn 960×360 town scenery for all eight banners (`assets/towns/wings.png`) | Supplied by the author (generated pixel art, ChatGPT), packed locally | 2026-11-12 | Original scenes |
 | Half-size move cursor (`assets/ui/cursors/move_small.png`) | Downscaled locally from Pack 09's move cursor | 2026-11-08 | Same as above |
 
 The generated source images (high-res magenta PNGs) are kept outside this repo.

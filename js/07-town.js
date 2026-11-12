@@ -57,7 +57,7 @@ function townBuildings(){
   f.units.forEach((k,i)=>L.push({id:'u'+(i+1),name:`${f.dw[i]}: upgrade`,cost:uc[i],req:['d'+(i+1)],desc:`Recruits ${U[k+'_u'].pl} instead, and lets heroes in town upgrade their ${U[k].pl}.`}));
   L.push({id:'muster',name:'Muster Field',cost:{gold:1500,ore:5},req:['d1'],desc:'Every dwelling grows 50% more recruits each week.'});
   if(f.travel!=='hooves')L.push({id:'stables',name:'Stables',cost:{gold:1500,timber:5},desc:'Your hero takes a horse here: +40% movement.'});
-  if(fk==='dwarves')L.push({id:'forge',name:'Great Forge',cost:{gold:2000,ore:Math.round(10*(fx().forgeCut||1))},req:['d1'],desc:'Forging: every Dwarven unit gets +1 attack and +1 defense.'});
+  if(fk==='dwarves')L.push({id:'forge',name:'Great Forge',cost:{gold:2000,ore:Math.round(10*(fx().forgeCut||1))},req:['d1'],desc:`Forging: every Dwarven unit gets +${1+(fx().forgePlus||0)} attack and +1 defense.`});
   L.push({id:'lib1',name:'Lantern Library',cost:{gold:2000,timber:5,ore:5},desc:`Sells spellbooks and teaches ${libSpells(1).map(x=>SP[x].name).join(' and ')}. Refills mana on each visit.`});
   L.push({id:'lib2',name:'Star Archive',cost:{gold:4000,ore:5,moonwater:4},req:['lib1'],desc:`Teaches ${libSpells(2).map(x=>SP[x].name).join(', ')}.`});
   L.push({id:'market',name:'Barter Yard',cost:{gold:500,timber:5},desc:'Trade goods for gold, or gold for goods.'});
@@ -272,7 +272,7 @@ function drawArtTown(cv,TSN){const a=artImg(TSN.atlas);if(!a.ok)return false;con
   return true;}
 /* a banner's home town with every building up (capital hall), for the banner Details page */
 function paintTownPrev(root,tries=0){for(const cv of root.querySelectorAll('canvas.tprev:not([data-done])')){const T=TOWN_SCREEN[cv.dataset.fac],a=T&&artImg(T.atlas);if(!a||!a.ok){if(tries<40)setTimeout(()=>paintTownPrev(root,tries+1),100);continue;}
-  const c=cv.getContext('2d');c.imageSmoothingEnabled=false;c.drawImage(a.img,0,0,640,360,0,0,640,360);for(const[id,q]of Object.entries(T.pieces)){if((/_hall_/.test(id)&&!/capital$/.test(id))||T.sites.some(z=>z[0]===id&&z[3]))continue;c.drawImage(a.img,q[0],q[1],q[2],q[3],q[4],q[5],q[2],q[3]);}cv.dataset.done=1;}}
+  const c=cv.getContext('2d');c.imageSmoothingEnabled=false;{const wa=artImg(WINGS_ATLAS),wr=XB_ROW.indexOf(cv.dataset.fac);if(wa.ok&&wr>=0)c.drawImage(wa.img,160,wr*360,640,360,0,0,640,360);else c.drawImage(a.img,0,0,640,360,0,0,640,360);}for(const[id,q]of Object.entries(T.pieces)){if((/_hall_/.test(id)&&!/capital$/.test(id))||T.sites.some(z=>z[0]===id&&z[3]))continue;c.drawImage(a.img,q[0],q[1],q[2],q[3],q[4],q[5],q[2],q[3]);}cv.dataset.done=1;}}
 /* a building's picture from its banner's town atlas, cropped into a square (Build tab); null if the banner has no town art yet */
 /* the six shared extra buildings (Missing Buildings packs A and B): one 128×128 cell per banner (row) and building (column) in towns/extra_buildings.png, foot at (64,120) */
 const XB_ATLAS='towns/extra_buildings.png',XB_ROW=['rangers','wizards','necro','centaurs','pirates','elves','dwarves','merfolk'],XB_COL={reliquary:0,lodge:1,lib2:2,still:3,fb1:4,fb3:5,d5:6},XB_ONLY={d5:['rangers']};

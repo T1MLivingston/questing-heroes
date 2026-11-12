@@ -28,8 +28,8 @@ const mine0=s=>s.side===0&&facOfUnit(s.k)===S.fac;
 const hasFriendNear=s=>hnb(s.c,s.r).some(([c,r])=>{const o=stackAt(c,r);return o&&o.side===s.side;});
 const tide=s=>S.fac==='merfolk'&&mine0(s)&&bt.round%3===0;
 const pack=s=>S.fac==='centaurs'&&mine0(s)&&hasFriendNear(s);
-function sAtk(s){let a=s.u.atk+s.buff.atk;if(s.side===0){const f=fx();a+=hst(HERO(),'atk')+((f.unitAtk||{})[s.k]||0);if(S.fac==='dwarves'&&S.town.built.forge&&mine0(s))a++;}else if(bt&&bt.enemyHero)a+=hst(bt.enemyHero,'atk');if(tide(s))a+=2;if(pack(s))a+=2;return a;}
-function sDef(s){let d=s.u.def+s.buff.def+(s.side===1&&bt&&bt.obj&&bt.obj.type==='spire'?3:0)+(s.side===1&&bt&&bt.siege?bt.siege:0);if(s.side===0){const f=fx();d+=hst(HERO(),'def')+((f.unitDef||{})[s.k]||0);if(S.fac==='dwarves'&&S.town.built.forge&&mine0(s))d++;if(S.fac==='rangers'&&mine0(s)&&s.stood)d+=f.rootbound||2;}else if(bt&&bt.enemyHero)d+=hst(bt.enemyHero,'def');if(s.defending)d=Math.ceil(d*1.3);return d;}
+function sAtk(s){let a=s.u.atk+s.buff.atk;if(s.side===0){const f=fx();a+=hst(HERO(),'atk')+((f.unitAtk||{})[s.k]||0);if(S.fac==='dwarves'&&S.town.built.forge&&mine0(s))a+=1+(f.forgePlus||0);}else if(bt&&bt.enemyHero)a+=hst(bt.enemyHero,'atk');if(tide(s))a+=2;if(pack(s))a+=2;return a;}
+function sDef(s){let d=s.u.def+s.buff.def+(s.side===1&&bt&&bt.obj&&bt.obj.type==='spire'?3:0)+(s.side===1&&bt&&bt.siege?bt.siege:0);if(s.side===0){const f=fx();d+=hst(HERO(),'def')+((f.unitDef||{})[s.k]||0)+(f.armyDef||0);if(S.fac==='dwarves'&&S.town.built.forge&&mine0(s))d++;if(S.fac==='rangers'&&mine0(s)&&s.stood)d+=f.rootbound||2;}else if(bt&&bt.enemyHero)d+=hst(bt.enemyHero,'def');if(s.defending)d=Math.ceil(d*1.3);return d;}
 function sSpd(s){let v=s.u.spd+s.buff.spd;if(s.side===0)v+=((fx().unitSpd||{})[s.k]||0);if(tide(s))v+=2;if(pack(s))v+=1;return Math.max(1,v);}
 function sMorale(s){if(s.side!==0)return 0;let m=(unpaid()?-2:0)+skL('command')+(fx().morale||0)+s.buff.morale+carry(HERO(),'morale')+gear(HERO(),'morale');if(pack(s))m+=fx().packMorale||0;return m;}
 const sLuck=s=>s.side===0?skL('fortune')+(fx().luck||0)+carry(HERO(),'luck')+gear(HERO(),'luck')+((HERO().luckUntil||0)>=S.day?1:0):0;
@@ -94,7 +94,7 @@ function canShoot(s){return s.u.shots&&s.shots>0&&!hnb(s.c,s.r).some(([c,r])=>{c
 function dmgRange(a,d,o={}){
   let m=sAtk(a)>=sDef(d)?Math.min(3,1+0.05*(sAtk(a)-sDef(d))):Math.max(0.3,1-0.025*(sDef(d)-sAtk(a)));
   if(o.half)m*=0.5;if(o.charge)m*=1+0.06*o.charge;
-  if(a.side===0){const f=fx();m*=((f.unitDmgPct||{})[a.k]||1);if(o.ranged)m*=1+0.1*skL('steadyaim');if(!o.ranged)m*=1+0.1*skL('bladework');}
+  if(a.side===0){const f=fx();m*=((f.unitDmgPct||{})[a.k]||1);if(o.ranged)m*=1+0.1*skL('steadyaim')+(f.rangedPct||0);if(!o.ranged)m*=1+0.1*skL('bladework');}
   if(d.side===0)m*=1-0.05*skL('shieldcraft');
   const flat=a.side===0?((fx().unitDmgFlat||{})[a.k]||0):0;
   return[Math.max(1,Math.round(a.n*(a.u.min+flat)*m)),Math.max(1,Math.round(a.n*(a.u.max+flat)*m))];
@@ -176,7 +176,7 @@ function updateBattleUI(){
   if(!bt.hover&&s)$('#btCard').innerHTML=stackCard(s);
 }
 function usableSpells(){return HERO().spells.filter(k=>spellCost(k)<=HERO().mana&&!(k==='geyser'&&bt.geyserUsed));}
-function spellCost(k){let c=SP[k].cost;if(k==='squall'&&fx().squallHalf)c=Math.ceil(c/2);if(skL('arcane')&&c>1)c=Math.max(1,c-(skL('arcane')>=3?2:1));if(S.delivered&&delivered(3)&&c>1)c-=1;return c;}
+function spellCost(k){let c=SP[k].cost;if(k==='squall'&&fx().squallHalf)c=Math.ceil(c/2);if(fx().halfCost===k)c=Math.ceil(c/2);if(fx().manaCut&&c>1)c=Math.max(1,c-fx().manaCut);if(skL('arcane')&&c>1)c=Math.max(1,c-(skL('arcane')>=3?2:1));if(S.delivered&&delivered(3)&&c>1)c-=1;return c;}
 function newRound(){bt.round++;for(const s of bt.stacks){s.acted=false;s.waited=false;s.retLeft=s.u.retal||1;if(s.rooted>0)s.rooted--;}bt.spellCast=false;bt.eCast=false;bt.towersDue=bt.siege>=3;
   logB(`Round ${bt.round}.${S.fac==='merfolk'&&bt.round%3===0?' The tide rises: Merfolk +2 speed and +2 attack this round.':''}`);}
 function checkEnd(){const a=bt.stacks.some(s=>s.alive&&s.side===0),b=bt.stacks.some(s=>s.alive&&s.side===1);if(!a||!b){bt.over=true;return true;}return false;}
@@ -274,7 +274,7 @@ async function spellEffect0(id,target,P){
   else if(id==='chain'){await burst(target,'#ffe066');const dm=12+8*P;applyDmg(target,dm);floatAt(target,`-${dm}`,'#ffe066');let from=target;const hit=new Set([target]);
     for(let j=0;j<1+(fx().chainExtra||0);j++){const nx=bt.stacks.filter(s=>s.alive&&s.side===1&&!hit.has(s)).sort((a,b)=>hdist(from.c,from.r,a.c,a.r)-hdist(from.c,from.r,b.c,b.r))[0];if(!nx)break;hit.add(nx);await burst(nx,'#ffe066');const d2=Math.round(dm/2);applyDmg(nx,d2);floatAt(nx,`-${d2}`,'#ffe066');from=nx;}
     logB(`Chain Spark arcs through ${hit.size} stacks.`);}
-  else if(id==='squall'){await burst(target,'#cfe8ff');const dm=8+6*P;applyDmg(target,dm);target.buff.spd-=3;floatAt(target,`-${dm}, -3 speed`,'#cfe8ff');logB(`A squall batters ${nm(target)}.`);}
+  else if(id==='squall'){await burst(target,'#cfe8ff');const dm=Math.round((8+6*P)*(bt.enemyCasting?1:(fx().squallPct||1)));applyDmg(target,dm);target.buff.spd-=3;floatAt(target,`-${dm}, -3 speed`,'#cfe8ff');logB(`A squall batters ${nm(target)}.`);}
   else if(id==='entangle'){await burst(target,'#8cbc70');target.rooted=1+(fx().entangleExtra||0);floatAt(target,'Entangled','#a6e08a');logB(`Roots seize ${nm(target)}. They cannot move.`);}
   else if(id==='geyser'){bt.geyserUsed=true;const spot=hnb(target.c,target.r).find(([c,r])=>!blocked(c,r));if(spot){bt.obst.add(hk(spot[0],spot[1]));}
     const dm=10+6*P;const hits=[target,...bt.stacks.filter(s=>s.alive&&s.side===1&&s!==target&&spot&&hdist(s.c,s.r,spot[0],spot[1])<=1)];
@@ -284,7 +284,7 @@ async function spellEffect0(id,target,P){
   else if(id==='starfall'){const foes=bt.stacks.filter(f=>f.alive&&f.side===1);const dm=10+6*P;await Promise.all(foes.map(f=>burst(f,'#cfe0ff')));for(const f of foes){applyDmg(f,dm);floatAt(f,`-${dm}`,'#cfe0ff');}logB(`Starfall strikes every enemy for ${dm}.`);}
   else if(id==='mend'){await burst(target,'#a6e08a');const amt=Math.round((20+15*P)*(fx().mendPct||1));const raised=heal(target,amt);floatAt(target,`+${amt}`,'#a6e08a');if(fx().healMorale){target.buff.morale+=fx().healMorale;}logB(`Mend restores ${nm(target)}.${raised>0?` ${raised} rise again.`:''}`);}
   else if(id==='swift'){await burst(target,'#cde6ff');target.buff.spd+=3;floatAt(target,'+3 speed','#cde6ff');logB(`Swift Wind hastens ${nm(target)}.`);}
-  else if(id==='weaken'){await burst(target,'#b07ad8');const a=3+Math.floor(P/3);target.buff.atk-=a;floatAt(target,`-${a} attack`,'#d0a6f0');logB(`${nm(target)} are weakened.`);}
+  else if(id==='weaken'){await burst(target,'#b07ad8');const a=Math.round((3+Math.floor(P/3))*(bt.enemyCasting?1:(fx().weakenPct||1)));target.buff.atk-=a;floatAt(target,`-${a} attack`,'#d0a6f0');logB(`${nm(target)} are weakened.`);}
   else if(id==='frost'){await burst(target,'#bfe8ff');const dm=14+9*P,k=applyDmg(target,dm);target.buff.spd-=2;floatAt(target,`-${dm}, -2 speed`,'#bfe8ff');logB(`A frost lance strikes ${nm(target)} for ${dm}.${k?` ${k} fall.`:''}`);}
   else if(id==='rally'){await burst(target,'#ffe08a');const amt=10+8*P;heal(target,amt);target.buff.morale+=2;floatAt(target,`+${amt}, +2 morale`,'#ffe08a');logB(`${nm(target)} rally.`);}
   else if(id==='meteor'){const dm=25+14*P;await burst(target,'#ff7a3c');applyDmg(target,dm);floatAt(target,`-${dm}`,'#ffb48a');const nb=bt.stacks.filter(s=>s.alive&&s.side===target.side&&s!==target&&hdist(s.c,s.r,target.c,target.r)<=1);

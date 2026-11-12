@@ -216,6 +216,13 @@ Everything lives in one object, `S`, so it can be saved as JSON:
 - The tavern (`hireable`) always offers four: the banner's main tavern hero, one of its extras (rotates weekly), one of its regular six, and a free rogue (or a wanderer from another banner), padded with more of the banner's own heroes when short.
 - `RECRUIT_PORT` and `recruits.png` now hold 41 portraits (10 a row).
 
+### v41 balance pass and city scenes
+
+- City Scenes pack: `towns/wings.png` now holds redrawn 960×360 scenes for all eight banners (same lot coordinates and centre offset; the centre no longer matches `screen.png`'s background, which is only the fallback before the atlas loads). `paintTownPrev` (banner Details) uses the scene's centre too.
+- Every hero starts with an artifact: `START_ITEM` fills in the newer heroes that had none.
+- New ability hooks (player side only): `forgePlus` (extra Great Forge attack), `armyDef` (whole army defense), `rangedPct` (shooter damage), `halfCost` (one spell at half mana), `manaCut` (all spells cheaper), `squallPct`, `weakenPct`.
+- Raised: Ivan (Forge half ore, +1 more attack), Oliver (30% cheaper rough ground, +5% movement), Shadow (harvest 20%), Sheila (Squall +30%), Grimes and Griffiths (+1 speed to their troop). Made distinct: Veyra, Gliss, Silka, Murmur, Boone, Mossback, Aster, Nessa Holt. Trimmed: Schmickle and Quillby to +200 gold a day. Battaglia is a Might hero.
+
 ### Map furniture
 
 - `furnishMap(bases)` runs after generation: every base (your town, rival camps, other players' towns) gets a sawmill, ore pit, amber spring and gold seam within a short walk (`reachFrom`, `freeTile`). Mines start at level 1-3, and the owner can pay at the mine to raise it (the prompt shows only when the mine is your destination).

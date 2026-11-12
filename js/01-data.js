@@ -144,42 +144,42 @@ const HEROES=[
   {id:'bear',name:'Bear',fac:'centaurs',type:'Might',st:[2,2,1,1],ab:'Great Bear',ad:'Lions +2 attack and +2 defense.',sk:['shieldcraft'],sp:[],fx:{unitAtk:{lion:2},unitDef:{lion:2}}},
   {id:'perry',name:'Perry',fac:'rangers',type:'Might',st:[2,2,1,1],ab:'Rootkeeper',ad:'Oak Wardens +1 growth per week. Rootbound gives +3 defense instead of +2.',sk:['shieldcraft'],sp:[],fx:{growth:{oak:1},rootbound:3}},
   {id:'dorothy',name:'Dorothy',fac:'rangers',type:'Magic',st:[0,1,2,2],ab:'Green Mender',ad:'Mend heals 50% more.',sk:[],sp:['mend'],fx:{mendPct:1.5}},
-  {id:'oliver',name:'Oliver',fac:'rangers',type:'Might',st:[2,1,1,1],ab:'Trailblazer',ad:'Heath and bog cost 20% less movement.',sk:['forcedmarch'],sp:[],fx:{terrainCut:0.8}},
+  {id:'oliver',name:'Oliver',fac:'rangers',type:'Might',st:[2,1,1,1],ab:'Trailblazer',ad:'Heath and bog cost 30% less movement, and +5% movement.',sk:['forcedmarch'],sp:[],fx:{terrainCut:0.7,mpPct:5}},
   {id:'engelman',name:'Engelman',fac:'wizards',type:'Magic',st:[0,1,3,2],ab:'Arcanist',ad:'Spell Echo also works on the second spell each battle.',sk:['arcane'],sp:['ember'],fx:{echo:2}},
   {id:'tempest',name:'Tempest',fac:'wizards',type:'Magic',st:[0,1,2,3],ab:'Stormborn',ad:'Chain Spark jumps to one extra enemy.',sk:['deepres'],sp:['chain'],fx:{chainExtra:1}},
   {id:'parker',name:'Parker',fac:'necro',type:'Might',st:[2,2,1,1],ab:'Restless Dead',ad:'Zombies and Werewolves +2 speed.',sk:['battleplan'],sp:[],fx:{unitSpd:{zombie:2,werewolf:2}}},
-  {id:'shadow',name:'Shadow',fac:'necro',type:'Magic',st:[0,1,2,2],ab:'Gravecaller',ad:'Grave Harvest raises 15% instead of 10%.',sk:[],sp:['raise'],fx:{harvest:0.15}},
-  {id:'grimes',name:'Grimes',fac:'dwarves',type:'Might',st:[2,2,1,1],ab:'Stone Warden',ad:'Gem Golems +3 defense.',sk:['shieldcraft'],sp:[],fx:{unitDef:{golem:3}}},
+  {id:'shadow',name:'Shadow',fac:'necro',type:'Magic',st:[0,1,2,2],ab:'Gravecaller',ad:'Grave Harvest raises 20% instead of 10%.',sk:[],sp:['raise'],fx:{harvest:0.20}},
+  {id:'grimes',name:'Grimes',fac:'dwarves',type:'Might',st:[2,2,1,1],ab:'Stone Warden',ad:'Gem Golems +3 defense and +1 speed.',sk:['shieldcraft'],sp:[],fx:{unitDef:{golem:3},unitSpd:{golem:1}}},
   {id:'boopis',name:'Boopis',fac:'centaurs',type:'Magic',st:[1,1,2,1],ab:'Pounce',ad:'War Rabbits +4 growth per week and +1 speed.',sk:['fortune'],sp:['ember'],fx:{growth:{rabbit:4},unitSpd:{rabbit:1}}},
   {id:'rocky',name:'Rocky',fac:'merfolk',type:'Might',st:[3,1,1,1],ab:'Wave Rider',ad:'Turtle Knights +2 attack and +2 speed.',sk:['forcedmarch'],sp:[],fx:{unitAtk:{turtle:2},unitSpd:{turtle:2}}},
   {id:'monkey',name:'Monkey',fac:'centaurs',type:'Might',st:[2,2,1,1],ab:'Troublemaker',ad:'Your first stack to act each battle gets an extra turn.',sk:['bladework'],sp:[],fx:{extraFirst:true}},
   {id:'binx',name:'Binx',fac:'centaurs',type:'Magic',st:[1,1,2,2],ab:'Night Prowler',ad:'+2 vision, and you see exact enemy army sizes.',sk:['farsight'],sp:['ember'],fx:{vision:2,exact:true}},
   {id:'omalley',name:"O'Malley",fac:'pirates',type:'Might',st:[2,2,1,1],ab:'Scourge of the Coast',ad:'Plunder pays 50% more.',sk:['seamanship'],sp:[],fx:{plunder:1.5}},
   {id:'vargas',name:'Vargas',fac:'pirates',type:'Might',st:[3,1,1,1],ab:'Powder Master',ad:'Cannon Crews and Gunners +25% damage and +2 shots.',sk:['steadyaim'],sp:[],fx:{unitDmgPct:{cannon:1.25,gunner:1.25},unitShots:{cannon:2,gunner:2}}},
-  {id:'sheila',name:'Sheila',fac:'pirates',type:'Magic',st:[0,1,2,2],ab:'Weatherwise',ad:'Squall costs half.',sk:[],sp:['squall'],fx:{squallHalf:true}},
+  {id:'sheila',name:'Sheila',fac:'pirates',type:'Magic',st:[0,1,2,2],ab:'Weatherwise',ad:'Squall costs half and hits 30% harder.',sk:[],sp:['squall'],fx:{squallHalf:true,squallPct:1.3}},
   {id:'davis',name:'Davis',retired:true,fac:'elves',type:'Might',st:[2,1,1,1],ab:'Master Archer',ad:'Longbow Rangers +1 damage and +4 shots.',sk:['steadyaim'],sp:[],fx:{unitDmgFlat:{longbow:1},unitShots:{longbow:4}}},
   {id:'love',name:'Love',fac:'elves',type:'Magic',st:[0,1,2,2],ab:'Heartbloom',ad:'Healing spells also give the target +1 morale for the battle.',sk:[],sp:['mend'],fx:{healMorale:1}},
-  {id:'ivan',name:'Ivan',fac:'dwarves',type:'Might',st:[2,2,1,1],ab:'Master Smith',ad:'The Great Forge costs 25% less ore.',sk:['shieldcraft'],sp:[],fx:{forgeCut:0.75}},
+  {id:'ivan',name:'Ivan',fac:'dwarves',type:'Might',st:[2,2,1,1],ab:'Master Smith',ad:'The Great Forge costs half the ore, and forged troops get +1 more attack.',sk:['shieldcraft'],sp:[],fx:{forgeCut:0.5,forgePlus:1}},
   {id:'rago',name:'Rago',fac:'necro',type:'Magic',st:[1,1,2,2],ab:'Hex Mistress',ad:'Vampires +2 attack and +2 speed.',sk:['battleplan'],sp:['ember'],fx:{unitAtk:{vampire:2},unitSpd:{vampire:2}}},
   {id:'dupengeiser',name:'Dupengeiser',fac:'dwarves',type:'Magic',st:[1,1,2,2],ab:'Steamcaller',ad:'Once per battle, raise a scalding geyser beside an enemy.',sk:['warding'],sp:['geyser'],fx:{}},
   {id:'rimmer',name:'Rimmer',fac:'wizards',type:'Magic',st:[1,1,2,2],ab:'Storm Keeper',ad:'Storm Elementals +2 attack and +1 speed.',sk:['meditation'],sp:['ember'],fx:{unitAtk:{stormel:2},unitSpd:{stormel:1}}},
   {id:'sookie',name:'Sookie',fac:'wizards',type:'Magic',st:[0,1,2,3],ab:'Owl Mother',ad:'Owl Familiars +4 growth per week and +1 speed.',sk:['meditation'],sp:['ember'],fx:{growth:{owl:4},unitSpd:{owl:1}}},
-  {id:'schmickle',name:'Schmickle',tav:true,fac:'centaurs',type:'Might',st:[2,2,1,1],ab:'Light Fingers',ad:'Brings in +250 gold every day.',sk:['shieldcraft'],sp:[],fx:{goldDay:250}},
+  {id:'schmickle',name:'Schmickle',tav:true,fac:'centaurs',type:'Might',st:[2,2,1,1],ab:'Light Fingers',ad:'Brings in +200 gold every day.',sk:['shieldcraft'],sp:[],fx:{goldDay:200}},
   {id:'elvis',name:'Eelvis',fac:'merfolk',type:'Magic',st:[1,1,2,2],ab:'Siren Voice',ad:'Siren charms last 1 turn longer, and your whole army has +1 morale.',sk:['command'],sp:['ember'],fx:{charmExtra:1,morale:1}},
 ];
 /* rogues: wanderers of no banner, found only in taverns and freed from prisons on the map */
 HEROES.push(
-  {id:'boone',name:'Boone',rogue:true,fac:'elves',type:'Might',st:[2,1,1,1],ab:'Quickdraw',ad:'Your first stack to act each battle gets an extra turn.',sk:['steadyaim'],sp:[],fx:{extraFirst:true}},
+  {id:'boone',name:'Boone',rogue:true,fac:'elves',type:'Might',st:[2,1,1,1],ab:'Quickdraw',ad:'Your shooters deal 15% more damage.',sk:['steadyaim'],sp:[],fx:{rangedPct:0.15}},
   {id:'holmes',name:'Holmes',rogue:true,fac:'necro',type:'Magic',st:[0,1,2,2],ab:'Sharp Eyes',ad:'+2 vision, and you see exact enemy army sizes.',sk:['farsight'],sp:['ember'],fx:{vision:2,exact:true}},
   {id:'tinker',name:'Tinker',rogue:true,fac:'dwarves',type:'Might',st:[2,1,1,2],ab:'Wayfinder',ad:'+15% movement every day.',sk:['forcedmarch'],sp:[],fx:{mpPct:15}},
 );
 /* placeholder heroes fill every faction to four; rename them and give them art later */
 HEROES.push(
   {id:'necro4',name:'William IV',fac:'necro',type:'Might',st:[2,2,1,1],ab:'Bone Collector',ad:'Skeletons +3 growth per week.',sk:[],sp:[],fx:{growth:{skeleton:3}}},
-  {id:'mer2',name:'Griffiths',fac:'merfolk',type:'Might',st:[2,2,1,1],ab:'Crab Warden',ad:'Giant Crabs +3 defense.',sk:[],sp:[],fx:{unitDef:{crab:3}}},
+  {id:'mer2',name:'Griffiths',fac:'merfolk',type:'Might',st:[2,2,1,1],ab:'Crab Warden',ad:'Giant Crabs +3 defense and +1 speed.',sk:[],sp:[],fx:{unitDef:{crab:3},unitSpd:{crab:1}}},
 );
 HEROES.push(
-  {id:'battaglia',name:'Battaglia',fac:'rangers',type:'Magic',st:[0,1,3,2],ab:'Champion of the Vale',ad:'Antler Knights +2 attack and +2 defense.',sk:[],sp:[],fx:{unitAtk:{antler:2},unitDef:{antler:2}}},
+  {id:'battaglia',name:'Battaglia',fac:'rangers',type:'Might',st:[2,2,1,1],ab:'Champion of the Vale',ad:'Antler Knights +2 attack and +2 defense.',sk:[],sp:[],fx:{unitAtk:{antler:2},unitDef:{antler:2}}},
   {id:'lawrence',name:'Lawrence',fac:'pirates',type:'Magic',st:[0,1,2,2],ab:"Ship's Surgeon",ad:'Mend heals 40% more, and Deckhands +2 growth per week.',sk:[],sp:['mend'],fx:{mendPct:1.4,growth:{deckhand:2}}},
   {id:'michael',name:'Michael',fac:'elves',type:'Might',st:[2,2,1,1],ab:'Glade Guard',ad:'Grove Wardens +2 attack and +2 defense.',sk:[],sp:[],fx:{unitAtk:{dryad:2},unitDef:{dryad:2}}},
   {id:'livingston',name:'Livingston',fac:'elves',type:'Magic',st:[0,1,2,2],ab:'Rootweaver',ad:'Entangle lasts 1 round longer.',sk:[],sp:['entangle'],fx:{entangleExtra:1}},
@@ -187,11 +187,11 @@ HEROES.push(
   /* v39: each banner shows six heroes (pickers, rivals' first heroes); one more per banner has tav:true and is only met in the tavern ("on the road"). Rogues have no banner. */
   {id:'alderhide',rogue:true,name:'Alderhide',fac:'centaurs',type:'Might',st:[2,2,1,1],ab:'Moose Guardian',ad:'Boars +1 attack and +2 defense.',sk:['shieldcraft'],sp:[],fx:{unitAtk:{boar:1},unitDef:{boar:2}}},
   {id:'briar',rogue:true,name:'Briar',fac:'centaurs',type:'Might',st:[2,1,1,1],ab:'Fox Scout',ad:'+2 vision and +10% movement.',sk:['farsight'],sp:[],fx:{vision:2,mpPct:10}},
-  {id:'mossback',rogue:true,name:'Mossback',fac:'centaurs',type:'Magic',st:[0,2,2,2],ab:'Tortoise Herbalist',ad:'Mend heals 50% more.',sk:['meditation'],sp:['mend'],fx:{mendPct:1.5}},
+  {id:'mossback',rogue:true,name:'Mossback',fac:'centaurs',type:'Magic',st:[0,2,2,2],ab:'Tortoise Herbalist',ad:'Your whole army +1 defense.',sk:['meditation'],sp:['mend'],fx:{armyDef:1}},
   {id:'ilyra',name:'Ilyra',fac:'elves',type:'Magic',st:[0,1,2,2],ab:'Moon Sentinel',ad:'Sprites +3 growth per week and +1 speed.',sk:['arcane'],sp:['entangle'],fx:{growth:{sprite:3},unitSpd:{sprite:1}}},
   {id:'tavian',tav:true,name:'Tavian',fac:'elves',type:'Might',st:[2,1,1,1],ab:'Veteran Duelist',ad:'Elven Riders +2 attack and +1 speed.',sk:['bladework'],sp:[],fx:{unitAtk:{rider:2},unitSpd:{rider:1}}},
   {id:'yselle',name:'Yselle',fac:'elves',type:'Magic',st:[0,1,2,2],ab:'Grove Elder',ad:'Grove Wardens +2 growth per week and +2 defense.',sk:['meditation'],sp:['mend'],fx:{growth:{dryad:2},unitDef:{dryad:2}}},
-  {id:'veyra',name:'Veyra',fac:'necro',type:'Magic',st:[0,1,2,2],ab:'Spirit Medium',ad:'Grave Harvest raises 15% instead of 10%.',sk:['sorcery'],sp:['raise'],fx:{harvest:0.15}},
+  {id:'veyra',name:'Veyra',fac:'necro',type:'Magic',st:[0,1,2,2],ab:'Spirit Medium',ad:'Grave Harvest raises 15%, and Skeletons +1 defense.',sk:['sorcery'],sp:['raise'],fx:{harvest:0.15,unitDef:{skeleton:1}}},
   {id:'graven',tav:true,name:'Graven',fac:'necro',type:'Might',st:[2,2,1,1],ab:'Haunted Knight',ad:'Werewolves +2 attack and +2 defense.',sk:['shieldcraft'],sp:[],fx:{unitAtk:{werewolf:2},unitDef:{werewolf:2}}},
   {id:'ossin',name:'Ossin',fac:'necro',type:'Magic',st:[0,1,2,2],ab:'Tomb Vizier',ad:'Zombies +3 growth per week and +2 defense.',sk:['deepres'],sp:['weaken'],fx:{growth:{zombie:3},unitDef:{zombie:2}}},
   {id:'spindle',tav:true,name:'Spindle',fac:'merfolk',type:'Might',st:[2,1,1,1],ab:'Seahorse Courier',ad:'+15% movement, and Spearfolk +1 speed.',sk:['forcedmarch'],sp:[],fx:{mpPct:15,unitSpd:{spear:1}}},
@@ -201,7 +201,7 @@ HEROES.push(
   {id:'tansy',tav:true,name:'Tansy',fac:'dwarves',type:'Magic',st:[1,1,2,1],ab:'Clockmaker',ad:'Dwarf Crossbowmen +3 shots and +1 damage.',sk:['steadyaim'],sp:['ember'],fx:{unitShots:{bolt:3},unitDmgFlat:{bolt:1}}},
   {id:'kiln',name:'Kiln',fac:'dwarves',type:'Might',st:[2,2,1,1],ab:'Forge Golem',ad:'Gem Golems +2 attack and +1 speed.',sk:['shieldcraft'],sp:[],fx:{unitAtk:{golem:2},unitSpd:{golem:1}}},
   {id:'purl',name:'Purl',fac:'wizards',type:'Magic',st:[0,1,2,2],ab:'Yarn Mage',ad:'Apprentice Mages +3 growth per week and +1 damage.',sk:['arcane'],sp:['ember'],fx:{growth:{apprentice:3},unitDmgFlat:{apprentice:1}}},
-  {id:'quillby',name:'Quillby',fac:'wizards',type:'Magic',st:[1,1,2,1],ab:'Magpie Collector',ad:'Collects shiny things: +250 gold every day.',sk:['learning'],sp:['ember'],fx:{goldDay:250}},
+  {id:'quillby',name:'Quillby',fac:'wizards',type:'Magic',st:[1,1,2,1],ab:'Magpie Collector',ad:'Collects shiny things: +200 gold every day.',sk:['learning'],sp:['ember'],fx:{goldDay:200}},
   {id:'folio',retired:true,name:'Folio',fac:'wizards',type:'Magic',st:[0,1,3,2],ab:'Living Spellbook',ad:'Ember Dart deals 50% more.',sk:['sorcery'],sp:['ember','swift'],fx:{emberPct:1.5}},
   {id:'cresset',name:'Cresset',tav:true,fac:'rangers',type:'Might',st:[2,1,1,2],ab:'Lantern Wayfinder',ad:'Heath and bog cost 20% less movement, and +1 vision.',sk:['farsight'],sp:[],fx:{terrainCut:0.8,vision:1}},
   {id:'inkwake',name:'Inkwake',fac:'pirates',type:'Might',st:[2,2,1,1],ab:'Octopus Captain',ad:'Deckhands +2 attack and +2 defense.',sk:['command'],sp:[],fx:{unitAtk:{deckhand:2},unitDef:{deckhand:2}}},
@@ -211,17 +211,17 @@ HEROES.push(
   {id:'tembor',name:'Tembor',fac:'centaurs',type:'Might',st:[2,2,1,1],ab:'Elephant Marshal',ad:'Your whole army +1 morale, and Boars +2 defense.',sk:['command'],sp:[],fx:{morale:1,unitDef:{boar:2}}},
   {id:'virel',rogue:true,name:'Virel',fac:'centaurs',type:'Magic',st:[0,1,2,2],ab:'Peacock Herald',ad:'Your whole army +1 luck and +1 morale.',sk:['fortune'],sp:['rally'],fx:{luck:1,morale:1}},
   /* v40: 16 more heroes: Rangers Nessa Holt and Reedcall join the Rangers' six; the rest are extra tavern heroes for their banners */
-  {id:'nessa_holt',name:'Nessa Holt',fac:'rangers',type:'Might',st:[2,1,1,2],ab:'Trail Surveyor',ad:'Heath and bog cost 20% less movement, and +10% movement.',sk:['forcedmarch'],sp:[],fx:{terrainCut:0.8,mpPct:10}},
+  {id:'nessa_holt',name:'Nessa Holt',fac:'rangers',type:'Might',st:[2,1,1,2],ab:'Trail Surveyor',ad:'+10% movement, and Thornguard +2 defense.',sk:['forcedmarch'],sp:[],fx:{mpPct:10,unitDef:{thorn:2}}},
   {id:'reedcall',name:'Reedcall',fac:'rangers',type:'Might',st:[2,1,1,1],ab:'Resonant Call',ad:'Reedbows +2 shots and +1 damage.',sk:['steadyaim'],sp:[],fx:{unitShots:{reed:2},unitDmgFlat:{reed:1}}},
   {id:'sera_venn',tav:true,name:'Sera Venn',fac:'wizards',type:'Magic',st:[0,1,2,2],ab:'Bell Mage',ad:'Your whole army +1 morale.',sk:['sorcery'],sp:['rally'],fx:{morale:1}},
-  {id:'gliss',tav:true,extra:true,name:'Gliss',fac:'wizards',type:'Magic',st:[0,1,3,2],ab:'Stained-Glass Caster',ad:'Chain Spark jumps to one extra enemy.',sk:['arcane'],sp:['chain'],fx:{chainExtra:1}},
-  {id:'murmur',tav:true,extra:true,name:'Murmur',fac:'necro',type:'Magic',st:[0,1,2,2],ab:'Veiled Shadow',ad:'+2 vision, and you see exact enemy army sizes.',sk:['farsight'],sp:['weaken'],fx:{vision:2,exact:true}},
+  {id:'gliss',tav:true,extra:true,name:'Gliss',fac:'wizards',type:'Magic',st:[0,1,3,2],ab:'Stained-Glass Caster',ad:'Every spell costs 1 less mana.',sk:['arcane'],sp:['chain'],fx:{manaCut:1}},
+  {id:'murmur',tav:true,extra:true,name:'Murmur',fac:'necro',type:'Magic',st:[0,1,2,2],ab:'Veiled Shadow',ad:'Weaken drains 50% more attack, and +1 vision.',sk:['farsight'],sp:['weaken'],fx:{weakenPct:1.5,vision:1}},
   {id:'rattleclaw',tav:true,extra:true,name:'Rattleclaw',fac:'necro',type:'Might',st:[2,1,1,1],ab:'Fossil Raptor',ad:'Skeletons +2 attack and +1 speed.',sk:['bladework'],sp:[],fx:{unitAtk:{skeleton:2},unitSpd:{skeleton:1}}},
-  {id:'silka',tav:true,extra:true,name:'Silka',fac:'centaurs',type:'Magic',st:[0,1,2,2],ab:'Silk Keeper',ad:'Entangle lasts 1 round longer.',sk:['meditation'],sp:['entangle'],fx:{entangleExtra:1}},
+  {id:'silka',tav:true,extra:true,name:'Silka',fac:'centaurs',type:'Magic',st:[0,1,2,2],ab:'Silk Keeper',ad:'Entangle costs half and lasts 1 round longer.',sk:['meditation'],sp:['entangle'],fx:{halfCost:'entangle',entangleExtra:1}},
   {id:'flintback',tav:true,extra:true,name:'Flintback',fac:'centaurs',type:'Might',st:[1,3,1,1],ab:'Ankylosaur Shieldbearer',ad:'Hounds +1 attack and +3 defense.',sk:['shieldcraft'],sp:[],fx:{unitAtk:{hounds:1},unitDef:{hounds:3}}},
   {id:'bess_bell',tav:true,extra:true,name:'Bess Bell',fac:'pirates',type:'Might',st:[1,2,1,2],ab:'Salvage Diver',ad:'+150 gold every day, and +10% movement.',sk:['seamanship'],sp:[],fx:{goldDay:150,mpPct:10}},
   {id:'rusk_hookhorn',tav:true,extra:true,name:'Rusk Hookhorn',fac:'pirates',type:'Might',st:[2,1,1,1],ab:'Carnotaur First Mate',ad:'Gunners +2 attack and +1 speed.',sk:['command'],sp:[],fx:{unitAtk:{gunner:2},unitSpd:{gunner:1}}},
-  {id:'aster',tav:true,extra:true,name:'Aster',fac:'elves',type:'Magic',st:[0,1,2,2],ab:'Dryad Envoy',ad:'Mend heals 50% more.',sk:['meditation'],sp:['mend'],fx:{mendPct:1.5}},
+  {id:'aster',tav:true,extra:true,name:'Aster',fac:'elves',type:'Magic',st:[0,1,2,2],ab:'Dryad Envoy',ad:'Grove Wardens +1 growth per week, and Mend heals 25% more.',sk:['meditation'],sp:['mend'],fx:{growth:{dryad:1},mendPct:1.25}},
   {id:'thornfrill',tav:true,extra:true,name:'Thornfrill',fac:'elves',type:'Might',st:[1,3,1,1],ab:'Glade Knight',ad:'Elven Riders +1 attack and +2 defense.',sk:['shieldcraft'],sp:[],fx:{unitAtk:{rider:1},unitDef:{rider:2}}},
   {id:'harlan_chalk',tav:true,extra:true,name:'Harlan Chalk',fac:'dwarves',type:'Might',st:[1,2,1,2],ab:'Mine Rescue Chief',ad:'Young Dwarves +3 growth per week and +2 defense.',sk:['command'],sp:[],fx:{growth:{delver:3},unitDef:{delver:2}}},
   {id:'morel',tav:true,extra:true,name:'Morel',fac:'dwarves',type:'Magic',st:[0,1,2,2],ab:'Spore Brewer',ad:'Your whole army +1 luck.',sk:['fortune'],sp:['mend'],fx:{luck:1}},
@@ -289,14 +289,17 @@ const START_KIT={bear:['command','sash'],perry:['shieldcraft','buckler'],boone:[
   ivan:['shieldcraft','buckler'],dupengeiser:['warding','spark'],slack:['bladework','whetstone'],eden:['steadyaim','bracer'],sookie:['meditation','candle'],
   elvis:['command','sash'],mer2:['shieldcraft','kettle'],rocky:['forcedmarch','sash'],letchworth:['meditation','breath']};
 HEROES.forEach(h=>{const k=START_KIT[h.id];if(k){h.sk=[k[0]];h.item=k[1];}});
+/* v41: every hero starts with an artifact (the newer heroes had none) */
+const START_ITEM={'zahara': 'errands', 'tembor': 'buckler', 'cresset': 'candle', 'nessa_holt': 'errands', 'reedcall': 'bracer', 'purl': 'inkwell', 'quillby': 'purse', 'sera_venn': 'breath', 'gliss': 'spark', 'veyra': 'spark', 'graven': 'buckler', 'ossin': 'inkwell', 'murmur': 'cloak', 'rattleclaw': 'whetstone', 'silka': 'candle', 'flintback': 'kettle', 'inkwake': 'cudgel', 'saltjaw': 'whetstone', 'pip_quickline': 'cloak', 'bess_bell': 'errands', 'rusk_hookhorn': 'cudgel', 'ilyra': 'breath', 'tavian': 'whetstone', 'yselle': 'inkwell', 'aster': 'candle', 'thornfrill': 'buckler', 'brynja': 'cudgel', 'tansy': 'bracer', 'kiln': 'kettle', 'harlan_chalk': 'buckler', 'morel': 'rabbit', 'spindle': 'errands', 'skimmer': 'whetstone', 'atoll': 'spark', 'iona_shoal': 'breath', 'nerka': 'cudgel', 'alderhide': 'buckler', 'briar': 'cloak', 'mossback': 'breath', 'virel': 'rabbit'};
+HEROES.forEach(h=>{if(!h.item&&START_ITEM[h.id])h.item=START_ITEM[h.id];});
 /* starting stats: one higher across the board, more on each hero's main stat, and a personal extra point */
 for(const h of HEROES){if(h._st)continue;h._st=1;const r=hash(h.id);h.st=h.st.map(v=>v+1);const main=h.type==='Might'?(h.st[0]>=h.st[1]?0:1):(h.st[2]>=h.st[3]?2:3);h.st[main]+=1+(r%2);h.st[(r>>>3)%4]+=1;}
 /* one-line versions of each ability for the hero cards; the full text is under Details */
-const AB_SHORT={bear:'Lions +2 attack and defense',perry:'Oak Wardens grow faster',boone:'First stack acts twice',holmes:'Sees farther and exactly',tinker:'+15% movement',dorothy:'Mend heals 50% more',oliver:'Heath and bog cost less',engelman:'Echoes a second spell',tempest:'Chain Spark hits one more',
-  parker:'Zombies, Werewolves +2 speed',shadow:'Raises 15% of the fallen',grimes:'Gem Golems +3 defense',boopis:'War Rabbits grow faster',rocky:'Turtles +2 attack, +2 speed',
-  monkey:'First stack acts twice',binx:'Sees farther and exactly',omalley:'Plunder pays 50% more',vargas:'Gunners hit harder, shoot more',sheila:'Squall costs half',
-  davis:'Longbows +1 damage, +4 shots',love:'Healing lifts morale',ivan:'Great Forge costs less',rago:'Vampires +2 attack and speed',dupengeiser:'Raises a scalding geyser',
-  rimmer:'Storm Elementals +2 attack',schmickle:'+250 gold a day',elvis:'Longer charms, +1 morale',necro4:'Skeletons grow faster',mer2:'Giant Crabs +3 defense',
+const AB_SHORT={bear:'Lions +2 attack and defense',perry:'Oak Wardens grow faster',boone:'First stack acts twice',holmes:'Sees farther and exactly',tinker:'+15% movement',dorothy:'Mend heals 50% more',oliver:'Rough ground costs less',engelman:'Echoes a second spell',tempest:'Chain Spark hits one more',
+  parker:'Zombies, Werewolves +2 speed',shadow:'Raises 20% of the fallen',grimes:'Gem Golems +3 defense, faster',boopis:'War Rabbits grow faster',rocky:'Turtles +2 attack, +2 speed',
+  monkey:'First stack acts twice',binx:'Sees farther and exactly',omalley:'Plunder pays 50% more',vargas:'Gunners hit harder, shoot more',sheila:'Squall cheaper and stronger',
+  davis:'Longbows +1 damage, +4 shots',love:'Healing lifts morale',ivan:'Better, cheaper Great Forge',rago:'Vampires +2 attack and speed',dupengeiser:'Raises a scalding geyser',
+  rimmer:'Storm Elementals +2 attack',schmickle:'+200 gold a day',elvis:'Longer charms, +1 morale',necro4:'Skeletons grow faster',mer2:'Giant Crabs +3 defense, faster',
   battaglia:'Antler Knights +2 / +2',lawrence:'Better Mend, more Deckhands',michael:'Grove Wardens +2 / +2',livingston:'Entangle lasts longer',slack:'Young Dwarves +2 attack',
   eden:'Longbows +1 damage, +4 shots',sookie:'Owl Familiars grow faster',letchworth:'Sirens +2 shots, +1 damage'};
 const HBY=Object.fromEntries(HEROES.map(h=>[h.id,h]));
