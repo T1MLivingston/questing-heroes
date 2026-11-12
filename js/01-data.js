@@ -159,7 +159,7 @@ const HEROES=[
   {id:'rimmer',name:'Rimmer',fac:'wizards',type:'Magic',st:[1,1,2,2],ab:'Storm Keeper',ad:'Storm Elementals +2 attack and +1 speed.',sk:['meditation'],sp:['ember'],fx:{unitAtk:{stormel:2},unitSpd:{stormel:1}}},
   {id:'sookie',name:'Sookie',fac:'wizards',type:'Magic',st:[0,1,2,3],ab:'Owl Mother',ad:'Owl Familiars +4 growth per week and +1 speed.',sk:['meditation'],sp:['ember'],fx:{growth:{owl:4},unitSpd:{owl:1}}},
   {id:'schmickle',name:'Schmickle',rogue:true,fac:'centaurs',type:'Might',st:[2,2,1,1],ab:'Light Fingers',ad:'Brings in +250 gold every day.',sk:['shieldcraft'],sp:[],fx:{goldDay:250}},
-  {id:'elvis',name:'Elvis',fac:'merfolk',type:'Magic',st:[1,1,2,2],ab:'Siren Voice',ad:'Siren charms last 1 turn longer, and your whole army has +1 morale.',sk:['command'],sp:['ember'],fx:{charmExtra:1,morale:1}},
+  {id:'elvis',name:'Eelvis',fac:'merfolk',type:'Magic',st:[1,1,2,2],ab:'Siren Voice',ad:'Siren charms last 1 turn longer, and your whole army has +1 morale.',sk:['command'],sp:['ember'],fx:{charmExtra:1,morale:1}},
 ];
 /* rogues: wanderers of no banner, found only in taverns and freed from prisons on the map */
 HEROES.push(

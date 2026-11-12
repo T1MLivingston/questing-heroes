@@ -62,7 +62,7 @@ function migrateRoster(st){if(!st||st.roster>=2)return;const M={};for(const[f,ol
     if(v.unit&&M[v.unit])v.unit=fix(v.unit);for(const x of Object.values(v))if(x&&typeof x==='object')walk(x);};
   walk(st);st.roster=2;}
 /* saves from before v25: new resources, and cities and rival homes you already hold become full towns */
-function migrateTowns(st){/* v27: the Ranger is now id perry and the Elf id eden (ids match names; new portraits) */
+function migrateTowns(st){[...(st.heroes||[]),...(st.rivals||[]),...((st.players||[]).flatMap(p=>p&&p.heroes||[]))].forEach(h=>{if(h&&h.id==='elvis'&&h.name==='Elvis')h.name='Eelvis';});/* v27: the Ranger is now id perry and the Elf id eden (ids match names; new portraits) */
   if(!st.ids27){st.ids27=1;for(const h of [...(st.heroes||[]),...(st.rivals||[]),...(st.players||[]).flatMap(q=>q.heroes||[])]){if(h.id==='eden'){h.id='perry';if(h.name==='Eden'||h.name==='Perry')h.name='Perry';}else if(h.id==='perry'){h.id='eden';if(h.name==='Perry'||h.name==='Eden')h.name='Eden';}}}
   const fix=r=>{if(r)for(const k of RES)if(r[k]==null)r[k]=0;};fix(st.res);(st.players||[]).forEach(q=>fix(q.res));
   if(st.players)return;for(const o of st.objs)if(o.type==='camp'){if(o.free&&o.lvl===3&&o.major===undefined)o.major=true;if(!o.free&&o.fac&&!o.built&&!o.owned)Object.assign(o,{major:true,built:{hall1:1,hall2:1,d1:1,d2:1,d3:1,lib1:1},name:FAC[o.fac].town,pool:{}});if(isMajor(o)&&o.owned&&o.owned===ME()&&!o.built)makeTown(o);}}

@@ -1,6 +1,6 @@
 # Legal notes
 
-Questing Heroes is a private, personal project. It is not for sale and is not published. These notes record what has been done to keep it original, and what to check before it is ever shared publicly.
+Questing Heroes is a free, non-commercial hobby project. Since 2026-11-12 the repository is public and the game is playable on GitHub Pages. These notes record what has been done to keep it original and what was checked before going public.
 
 This file is a practical checklist, not legal advice. If the game will be sold or widely released, have a lawyer review it.
 
@@ -68,11 +68,15 @@ The heroes are named after people (and possibly pets) from the author's life: Be
 - Battaglia is described as a classic square-jawed champion. Keep his look original: no emblem, costume, colour scheme or pose borrowed from any comic-book hero.
 - Watch Binx in particular: a black cat named Binx is a well-known film character. The current panther-like design with a team collar is its own, but keep it away from that film's look and story before any release, or rename the hero.
 
-## Before going public: checklist
+## Going public (2026-11-12): what was checked
 
-- [ ] Search trademarks for "Questing Heroes" (USPTO and app stores) and pick a different title if it's taken in games.
-- [ ] Get consent from everyone whose name is used, or rename those heroes.
-- [ ] Review every sprite made with AI tools for resemblance to existing characters or art, and log it above.
-- [ ] Decide on a license (keep All Rights Reserved, or pick an open-source license on purpose).
-- [ ] If the game collects any data (saves stay in the browser today), add a privacy note.
-- [ ] Keep the GitHub repository private (it now also holds all the art) until this list is done.
+- [x] Title: a web search found no game called "Questing Heroes" (closest: the board games "Questing" and "Quest: A Time of Heroes", and the "HeroQuest" brand). Fine for a free hobby game. Search the USPTO and app stores again before selling it or releasing it on a store.
+- [x] Real names: the author confirmed that everyone whose name is used has agreed. If anyone later asks to be removed, rename that hero (change `name` in `HEROES`; the id can stay).
+- [x] Famous likeness: the merman Elvis (black pompadour) was renamed **Eelvis** so the hero doesn't point to a real celebrity (`migrateTowns` renames him in old saves). Binx stays an original panther-like design.
+- [x] AI art: generated with ChatGPT image generation. OpenAI's terms assign output rights to the user; logged per pack above. Purely AI-made images may have thin copyright protection, which is acceptable for a hobby game.
+- [x] License: All Rights Reserved kept on purpose (LICENSE): play freely, no copying or redistribution.
+- [x] Privacy: no accounts, tracking or server; saves stay in the browser. The README and the in-game About page say so, and mention that Google Fonts sees visitors' IP addresses.
+- [x] Commit history: every commit is authored by `Claude <noreply@anthropic.com>`; no personal email, keys or passwords are in the repository.
+- [x] Notices: README.md and the title screen's **About & credits** carry the no-affiliation notice, credits, privacy note, license summary and a contact route (GitHub issues).
+
+Still worth doing if the game ever grows: self-host the two fonts (OFL allows it) so no visitor data goes to Google, and get a lawyer's review before any sale.
