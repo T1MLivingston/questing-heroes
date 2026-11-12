@@ -229,10 +229,13 @@ let townAlpha={};
 function artTownAlpha(path,img){if(townAlpha[path]!==undefined)return townAlpha[path];try{const cv=document.createElement('canvas');cv.width=img.width;cv.height=img.height;const c=cv.getContext('2d');c.drawImage(img,0,0);townAlpha[path]={w:img.width,d:c.getImageData(0,0,img.width,img.height).data};}catch(e){townAlpha[path]=null;}return townAlpha[path];}
 function drawArtTown(cv,TSN){const a=artImg(TSN.atlas);if(!a.ok)return false;const im=a.img,c=cv.getContext('2d'),t=TW(),f=FAC[TF()],BL=townBuildings(),BY=Object.fromEntries(BL.map(b=>[b.id,b])),OX=160,P=TSN.pieces;
   townSpots=[];c.imageSmoothingEnabled=false;c.clearRect(0,0,cv.width,cv.height);
-  c.drawImage(im,0,0,640,360,OX,0,640,360);
+  /* Town Wings pack: a real 960×360 scene per banner (centre identical to the 640 background); until it loads, mirror the edges */
+  const wa=artImg(WINGS_ATLAS),wr=XB_ROW.indexOf(TF());
+  if(wa.ok&&wr>=0)c.drawImage(wa.img,0,wr*360,960,360,0,0,960,360);
+  else{c.drawImage(im,0,0,640,360,OX,0,640,360);
   c.save();c.translate(OX,0);c.scale(-1,1);c.drawImage(im,0,0,OX,360,0,0,OX,360);c.restore();
   c.save();c.translate(OX+640+640,0);c.scale(-1,1);c.drawImage(im,640-OX,0,OX,360,640-OX,0,OX,360);c.restore();
-  for(const[x0,x1]of[[0,OX],[OX+640,960]]){const g=c.createLinearGradient(x0,0,x1,0),dk='rgba(10,14,30,.45)',cl='rgba(10,14,30,0)';g.addColorStop(0,x0?cl:dk);g.addColorStop(1,x0?dk:cl);c.fillStyle=g;c.fillRect(x0,0,x1-x0,360);}
+  for(const[x0,x1]of[[0,OX],[OX+640,960]]){const g=c.createLinearGradient(x0,0,x1,0),dk='rgba(10,14,30,.45)',cl='rgba(10,14,30,0)';g.addColorStop(0,x0?cl:dk);g.addColorStop(1,x0?dk:cl);c.fillStyle=g;c.fillRect(x0,0,x1-x0,360);}}
   const piece=(id,tab,bid,label)=>{const q=P[id];c.drawImage(im,q[0],q[1],q[2],q[3],OX+q[4],q[5],q[2],q[3]);townSpots.push({x:OX+q[4],y:q[5],w:q[2],h:q[3],tab,id:bid,label,pix:[q[0],q[1]],atlas:TSN.atlas});};
   const lot=(id,bid)=>{const q=P[id],b=BY[bid];if(!b)return;townSpots.push({x:OX+q[4],y:q[5],w:q[2],h:q[3],tab:'build',id:bid,label:`Empty lot: ${b.name}${bAvail(b)?' (can be built)':' (locked)'}`});};
   const used=new Set(['hall1','hall2','hall3','hall4']);
@@ -247,7 +250,7 @@ function drawArtTown(cv,TSN){const a=artImg(TSN.atlas);if(!a.ok)return false;con
     piece(id,di>=0?'recruit':tab||'build',di>=0?b0:tab==='upgrade'?null:b0.startsWith('wall')?(t.built.wall3?'wall3':t.built.wall2?'wall3':'wall2'):b0,label);}
   // built buildings that have no picture yet: small signs along the bottom, still clickable
   // the shared extra buildings stand in the side margins: built ones drawn, unbuilt ones are clickable lots
-  {const xa=artImg(XB_ATLAS),fk=TF();if(xa.ok)for(const[id,[fx,fy]]of Object.entries({...XB_SPOT,...(XB_SPOT_FAC[fk]||{})})){const b=BY[id],xc=xbCell(fk,id);if(!b||!xc||TSN.sites.some(z=>z[1].includes(id)))continue;used.add(id);
+  {const xa=artImg(XB_ATLAS),fk=TF();if(xa.ok)for(const[id,[fx,fy]]of xbSpots(fk)){const b=BY[id],xc=xbCell(fk,id);if(!b||!xc||TSN.sites.some(z=>z[1].includes(id)))continue;used.add(id);
     const x0=fx-64,y0=fy-120;if(t.built[id]){c.drawImage(xa.img,xc[0],xc[1],128,128,x0,y0,128,128);townSpots.push({x:x0,y:y0,w:128,h:128,tab:id==='reliquary'?'relics':id==='lib2'?'library':id==='d5'?'recruit':'build',id,label:id==='reliquary'?`${b.name}: ${S.delivered.length}/7 relics home`:`${b.name}: ${b.desc}`,pix:xc,atlas:XB_ATLAS});}
     else townSpots.push({x:x0+16,y:y0+40,w:96,h:80,tab:'build',id,label:`Empty lot: ${b.name}${bAvail(b)?' (can be built)':' (locked)'}`});}}
   // (signs stack down the left margin, outside the painted scene)
@@ -264,6 +267,10 @@ function paintTownPrev(root,tries=0){for(const cv of root.querySelectorAll('canv
 /* the six shared extra buildings (Missing Buildings packs A and B): one 128×128 cell per banner (row) and building (column) in towns/extra_buildings.png, foot at (64,120) */
 const XB_ATLAS='towns/extra_buildings.png',XB_ROW=['rangers','wizards','necro','centaurs','pirates','elves','dwarves','merfolk'],XB_COL={reliquary:0,lodge:1,lib2:2,still:3,fb1:4,fb3:5,d5:6},XB_ONLY={d5:['rangers']};
 /* where they stand in the town picture: the side margins beside the scene, three a side (canvas x of the foot centre, foot y) */
+/* Town Wings pack: purpose-made lots in the 960 scene (foot x, foot y, draw order back to front) */
+const WINGS_ATLAS='towns/wings.png';
+const XB_LOTS={"rangers":{"reliquary":[80,112,1],"lodge":[96,224,3],"lib2":[72,344,6],"still":[876,104,0],"fb1":[892,188,2],"fb3":[864,266,4],"d5":[892,344,5]},"wizards":{"reliquary":[80,112,1],"lodge":[96,224,3],"lib2":[72,344,5],"still":[876,112,0],"fb1":[892,224,2],"fb3":[864,344,4]},"necro":{"reliquary":[80,112,1],"lodge":[96,224,3],"lib2":[72,344,5],"still":[876,112,0],"fb1":[892,224,2],"fb3":[864,344,4]},"centaurs":{"reliquary":[80,112,1],"lodge":[96,224,3],"lib2":[72,344,5],"still":[876,112,0],"fb1":[892,300,2]},"pirates":{"reliquary":[80,112,1],"lodge":[96,224,3],"lib2":[72,344,5],"still":[876,112,0],"fb1":[892,300,2]},"elves":{"reliquary":[80,112,1],"lodge":[96,224,3],"lib2":[72,344,5],"still":[876,112,0],"fb1":[892,224,2],"fb3":[864,344,4]},"dwarves":{"reliquary":[80,112,1],"lodge":[96,224,3],"lib2":[72,344,5],"still":[876,112,0],"fb1":[892,224,2],"fb3":[864,344,4]},"merfolk":{"reliquary":[80,112,1],"lodge":[96,224,3],"lib2":[72,344,5],"still":[876,112,0],"fb1":[892,224,2],"fb3":[864,344,4]}};
+const xbSpots=fk=>XB_LOTS[fk]?Object.entries(XB_LOTS[fk]).sort((a,b)=>a[1][2]-b[1][2]).map(([id,v])=>[id,[v[0],v[1]]]):Object.entries({...XB_SPOT,...(XB_SPOT_FAC[fk]||{})});
 const XB_SPOT={reliquary:[80,128],lib2:[80,244],still:[80,356],lodge:[880,128],fb1:[880,244],fb3:[880,356]};
 /* Rangers also stand their Heartwood Grove (tier 5) in the right margin, so that side holds four */
 const XB_SPOT_FAC={rangers:{lodge:[880,96],d5:[880,184],fb1:[880,272],fb3:[880,360]}};
@@ -367,7 +374,7 @@ document.addEventListener('click',async e=>{
 },true);
 async function openTown(tw){
   if(modalOpen||S.over)return;
-  tw=tw&&tw!==S.town?tw:null;VT=tw;if(TOWN_SCREEN[TF()])artImg(TOWN_SCREEN[TF()].atlas);artImg(XB_ATLAS);
+  tw=tw&&tw!==S.town?tw:null;VT=tw;if(TOWN_SCREEN[TF()])artImg(TOWN_SCREEN[TF()].atlas);artImg(XB_ATLAS);artImg(WINGS_ATLAS);
   if(!tw&&S.town.taken){VT=null;toast(`${esc(TW().taken.name)} holds ${esc(TW().name)}. Defeat them at the gate to take it back.`);return;}
   townTab=townAdvice().tab==='overview'?'overview':'overview';townFocus=null;
   const p=showModal({title:`<img src="${iconURL('crest',TF(),52)}" alt="" style="width:44px;height:44px;vertical-align:-12px;margin-right:8px;image-rendering:pixelated"><span class="tname" data-rename-town="1" title="Double-click to rename">${esc(TW().name)}</span>`,body:townHTML(),wide:true,top:true,buttons:[...(nextTowns(tw).length?[{label:`Next town: ${esc(nextTowns(tw)[0].name)} ▸`,value:'next'}]:[]),{label:'Leave town ▸',value:1,primary:true}],dismiss:1});
