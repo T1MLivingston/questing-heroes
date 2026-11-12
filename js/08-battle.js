@@ -1,4 +1,10 @@
 'use strict';
+/* v35: each animation frame is cut into its own small canvas once, so shrinking it with smoothing can't blend in the
+   neighbouring frame (that bled the hit pose into the defeat pose). Works from file:// too: drawing never needs pixel reads. */
+const FRAME_CACHE=new WeakMap();
+function stripFrame(im,i,fw,fh,cols){let m=FRAME_CACHE.get(im);if(!m){m=new Map();FRAME_CACHE.set(im,m);}let cv=m.get(i);if(cv)return cv;
+  const cx=cols?(i%cols)*fw:i*fw,cy=cols?Math.floor(i/cols)*fh:0;cv=document.createElement('canvas');cv.width=Math.round(fw);cv.height=Math.round(fh);
+  cv.getContext('2d').drawImage(im,cx,cy,fw,fh,0,0,fw,fh);m.set(i,cv);return cv;}
 /* ================= BATTLE ================= */
 const BC=13,BR=9;
 const EVEN=[[1,0],[0,-1],[-1,-1],[-1,0],[-1,1],[0,1]],ODD=[[1,0],[1,-1],[0,-1],[-1,0],[0,1],[1,1]];
@@ -340,6 +346,8 @@ async function endBattle(){
 /* the commanding hero stands beside the field; click them to open the spellbook */
 function drawBattleHero(c,h,col,x,y,flip,canAct){
   const sc=Math.max(1.5,Math.min(3,BL.side/40)),now=performance.now();
+  /* v35: stand the hero at the top of the side column with the whole figure in view (never cut off at the head) */
+  {const kk=Math.min(BL.side*0.95/96,BL.h*0.32/128);y=Math.round(10+124*kk-15*sc);}
   c.save();c.fillStyle='rgba(0,0,0,.35)';c.beginPath();c.ellipse(x,y+30*sc/2,BL.side*0.38,8,0,0,7);c.fill();
   c.strokeStyle=col;c.lineWidth=2;c.stroke();
   {const bf=h.fac||(HBY[h.id]&&HBY[h.id].fac),im=bf&&tintedPacked(`battle/heroes/${bf}.png`,col,'h');
@@ -348,9 +356,9 @@ function drawBattleHero(c,h,col,x,y,flip,canAct){
   c.font=`800 ${Math.max(11,BL.side*0.13)}px "Alegreya SC",Georgia,serif`;c.textAlign='center';c.textBaseline='top';c.fillStyle='#f2d382';c.strokeStyle='#120f0b';c.lineWidth=3;
   c.strokeText(h.name,x,y+20*sc);c.fillText(h.name,x,y+20*sc);
   if(!flip){const ok=canAct&&h.book&&!bt.spellCast&&usableSpells().length;
-    c.globalAlpha=h.book?(ok?0.75+0.25*Math.sin(now/250):0.6):0.25;drawStat(c,'lore',x,y-34*sc,9+(ok?2:0));c.globalAlpha=1;
+    c.globalAlpha=h.book?(ok?0.75+0.25*Math.sin(now/250):0.6):0.25;drawStat(c,'lore',x,y+20*sc+44,9+(ok?2:0));c.globalAlpha=1;
     c.font=`700 ${Math.max(10,BL.side*0.11)}px "Alegreya SC",Georgia,serif`;c.fillStyle='#a9b8ef';c.fillText(h.book?`${h.mana} mana`:'no spellbook',x,y+20*sc+16);
-    BL.heroRect={x:0,y:y-44*sc,w:BL.side,h:80*sc};}
+    BL.heroRect={x:0,y:0,w:BL.side,h:y+20*sc+64};}
 }
 function drawBattle(){
   if(!bt)return;
@@ -391,9 +399,9 @@ function drawBattle(){
   const BIGK=new Set(['ogre','troll','drake']);
   const drawSprite=(sheet,k,row,fr,px,py,flip,alpha=1)=>{c.save();c.globalAlpha=alpha;c.imageSmoothingEnabled=false;c.translate(Math.round(px),Math.round(py));if(flip)c.scale(-1,1);
     {const u=U[k],b=u&&u.up?u.base:k,w=sheet.strip?sheet.strip.width/6*64/sheet.strip.height:sheet.width/4;if(w>64||(u&&u.amber)||BIGK.has(b))c.scale(1.4,1.4);}
-    if(sheet.strip){const im=sheet.strip,fw=im.width/6,fh=im.height,lf=64/fh,sc=spSc*lf;c.imageSmoothingEnabled=sc<1;c.imageSmoothingQuality='high';c.drawImage(im,stripPose(row,fr)*fw,0,fw,fh,Math.round(-fw/2*sc),Math.round(-60*spSc),Math.round(fw*sc),Math.round(fh*sc));c.restore();return;}
+    if(sheet.strip){const im=sheet.strip,fw=im.width/6,fh=im.height,lf=64/fh,sc=spSc*lf;c.imageSmoothingEnabled=sc<1;c.imageSmoothingQuality='high';c.drawImage(stripFrame(im,stripPose(row,fr),fw,fh),0,0,fw,fh,Math.round(-fw/2*sc),Math.round(-60*spSc),Math.round(fw*sc),Math.round(fh*sc));c.restore();return;}
     const fw=sheet.width/4;if(row===3&&ENEMY_ART[k])fr=0;
-    c.drawImage(sheet,fr*fw,row*64,fw,64,Math.round(-fw/2*spSc),Math.round(-60*spSc),fw*spSc,64*spSc);c.restore();};
+    c.drawImage(stripFrame(sheet,row*4+fr,fw,64,4),0,0,fw,64,Math.round(-fw/2*spSc),Math.round(-60*spSc),fw*spSc,64*spSc);c.restore();};
   for(const cp of bt.corpses){const sh=unitSheet(cp.k,cp.side?foeCol:team);if(!sh)continue;const t=now-cp.t0,p=hc(cp.c,cp.r);if(t>2600)continue;
     drawSprite(sh,cp.k,4,Math.min(3,Math.floor(t/150)),p.x,p.y+BL.s*0.4,cp.side===1,t<1600?1:1-(t-1600)/1000);}
   for(const{x,p}of list){const r=BL.s*0.72;const sheet=unitSheet(x.k,x.side?foeCol:team);

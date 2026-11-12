@@ -607,6 +607,35 @@ const spireFoe=o=>o&&((o.type==='spire'&&o.owned&&o.owned!==ME())||(o.type==='ca
 function zocFor(owner){const z=new Set();for(const o of S.objs)if(o.type==='spire'&&o.owned&&o.owned!==owner&&o.garrison.length)for(let a=-1;a<=1;a++)for(let b=-1;b<=1;b++)if((a||b)&&inb(o.x+a,o.y+b))z.add(idx(o.x+a,o.y+b));return z;}
 const zocMap=new WeakMap();
 const spireOwnerName=o=>!o.owned?'nobody':o.owned===ME()?'you':(o.ownerName||(FAC[o.owned]?FAC[o.owned].arch:'a rival'));
+/* v35: after everything is placed, make sure every object can be reached from a home (by land, boat or portal).
+   Heroes pass through towns, camps, portals and (after a fight) monsters; other objects are visited from a neighbouring tile.
+   Anything sealed off gets a dirt path carved through forest or crags toward the reachable land. Returns how many it fixed. */
+function ensureAccess(bases){
+  const OM=new Map();for(const o of S.objs)OM.set(idx(o.x,o.y),o);
+  const thru=o=>!o||o.type==='town'||o.type==='camp'||o.type==='portal'||o.type==='neutral'||o.type==='spire';
+  const walk=i=>{const t=S.tiles[i];return(passableT(t)||t===T.LAKE)&&!FOOT.has(i);};
+  const seen=new Uint8Array(W*H),q=[];
+  const flood=()=>{while(q.length){const i=q.pop(),x=i%W,y=(i/W)|0;const pj=PORT.get(i);if(pj!==undefined&&!seen[pj]){seen[pj]=1;q.push(pj);}
+    for(let a=-1;a<=1;a++)for(let b=-1;b<=1;b++){if(!a&&!b)continue;const nx=x+a,ny=y+b;if(!inb(nx,ny))continue;const ni=idx(nx,ny);if(seen[ni]||!walk(ni))continue;
+      if(a&&b&&(!walk(idx(x+a,y))||!walk(idx(x,y+b))))continue;seen[ni]=1;if(thru(OM.get(ni)))q.push(ni);}}};
+  for(const b of bases){for(const[dx,dy]of[[0,1],[0,0]]){const i=idx(b.x+dx,b.y+dy);if(inb(b.x+dx,b.y+dy)&&!seen[i]){seen[i]=1;q.push(i);}}}
+  flood();
+  const reached=o=>{if(seen[idx(o.x,o.y)])return true;for(let a=-1;a<=1;a++)for(let b=-1;b<=1;b++){const nx=o.x+a,ny=o.y+b;if(inb(nx,ny)&&seen[idx(nx,ny)]&&thru(OM.get(idx(nx,ny))))return true;}return false;};
+  let fixed=0;
+  for(const o of S.objs){if(o.type==='flot'||reached(o))continue;
+    /* Dijkstra from the object to the nearest reached tile: open ground is cheap, forest and crags cost more and get carved */
+    const dist=new Float64Array(W*H).fill(Infinity),prev=new Int32Array(W*H).fill(-1),st=idx(o.x,o.y);dist[st]=0;
+    const hp=[[0,st]],push=e=>{hp.push(e);let k=hp.length-1;while(k){const pk=(k-1)>>1;if(hp[pk][0]<=hp[k][0])break;[hp[pk],hp[k]]=[hp[k],hp[pk]];k=pk;}},
+      pop=()=>{const top=hp[0],last=hp.pop();if(hp.length){hp[0]=last;let k=0;for(;;){const l=2*k+1,r=l+1;let m=k;if(l<hp.length&&hp[l][0]<hp[m][0])m=l;if(r<hp.length&&hp[r][0]<hp[m][0])m=r;if(m===k)break;[hp[m],hp[k]]=[hp[k],hp[m]];k=m;}}return top;};
+    let end=-1;
+    while(hp.length){const[d,i]=pop();if(d>dist[i])continue;if(i!==st&&seen[i]&&thru(OM.get(i))){end=i;break;}const x=i%W,y=(i/W)|0;
+      for(const[a,b]of[[1,0],[-1,0],[0,1],[0,-1]]){const nx=x+a,ny=y+b;if(nx<1||ny<1||nx>W-2||ny>H-2)continue;const ni=idx(nx,ny);if(FOOT.has(ni))continue;const ob=OM.get(ni);if(ob&&!thru(ob))continue;
+        const t=S.tiles[ni],bed=S.underY&&ny>=S.underY-1&&ny<=S.underY+2,c=walk(ni)?1:!bed&&(t===T.FOREST||t===T.CRAG)?6:Infinity;if(d+c<dist[ni]){dist[ni]=d+c;prev[ni]=i;push([d+c,ni]);}}}
+    if(end<0)continue;
+    for(let i=end;i>=0&&i!==st;i=prev[i]){if(!walk(i))S.tiles[i]=T.DIRT;if(!seen[i]){seen[i]=1;q.push(i);}}
+    flood();fixed++;}
+  return fixed;
+}
 function furnishMap(bases){
   const KS=W/34;let uid=S.uid;const add=o=>{o.id=uid++;S.objs.push(o);};
   // every base gets a sawmill, ore pit, amber spring and gold seam within a short walk
@@ -721,7 +750,7 @@ function newGame(fk,hid,mo={}){
     loadPlayer(0);
   }
   rebuildFoot();
-  if(!w.noFurnish){const bases=[{x:S.town.x,y:S.town.y,fac:S.fac},...(S.players?S.players.slice(1).map(q=>({x:q.town.x,y:q.town.y,fac:q.fac})):S.rivals.map(r=>({x:r.x,y:r.y,fac:r.fac})))];furnishMap(bases);}
+  if(!w.noFurnish){const bases=[{x:S.town.x,y:S.town.y,fac:S.fac},...(S.players?S.players.slice(1).map(q=>({x:q.town.x,y:q.town.y,fac:q.fac})):S.rivals.map(r=>({x:r.x,y:r.y,fac:r.fac})))];furnishMap(bases);if(!cm)S.accessFixed=ensureAccess(bases);}
 }
 function reveal(cx,cy,r){for(let y=cy-r;y<=cy+r;y++)for(let x=cx-r;x<=cx+r;x++)if(inb(x,y)&&(x-cx)**2+(y-cy)**2<=r*r+1)S.explored[idx(x,y)]=1;}
 const vision=()=>5+skL('farsight')+(fx().vision||0)+(S&&S.heroes?gear(HERO(),'vision'):0)+(S&&S.delivered&&delivered(0)?1:0);

@@ -915,3 +915,5 @@ img.upg{filter:sepia(.55) saturate(1.9) hue-rotate(-12deg) brightness(1.06) drop
 .bthumb.art:has(.xbcrop){display:grid;place-items:center}.bthumb .xbcrop{display:block}
 .tabout{text-align:center;margin:4px 0 0}.linkbtn{background:none;border:0;padding:0;font:inherit;color:var(--blue-dk,#1b2f7a);text-decoration:underline;cursor:pointer}
 .about p{margin:0 0 10px;font-size:17px;line-height:1.4}
+/* v35: battle heroes stand at the top of the side columns, so the troop info card moves to the bottom centre */
+.bt-card{top:auto;bottom:8px;right:auto;left:50%;transform:translateX(-50%)}

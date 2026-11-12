@@ -183,6 +183,12 @@ Everything lives in one object, `S`, so it can be saved as JSON:
 - Great towns and outposts default to Random (🎲), rolled from the map seed by `seedPick`: `TOWN_W` makes 2-4 towns common and 0 or 6 very rare (about 2% each); `OUT_W` makes Some about 55%. New layout re-rolls them.
 - Banner Details: the ability is one line under the name (`.fd-ab`); the Travel and Home town boxes are gone.
 
+### v35 bug fixes
+
+- `ensureAccess(bases)` runs after `furnishMap` on generated maps (not custom ones): it floods from every home (through towns, camps, portals, spires, monsters and water) and, for any object that can't be reached, carves a dirt path through forest or crags to the nearest reached tile (Dijkstra, 4-way, never through the underworld bedrock rows). `S.accessFixed` counts the fixes; 32 test maps needed 58 and none were left unreachable.
+- Battle frames are drawn from per-frame canvases (`stripFrame`, `FRAME_CACHE` in `08-battle.js`), so shrinking with smoothing no longer bleeds the neighbouring pose into the defeat animation.
+- `drawBattleHero` stands each hero at the top of its side column with the whole figure in view; the spellbook orb sits under the name and mana. The troop info card (`.bt-card`) moved to the bottom centre.
+
 ### Map furniture
 
 - `furnishMap(bases)` runs after generation: every base (your town, rival camps, other players' towns) gets a sawmill, ore pit, amber spring and gold seam within a short walk (`reachFrom`, `freeTile`). Mines start at level 1-3, and the owner can pay at the mine to raise it (the prompt shows only when the mine is your destination).

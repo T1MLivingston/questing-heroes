@@ -3,9 +3,9 @@
 Improvement notes from playtesting (2026-11-12). Unticked items are still to do.
 
 ## Bugs first
-- [ ] Map generation: random terrain sometimes blocks mines or paths. After generation, path-check from every base to every mine and site; carve a path or regenerate if anything is unreachable.
-- [ ] Battle: the enemy death/fall animation picks up stray pixels from the neighbouring frame (left side). Inset the frame crop or pad frames.
-- [ ] Battle: place the hero near the top of the screen, never cutting off the head.
+- [x] Map generation: random terrain sometimes blocks mines or paths. After generation, path-check from every base to every mine and site; carve a path or regenerate if anything is unreachable.
+- [x] Battle: the enemy death/fall animation picks up stray pixels from the neighbouring frame (left side). Inset the frame crop or pad frames.
+- [x] Battle: place the hero near the top of the screen, never cutting off the head.
 
 ## Day flow and building
 - [ ] Suggested-builds popup: a Next button after building, not only "Save my gold".
@@ -22,7 +22,7 @@ Improvement notes from playtesting (2026-11-12). Unticked items are still to do.
 - [ ] Remove an obstacle.
 
 ## Map generation
-- [ ] Clear paths to and from every base and mine.
+- [x] Clear paths to and from every base and mine.
 - [ ] Bigger prizes always guarded: beat the guard to reach them.
 
 ## Week summary
