@@ -206,7 +206,7 @@ Everything lives in one object, `S`, so it can be saved as JSON:
 
 ### v39 six heroes per banner
 
-- Each banner shows the same six heroes everywhere (banner cards 3×2, Details page, hero picker, rivals' first heroes); a seventh per banner has `tav:true` and is only met in the tavern, which always offers it first among your banner's two slots: Rangers Cresset, Wizards Sera Venn (Folio retired in v40), Necromancers Graven, Beastmasters Schmickle, Pirates Pip Quickline, Elves Tavian, Dwarves Tansy, Merfolk Spindle. Rangers show four until two more portraits arrive.
+- Each banner shows the same six heroes everywhere (banner cards 3×2, Details page, hero picker, rivals' first heroes); a seventh per banner has `tav:true` and is only met in the tavern, which always offers it first among your banner's two slots: Rangers Cresset, Wizards Sera Venn (Folio retired in v40), Necromancers Graven, Beastmasters Schmickle, Pirates Pip Quickline, Elves Tavian, Dwarves Tansy, Merfolk Spindle. Rangers reached six in v40.
 - Beastmasters' six: Bear, Boopis, Monkey, Binx, Zahara, Tembor. Alderhide, Briar, Mossback and Virel became rogues (no banner) with Boone, Holmes and Tinker. The `recruit` flag is gone.
 - `ART_REQUEST_NEXT.md` lists the art still needed (two Rangers heroes, the skill icon PNG, 43 map walkers, the icon batches).
 
