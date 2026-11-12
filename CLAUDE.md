@@ -206,9 +206,15 @@ Everything lives in one object, `S`, so it can be saved as JSON:
 
 ### v39 six heroes per banner
 
-- Each banner shows the same six heroes everywhere (banner cards 3×2, Details page, hero picker, rivals' first heroes); a seventh per banner has `tav:true` and is only met in the tavern, which always offers it first among your banner's two slots: Rangers Cresset, Wizards Folio, Necromancers Graven, Beastmasters Schmickle, Pirates Pip Quickline, Elves Tavian, Dwarves Tansy, Merfolk Spindle. Rangers show four until two more portraits arrive.
+- Each banner shows the same six heroes everywhere (banner cards 3×2, Details page, hero picker, rivals' first heroes); a seventh per banner has `tav:true` and is only met in the tavern, which always offers it first among your banner's two slots: Rangers Cresset, Wizards Sera Venn (Folio retired in v40), Necromancers Graven, Beastmasters Schmickle, Pirates Pip Quickline, Elves Tavian, Dwarves Tansy, Merfolk Spindle. Rangers show four until two more portraits arrive.
 - Beastmasters' six: Bear, Boopis, Monkey, Binx, Zahara, Tembor. Alderhide, Briar, Mossback and Virel became rogues (no banner) with Boone, Holmes and Tinker. The `recruit` flag is gone.
 - `ART_REQUEST_NEXT.md` lists the art still needed (two Rangers heroes, the skill icon PNG, 43 map walkers, the icon batches).
+
+### v40 sixteen more heroes
+
+- Rangers Nessa Holt (Trail Surveyor) and Reedcall (Reedbows +2 shots, +1 damage) complete the Rangers' six. Fourteen more are extra tavern heroes (`tav:true, extra:true`): Wizards Gliss; Necromancers Murmur, Rattleclaw; Beastmasters Silka, Flintback; Pirates Bess Bell, Rusk Hookhorn; Elves Aster, Thornfrill; Dwarves Harlan Chalk, Morel; Merfolk Iona Shoal, Nerka. Sera Venn is the Wizards' main tavern hero; Folio is retired (kept for old saves).
+- The tavern (`hireable`) always offers four: the banner's main tavern hero, one of its extras (rotates weekly), one of its regular six, and a free rogue (or a wanderer from another banner), padded with more of the banner's own heroes when short.
+- `RECRUIT_PORT` and `recruits.png` now hold 41 portraits (10 a row).
 
 ### Map furniture
 

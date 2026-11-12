@@ -237,7 +237,7 @@ function drawRelic(c,i,x,y,r){const Rl=RELICS[i];c.save();c.translate(x,y);c.sca
 const ART_BASE='assets/';
 /* Tavern Recruits (v37): 19 portraits packed in portraits/heroes/recruits.png (10 a row, 128 px) so the published copy stays under its file limit.
    Cropped to a data URL once the atlas loads; on file:// (canvas export blocked) or before it loads, use the single file. */
-const RECRUIT_PORT=['alderhide','briar','mossback','ilyra','tavian','yselle','veyra','graven','ossin','spindle','skimmer','atoll','brynja','tansy','kiln','purl','quillby','folio','cresset','inkwake','saltjaw','pip_quickline','zahara','tembor','virel'];
+const RECRUIT_PORT=['alderhide','briar','mossback','ilyra','tavian','yselle','veyra','graven','ossin','spindle','skimmer','atoll','brynja','tansy','kiln','purl','quillby','folio','cresset','inkwake','saltjaw','pip_quickline','zahara','tembor','virel','nessa_holt','reedcall','sera_venn','gliss','murmur','rattleclaw','silka','flintback','bess_bell','rusk_hookhorn','aster','thornfrill','harlan_chalk','morel','iona_shoal','nerka'];
 const recruitCache={};
 function recruitPortrait(id){if(recruitCache[id])return recruitCache[id];const a=artImg('portraits/heroes/recruits.png'),i=RECRUIT_PORT.indexOf(id),file=ART_BASE+`portraits/heroes/${id}_128.png`;
   if(!a.ok)return file;try{const cv=document.createElement('canvas');cv.width=cv.height=128;cv.getContext('2d').drawImage(a.img,(i%10)*128,Math.floor(i/10)*128,128,128,0,0,128,128);return recruitCache[id]=cv.toDataURL();}catch(e){return recruitCache[id]=file;}}

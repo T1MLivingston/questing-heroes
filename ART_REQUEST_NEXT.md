@@ -2,7 +2,7 @@
 
 In priority order. Match the existing packs: warm storybook pixel art, dark plum outline, light from the upper left, transparent PNGs, nearest-neighbour only, original characters.
 
-## 1. Two Rangers heroes (portraits)
+## 1. ~~Two Rangers heroes~~ (done: Nessa Holt and Reedcall)
 
 Rangers show four heroes; every other banner shows six. Cresset is already the Rangers' tavern hero.
 
@@ -20,7 +20,7 @@ These heroes still walk the map as their banner's generic walker. Same format as
 
 - **Batch A (Elves, Dwarves):** Love, Michael, Livingston, Eden, Ilyra, Tavian, Yselle · Grimes, Ivan, Dupengeiser, Slack, Brynja, Tansy, Kiln
 - **Batch B (Merfolk, Pirates):** Rocky, Eelvis, Griffiths, Letchworth, Spindle, Skimmer, Atoll · Sheila, Lawrence, O'Malley, Inkwake, Saltjaw, Pip Quickline
-- **Batch C (Necromancers, Wizards, Beastmasters, Rangers):** Veyra, Graven, Ossin · Purl, Quillby, Folio · Zahara, Tembor · Cresset
+- **Batch C (Necromancers, Wizards, Beastmasters, Rangers):** Veyra, Graven, Ossin · Purl, Quillby, Sera Venn · Zahara, Tembor · Cresset
 - **Batch D (rogues):** Boone, Holmes, Tinker, Alderhide, Briar, Mossback, Virel
 
 ## 4. Icons from `ART_REQUEST_ICONS.md`
