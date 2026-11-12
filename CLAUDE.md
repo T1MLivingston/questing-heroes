@@ -204,6 +204,12 @@ Everything lives in one object, `S`, so it can be saved as JSON:
 
 - Six more tavern recruits: Pirates Inkwake (Deckhands +2/+2), Saltjaw (Duelists +2 attack, +1 speed), Pip Quickline (+2 vision, Powder Monkeys +3 growth); Beastmasters Zahara (Centaurs +1 attack, +2 speed), Tembor (army +1 morale, Boars +2 defense), Virel (army +1 luck and +1 morale; `fx.luck` now counts in `sLuck`). They join `RECRUIT_PORT` and the `recruits.png` atlas (25 portraits, 10 a row). Every banner except Rangers now has three recruits.
 
+### v39 six heroes per banner
+
+- Each banner shows the same six heroes everywhere (banner cards 3×2, Details page, hero picker, rivals' first heroes); a seventh per banner has `tav:true` and is only met in the tavern, which always offers it first among your banner's two slots: Rangers Cresset, Wizards Folio, Necromancers Graven, Beastmasters Schmickle, Pirates Pip Quickline, Elves Tavian, Dwarves Tansy, Merfolk Spindle. Rangers show four until two more portraits arrive.
+- Beastmasters' six: Bear, Boopis, Monkey, Binx, Zahara, Tembor. Alderhide, Briar, Mossback and Virel became rogues (no banner) with Boone, Holmes and Tinker. The `recruit` flag is gone.
+- `ART_REQUEST_NEXT.md` lists the art still needed (two Rangers heroes, the skill icon PNG, 43 map walkers, the icon batches).
+
 ### Map furniture
 
 - `furnishMap(bases)` runs after generation: every base (your town, rival camps, other players' towns) gets a sawmill, ore pit, amber spring and gold seam within a short walk (`reachFrom`, `freeTile`). Mines start at level 1-3, and the owner can pay at the mine to raise it (the prompt shows only when the mine is your destination).

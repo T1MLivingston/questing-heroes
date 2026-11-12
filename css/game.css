@@ -959,3 +959,8 @@ img.upg{filter:sepia(.55) saturate(1.9) hue-rotate(-12deg) brightness(1.06) drop
 .tavkit span{display:inline-flex;align-items:center;gap:4px;cursor:help}
 .tavkit .iic{width:30px;height:30px;image-rendering:pixelated}
 .tavbuy{margin-top:auto;display:flex;align-items:center;gap:12px;justify-content:center;padding-top:4px}
+/* v39: six heroes per banner: 3×2 on banner cards, the Details page and the hero picker */
+.fc-heroes{grid-template-columns:repeat(3,1fr)!important}
+.fd-heroes{grid-template-columns:repeat(3,minmax(0,1fr))}
+.picks.heroes4{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+@media (max-width:1100px){.fd-heroes{grid-template-columns:repeat(2,minmax(0,1fr))}}

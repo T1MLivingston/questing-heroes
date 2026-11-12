@@ -721,7 +721,7 @@ function newGame(fk,hid,mo={}){
   const h=mkHero(hid,w.town.x,w.town.y);h.army=[{k:t1,n:Math.round(240/U[t1].hp)},{k:t2,n:Math.round(90/U[t2].hp)}];S.heroes.push(h);
   HERO().mana=maxMana();HERO().mp=maxMP();
   if(mo.artifact){const pool=Object.keys(ITEMS).filter(k=>ITEMS[k].lvl<=3&&!(h.items||[]).includes(k));if(pool.length){const it=pick(pool);giveItem(h,it);S.startArt=it;}}
-  if(!mo.players)w.rivalSpots.forEach(p=>{const rh=pick(HEROES.filter(x=>x.fac===p.fac&&!x.rogue&&!x.recruit));S.rivals.push(mkRival(rh.id,p.x,p.y));});
+  if(!mo.players)w.rivalSpots.forEach(p=>{const rh=pick(HEROES.filter(x=>x.fac===p.fac&&!x.rogue&&!x.tav));S.rivals.push(mkRival(rh.id,p.x,p.y));});
   // wild monsters roll a level: weak, normal, strong or elite (elites guard loot)
   {const home=S.town,maxD=Math.hypot(W,H);for(const o of S.objs){if(o.type!=='neutral'||o.guard||o.lvl)continue;const d=Math.hypot(o.x-home.x,o.y-home.y)/maxD,r=Math.random()+d*0.5;
     o.lvl=r<0.35?1:r<0.85?2:r<1.15?3:4;o.n=Math.max(1,Math.round(o.n*[0,0.6,1,1.4,1.9][o.lvl]*monMul()));}}
