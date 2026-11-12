@@ -79,7 +79,7 @@ function openHeroSheet(){const h=HERO(),hd=H_();h.pack=h.pack||[];
       return`<div class="dslot${worn.length?'':' none'}"><span class="label">${sl}${cap>1?` (${worn.length}/${cap})`:''}</span>${worn.map(k=>itemBox(k,'w')).join('')}${worn.length<cap?'<div class="eqempty">empty</div>':''}</div>`;}).join('')}</div>
     <div class="sheetside">
       <p style="margin-top:0"><b>★ Ability:</b> ${hd.ad}</p>
-      ${h.skills.length?`<p><b>Skills:</b> ${h.skills.map(k=>`${SK[k].name} <i>${SK_LV[skLevel(h,k)]}</i> (${SK_TXT[k](skLevel(h,k)).replace(/\.$/,'')})`).join('; ')}</p>`:''}
+      ${h.skills.length?`<p><b>Skills:</b> ${h.skills.map(k=>`${skIco(k,22)}${SK[k].name} <i>${SK_LV[skLevel(h,k)]}</i> (${SK_TXT[k](skLevel(h,k)).replace(/\.$/,'')})`).join('; ')}</p>`:''}
       <p><b>Travel:</b> ${travelName()}</p>
       <p class="muted">Attack and Defense make every troop in the army hit harder and take less damage. Power makes spells stronger. Lore sets mana: 10 mana per point, and the hero gets back mana equal to their Lore each day.</p>
       <div class="label">Backpack · click an item to wear it</div><div class="pack">${h.pack.length?h.pack.map(k=>itemBox(k,'p')).join(''):'<p class="muted">Empty.</p>'}</div>

@@ -132,6 +132,12 @@ const SK_TXT={shieldcraft:l=>`Your troops take ${5*l}% less damage.`,bladework:l
   command:l=>`+${l} morale: a chance of extra turns in battle.`,fortune:l=>`+${l} luck: a chance of double damage.`,estates:l=>`+${250*l} gold a day.`,learning:l=>`+${10*l}% experience from battles.`,sorcery:l=>`Your spells work at +${15*l}% Power.`};
 const skLevel=(h,k)=>!h||!h.skills.includes(k)?0:((h.skLv||{})[k]||1);
 const skL=k=>S&&S.heroes&&S.heroes[S.cur]?skLevel(HERO(),k):0;
+/* Skill Icons pack (v36): 64 px icons in ui/skill_icons.png, 6 a row in this order; game skill key → icon name */
+const SKI_ORDER=['forced_march','arcane_study','bladework','shieldcraft','steady_aim','command_presence','battle_planning','deep_reserves','meditation','fortunes_favor','field_surgery','stewardship','far_sight','warding','seamanship','silver_tongue','quick_study'];
+const SK_ICON={forcedmarch:'forced_march',arcane:'arcane_study',bladework:'bladework',shieldcraft:'shieldcraft',steadyaim:'steady_aim',command:'command_presence',battleplan:'battle_planning',deepres:'deep_reserves',meditation:'meditation',fortune:'fortunes_favor',estates:'stewardship',farsight:'far_sight',warding:'warding',seamanship:'seamanship',learning:'quick_study'};
+/* a skill's icon as a sprite span (px = shown size); skills without art yet get an empty span of the same size so rows line up */
+const skIco=(k,px=28)=>{const i=SKI_ORDER.indexOf(SK_ICON[k]);if(i<0)return`<span class="skico none" style="width:${px}px;height:${px}px;background-image:url(${ART_BASE}ui/icons/spellbook.png);background-size:contain" aria-hidden="true"></span>`;const z=px/64;
+  return`<span class="skico" style="width:${px}px;height:${px}px;background-size:${384*z}px ${192*z}px;background-position:-${(i%6)*64*z}px -${Math.floor(i/6)*64*z}px" aria-hidden="true"></span>`;};
 const skName=(h,k)=>`${SK[k].name}${skLevel(h,k)>1?` (${SK_LV[skLevel(h,k)]})`:''}`;
 /* heroes: st = [attack, defense, power, lore]; fx = what the signature ability does */
 const HEROES=[

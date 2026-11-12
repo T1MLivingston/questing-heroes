@@ -13,7 +13,7 @@ Improvement notes from playtesting (2026-11-12). Unticked items are still to do.
 
 ## Heroes and movement
 - [ ] Heroes can travel between owned towns with their troops (about two days).
-- [ ] A small symbol for each skill. Level-up offers four choices (four small squares hinting at the path) instead of two.
+- [x] A small symbol for each skill. Level-up offers four choices (four small squares hinting at the path) instead of two.
 - [ ] Skill offers weighted by banner.
 - [ ] A minimap in the town view or by the heroes at the top, with a way to edit it.
 

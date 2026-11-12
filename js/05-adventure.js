@@ -218,16 +218,21 @@ async function addXP(n){
   while(h.xp>=xpFor(h.lvl)){
     h.lvl++;const keys=['atk','def','pow','lore'];const a=keys.splice(ri(0,3),1)[0],b=keys[ri(0,2)];
     const what={atk:'All troops deal +5% damage per point over the enemy’s defense.',def:'All troops take less damage.',pow:'Spells hit harder and heal more.',lore:'+10 maximum mana.'};
-    const card=k=>`<div style="display:grid;gap:4px;justify-items:center;text-align:center"><img src="${iconURL('stat',k,64)}" alt="" style="width:40px;height:40px"><b style="font-size:18px">${STATN[k]} ${h[k]} → ${h[k]+1}</b><span style="font-size:13px;font-family:var(--f-body)">${what[k]}</span></div>`;
-    const v=await showModal({title:`${h.name} reaches level ${h.lvl}`,body:'<p>Choose what your hero has learned.</p>',
-      buttons:[{label:card(a),value:a,primary:true},{label:card(b),value:b}]});
+    /* v36: the stat choice uses the same centred card row as the skill choice */
+    const card=k=>`<button class="skcard" data-skpick="${k}"><img src="${iconURL('stat',k,64)}" alt="" class="stico"><b>${STATN[k]}</b><span class="tag ok">${h[k]} → ${h[k]+1}</span><span class="skfx">${what[k]}</span></button>`;
+    const pv=showModal({title:`${h.name} reaches level ${h.lvl}`,wide:true,body:`<p class="skhint">Choose what your hero has learned.</p><div class="skgrid" style="--n:2">${card(a)}${card(b)}</div>`,buttons:[]});
+    $('#modal').querySelector('.skgrid').addEventListener('click',e=>{const bt2=e.target.closest('[data-skpick]');if(bt2)$('#modal')._close(bt2.dataset.skpick);});
+    const v=await pv;
     h[v]++;if(v==='lore')h.mana+=10;renderUI();
     // then a skill: learn a new one or improve one you have
     const ups=h.skills.filter(k=>skLevel(h,k)<3),news=h.skills.length<SK_MAX?Object.keys(SK).filter(k=>!h.skills.includes(k)):[];
     const opts=[];const sh=a=>a.slice().sort(()=>Math.random()-0.5);
-    if(news.length)opts.push(sh(news)[0]);if(ups.length)opts.push(sh(ups)[0]);for(const k of sh([...news,...ups]))if(opts.length<2&&!opts.includes(k))opts.push(k);
-    if(opts.length){const sc=k=>{const nl=skLevel(h,k)+1;return`<div style="display:grid;gap:4px;justify-items:center;text-align:center"><b style="font-size:18px">${SK[k].name}</b><span class="tag ${nl>1?'ok':''}">${nl>1?`${SK_LV[nl-1]} → ${SK_LV[nl]}`:'New skill'}</span><span style="font-size:13px;font-family:var(--f-body)">${SK_TXT[k](nl)}</span></div>`;};
-      const w=await showModal({title:`${h.name}: choose a skill`,body:`<p>${h.skills.length<SK_MAX?`Learn something new or sharpen a skill you have. Heroes can know up to ${SK_MAX} skills, each up to Expert.`:'Sharpen one of your skills.'}</p>`,buttons:opts.map((k,i)=>({label:sc(k),value:k,primary:i===0}))});
+    for(const k of sh(news).slice(0,2))opts.push(k);for(const k of sh(ups).slice(0,2))opts.push(k);for(const k of sh([...news,...ups]))if(opts.length<4&&!opts.includes(k))opts.push(k);
+    if(opts.length){/* v36: up to four cards in one even row, each with a big centred icon, the name, its level step and the effect */
+      const sc=k=>{const nl=skLevel(h,k)+1;return`<button class="skcard${nl>1?' up':''}" data-skpick="${k}">${skIco(k,72)}<b>${SK[k].name}</b><span class="tag ${nl>1?'ok':''}">${nl>1?`${SK_LV[nl-1]} → ${SK_LV[nl]}`:'New skill'}</span><span class="skfx">${SK_TXT[k](nl)}</span></button>`;};
+      const pr=showModal({title:`${h.name}: choose a skill`,wide:true,body:`<p class="skhint">${h.skills.length<SK_MAX?`Learn something new or sharpen a skill you have. Heroes can know up to ${SK_MAX} skills, each up to Expert.`:'Sharpen one of your skills.'}</p><div class="skgrid" style="--n:${opts.length}">${opts.map(sc).join('')}</div>`,buttons:[]});
+      $('#modal').querySelector('.skgrid').addEventListener('click',e=>{const b=e.target.closest('[data-skpick]');if(b)$('#modal')._close(b.dataset.skpick);});
+      const w=await pr;
       if(!h.skills.includes(w)){h.skills.push(w);}else{h.skLv=h.skLv||{};h.skLv[w]=skLevel(h,w)+1;}if(w==='deepres')h.mana=Math.min(maxMana(),h.mana);renderUI();}
   }
 }
