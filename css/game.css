@@ -1,3 +1,13 @@
+/* v38: fonts are served from the game's own files (assets/fonts, SIL Open Font License, see OFL.txt), so the game makes no requests to any other site */
+@font-face{font-family:'Alegreya SC';font-style:normal;font-weight:500;font-display:swap;src:url(../assets/fonts/alegreya-sc-latin-500-normal.woff2) format('woff2')}
+@font-face{font-family:'Alegreya SC';font-style:normal;font-weight:700;font-display:swap;src:url(../assets/fonts/alegreya-sc-latin-700-normal.woff2) format('woff2')}
+@font-face{font-family:'Alegreya SC';font-style:normal;font-weight:800;font-display:swap;src:url(../assets/fonts/alegreya-sc-latin-800-normal.woff2) format('woff2')}
+@font-face{font-family:'Alegreya SC';font-style:normal;font-weight:900;font-display:swap;src:url(../assets/fonts/alegreya-sc-latin-900-normal.woff2) format('woff2')}
+@font-face{font-family:'Alegreya';font-style:normal;font-weight:500;font-display:swap;src:url(../assets/fonts/alegreya-latin-500-normal.woff2) format('woff2')}
+@font-face{font-family:'Alegreya';font-style:normal;font-weight:600;font-display:swap;src:url(../assets/fonts/alegreya-latin-600-normal.woff2) format('woff2')}
+@font-face{font-family:'Alegreya';font-style:normal;font-weight:700;font-display:swap;src:url(../assets/fonts/alegreya-latin-700-normal.woff2) format('woff2')}
+@font-face{font-family:'Alegreya';font-style:normal;font-weight:800;font-display:swap;src:url(../assets/fonts/alegreya-latin-800-normal.woff2) format('woff2')}
+@font-face{font-family:'Alegreya';font-style:italic;font-weight:400 800;font-display:swap;src:url(../assets/fonts/alegreya-latin-500-italic.woff2) format('woff2')}
 /* Layout: a lamplit war-table. The map fills the screen; a ledger column on the right holds the hero, the army and the day's orders. The chosen faction tints every banner and frame. */
 :root{
   --ink:#101413; --vellum:#1a201d; --vellum-2:#232b27; --rule:#37433d;

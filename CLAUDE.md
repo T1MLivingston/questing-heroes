@@ -11,7 +11,7 @@ This is a free, non-commercial hobby project. Since 2026-11-12 the repo is publi
 - **Frontend**: `index.html` (markup) + `css/game.css` + plain scripts in `js/` loaded in order (v30 split; no modules, no build: they share one global scope, so later files can use anything declared earlier)
 - **Rendering**: HTML5 Canvas 2D API (map and battlefield), DOM for panels and dialogs
 - **Art**: Sprite PNGs in `assets/` where they exist (map terrain, rivers, bridges and scenery, battle rocks, every troop (Rangers as 4×5 sheets, the rest as Pack 10 strips), 5 hero map sprites, hero portraits); everything else is still drawn in code, and the drawn version is the fallback for any missing image
-- **Fonts**: Alegreya SC (display, numbers, canvas text) and Alegreya (body) from Google Fonts (SIL Open Font License): a chunky serif
+- **Fonts**: Alegreya SC (display, numbers, canvas text) and Alegreya (body), SIL Open Font License: self-hosted since v38 in `assets/fonts` (latin woff2 from Fontsource, `OFL.txt`; `@font-face` at the top of `game.css`), so the game makes no requests to other sites. The claude.ai copy embeds them as data URIs in its CSS
 - **Look**: gilded gold panels with dark ink text and royal blue for highlights, selection and primary buttons, on a deep navy page. The map, battle screen, map hover box and toasts stay dark (they reset the colour variables). Actions sit in the top bar (Town, Hero, End day, ☰ menu); the right-hand ledger must fit the window without scrolling
 - **No build tools**: open `index.html` in a browser to play
 
@@ -199,6 +199,10 @@ Everything lives in one object, `S`, so it can be saved as JSON:
 - 19 more heroes (`recruit:true` in `HEROES`): three each for Beastmasters (Alderhide, Briar, Mossback), Elves (Ilyra, Tavian, Yselle), Necromancers (Veyra, Graven, Ossin), Merfolk (Spindle, Skimmer, Atoll), Dwarves (Brynja, Tansy, Kiln) and Wizards (Purl, Quillby, Folio), plus the rogue Cresset. Recruits never appear in the banner and hero pickers or as a rival's first hero; the tavern offers them with their banner, and rivals may hire them as extra heroes. They use the banner walkers.
 - Portraits: single files `portraits/heroes/<id>_128.png` (repo) and one atlas `portraits/heroes/recruits.png` (10 a row; the published copy only ships the atlas). `iconURL('hero')` calls `recruitPortrait`, which crops the atlas to a data URL, or falls back to the single file before it loads or on file://.
 - Tavern cards (`.tavcard`): a big portrait on the hero's banner colour, name and crest, banner and type, the ability, stats, skill and artifact icons (hover for the effect, `itemTxt`), cost and Hire.
+
+### v38 more recruits
+
+- Six more tavern recruits: Pirates Inkwake (Deckhands +2/+2), Saltjaw (Duelists +2 attack, +1 speed), Pip Quickline (+2 vision, Powder Monkeys +3 growth); Beastmasters Zahara (Centaurs +1 attack, +2 speed), Tembor (army +1 morale, Boars +2 defense), Virel (army +1 luck and +1 morale; `fx.luck` now counts in `sLuck`). They join `RECRUIT_PORT` and the `recruits.png` atlas (25 portraits, 10 a row). Every banner except Rangers now has three recruits.
 
 ### Map furniture
 

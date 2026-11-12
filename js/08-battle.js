@@ -32,7 +32,7 @@ function sAtk(s){let a=s.u.atk+s.buff.atk;if(s.side===0){const f=fx();a+=hst(HER
 function sDef(s){let d=s.u.def+s.buff.def+(s.side===1&&bt&&bt.obj&&bt.obj.type==='spire'?3:0)+(s.side===1&&bt&&bt.siege?bt.siege:0);if(s.side===0){const f=fx();d+=hst(HERO(),'def')+((f.unitDef||{})[s.k]||0);if(S.fac==='dwarves'&&S.town.built.forge&&mine0(s))d++;if(S.fac==='rangers'&&mine0(s)&&s.stood)d+=f.rootbound||2;}else if(bt&&bt.enemyHero)d+=hst(bt.enemyHero,'def');if(s.defending)d=Math.ceil(d*1.3);return d;}
 function sSpd(s){let v=s.u.spd+s.buff.spd;if(s.side===0)v+=((fx().unitSpd||{})[s.k]||0);if(tide(s))v+=2;if(pack(s))v+=1;return Math.max(1,v);}
 function sMorale(s){if(s.side!==0)return 0;let m=(unpaid()?-2:0)+skL('command')+(fx().morale||0)+s.buff.morale+carry(HERO(),'morale')+gear(HERO(),'morale');if(pack(s))m+=fx().packMorale||0;return m;}
-const sLuck=s=>s.side===0?skL('fortune')+carry(HERO(),'luck')+gear(HERO(),'luck')+((HERO().luckUntil||0)>=S.day?1:0):0;
+const sLuck=s=>s.side===0?skL('fortune')+(fx().luck||0)+carry(HERO(),'luck')+gear(HERO(),'luck')+((HERO().luckUntil||0)>=S.day?1:0):0;
 const totalHP=s=>s.alive?(s.n-1)*s.u.hp+s.hp:0;
 function mkStack(k,n,side,c,r,slot){const u=U[k];let shots=u.shots||0;if(side===0&&u.shots)shots+=((fx().unitShots||{})[k]||0)+gear(HERO(),'shots');
   return{id:Math.random(),k,u,n,n0:n,hp:u.hp,side,c,r,slot,shots,retLeft:u.retal||1,acted:false,waited:false,defending:false,buff:{atk:0,def:0,spd:0,morale:0},alive:true,anim:null,rooted:0,skip:0,stood:false,movedTurn:false,movedLast:false};}

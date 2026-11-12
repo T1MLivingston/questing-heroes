@@ -13,7 +13,7 @@ Questing Heroes is a non-commercial hobby project by Tim Livingston, built with 
 - **Original content.** All names, characters, factions, units, towns, story text and art were made for this game. It uses common strategy-game mechanics but no other game's names, characters, art, music or text.
 - **No affiliation.** Questing Heroes is not affiliated with, endorsed by or connected to any other game, studio, publisher or company. Any resemblance to other works is coincidental.
 - **Real names.** Many heroes are named after the author's friends, family and pets, with their permission; the rest are invented. All characters are fictional.
-- **Privacy.** No accounts, ads, analytics or tracking. Saves and the Hall of Fame stay in your own browser (localStorage). Fonts load from Google Fonts, which receives your IP address as with any web font.
+- **Privacy.** No accounts, ads, analytics or tracking. Saves and the Hall of Fame stay in your own browser (localStorage). The fonts are included in the repository, so playing makes no requests to any other site.
 
 Concerns or takedown requests: please [open an issue](https://github.com/T1MLivingston/questing-heroes/issues) and it will be dealt with promptly.
 
@@ -22,7 +22,7 @@ Concerns or takedown requests: please [open an issue](https://github.com/T1MLivi
 - Game design and direction: Tim Livingston
 - Code: written with Claude (Anthropic)
 - Art: generated with ChatGPT image generation, then cleaned up and palette-matched
-- Fonts: [Alegreya and Alegreya SC](https://fonts.google.com/specimen/Alegreya) by Juan Pablo del Peral (Huerta Tipográfica), SIL Open Font License 1.1
+- Fonts: Alegreya and Alegreya SC by Juan Pablo del Peral (Huerta Tipográfica), SIL Open Font License 1.1, included in `assets/fonts` with `OFL.txt`
 
 ## License
 

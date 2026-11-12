@@ -204,6 +204,12 @@ HEROES.push(
   {id:'quillby',name:'Quillby',recruit:true,fac:'wizards',type:'Magic',st:[1,1,2,1],ab:'Magpie Collector',ad:'Collects shiny things: +250 gold every day.',sk:['learning'],sp:['ember'],fx:{goldDay:250}},
   {id:'folio',name:'Folio',recruit:true,fac:'wizards',type:'Magic',st:[0,1,3,2],ab:'Living Spellbook',ad:'Ember Dart deals 50% more.',sk:['sorcery'],sp:['ember','swift'],fx:{emberPct:1.5}},
   {id:'cresset',name:'Cresset',rogue:true,fac:'rangers',type:'Might',st:[2,1,1,2],ab:'Lantern Wayfinder',ad:'Heath and bog cost 20% less movement, and +1 vision.',sk:['farsight'],sp:[],fx:{terrainCut:0.8,vision:1}},
+  {id:'inkwake',name:'Inkwake',recruit:true,fac:'pirates',type:'Might',st:[2,2,1,1],ab:'Octopus Captain',ad:'Deckhands +2 attack and +2 defense.',sk:['command'],sp:[],fx:{unitAtk:{deckhand:2},unitDef:{deckhand:2}}},
+  {id:'saltjaw',name:'Saltjaw',recruit:true,fac:'pirates',type:'Might',st:[2,1,1,1],ab:'Drowned Captain',ad:'Duelists +2 attack and +1 speed.',sk:['bladework'],sp:[],fx:{unitAtk:{duelist:2},unitSpd:{duelist:1}}},
+  {id:'pip_quickline',name:'Pip Quickline',recruit:true,fac:'pirates',type:'Might',st:[1,1,1,2],ab:'Capuchin Lookout',ad:'+2 vision, and Powder Monkeys +3 growth per week.',sk:['farsight'],sp:[],fx:{vision:2,growth:{powder:3}}},
+  {id:'zahara',name:'Zahara',recruit:true,fac:'centaurs',type:'Might',st:[2,1,1,1],ab:'Cheetah Outrider',ad:'Centaurs +1 attack and +2 speed.',sk:['forcedmarch'],sp:[],fx:{unitAtk:{centaur:1},unitSpd:{centaur:2}}},
+  {id:'tembor',name:'Tembor',recruit:true,fac:'centaurs',type:'Might',st:[2,2,1,1],ab:'Elephant Marshal',ad:'Your whole army +1 morale, and Boars +2 defense.',sk:['command'],sp:[],fx:{morale:1,unitDef:{boar:2}}},
+  {id:'virel',name:'Virel',recruit:true,fac:'centaurs',type:'Magic',st:[0,1,2,2],ab:'Peacock Herald',ad:'Your whole army +1 luck and +1 morale.',sk:['fortune'],sp:['rally'],fx:{luck:1,morale:1}},
   {id:'eden',name:'Eden',fac:'elves',type:'Magic',st:[0,1,2,2],ab:'Master Archer',ad:'Longbow Rangers +1 damage and +4 shots.',sk:['steadyaim'],sp:[],fx:{unitDmgFlat:{longbow:1},unitShots:{longbow:4}}},
   {id:'letchworth',name:'Letchworth',fac:'merfolk',type:'Magic',st:[0,1,2,2],ab:'Siren Keeper',ad:'Sirens +2 shots and +1 damage.',sk:[],sp:['squall'],fx:{unitShots:{siren:2},unitDmgFlat:{siren:1}}},
 );

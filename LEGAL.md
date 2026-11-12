@@ -15,8 +15,8 @@ This file is a practical checklist, not legal advice. If the game will be sold o
 
 | Component | Source | License | Notes |
 |-----------|--------|---------|-------|
-| Alegreya SC font | Google Fonts | SIL Open Font License 1.1 | Loaded from fonts.googleapis.com at runtime |
-| Alegreya font | Google Fonts | SIL Open Font License 1.1 | Loaded from fonts.googleapis.com at runtime |
+| Alegreya SC font | Alegreya Project (via Fontsource 5.3.0) | SIL Open Font License 1.1 | Self-hosted in `assets/fonts` (latin, 500-900), licence in `assets/fonts/OFL.txt` |
+| Alegreya font | Alegreya Project (via Fontsource 5.3.0) | SIL Open Font License 1.1 | Self-hosted in `assets/fonts` (latin, 500-800 and italic), licence in `assets/fonts/OFL.txt` |
 
 No other libraries, images or audio are included. Art made later with ChatGPT or other tools should be logged below, with the tool and its terms at the time.
 
@@ -54,6 +54,7 @@ No other libraries, images or audio are included. Art made later with ChatGPT or
 | Town Wings A and B: 960×360 town scenes for all eight banners with building lots (`assets/towns/wings.png`), Heartwood Grove re-anchored | Supplied by the author (generated pixel art, ChatGPT), packed locally | 2026-11-12 | Original; scenery extends our own town scenes |
 | Skill Icons: 17 hero skill icons, 32 and 64 px (`assets/ui/skill_icons.png`, 64 px packed) | Supplied by the author (generated pixel art, ChatGPT), packed locally | 2026-11-12 | Original symbols |
 | Tavern Recruits: 19 hero portraits (`assets/portraits/heroes/*_128.png`, `recruits.png`), cut from the supplied preview sheet with the backdrop removed | Supplied by the author (generated pixel art, ChatGPT) | 2026-11-12 | Original invented characters, not real people |
+| Pirates and Beasts recruits: 6 hero portraits (Inkwake, Saltjaw, Pip Quickline, Zahara, Tembor, Virel) | Supplied by the author (generated pixel art, ChatGPT) | 2026-11-12 | Original invented characters |
 | Half-size move cursor (`assets/ui/cursors/move_small.png`) | Downscaled locally from Pack 09's move cursor | 2026-11-08 | Same as above |
 
 The generated source images (high-res magenta PNGs) are kept outside this repo.
@@ -78,8 +79,10 @@ The heroes are named after people (and possibly pets) from the author's life: Be
 - [x] Famous likeness: the merman Elvis (black pompadour) was renamed **Eelvis** so the hero doesn't point to a real celebrity (`migrateTowns` renames him in old saves). Binx stays an original panther-like design.
 - [x] AI art: generated with ChatGPT image generation. OpenAI's terms assign output rights to the user; logged per pack above. Purely AI-made images may have thin copyright protection, which is acceptable for a hobby game.
 - [x] License: All Rights Reserved kept on purpose (LICENSE): play freely, no copying or redistribution.
-- [x] Privacy: no accounts, tracking or server; saves stay in the browser. The README and the in-game About page say so, and mention that Google Fonts sees visitors' IP addresses.
+- [x] Privacy: no accounts, tracking or server; saves stay in the browser. The README and the in-game About page say so, and mention that the fonts are self-hosted.
 - [x] Commit history: every commit is authored by `Claude <noreply@anthropic.com>`; no personal email, keys or passwords are in the repository.
 - [x] Notices: README.md and the title screen's **About & credits** carry the no-affiliation notice, credits, privacy note, license summary and a contact route (GitHub issues).
 
-Still worth doing if the game ever grows: self-host the two fonts (OFL allows it) so no visitor data goes to Google, and get a lawyer's review before any sale.
+- [x] Fonts self-hosted (2026-11-12): the game makes no third-party requests, so no visitor IP addresses go to Google or anyone else.
+
+Still worth doing if the game ever grows: get a lawyer's review before any sale.
