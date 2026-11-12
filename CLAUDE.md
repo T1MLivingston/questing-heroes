@@ -194,6 +194,12 @@ Everything lives in one object, `S`, so it can be saved as JSON:
 - Skill Icons pack: 17 icons of 64×64 in `ui/skill_icons.png` (6 a row, `SKI_ORDER`); `SK_ICON` maps game skill keys to them (Stewardship = Estates, Quick Study = Learning; Field Surgery and Silver Tongue wait for those skills). `skIco(k, px)` returns a sprite span (Sorcery borrows the spellbook icon until it has art). Icons show on the hero sheet, tavern, hero picker and level-up.
 - Level-up: the stat choice and the skill choice are rows of centred cards (`.skgrid`, `.skcard`: big icon, name, level step tag, effect). The skill choice offers up to four: two new skills and two upgrades when available.
 
+### v37 Tavern Recruits
+
+- 19 more heroes (`recruit:true` in `HEROES`): three each for Beastmasters (Alderhide, Briar, Mossback), Elves (Ilyra, Tavian, Yselle), Necromancers (Veyra, Graven, Ossin), Merfolk (Spindle, Skimmer, Atoll), Dwarves (Brynja, Tansy, Kiln) and Wizards (Purl, Quillby, Folio), plus the rogue Cresset. Recruits never appear in the banner and hero pickers or as a rival's first hero; the tavern offers them with their banner, and rivals may hire them as extra heroes. They use the banner walkers.
+- Portraits: single files `portraits/heroes/<id>_128.png` (repo) and one atlas `portraits/heroes/recruits.png` (10 a row; the published copy only ships the atlas). `iconURL('hero')` calls `recruitPortrait`, which crops the atlas to a data URL, or falls back to the single file before it loads or on file://.
+- Tavern cards (`.tavcard`): a big portrait on the hero's banner colour, name and crest, banner and type, the ability, stats, skill and artifact icons (hover for the effect, `itemTxt`), cost and Hire.
+
 ### Map furniture
 
 - `furnishMap(bases)` runs after generation: every base (your town, rival camps, other players' towns) gets a sawmill, ore pit, amber spring and gold seam within a short walk (`reachFrom`, `freeTile`). Mines start at level 1-3, and the owner can pay at the mine to raise it (the prompt shows only when the mine is your destination).

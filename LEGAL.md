@@ -53,6 +53,7 @@ No other libraries, images or audio are included. Art made later with ChatGPT or
 | Selected portraits: Perry (female Ranger), Eden (red-haired Elf), updated Love (`assets/portraits/heroes`) | Supplied by the author (generated pixel portraits) | 2026-11-08 | Same as other portraits |
 | Town Wings A and B: 960×360 town scenes for all eight banners with building lots (`assets/towns/wings.png`), Heartwood Grove re-anchored | Supplied by the author (generated pixel art, ChatGPT), packed locally | 2026-11-12 | Original; scenery extends our own town scenes |
 | Skill Icons: 17 hero skill icons, 32 and 64 px (`assets/ui/skill_icons.png`, 64 px packed) | Supplied by the author (generated pixel art, ChatGPT), packed locally | 2026-11-12 | Original symbols |
+| Tavern Recruits: 19 hero portraits (`assets/portraits/heroes/*_128.png`, `recruits.png`), cut from the supplied preview sheet with the backdrop removed | Supplied by the author (generated pixel art, ChatGPT) | 2026-11-12 | Original invented characters, not real people |
 | Half-size move cursor (`assets/ui/cursors/move_small.png`) | Downscaled locally from Pack 09's move cursor | 2026-11-08 | Same as above |
 
 The generated source images (high-res magenta PNGs) are kept outside this repo.

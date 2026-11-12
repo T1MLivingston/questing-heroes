@@ -4,7 +4,7 @@
 const ABOUT_HTML=`<div class="about">
   <p><b>Questing Heroes</b> is a free, non-commercial hobby game made by Tim Livingston, built with AI coding help (Claude) and AI image tools (ChatGPT image generation).</p>
   <p>All names, characters, factions, towns and art are original to this game. It is not affiliated with, endorsed by or connected to any other game, studio or company. Any resemblance to other works is coincidental.</p>
-  <p>Heroes are named after friends, family and pets, with their permission. Characters are fictional; their abilities and looks are invented.</p>
+  <p>Many heroes are named after friends, family and pets, with their permission; the rest are invented. All characters are fictional; their abilities and looks are made up.</p>
   <p><b>Privacy:</b> the game has no accounts, ads or tracking. Saves and the Hall of Fame stay in your own browser. Fonts are loaded from Google Fonts, which sees your IP address like any website.</p>
   <p><b>Credits:</b> Alegreya and Alegreya SC fonts by Juan Pablo del Peral (Huerta Tipográfica), SIL Open Font License 1.1.</p>
   <p class="muted">© 2026 Tim Livingston. All rights reserved: you are welcome to play, but please don't copy or redistribute the code or art. Provided as is, without warranty. To raise a concern, open an issue on the game's GitHub page and it will be looked at promptly.</p></div>`;

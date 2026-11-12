@@ -31,7 +31,7 @@ Improvement notes from playtesting (2026-11-12). Unticked items are still to do.
 
 ## Tavern
 - [ ] Always four heroes for hire.
-- [ ] Redesign: bigger hero picture, their troops, artifact picture with hover text, special ability.
+- [x] Redesign: bigger hero picture, artifact picture with hover text, special ability (troops still to do).
 
 ## Settings
 - [ ] Custom keybinds for heroes, towns and every shortcut.
@@ -39,7 +39,7 @@ Improvement notes from playtesting (2026-11-12). Unticked items are still to do.
 ## World content
 - [x] Eight banners.
 - [ ] Rename the seven relics. First ideas: Ember Crown, Tidecaller's Horn, Stoneheart Shield, Whispering Compass, Gauntlet of Ages, Moonlit Chalice, Phoenix Feather.
-- [ ] Rogues: grow from four or five to ten (prisons and tavern).
+- [ ] Rogues: grow from four or five to ten (prisons and tavern). Cresset added (6 now); 18 banner tavern recruits added.
 - [ ] Towns with their own abilities.
 - [ ] Hero rework from the lore notes (kept privately, not in this repo): signature spells for every Beastmaster, Livingston and her cat, Slack's spellbook, Grimes' mentor perk, Ivan's decoys, Enzo the exiled elf rogue.
 

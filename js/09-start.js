@@ -72,12 +72,12 @@ function paintTroopPics(root,tries=0){let left=0;
     c.fillStyle='rgba(0,0,0,.25)';c.beginPath();c.ellipse(cx,gy,hw*0.36,hw*0.11,0,0,7);c.fill();
     c.imageSmoothingEnabled=z<1;c.imageSmoothingQuality='high';c.drawImage(im,0,0,fw,fh,Math.round(cx-fw*z/2),Math.round(gy-fh*z*60/64),Math.round(fw*z),Math.round(fh*z));cv.dataset.done=1;}
   if(left&&tries<40)setTimeout(()=>paintTroopPics(root,tries+1),100);}
-function bannerCard(k,off){const f=FAC[k],hs=HEROES.filter(h=>h.fac===k&&!h.rogue);
+function bannerCard(k,off){const f=FAC[k],hs=HEROES.filter(h=>h.fac===k&&!h.rogue&&!h.recruit);
   return`<div class="pick fcard2" style="--c:${f.col};--c2:${f.col2}" data-fac="${k}" ${off?'aria-disabled="true"':''} title="Choose the ${f.arch}">
     <div class="fc-head"><img src="${iconURL('crest',k,52)}" alt=""><div><h3>${f.arch}</h3></div></div>
     <div class="fc-heroes">${hs.map(h=>`<span><img src="${iconURL('hero',h.id,128)}" alt="${esc(h.name)}"><b>${esc(h.name)}</b></span>`).join('')}</div>
     <button class="btn sm fc-det" data-det="${k}">Details</button></div>`;}
-function bannerDetail(k,off){const f=FAC[k],hs=HEROES.filter(h=>h.fac===k&&!h.rogue),i=FAC_ORDER.indexOf(k),prev=FAC_ORDER[(i+7)%8],next=FAC_ORDER[(i+1)%8];
+function bannerDetail(k,off){const f=FAC[k],hs=HEROES.filter(h=>h.fac===k&&!h.rogue&&!h.recruit),i=FAC_ORDER.indexOf(k),prev=FAC_ORDER[(i+7)%8],next=FAC_ORDER[(i+1)%8];
   const stat=(n,v)=>`<span><em>${n}</em><b>${v}</b></span>`;
   return`<div class="fdet" style="--c:${f.col};--c2:${f.col2}">
     <div class="fd-top"><button class="btn" data-grid="1">◂ All banners</button><button class="btn icon" data-det="${prev}" title="${FAC[prev].arch}">‹</button>
@@ -107,7 +107,7 @@ async function pickFaction(opt={}){
   }
 }
 async function pickHero(fk,opt={}){
-  const f=FAC[fk],list=HEROES.filter(h=>h.fac===fk&&!h.rogue);
+  const f=FAC[fk],list=HEROES.filter(h=>h.fac===fk&&!h.rogue&&!h.recruit);
   const book=h=>h.type==='Magic'||h.sp.length>0;
   const body=`<div class="picks heroes4">${list.map(h=>`<div class="pick hcard" style="--c:${f.col};--c2:${f.col2}"><button class="fpick" data-hero="${h.id}" aria-label="Choose ${esc(h.name)}"></button>
       <h3 class="qh-name">${esc(h.name)}</h3>

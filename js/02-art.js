@@ -235,6 +235,12 @@ function drawRelic(c,i,x,y,r){const Rl=RELICS[i];c.save();c.translate(x,y);c.sca
   c.restore();}
 /* -------- sprite art in assets/; the drawn placeholders stay as the fallback -------- */
 const ART_BASE='assets/';
+/* Tavern Recruits (v37): 19 portraits packed in portraits/heroes/recruits.png (10 a row, 128 px) so the published copy stays under its file limit.
+   Cropped to a data URL once the atlas loads; on file:// (canvas export blocked) or before it loads, use the single file. */
+const RECRUIT_PORT=['alderhide','briar','mossback','ilyra','tavian','yselle','veyra','graven','ossin','spindle','skimmer','atoll','brynja','tansy','kiln','purl','quillby','folio','cresset'];
+const recruitCache={};
+function recruitPortrait(id){if(recruitCache[id])return recruitCache[id];const a=artImg('portraits/heroes/recruits.png'),i=RECRUIT_PORT.indexOf(id),file=ART_BASE+`portraits/heroes/${id}_128.png`;
+  if(!a.ok)return file;try{const cv=document.createElement('canvas');cv.width=cv.height=128;cv.getContext('2d').drawImage(a.img,(i%10)*128,Math.floor(i/10)*128,128,128,0,0,128,128);return recruitCache[id]=cv.toDataURL();}catch(e){return recruitCache[id]=file;}}
 const ART_PORTRAITS=new Set(['eden','boone','holmes','tinker','bear','battaglia','dorothy','oliver','grimes','engelman','tempest','rimmer','parker','necro4','shadow','rago','monkey','schmickle','binx','boopis',
   'omalley','vargas','sheila','lawrence','davis','sookie','michael','love','livingston','ivan','slack','dupengeiser','perry','rocky','elvis','letchworth','mer2']);
 const ART_MAP=new Set(['binx','dorothy','oliver','vargas']),MAP_SRC={};
@@ -311,7 +317,7 @@ const WALKERS=['perry','battaglia','engelman','rimmer','sookie','tempest','bear'
 const walkerSheet=id=>{const i=WALKERS.indexOf(id);if(i<0)return null;if(walkCache[id])return walkCache[id];const a=artImg('heroes/walkers.png');if(!a.ok)return null;
   const cv=document.createElement('canvas');cv.width=192;cv.height=384;cv.getContext('2d').drawImage(a.img,(i%7)*192,Math.floor(i/7)*384,192,384,0,0,192,384);return walkCache[id]=cv;};
 const heroSheet=(id,col)=>{if(!ART_MAP.has(id)&&WALKERS.includes(id)){const w=walkerSheet(id);if(w)return w;}if(ART_MAP.has(id)){const m=MAP_SRC[id]||id;return tinted(`heroes/${m}/map/${m}_map_sheet.png`,`team_masks/heroes/${m}/map/${m}_map_sheet.png`,col);}const f=HBY[id]&&HBY[id].fac;if(!f)return null;const a=artImg(`heroes/_banners/${f}_map_sheet.png`);return a.ok?a.img:null;};
-function preloadArt(){artImg('heroes/walkers.png');artImg('map/world_extras.png');artImg('towns/extra_buildings.png');for(const g of['meadow','dirt','sand','snow','marsh','cavern','ash','ship_deck'])artImg(`battle/grounds/${g}.png`);for(const n of['split_boulder','basalt_columns','leaning_monolith','stone_arch'])artImg(`terrain/battle/${n}_battle.png`);for(const id0 of ART_MAP){const id=MAP_SRC[id0]||id0;artImg(`heroes/${id}/map/${id}_map_sheet.png`);artImg(`team_masks/heroes/${id}/map/${id}_map_sheet.png`);}
+function preloadArt(){artImg('heroes/walkers.png');artImg('portraits/heroes/recruits.png');artImg('map/world_extras.png');artImg('towns/extra_buildings.png');for(const g of['meadow','dirt','sand','snow','marsh','cavern','ash','ship_deck'])artImg(`battle/grounds/${g}.png`);for(const n of['split_boulder','basalt_columns','leaning_monolith','stone_arch'])artImg(`terrain/battle/${n}_battle.png`);for(const id0 of ART_MAP){const id=MAP_SRC[id0]||id0;artImg(`heroes/${id}/map/${id}_map_sheet.png`);artImg(`team_masks/heroes/${id}/map/${id}_map_sheet.png`);}
   for(const k of Object.keys(ART_STRIPS))artImg(stripPath(k));
   for(const n of Object.values(ENEMY_ART)){artImg(`enemies/${n}/sheet.png`);artImg(`map/guards/${n}_32.png`);}
   for(const[n]of Object.values(MINE_ART))artImg(`map/mines/${n}.png`);for(const f of Object.keys(FLAG_COLS))artImg(`map/flags/${f}.png`);for(const p of['arrow','bolt','ember','rock','spit','spell_orb'])artImg(`projectiles/${p}.png`);
@@ -327,6 +333,7 @@ function iconURL(kind,key,size=64){
   if(kind==='stat'&&UI_STAT[key])return ART_BASE+`ui/icons/${UI_STAT[key]}.png`;
   if(kind==='ui')return ART_BASE+`ui/icons/${key}.png`;
   if(kind==='gem')return ART_BASE+`gems/${key}.png`;
+  if(kind==='hero'&&RECRUIT_PORT.includes(key))return recruitPortrait(key);
   if(kind==='hero'&&ART_PORTRAITS.has(key))return ART_BASE+`portraits/heroes/${key}_128.png?v=30`;
   if(kind==='unit'&&ENEMY_ART[key])return ART_BASE+`portraits/enemies/${ENEMY_ART[key]}_64.png`;
   if(kind==='unit'&&stripArt(key))return ART_BASE+`portraits/units/${stripArt(key)}_128.png`;

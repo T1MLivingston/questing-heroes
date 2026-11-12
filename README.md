@@ -12,7 +12,7 @@ Questing Heroes is a non-commercial hobby project by Tim Livingston, built with 
 
 - **Original content.** All names, characters, factions, units, towns, story text and art were made for this game. It uses common strategy-game mechanics but no other game's names, characters, art, music or text.
 - **No affiliation.** Questing Heroes is not affiliated with, endorsed by or connected to any other game, studio, publisher or company. Any resemblance to other works is coincidental.
-- **Real names.** Heroes are named after the author's friends, family and pets, with their permission. All characters are fictional.
+- **Real names.** Many heroes are named after the author's friends, family and pets, with their permission; the rest are invented. All characters are fictional.
 - **Privacy.** No accounts, ads, analytics or tracking. Saves and the Hall of Fame stay in your own browser (localStorage). Fonts load from Google Fonts, which receives your IP address as with any web font.
 
 Concerns or takedown requests: please [open an issue](https://github.com/T1MLivingston/questing-heroes/issues) and it will be dealt with promptly.
