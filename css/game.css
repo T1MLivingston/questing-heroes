@@ -1011,3 +1011,10 @@ img.upg{filter:sepia(.55) saturate(1.9) hue-rotate(-12deg) brightness(1.06) drop
 .creator .cr-out{background:#fffdf4}.creator .cr-out p{margin:0;font-size:17px;line-height:1.5}
 .creator .cr-prompt{font-size:14px!important;color:#3a3a3a;font-family:ui-monospace,monospace}
 @media (max-width:640px){.creator label{grid-template-columns:1fr}.creator .cr-stats{grid-template-columns:repeat(2,1fr)}}
+.creator .cr-prompt{white-space:pre-wrap;background:#f6efdc;border-radius:6px;padding:8px 10px}
+.creator .cr-sub{font:600 13px var(--f-body);color:#5a4320;text-transform:none;letter-spacing:0}
+.creator .cr-cols{display:flex;flex-wrap:wrap;gap:5px}
+.creator .cr-col{display:inline-flex;align-items:center;gap:5px;font:600 13px var(--f-body);padding:3px 9px 3px 4px;border-radius:14px;border:1px solid #9a7330;background:#fff6d6;color:#2a1d10;cursor:pointer}
+.creator .cr-col i{width:16px;height:16px;border-radius:50%;background:var(--sw);border:1px solid #2b1a33}
+.creator .cr-col.on{background:#1b2f7a;color:#fff;border-color:#1b2f7a}
+.creator .cr-out p{max-width:none!important}
