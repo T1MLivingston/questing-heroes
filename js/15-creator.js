@@ -66,6 +66,7 @@ function crPrompt(){const f=FAC[CR.fac],n=CR.name.trim()||'the hero',cl=t=>t.tri
   const tr=CR.traits.length?CR.traits:['brave'],ex=tr.map(t=>CR_EXPR[t]).filter(Boolean).slice(0,2).join(' and ');
   const L=[];
   L.push('Create a pixel-art hero portrait for a fantasy strategy game.');
+  L.push('OUTPUT: one SQUARE image (1:1 aspect ratio) with a TRANSPARENT background, saved as a PNG. If a transparent background is not possible, use a plain solid white background instead. Nothing else behind the character.');
   L.push('');
   L.push(`CHARACTER: ${n}, a ${ag}${g}${role}. ${crCap(body)}. ${CR.type} hero, ${CR_TYPE[CR.type]}.`);
   const looks=[CR.skin.trim()&&('skin/fur/body: '+cl(CR.skin)),CR.hair.trim()&&('hair: '+cl(CR.hair)),CR.eyes.trim()&&('eyes: '+cl(CR.eyes)),CR.look.trim()&&cl(CR.look)].filter(Boolean);
@@ -80,7 +81,7 @@ function crPrompt(){const f=FAC[CR.fac],n=CR.name.trim()||'the hero',cl=t=>t.tri
   L.push('- A 1-pixel dark plum outline (#2b1a33) around the figure and major shapes.');
   L.push('- Light from the upper left, with 2-3 shading steps per colour.');
   L.push('- Head-and-shoulders bust in three-quarter view, facing slightly right, centred, filling most of the frame.');
-  L.push('- Transparent background (or one flat colour that is easy to remove). No text, frame, border, logo or watermark.');
+  L.push('- Square 1:1 image. Transparent background (PNG); if that is not possible, plain solid white. No scenery, shadow, text, frame, border, logo or watermark.');
   L.push('- An original character, not based on any existing game, film, show or book.');
   return L.join('\n');}
 function crHTML(){const f=FAC[CR.fac],left=crLeft();
