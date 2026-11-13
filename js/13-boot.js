@@ -9,12 +9,19 @@ const ABOUT_HTML=`<div class="about">
   <p><b>Credits:</b> Alegreya and Alegreya SC fonts by Juan Pablo del Peral (Huerta Tipográfica), SIL Open Font License 1.1.</p>
   <p class="muted">© 2026 Tim Livingston. All rights reserved: you are welcome to play, but please don't copy or redistribute the code or art. Provided as is, without warranty. To raise a concern, open an issue on the game's GitHub page and it will be looked at promptly.</p></div>`;
 document.addEventListener('click',e=>{const b=e.target.closest('[data-about]');if(!b)return;e.stopPropagation();$('#modal')._close('about');},true);
+/* v44 title: three big buttons (New campaign, Continue, Load), then Create a hero and Hall of Fame, a parade of heroes, and a small credit line */
+document.addEventListener('click',e=>{const b=e.target.closest('[data-tv]');if(!b||b.disabled)return;e.stopPropagation();$('#modal')._close(b.dataset.tv);},true);
+function heroParade(){const ids=(a=>a.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(x=>x[1]))(HEROES.filter(h=>!h.rogue).map(h=>h.id));const one=ids.map(id=>`<img src="${iconURL('hero',id,128)}" alt="" loading="lazy">`).join('');
+  return `<div class="tparade" aria-hidden="true"><div class="tp-track">${one}${one}</div></div>`;}
 async function title(){
-  const has=loadSave();
-  const v=await showModal({title:'',body:`<img class="tbanner" src="${ART_BASE}ui/banner.png" alt="Questing Heroes"><p>Choose how you want to play: hunt the Seven Relics, conquer every rival, or pass the device around for a hot-seat game with friends. Then pick your land, your banner and your hero.</p>
-   <p class="muted">Follow the weekly rumours, break through the guarded passes, grow your town, upgrade your troops and hire more heroes. Battles are fought turn by turn on a hex field, and faster stacks act first.</p>
-   <p class="tabout"><button class="linkbtn" data-about="1">About &amp; credits</button></p>`,
-   buttons:[{label:`${ico('relic_hunt',36)}Hall of Fame`,value:'f'},{label:`✎ Create your hero`,value:'h'},{label:`${ico('load_game',36)}Load game`,value:'l',disabled:!loadSlots().length},...(has?[{label:`${ico('continue',36)}Continue as ${esc(has.heroes[0].name)}`,value:'c'}]:[]),{label:`${ico('new_campaign',36)}New campaign`,value:'n',primary:true}]});
+  const has=loadSave(),slots=loadSlots().length;
+  const big=(v,icon,label,dis,extra='')=>`<button class="tbtn" data-tv="${v}" ${dis?'disabled':''}>${extra||ico(icon,72)}<b>${label}</b></button>`;
+  const cont=has?`<img class="tb-face" src="${iconURL('hero',has.heroes[0].id,128)}" alt="">`:'';
+  const v=await showModal({title:'',body:`<div class="titlescreen"><img class="tbanner" src="${ART_BASE}ui/banner.png" alt="Questing Heroes">
+    <div class="tb-main">${big('n','new_campaign','New campaign')}${big('c','continue',has?'Continue':'Continue',!has,cont)}${big('l','load_game','Load',!slots)}</div>
+    <div class="tb-sub"><button class="tbtn sm" data-tv="h"><span class="tb-emoji">✎</span><b>Create a hero</b></button><button class="tbtn sm" data-tv="f">${ico('relic_hunt',40)}<b>Hall of Fame</b></button></div>
+    ${heroParade()}
+    <p class="tcredit">Free game created by Tim Livingston, computer teacher · <button class="linkbtn" data-about="1">About &amp; credits</button></p></div>`,buttons:[]});
   if(v==='about'){await showModal({title:'About & credits',body:ABOUT_HTML,buttons:[{label:'Back',value:1,primary:true}],dismiss:1});title();return;}
   if(v==='h'){await openCreator();title();return;}
   if(v==='f'){await showModal({title:'Hall of Fame',body:fameHTML(),wide:true,buttons:[{label:'Back',value:1,primary:true}],dismiss:1});title();return;}

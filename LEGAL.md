@@ -58,6 +58,7 @@ No other libraries, images or audio are included. Art made later with ChatGPT or
 | 16 Faction Recruits: portraits of Nessa Holt, Reedcall, Sera Venn, Gliss, Murmur, Rattleclaw, Silka, Flintback, Bess Bell, Rusk Hookhorn, Aster, Thornfrill, Harlan Chalk, Morel, Iona Shoal, Nerka | Supplied by the author (generated pixel art, ChatGPT) | 2026-11-12 | Original invented characters |
 | City Scenes: redrawn 960×360 town scenery for all eight banners (`assets/towns/wings.png`) | Supplied by the author (generated pixel art, ChatGPT), packed locally | 2026-11-12 | Original scenes |
 | Final Roster: 13 hero portraits (Peyto, Nissa, the second Livingston, Enzo, Axel, Dot, Gale, Wick, Lore, Fern, Mossback, Alderhide, India) in `assets/portraits/heroes/` and `recruits.png` | Supplied by the author (generated pixel art, ChatGPT) | 2026-11-13 | Invented characters; any modelled on real people are used with their permission and carry no surnames beyond what the author approved |
+| Banner Heroes: 13 new hero portraits and 13 redraws in `assets/portraits/heroes/` and `recruits.png` | Supplied by the author (generated pixel art, ChatGPT) | 2026-11-13 | Invented characters; any modelled on real people are used with their permission |
 | Half-size move cursor (`assets/ui/cursors/move_small.png`) | Downscaled locally from Pack 09's move cursor | 2026-11-08 | Same as above |
 
 The generated source images (high-res magenta PNGs) are kept outside this repo.

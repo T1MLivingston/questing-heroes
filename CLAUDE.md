@@ -223,6 +223,11 @@ Everything lives in one object, `S`, so it can be saved as JSON:
 - New ability hooks (player side only): `forgePlus` (extra Great Forge attack), `armyDef` (whole army defense), `rangedPct` (shooter damage), `halfCost` (one spell at half mana), `manaCut` (all spells cheaper), `squallPct`, `weakenPct`.
 - Raised: Ivan (Forge half ore, +1 more attack), Oliver (30% cheaper rough ground, +5% movement), Shadow (harvest 20%), Sheila (Squall +30%), Grimes and Griffiths (+1 speed to their troop). Made distinct: Veyra, Gliss, Silka, Murmur, Boone, Mossback, Aster, Nessa Holt. Trimmed: Schmickle and Quillby to +200 gold a day. Battaglia is a Might hero.
 
+### v44 banner heroes and title screen
+
+- Banner Heroes pack: 13 new heroes (picks Vera, Remy (Wizards), Ivy, Lune (Elves), Kit & Nell (Dwarves); wanderers Ada (Wizards), Mara (Necromancers), Hart (Elves), Orla (Dwarves), Cato and Sid & Tess (Pirates), Wren and Rumble (Beastmasters)) and redrawn portraits for Payton, Livingston (cyborg), Wick, Lore, Axel, Dot, Gale, Nissa, Mossback, Alderhide, Enzo, India and Fern. Crestwind and Thornfrill are Rangers picks again, Enzo a Dwarves pick, Rusk Hookhorn a rogue. Silka is now Violet and Vesra Willa (the pack's Ivy and Mara took those names). Every banner has 8 picks and 2 wanderers except Merfolk (7 picks). `RECRUIT_PORT`/`recruits.png` hold 61 portraits (7 rows).
+- Title screen (`title` in `13-boot.js`, `.titlescreen`): the banner art, three big buttons (New campaign, Continue with the saved hero's face, Load), then Create a hero and Hall of Fame, a looping parade of every hero's portrait (`heroParade`, pauses on hover, still with reduced motion) and a small credit line with About & credits. Buttons carry `data-tv` and close the modal with that value.
+
 ### v43 final roster, hero creator
 
 - Eight heroes per banner in every picker and two tavern wanderers (`tav:true`; the `extra` flag is gone). Banner cards show the eight 4×2 with Details beside the name; Necromancers, Wizards and Rangers tiles use a lighter backing (`[data-fac]` rules at the end of `game.css`). The Details page and hero picker use four columns.
