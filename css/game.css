@@ -979,3 +979,35 @@ img.upg{filter:sepia(.55) saturate(1.9) hue-rotate(-12deg) brightness(1.06) drop
 @media (prefers-reduced-motion:reduce){.tut-glow{animation:none}}
 .sheet:has(.gm-top) .tutchip{margin-left:auto;font-size:16px}
 .sheet:has(.gm-top) .tutchip.on{background:rgba(255,236,170,.75);border-color:#e0a92a}
+/* v43: eight heroes per banner (4×2, smaller), Details beside the banner name; lighter tiles for Necromancers, Wizards and Rangers */
+.fc-heroes{grid-template-columns:repeat(4,1fr)!important;gap:4px!important}
+.fc-heroes b{font-size:11px!important;padding:8px 2px 2px!important}
+.fc-head .fc-det{margin:0 0 0 auto!important;align-self:center}
+.fcard2{padding-bottom:10px!important}
+[data-fac="necro"] .fc-heroes img,.fdet[data-fac="necro"] .fd-hero>img{background:color-mix(in srgb,var(--c) 60%,#fff 40%)!important}
+[data-fac="wizards"] .fc-heroes img,.fdet[data-fac="wizards"] .fd-hero>img{background:color-mix(in srgb,var(--c) 60%,#fff 40%)!important}
+[data-fac="rangers"] .fc-heroes img,.fdet[data-fac="rangers"] .fd-hero>img{background:color-mix(in srgb,var(--c) 60%,#fff 40%)!important}
+.fd-heroes{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+.fd-hero{grid-template-columns:96px 1fr!important}.fd-hero>img{width:96px!important;height:96px!important}
+.picks.heroes4{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+@media (max-width:1100px){.fd-heroes{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+/* v43: hero creator worksheet */
+.creator{display:grid;gap:12px;max-width:860px;margin:0 auto}
+.creator section{background:rgba(255,250,232,.55);border:1px solid rgba(120,90,40,.35);border-radius:8px;padding:10px 14px;display:grid;gap:8px}
+.creator h3{margin:0;font:800 19px var(--f-display);color:#1b2f7a;display:flex;gap:10px;align-items:center}
+.creator label{display:grid;grid-template-columns:200px 1fr;gap:10px;align-items:center;font-weight:700}
+.creator input,.creator select,.creator textarea{font:16px var(--f-body);padding:6px 8px;border:1px solid #9a7330;border-radius:6px;background:#fffdf4;color:#2a1d10;width:100%;box-sizing:border-box}
+.creator .cr-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.creator .cr-row>span{font-weight:700;margin-right:6px}
+.creator .cr-row select{width:auto;min-width:180px}
+.creator .chip{font:700 15px var(--f-body);padding:5px 12px;border-radius:16px;border:1px solid #9a7330;background:#fff6d6;color:#2a1d10;cursor:pointer}
+.creator .chip.on{background:#1b2f7a;color:#fff;border-color:#1b2f7a}
+.creator .cr-chips{display:flex;flex-wrap:wrap;gap:6px}
+.creator .cr-hint{margin:0;font-size:14px;color:#5a4320}
+.creator .cr-left{font:700 14px var(--f-body);background:#b33;color:#fff;border-radius:10px;padding:2px 10px}.creator .cr-left.done{background:#2c7a3a}
+.creator .cr-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.creator .cr-stat{display:grid;gap:2px;text-align:center;background:#fff6d6;border-radius:8px;padding:8px}
+.creator .cr-stat small{font-size:12px;color:#5a4320}.creator .cr-stat div{display:flex;justify-content:center;align-items:center;gap:10px}
+.creator .cr-stat span{font:800 26px var(--f-display);min-width:24px}
+.creator .cr-out{background:#fffdf4}.creator .cr-out p{margin:0;font-size:17px;line-height:1.5}
+.creator .cr-prompt{font-size:14px!important;color:#3a3a3a;font-family:ui-monospace,monospace}
+@media (max-width:640px){.creator label{grid-template-columns:1fr}.creator .cr-stats{grid-template-columns:repeat(2,1fr)}}

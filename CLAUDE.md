@@ -23,7 +23,7 @@ questing-heroes/
 ├── css/game.css  # All styles (asset URLs are ../assets/...)
 ├── js/           # 00-core helpers, 01-data, 02-art, 03-map (generators, camera, drawing, pathfinding),
 │                 # 04-ui, 05-adventure, 06-rivals, 07-town, 08-battle, 09-start (pickers),
-│                 # 10-save (end states, saves, Hall of Fame), 11-input, 12-editor, 13-boot, 14-tutorial
+│                 # 10-save (end states, saves, Hall of Fame), 11-input, 12-editor, 13-boot, 14-tutorial, 15-creator
 ├── CLAUDE.md     # This file
 ├── ART_REQUEST_TROOPS.md # Brief for the troop sprite pack (delivered as Pack 10)
 ├── ART_REQUEST_TOWNS.md  # Brief for the town buildings pack (Pack 13)
@@ -222,6 +222,15 @@ Everything lives in one object, `S`, so it can be saved as JSON:
 - Every hero starts with an artifact: `START_ITEM` fills in the newer heroes that had none.
 - New ability hooks (player side only): `forgePlus` (extra Great Forge attack), `armyDef` (whole army defense), `rangedPct` (shooter damage), `halfCost` (one spell at half mana), `manaCut` (all spells cheaper), `squallPct`, `weakenPct`.
 - Raised: Ivan (Forge half ore, +1 more attack), Oliver (30% cheaper rough ground, +5% movement), Shadow (harvest 20%), Sheila (Squall +30%), Grimes and Griffiths (+1 speed to their troop). Made distinct: Veyra, Gliss, Silka, Murmur, Boone, Mossback, Aster, Nessa Holt. Trimmed: Schmickle and Quillby to +200 gold a day. Battaglia is a Might hero.
+
+### v43 final roster, hero creator
+
+- Eight heroes per banner in every picker and two tavern wanderers (`tav:true`; the `extra` flag is gone). Banner cards show the eight 4×2 with Details beside the name; Necromancers, Wizards and Rangers tiles use a lighter backing (`[data-fac]` rules at the end of `game.css`). The Details page and hero picker use four columns.
+- Retired (kept in `HBY` for saves): Love, Ilyra, Tavian, Aster, Brynja, Purl, Quillby, Nessa Holt, Saltjaw. Renamed (old saves fixed by `OLD_NAMES` in `migrateTowns`): Reedcall → Crestwind, Veyra → Vesra, Ossin → Osrin, Graven → Lore, Zahara → Zarra, Tembor → India, Cresset → Wick (now the Rangers' wanderer), Yselle → Fern, Atoll → Coral. Boopis and Thornfrill moved to the Rangers; Schmickle and Briar are rogues; Mossback and Alderhide are the Beastmasters' wanderers.
+- New heroes: Peyto (Pirates), Nissa (Rangers), a second Livingston (`livingston_cyborg`, Elves; `fx.partner`/`partnerMorale`: +1 army morale in `sMorale` while his partner is in your party, and the other way round), Enzo (Dwarves), and wanderers Axel (Merfolk), Dot (Rangers), Gale (Wizards). `RECRUIT_PORT`/`recruits.png` hold 48 portraits.
+- Tavern (`hireable`): the banner's two wanderers, one of its eight, and a rogue (or a hero of another banner).
+- Tutorial: step 1 offers **No thanks, I'll play on my own**; every later step has **✕ Leave tutorial**.
+- Hero creator (`js/15-creator.js`, title button **Create your hero**): a student worksheet (name, what they are, banner, Might or Magic, look, three traits, home, want, fear, 6 stat points with at most 4 in one, an ability (boost a troop, a map perk or written), a spell (banner list or invented)). It writes a story paragraph and an art prompt live, with Copy, Print (opens a printable sheet with a drawing box) and Start over. The draft is saved only in this browser (`questing-heroes-creator`); nothing is sent anywhere.
 
 ### v42 tutorial
 

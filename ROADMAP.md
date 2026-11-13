@@ -44,11 +44,18 @@ Improvement notes from playtesting (2026-11-12). Unticked items are still to do.
 - [ ] Hero rework from the lore notes (kept privately, not in this repo): signature spells for every Beastmaster, Livingston and her cat, Slack's spellbook, Grimes' mentor perk, Ivan's decoys, Enzo the exiled elf rogue.
 
 ## Tutorial
+
+- [x] v43: "No thanks" on the first step and "Leave tutorial" on every step.
 - [x] First-week tutorial with a toggle on Choose your game (on for first-time players).
 
 ## In-game manual
 - [ ] Lore and how-to-play manual.
 - [ ] A page per banner: heroes, strengths, spells, might vs magic and why, a short story for each.
+
+## Classroom
+
+- [x] v43: Create your hero worksheet (story and art prompt, print, all local).
+- [ ] Let a created hero be played (import the worksheet as a custom hero).
 
 ## Ideas to consider
 - [ ] Ambushes or random events while travelling.

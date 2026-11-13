@@ -17,8 +17,8 @@ const hireCost=x=>x.fac===TF()&&!x.rogue?HIRE_COST:HIRE_COST+500;
 const hireable=()=>{const taken=new Set([...S.heroes.map(y=>y.id),...S.rivals.map(r=>r.id),...(S.players||[]).flatMap(p=>(p.heroes||[]).map(h=>h.id))]);
   const free=HEROES.filter(x=>!taken.has(x.id)&&!x.blank),g=mulberry32((S.seed^Math.imul(weekNo()+1,7919))>>>0),sh=a=>a.map(x=>[g(),x]).sort((p,q)=>p[0]-q[0]).map(x=>x[1]);
   const rg=sh(free.filter(x=>x.rogue&&!(S.jailed||[]).includes(x.id))).slice(0,1);const own=free.filter(x=>x.fac===TF()&&!x.rogue);
-  /* v40: four heroes: the banner's tavern hero, one of its extra tavern heroes (rotates weekly), one of its regular heroes, and a rogue (or a wanderer from another banner) */
-  const L=[...own.filter(x=>x.tav&&!x.extra).slice(0,1),...sh(own.filter(x=>x.extra)).slice(0,1),...sh(own.filter(x=>!x.tav)).slice(0,1),...rg,...sh(free.filter(x=>x.fac!==TF()&&!x.rogue&&!x.extra)).slice(0,1-rg.length)];
+  /* v43: four heroes: the banner's two wanderers, one of its eight, and a rogue (or a hero from another banner) */
+  const L=[...sh(own.filter(x=>x.tav)).slice(0,2),...sh(own.filter(x=>!x.tav)).slice(0,1),...rg,...sh(free.filter(x=>x.fac!==TF()&&!x.rogue)).slice(0,1-rg.length)];
   for(const x of sh(own))if(L.length<4&&!L.includes(x))L.push(x);return L;};
 /* each banner's own buildings: a horde (more of one troop each week), one that teaches visiting heroes, and a special */
 const FAC_BUILD={

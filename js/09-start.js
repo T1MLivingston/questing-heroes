@@ -75,12 +75,11 @@ function paintTroopPics(root,tries=0){let left=0;
   if(left&&tries<40)setTimeout(()=>paintTroopPics(root,tries+1),100);}
 function bannerCard(k,off){const f=FAC[k],hs=HEROES.filter(h=>h.fac===k&&!h.rogue&&!h.tav);
   return`<div class="pick fcard2" style="--c:${f.col};--c2:${f.col2}" data-fac="${k}" ${off?'aria-disabled="true"':''} title="Choose the ${f.arch}">
-    <div class="fc-head"><img src="${iconURL('crest',k,52)}" alt=""><div><h3>${f.arch}</h3></div></div>
-    <div class="fc-heroes">${hs.map(h=>`<span><img src="${iconURL('hero',h.id,128)}" alt="${esc(h.name)}"><b>${esc(h.name)}</b></span>`).join('')}</div>
-    <button class="btn sm fc-det" data-det="${k}">Details</button></div>`;}
+    <div class="fc-head"><img src="${iconURL('crest',k,52)}" alt=""><div><h3>${f.arch}</h3></div><button class="btn sm fc-det" data-det="${k}">Details</button></div>
+    <div class="fc-heroes">${hs.map(h=>`<span><img src="${iconURL('hero',h.id,128)}" alt="${esc(h.name)}"><b>${esc(h.name)}</b></span>`).join('')}</div></div>`;}
 function bannerDetail(k,off){const f=FAC[k],hs=HEROES.filter(h=>h.fac===k&&!h.rogue&&!h.tav),i=FAC_ORDER.indexOf(k),prev=FAC_ORDER[(i+7)%8],next=FAC_ORDER[(i+1)%8];
   const stat=(n,v)=>`<span><em>${n}</em><b>${v}</b></span>`;
-  return`<div class="fdet" style="--c:${f.col};--c2:${f.col2}">
+  return`<div class="fdet" data-fac="${k}" style="--c:${f.col};--c2:${f.col2}">
     <div class="fd-top"><button class="btn" data-grid="1">◂ All banners</button><button class="btn icon" data-det="${prev}" title="${FAC[prev].arch}">‹</button>
       <div class="fd-title"><img src="${iconURL('crest',k,52)}" alt=""><div><h2>${f.arch}</h2><div class="sw">${FAC_SW[k][0].map(t=>`<span class="pro">+ ${t}</span>`).join('')}<span class="con">− ${FAC_SW[k][1]}</span></div><div class="fd-ab"><b>★ ${f.mech}:</b> ${f.mechDesc}</div></div></div>
       <button class="btn icon" data-det="${next}" title="${FAC[next].arch}">›</button><button class="btn primary" data-choose="${k}" ${off?'disabled':''}>Choose the ${f.arch} ▸</button></div>
