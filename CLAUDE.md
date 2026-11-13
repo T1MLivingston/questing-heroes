@@ -23,7 +23,7 @@ questing-heroes/
 ├── css/game.css  # All styles (asset URLs are ../assets/...)
 ├── js/           # 00-core helpers, 01-data, 02-art, 03-map (generators, camera, drawing, pathfinding),
 │                 # 04-ui, 05-adventure, 06-rivals, 07-town, 08-battle, 09-start (pickers),
-│                 # 10-save (end states, saves, Hall of Fame), 11-input, 12-editor, 13-boot
+│                 # 10-save (end states, saves, Hall of Fame), 11-input, 12-editor, 13-boot, 14-tutorial
 ├── CLAUDE.md     # This file
 ├── ART_REQUEST_TROOPS.md # Brief for the troop sprite pack (delivered as Pack 10)
 ├── ART_REQUEST_TOWNS.md  # Brief for the town buildings pack (Pack 13)
@@ -222,6 +222,11 @@ Everything lives in one object, `S`, so it can be saved as JSON:
 - Every hero starts with an artifact: `START_ITEM` fills in the newer heroes that had none.
 - New ability hooks (player side only): `forgePlus` (extra Great Forge attack), `armyDef` (whole army defense), `rangedPct` (shooter damage), `halfCost` (one spell at half mana), `manaCut` (all spells cheaper), `squallPct`, `weakenPct`.
 - Raised: Ivan (Forge half ore, +1 more attack), Oliver (30% cheaper rough ground, +5% movement), Shadow (harvest 20%), Sheila (Squall +30%), Grimes and Griffiths (+1 speed to their troop). Made distinct: Veyra, Gliss, Silka, Murmur, Boone, Mossback, Aster, Nessa Holt. Trimmed: Schmickle and Quillby to +200 gold a day. Battaglia is a Might hero.
+
+### v42 tutorial
+
+- `js/14-tutorial.js`: a guide panel (`#coach`, bottom right, ▾ shrinks it) walks the first week in 15 steps (`TUT_STEPS`): welcome, treasury, open town, build (Council Hall), recruit all, claim a mine, use every step and end day, build a Tavern, hire a second hero, Gather, claim three mines, win a fight, build daily until day 8, recruit the new week, wrap-up. Each step has `done(st)` (checked every 400 ms by `tutTick`), an optional `start(st)` baseline, a `glow` selector (`.tut-glow`) or a `map` target (pulsing ring drawn by `tutDraw` from `drawMap`). State is `S.tut` (`i`, `st`), so it saves; Skip ends it.
+- Choose your game has a **📘 Tutorial** toggle (`data-tut`): on by default until a tutorial has been started on this browser (`questing-heroes-tutorial-seen`); turning it on picks Extra large. Single player only (`mo.tutorial`); `startNew` calls `tutStart()`.
 
 ### Map furniture
 

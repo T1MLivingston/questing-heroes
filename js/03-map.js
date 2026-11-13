@@ -1196,6 +1196,7 @@ function drawMap(){
   if(S.heroes.length)S.heroes.forEach((h,i)=>{if(h.relics.length)i===S.cur?beacon(heroDraw.x,heroDraw.y):beacon(h.x,h.y);});
   for(const rv of S.rivals)if(rv.relics.length)beacon(rv.x,rv.y);
   if(hoverTile&&inb(hoverTile.x,hoverTile.y)){c.strokeStyle='rgba(242,211,130,.7)';c.lineWidth=1.5;c.strokeRect(hoverTile.x*TS+1,hoverTile.y*TS+1,TS-2,TS-2);}
+  if(S.tut&&typeof tutDraw==='function')tutDraw(c);
   c.restore();
 }
 function planTo(x,y){

@@ -43,6 +43,9 @@ Improvement notes from playtesting (2026-11-12). Unticked items are still to do.
 - [ ] Towns with their own abilities.
 - [ ] Hero rework from the lore notes (kept privately, not in this repo): signature spells for every Beastmaster, Livingston and her cat, Slack's spellbook, Grimes' mentor perk, Ivan's decoys, Enzo the exiled elf rogue.
 
+## Tutorial
+- [x] First-week tutorial with a toggle on Choose your game (on for first-time players).
+
 ## In-game manual
 - [ ] Lore and how-to-play manual.
 - [ ] A page per banner: heroes, strengths, spells, might vs magic and why, a short story for each.

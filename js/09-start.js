@@ -33,10 +33,10 @@ const seedPick=(seed,salt,w)=>{let r=((seed^salt)*2654435761>>>0)/4294967296*w.r
 const REC_SIZE={1:'small',2:'medium',3:'large',4:'large',5:'xl',6:'xl'};
 async function pickMap(opt={}){
   const mine=loadMaps().filter(m=>m.objs.some(o=>o.type==='town')&&m.objs.filter(o=>o.type==='relic').length>=7);
-  let type=opt.custom?'custom:'+opt.custom:'wheel',size='large',seed=(Math.random()*1e9)|0,mode='relic',np=2,diff='normal',nr=3,nm='r',no='r',art=false;
+  let tut=typeof tutSeen==='function'?!tutSeen():false,type=opt.custom?'custom:'+opt.custom:'wheel',size=tut?'xl':'large',seed=(Math.random()*1e9)|0,mode='relic',np=2,diff='normal',nr=3,nm='r',no='r',art=false;
   const NR=()=>nr??MAP_SIZES[size].rivals,NM=()=>nm==='r'?seedPick(seed,0x5bd1,TOWN_W):nm??MAP_SIZES[size].majors,NO=()=>no==='r'?seedPick(seed,0x1f3a,OUT_W):no,OUTW=['Few','Some','Many'];
   const maxR=()=>type==='rivers'?4:6;
-  const html=()=>`<div class="gm-top"><div class="diffs" role="group" aria-label="Difficulty"><span class="label">Difficulty</span>${Object.entries(DIFF).map(([k,d])=>`<button class="dchip bare${k===diff?' on':''}" data-diff="${k}" title="${d.desc}">${ico('difficulty_'+k,40)}${d.name}</button>`).join('')}</div></div>
+  const html=()=>`<div class="gm-top"><div class="diffs" role="group" aria-label="Difficulty"><span class="label">Difficulty</span>${Object.entries(DIFF).map(([k,d])=>`<button class="dchip bare${k===diff?' on':''}" data-diff="${k}" title="${d.desc}">${ico('difficulty_'+k,40)}${d.name}</button>`).join('')}</div><button class="dchip bare tutchip${tut?' on':''}" data-tut="1" title="A guide walks you through your first week: building, recruiting, mines, a second hero and your first fight. Suggested: an Extra large map with a banner you like.">📘 Tutorial${tut?': on':': off'}</button></div>
     <h3 class="gsec">Game mode</h3>
     <div class="modes4 modes3">${Object.entries(MODES).filter(([k])=>k!=='grail').map(([k,m])=>`<button class="mode${k===mode?' on':''}" data-mode="${k}" title="${m.desc}">${ico({relic:'relic_hunt',conquest:'conquest',multi:'multiplayer'}[k],64)}<b>${m.name}</b><span>${MODE_SHORT[k]}</span></button>`).join('')}</div>
     <h3 class="gsec">Rivals and towns</h3>
@@ -53,10 +53,11 @@ async function pickMap(opt={}){
   const body=$('#modal').querySelector('.body');
   body.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
     if(b.dataset.mkmap){$('#modal')._close('edit');return;}
+    if(b.dataset.tut){tut=!tut;if(tut){size='xl';nm=nm==='r'?'r':null;}body.innerHTML=html();return;}
     if(b.dataset.mode)mode=b.dataset.mode;else if(b.dataset.diff)diff=b.dataset.diff;else if(b.dataset.np){np=+b.dataset.np;size=REC_SIZE[np-1];}else if(b.dataset.map){type=b.dataset.map;if(type==='rivers'&&NR()>4)nr=4;}else if(b.dataset.size){size=b.dataset.size;nm=nm==='r'?'r':null;}else if(b.dataset.nr){nr=+b.dataset.nr;size=REC_SIZE[nr];nm=nm==='r'?'r':null;}else if(b.dataset.nm)nm=b.dataset.nm==='r'?'r':+b.dataset.nm;else if(b.dataset.no)no=b.dataset.no==='r'?'r':+b.dataset.no;else if(b.dataset.reroll)seed=(Math.random()*1e9)|0;else return;body.innerHTML=html();});
   const v=await p;if(v==='edit')return{edit:true};if(v!=='go')return null;
   if(type.startsWith('custom:')){const id=type.slice(7),m=loadMaps().find(x=>x.id===id);if(m)return{type:'custom',custom:id,size:m.size,seed,mode,diff,majors:NM(),outposts:NO(),artifact:art,nPlayers:mode==='multi'?Math.min(np,1+m.objs.filter(o=>o.type==='camp'&&!o.free).length):1};}
-  return{type,size,seed,mode,diff,rivals:Math.min(maxR(),NR()),majors:NM(),outposts:NO(),artifact:art,nPlayers:mode==='multi'?np:1};
+  return{type,size,seed,mode,diff,rivals:Math.min(maxR(),NR()),majors:NM(),outposts:NO(),artifact:art,tutorial:tut&&mode!=='multi',nPlayers:mode==='multi'?np:1};
 }
 /* Choose your banner: a tall grid of banner cards; Details opens a full page for one banner (heroes, troops, ability), with arrows to flip between banners */
 const UNIT_TAGS=u=>[u.fly&&'Flies',u.shots&&`Shoots (${u.shots})`,u.charge&&'Charge',u.double&&'Strikes twice',u.noRetal&&'No strike-back',u.retal>1&&'Strikes back twice',u.regen&&'Regrows',u.drain&&'Drains life',u.charm&&'Charms',u.undead&&'Undead'].filter(Boolean);

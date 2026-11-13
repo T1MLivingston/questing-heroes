@@ -51,7 +51,7 @@ async function loading(steps){let el=$('#loadbar');if(!el){el=document.createEle
 async function startNew(){S=null;applyTheme();const mo=await pickMap();if(!mo){title();return;}if(mo.edit){openEditor();return;}
   if(mo.mode==='multi'){const ps=[];for(let i=0;i<mo.nPlayers;i++)ps.push(await pickFaction({who:`Player ${i+1}`,exclude:ps.map(p=>p.fk)}));
     mo.players=ps;await loading([['Shaping the land…',()=>newGame(ps[0].fk,ps[0].hid,mo)],['Painting the map…',()=>afterLoad()]]);save();await handoff();openTown();return;}
-  const{fk,hid}=await pickFaction();mo.artifact=pickedArt;await loading([['Shaping the land…',()=>newGame(fk,hid,mo)],['Painting the map…',()=>{if(pickedCol)S.col=pickedCol;afterLoad();}]]);save();openTown();}
+  const{fk,hid}=await pickFaction();mo.artifact=pickedArt;await loading([['Shaping the land…',()=>newGame(fk,hid,mo)],['Painting the map…',()=>{if(pickedCol)S.col=pickedCol;afterLoad();}]]);if(mo.tutorial&&typeof tutStart==='function')tutStart();save();openTown();}
 /* v17 roster: troops from older saves move to the new troop of the same tier */
 const OLD_ROSTER={wizards:['inkling','hound','sentinel','owl','magus'],necro:['thrall','rats','wraith','barrow','hiero'],centaurs:['hounds','skirm','badger','lancer','bearw'],
   pirates:['deckhand','powder','duelist','harpoon','cannon'],elves:['sprite','longbow','dryad','dancer','stag'],dwarves:['delver','bolt','anvil','smith','ram'],merfolk:['shell','coral','eel','seahorse','choir']};
