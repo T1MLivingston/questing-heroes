@@ -6,8 +6,9 @@
 const CR_KEY='questing-heroes-creator';
 const CR_POINTS=6,CR_MAX=4;
 const CR_TRAITS=['brave','curious','kind','clever','stubborn','funny','quiet','loyal','sneaky','cheerful','wise','reckless','patient','proud','gentle','fierce'];
-const CR_PERKS={unitAtk:'+2 attack',unitDef:'+2 defense',unitSpd:'+1 speed',growth:'+3 recruits a week'};
-const CR_MAP={mp:'+15% movement on the map',gold:'+100 gold a day',vision:'+2 sight in the fog',morale:'+1 morale for the whole army',luck:'+1 luck for the whole army'};
+/* the same ability choices the game accepts for class heroes (CU_TROOP, CU_MAP in 01-data.js) */
+const CR_PERKS=Object.fromEntries(Object.entries(CU_TROOP).map(([k,v])=>[k,v[0]]));
+const CR_MAP=Object.fromEntries(Object.entries(CU_MAP).map(([k,v])=>[k,v[0]]));
 const CR_STATS=[['atk','Attack','how hard your troops hit'],['def','Defense','how well your troops take a hit'],['pow','Power','how strong your spells are'],['lore','Lore','how much mana you have']];
 /* what each banner looks like, for the art prompt */
 const CR_LOOK={rangers:'forest wardens: green and brown leather, hooded cloaks, antler and oak-leaf motifs, teal and gold trim',
@@ -28,7 +29,7 @@ const CR_DL={skin:['pale','fair','tan','olive','brown','dark brown','orange fur'
 let CR=null;
 function crLoad(){try{return JSON.parse(localStorage.getItem(CR_KEY))||null;}catch(e){return null;}}
 function crSave(){try{localStorage.setItem(CR_KEY,JSON.stringify(CR));}catch(e){}}
-function crBlank(){return{name:'',fac:'rangers',type:'Might',kind:'',species:'human',animal:'',gender:'open',age:'adult',skin:'',hair:'',eyes:'',cols:[],look:'',outfit:'',carry:'',traits:[],home:'',want:'',fear:'',st:{atk:1,def:1,pow:1,lore:1},abName:'',abMode:'troop',abUnit:'',abPerk:'unitAtk',abMap:'mp',abOwn:'',spMode:'pick',sp:'',spName:'',spOwn:''};}
+function crBlank(){return{name:'',fac:'rangers',type:'Might',kind:'',species:'human',animal:'',gender:'open',age:'adult',skin:'',hair:'',eyes:'',cols:[],look:'',outfit:'',carry:'',traits:[],home:'',want:'',fear:'',st:{atk:1,def:1,pow:1,lore:1},abName:'',abMode:'troop',abUnit:'',abPerk:'ad',abMap:'mp',abOwn:'',spMode:'pick',sp:'',spName:'',spOwn:''};}
 const crPro=()=>CR.gender==='female'?{s:'she',o:'her',p:'her',v:'is'}:CR.gender==='male'?{s:'he',o:'him',p:'his',v:'is'}:{s:'they',o:'them',p:'their',v:'are'};
 const crCap=t=>t.replace(/^./,c=>c.toUpperCase());
 function crWho(){const role=CR.kind.trim().replace(/^(a|an|the)\s+/i,'')||(CR.type==='Magic'?'spellcaster':'warrior');
@@ -39,7 +40,7 @@ const crOpt=(v,cur,lab)=>`<option value="${esc(v)}"${v===cur?' selected':''}>${e
 function crAbilityText(){const f=FAC[CR.fac];
   if(CR.abMode==='own')return CR.abOwn.trim()||'(write your own ability)';
   if(CR.abMode==='map')return CR_MAP[CR.abMap].replace(/^./,c=>c.toUpperCase())+'.';
-  const u=U[CR.abUnit||f.units[0]];const nm=u?u.name:'Troop';return `${/s$/.test(nm)?nm:nm+'s'} ${CR_PERKS[CR.abPerk]}.`;}
+  const u=U[CR.abUnit||f.units[0]];return `${u?(u.pl||u.name):'Troops'} ${CR_PERKS[CR.abPerk]}.`;}
 function crSpellText(){if(CR.spMode==='own')return{name:CR.spName.trim()||'(name your spell)',desc:CR.spOwn.trim()||'(say what it does)'};
   const k=CR.sp||FAC_SPELLS[CR.fac][0],s=SP[k];return{name:s.name,desc:s.desc(2)};}
 function crBio(){const f=FAC[CR.fac],n=CR.name.trim()||'Our hero',P=crPro(),tr=CR.traits.length?CR.traits.slice(0,3):['brave'];
@@ -124,11 +125,54 @@ function crHTML(){const f=FAC[CR.fac],left=crLeft();
     <div class="cr-row">${[['pick','Pick a ${f.arch} spell'],['own','Invent a spell']].map(([m,l])=>`<button class="chip${CR.spMode===m?' on':''}" data-crsp="${m}">${l.replace('${f.arch}',f.arch)}</button>`).join('')}</div>
     ${CR.spMode==='pick'?`<select data-cr="sp">${spells}</select><p class="cr-hint">${esc(crSpellText().desc)}</p>`:
       `<label>Spell name <input data-cr="spName" maxlength="30" value="${esc(CR.spName)}" placeholder="e.g. Lantern Flare"></label><textarea data-cr="spOwn" maxlength="140" rows="2" placeholder="What does it do? e.g. Blinds one enemy stack so it misses its next turn.">${esc(CR.spOwn)}</textarea>`}</section>
+  ${crGameHTML()}
   <section class="cr-out"><h3>Your hero's story</h3><p id="crBio">${esc(crBio())}</p>
     <h3>Art prompt <small class="cr-sub">paste into any AI image tool</small></h3><p id="crPrompt" class="cr-prompt">${esc(crPrompt())}</p>
     <div class="cr-row"><button class="btn" data-crcopy="bio">Copy story</button><button class="btn" data-crcopy="prompt">Copy art prompt</button><button class="btn" data-crprint="1">Print worksheet</button><button class="btn" data-crreset="1">Start over</button></div></section></div>`;}
+/* ---- v47: put the hero in the game ---- */
+let crRaw=null;/* the last uploaded file, kept in memory so the white-background tick can be redone */
+const crGameSpells=()=>FAC_SPELLS[CR.fac].filter(k=>!CU_NOSPELL.includes(k));
+const crGameSpell=()=>{const ok=crGameSpells();if(CR.spMode==='pick'&&ok.includes(CR.sp||FAC_SPELLS[CR.fac][0]))return CR.sp||FAC_SPELLS[CR.fac][0];return ok.includes(CR.gameSp)?CR.gameSp:ok[0];};
+const crEff=()=>CR.abMode==='troop'?{m:'troop',u:CR.abUnit||FAC[CR.fac].units[0],p:CR.abPerk}:CR.abMode==='map'?{m:'map',p:CR.abMap}:null;
+function crChecks(){return[[!!CR.name.trim(),'Your hero has a name'],[crLeft()===0,`All ${CR_POINTS} stat points are spent`],[!!crEff(),'The ability is <i>Boost a troop</i> or <i>Help on the map</i> (a written ability stays in the story only)'],[!!CR.pic,'A picture is loaded']];}
+function crGameHTML(){const f=FAC[CR.fac],chk=crChecks(),ok=chk.every(c=>c[0]),cls=loadClass(),needSp=!(CR.spMode==='pick'&&crGameSpells().includes(CR.sp||FAC_SPELLS[CR.fac][0]));
+  return`<section class="cr-game"><h3>7. Put your hero in the game</h3>
+  <p class="cr-hint">Ask an AI image tool for a picture using the <b>Art prompt</b> below, save it, then load it here. It is cut to a square and shrunk to the game's 128 × 128 size.</p>
+  <div class="cr-gamegrid"><div class="cr-pic" style="--c:${f.col}">${CR.pic?`<img src="${CR.pic}" alt="">`:'<span>No picture yet</span>'}</div>
+   <div class="cr-gameside"><div class="cr-row"><label class="btn cr-up">📷 Choose picture<input type="file" accept="image/*" data-crfile hidden></label>
+     <label class="cr-chk"><input type="checkbox" data-crwhite ${CR.cutWhite===false?'':'checked'}> Remove a white background</label></div>
+    ${needSp?`<label>Spell in the game <select data-cr="gameSp">${crGameSpells().map(k=>crOpt(k,crGameSpell(),SP[k].name)).join('')}</select></label><p class="cr-hint">${CR.spMode==='own'?'Your invented spell stays in the story. ':''}Meteor and Starfall are too strong for class heroes, so pick one of these.</p>`:''}
+    <ul class="cr-checks">${chk.map(([g,t])=>`<li class="${g?'ok':''}">${g?'✔':'○'} ${t}</li>`).join('')}</ul>
+    <button class="btn primary" data-cradd="1" ${ok?'':'disabled'}>⭐ Add ${esc(CR.name.trim()||'my hero')} to the game</button></div></div>
+  <div class="cr-how"><b>How to unlock your hero:</b> they join the <b>${f.arch}</b>. Start a campaign as the ${f.arch} (or capture a ${f.arch} town), build a <b>Tavern</b> there and open its Tavern tab: your hero waits there with a ★ and costs ${fmt(HIRE_COST)} gold to hire. Heroes are saved in this browser only; use <b>Save hero file</b> to take them to another computer.</div>
+  <h4 class="cr-h4">Class heroes on this computer (${cls.length})</h4>
+  <div class="cr-class">${cls.length?cls.map(c=>`<div class="cr-cl" style="--c:${(FAC[c.fac]||{}).col||'#888'}"><img src="${c.port||''}" alt=""><b>${esc(c.name)}</b><small>${esc((FAC[c.fac]||{}).arch||'')} · ${esc(c.type)}</small><button class="cr-del" data-crdel="${esc(c.id)}" title="Remove ${esc(c.name)}">✕</button></div>`).join(''):'<p class="muted">None yet.</p>'}</div>
+  <div class="cr-row"><button class="btn" data-crexport="1" ${cls.length?'':'disabled'}>💾 Save hero file</button><label class="btn cr-up">📂 Load hero file<input type="file" accept=".json,application/json" data-crimport hidden></label></div></section>`;}
+/* square-crop, optionally clear a white background (flood fill from the edges), and shrink to 128 × 128 */
+function crProcess(file,cut){return new Promise((res,rej)=>{const url=URL.createObjectURL(file),img=new Image();
+  img.onload=()=>{try{const s=Math.min(img.width,img.height),n=Math.min(s,512),c=document.createElement('canvas');c.width=c.height=n;const x=c.getContext('2d');
+    x.drawImage(img,(img.width-s)/2,(img.height-s)/2,s,s,0,0,n,n);
+    if(cut){const d=x.getImageData(0,0,n,n),p=d.data,seen=new Uint8Array(n*n),st=[];const white=i=>p[i*4+3]>0&&p[i*4]>=228&&p[i*4+1]>=228&&p[i*4+2]>=228;
+      for(let i=0;i<n;i++)st.push(i,(n-1)*n+i,i*n,i*n+n-1);
+      while(st.length){const i=st.pop();if(seen[i])continue;seen[i]=1;if(!white(i)&&p[i*4+3]>0)continue;p[i*4+3]=0;const cx=i%n,cy=(i/n)|0;
+        if(cx>0)st.push(i-1);if(cx<n-1)st.push(i+1);if(cy>0)st.push(i-n);if(cy<n-1)st.push(i+n);}
+      x.putImageData(d,0,0);}
+    const o=document.createElement('canvas');o.width=o.height=128;const ox=o.getContext('2d');ox.imageSmoothingEnabled=true;ox.imageSmoothingQuality='high';ox.drawImage(c,0,0,128,128);
+    URL.revokeObjectURL(url);res(o.toDataURL('image/png'));}catch(e){rej(e);}};
+  img.onerror=()=>{URL.revokeObjectURL(url);rej(new Error('bad image'));};img.src=url;});}
+async function crUsePic(){if(!crRaw)return;try{CR.pic=await crProcess(crRaw,CR.cutWhite!==false);crRedraw();}catch(e){toast('That file could not be read as a picture.');}}
+function crAdd(){if(!crChecks().every(c=>c[0]))return;
+  const def={id:'cu_'+Date.now().toString(36)+Math.floor(Math.random()*1296).toString(36),name:CR.name.trim().slice(0,24),fac:CR.fac,type:CR.type,
+    st:[CR.st.atk,CR.st.def,CR.st.pow,CR.st.lore],ab:(CR.abName.trim()||'Class Hero').slice(0,30),eff:crEff(),sp:crGameSpell(),port:CR.pic,story:crBio().slice(0,1500)};
+  if(!cuValid(def)){toast('Something is outside the rules: check the stats and ability.');return;}
+  const all=loadClass();all.push(def);if(!storeClass(all)){toast('This browser is out of room for more heroes. Remove one first.');return;}
+  addCustomHero(def);toast(`⭐ ${def.name} joined the ${FAC[def.fac].arch}! Build a Tavern in a ${FAC[def.fac].arch} town to hire them.`);crRedraw();}
+function crExport(){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify({game:'questing-heroes',heroes:loadClass()})],{type:'application/json'}));a.download='questing-heroes-class.json';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},500);}
+async function crImport(file){try{const j=JSON.parse(await file.text()),list=Array.isArray(j)?j:j.heroes||[];const all=loadClass();let n=0,bad=0;
+  for(const c of list){if(!cuValid(c)){bad++;continue;}if(all.some(x=>x.id===c.id))continue;all.push(c);addCustomHero(c);n++;}
+  if(!storeClass(all)){toast('This browser is out of room for that many heroes.');return;}toast(`${n} hero${n===1?'':'es'} added${bad?`, ${bad} skipped (outside the rules)`:''}.`);crRedraw();}catch(e){toast('That is not a hero file.');}}
 /* refresh the story and prompt as the student types, without rebuilding the form (keeps the cursor in place) */
-function crLive(){const b=$('#crBio'),p=$('#crPrompt');if(b)b.textContent=crBio();if(p)p.textContent=crPrompt();crSave();}
+function crLive(){const b=$('#crBio'),p=$('#crPrompt');if(b)b.textContent=crBio();if(p)p.textContent=crPrompt();const g=$('#modal .cr-game');if(g)g.outerHTML=crGameHTML();crSave();}
 function crRedraw(){const el=$('#modal .creator');if(!el)return;const y=el.closest('.body').scrollTop;el.outerHTML=crHTML();const b=$('#modal .body');if(b)b.scrollTop=y;crSave();}
 function crPrint(){const w=window.open('','_blank');if(!w){toast('Allow pop-ups to print.');return;}const f=FAC[CR.fac],sp=crSpellText();
   w.document.write(`<!doctype html><meta charset="utf-8"><title>${esc(CR.name||'My hero')}</title><style>body{font:16px/1.5 Georgia,serif;max-width:720px;margin:30px auto;padding:0 16px;color:#222}h1{margin:0}h2{font-size:17px;border-bottom:1px solid #999;margin-top:22px}td{padding:2px 12px 2px 0}</style>
@@ -140,9 +184,15 @@ function crPrint(){const w=window.open('','_blank');if(!w){toast('Allow pop-ups 
   w.document.close();w.focus();w.print();}
 async function openCreator(){CR=Object.assign(crBlank(),crLoad()||{});
   const m=$('#modal');
-  const onInput=e=>{const t=e.target.closest('[data-cr]');if(!t)return;CR[t.dataset.cr]=t.value;
+  const onInput=e=>{const t=e.target.closest('[data-cr]');if(!t||t.type==='file'||t.type==='checkbox')return;CR[t.dataset.cr]=t.value;
     if(t.dataset.cr==='fac'){CR.abUnit='';CR.sp='';crRedraw();}else if(t.tagName==='SELECT')crRedraw();else crLive();};
+  const onChange=e=>{const t=e.target;if(!t.closest||!t.closest('.creator'))return;
+    if(t.matches('[data-crfile]')&&t.files[0]){crRaw=t.files[0];crUsePic();}
+    else if(t.matches('[data-crimport]')&&t.files[0])crImport(t.files[0]);
+    else if(t.matches('[data-crwhite]')){CR.cutWhite=t.checked;crRaw?crUsePic():crSave();}};
   const onClick=e=>{const b=e.target.closest('button');if(!b||!b.closest('.creator'))return;const d=b.dataset;
+    if(d.cradd){crAdd();return;}if(d.crexport){crExport();return;}
+    if(d.crdel){const c=loadClass().find(x=>x.id===d.crdel);if(c&&confirm(`Remove ${c.name} from this computer? (Saved games that hired them keep them.)`)){storeClass(loadClass().filter(x=>x.id!==d.crdel));removeCustomHero(d.crdel);crRedraw();}return;}
     if(d.crtype)CR.type=d.crtype;else if(d.crspec)CR.species=d.crspec;else if(d.crgen)CR.gender=d.crgen;else if(d.crage)CR.age=d.crage;
     else if(d.crcol){const i=CR.cols.indexOf(d.crcol);if(i>=0)CR.cols.splice(i,1);else if(CR.cols.length<2)CR.cols.push(d.crcol);else{toast('Pick up to two colours.');return;}}else if(d.crtrait){const i=CR.traits.indexOf(d.crtrait);if(i>=0)CR.traits.splice(i,1);else if(CR.traits.length<3)CR.traits.push(d.crtrait);else{toast('Pick up to three.');return;}}
     else if(d.crst){const v=CR.st[d.crst]+(+d.d);if(v<0||v>CR_MAX||(+d.d>0&&crLeft()<=0))return;CR.st[d.crst]=v;}
@@ -150,6 +200,7 @@ async function openCreator(){CR=Object.assign(crBlank(),crLoad()||{});
     else if(d.crcopy){const txt=d.crcopy==='bio'?crBio():crPrompt();(navigator.clipboard?navigator.clipboard.writeText(txt):Promise.reject()).then(()=>toast('Copied.'),()=>toast('Select the text and copy it by hand.'));return;}
     else if(d.crprint){crPrint();return;}else if(d.crreset){CR=crBlank();}else return;
     e.preventDefault();crRedraw();};
-  m.addEventListener('input',onInput);m.addEventListener('click',onClick);
+  if(!CR_PERKS[CR.abPerk])CR.abPerk='ad';if(!CR_MAP[CR.abMap])CR.abMap='mp';
+  m.addEventListener('input',onInput);m.addEventListener('click',onClick);m.addEventListener('change',onChange);
   await showModal({title:'Create your hero',body:crHTML(),wide:true,top:true,buttons:[{label:'Back',value:1,primary:true}],dismiss:1});
-  m.removeEventListener('input',onInput);m.removeEventListener('click',onClick);crSave();}
+  m.removeEventListener('input',onInput);m.removeEventListener('click',onClick);m.removeEventListener('change',onChange);crSave();}

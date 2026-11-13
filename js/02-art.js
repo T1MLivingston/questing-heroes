@@ -333,6 +333,7 @@ function iconURL(kind,key,size=64){
   if(kind==='stat'&&UI_STAT[key])return ART_BASE+`ui/icons/${UI_STAT[key]}.png`;
   if(kind==='ui')return ART_BASE+`ui/icons/${key}.png`;
   if(kind==='gem')return ART_BASE+`gems/${key}.png`;
+  if(kind==='hero'&&HBY[key]&&HBY[key].custom&&HBY[key].port)return HBY[key].port;
   if(kind==='hero'&&RECRUIT_PORT.includes(key))return recruitPortrait(key);
   if(kind==='hero'&&ART_PORTRAITS.has(key))return ART_BASE+`portraits/heroes/${key}_128.png?v=30`;
   if(kind==='unit'&&ENEMY_ART[key])return ART_BASE+`portraits/enemies/${ENEMY_ART[key]}_64.png`;

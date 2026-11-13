@@ -90,4 +90,6 @@ The heroes are named after people (and possibly pets) from the author's life: Be
 
 - [x] Fonts self-hosted (2026-11-12): the game makes no third-party requests, so no visitor IP addresses go to Google or anyone else.
 
+- [x] Class heroes (2026-11-13): pictures and names students add with Create a hero stay in their own browser (localStorage) and in hero files they choose to save; nothing is uploaded or published.
+
 Still worth doing if the game ever grows: get a lawyer's review before any sale.

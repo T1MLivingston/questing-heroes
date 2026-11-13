@@ -223,6 +223,12 @@ Everything lives in one object, `S`, so it can be saved as JSON:
 - New ability hooks (player side only): `forgePlus` (extra Great Forge attack), `armyDef` (whole army defense), `rangedPct` (shooter damage), `halfCost` (one spell at half mana), `manaCut` (all spells cheaper), `squallPct`, `weakenPct`.
 - Raised: Ivan (Forge half ore, +1 more attack), Oliver (30% cheaper rough ground, +5% movement), Shadow (harvest 20%), Sheila (Squall +30%), Grimes and Griffiths (+1 speed to their troop). Made distinct: Veyra, Gliss, Silka, Murmur, Boone, Mossback, Aster, Nessa Holt. Trimmed: Schmickle and Quillby to +200 gold a day. Battaglia is a Might hero.
 
+### v47 class heroes
+
+- Students' heroes from **Create a hero** can join the game. Step 7 of the worksheet loads the AI picture (square crop, optional white-background flood fill from the edges, shrunk to 128 × 128 PNG data URL: `crProcess`), checks the rules (`crChecks`: name, all 6 points, an in-game ability, a picture) and adds the hero (`crAdd`). Written abilities and invented spells stay in the story; the game uses the picked troop/map ability and a banner spell (`crGameSpell`; Meteor and Starfall are not allowed, `CU_NOSPELL`).
+- Storage: `questing-heroes-class` in localStorage (`loadClass`/`storeClass`), one entry per hero holding only choices: id `cu_…`, name, banner, type, `st` (0-4 each, 6 total), `eff` (`{m:'troop',u,p}` with `CU_TROOP` or `{m:'map',p}` with `CU_MAP`), `sp`, `port`, `story`. `addCustomHero` (01-data.js) validates with `cuValid` and rebuilds the hero (`cuEffect` makes `fx` and the ability text, the usual starting-stat raise applies), so a hand-edited file can't make a stronger hero. Save hero file / Load hero file move heroes between computers.
+- In play: class heroes are `tav:true, custom:true`, never in pickers, random tavern seats or rival hires. `classHeroes()` lists every free class hero of the town's banner first in its Tavern (★ Class hero). Hiring copies the definition into `S.customHeroes`, and `afterLoad` re-registers them, so a save works on any computer. `iconURL('hero')` returns the stored picture.
+
 ### v46 tavern, dismissing heroes, mines panel, no upkeep
 
 - Tavern (`hireable`): the banner's two wanderers are picked per week from all its wanderers (one you hire leaves an empty seat until next week); the other two seats (one of the banner's eight, one rogue or other-banner hero) change every day. **Buy a round** (`TAV_ROLL`, 250 gold, `S.tavRoll` = `{day, n}`) re-rolls the daily seats.

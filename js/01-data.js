@@ -341,6 +341,28 @@ const AB_SHORT={bear:'Lions +2 attack and defense',perry:'Oak Wardens grow faste
 const HBY=Object.fromEntries(HEROES.map(h=>[h.id,h]));
 /* retired heroes stay in HBY so old saves load, but are no longer offered */
 for(let i=HEROES.length-1;i>=0;i--)if(HEROES[i].retired)HEROES.splice(i,1);
+/* v47 class heroes: heroes students make with Create a hero. Only their choices are stored (banner, type, 6 stat points,
+   one ability from the lists below, one spell), and the hero is rebuilt from them, so a hand-edited file can't make one too strong. */
+const CU_KEY='questing-heroes-class';
+const CU_TROOP={ad:['+2 attack and +2 defense',{unitAtk:2,unitDef:2}],as:['+2 attack and +1 speed',{unitAtk:2,unitSpd:1}],ds:['+2 defense and +1 speed',{unitDef:2,unitSpd:1}],gs:['+3 recruits a week and +1 speed',{growth:3,unitSpd:1}]};
+const CU_MAP={mp:['+15% movement on the map',{mpPct:15}],gold:['+150 gold a day',{goldDay:150}],vision:['+2 sight in the fog',{vision:2}],morale:['+1 morale for the whole army',{morale:1}],luck:['+1 luck for the whole army',{luck:1}]};
+const CU_NOSPELL=['meteor','starfall'];
+function cuValid(c){if(!c||typeof c.id!=='string'||!/^cu_[a-z0-9]{4,16}$/.test(c.id)||!FAC[c.fac]||!['Might','Magic'].includes(c.type))return false;
+  if(!Array.isArray(c.st)||c.st.length!==4||c.st.some(v=>!Number.isInteger(v)||v<0||v>4)||c.st.reduce((a,b)=>a+b,0)>6)return false;
+  const e=c.eff||{};if(e.m==='troop'){if(!CU_TROOP[e.p]||!FAC[c.fac].units.includes(e.u))return false;}else if(e.m!=='map'||!CU_MAP[e.p])return false;
+  if(c.sp&&(!SP[c.sp]||CU_NOSPELL.includes(c.sp)))return false;return typeof c.name==='string'&&c.name.trim().length>0&&c.name.length<=24;}
+function cuEffect(c){const e=c.eff,fx={};let ad;
+  if(e.m==='troop'){const [t,f]=CU_TROOP[e.p];for(const k in f)fx[k]={[e.u]:f[k]};ad=`${U[e.u].pl||U[e.u].name} ${t}.`;}
+  else{const [t,f]=CU_MAP[e.p];Object.assign(fx,f);ad=t.replace(/^./,x=>x.toUpperCase())+'.';}return{fx,ad};}
+function addCustomHero(c){if(!cuValid(c))return null;if(HBY[c.id])return HBY[c.id];const {fx,ad}=cuEffect(c);
+  const h={id:c.id,name:c.name.trim().slice(0,24),fac:c.fac,type:c.type,st:[...c.st],ab:String(c.ab||'Class Hero').slice(0,30),ad,sk:[c.type==='Magic'?'meditation':'command'],
+    sp:c.sp?[c.sp]:[],fx,item:c.type==='Magic'?'inkwell':'buckler',tav:true,custom:true,port:typeof c.port==='string'&&c.port.startsWith('data:image/')?c.port:'',_def:c};
+  const r=hash(h.id);h.st=h.st.map(v=>v+1);const main=h.type==='Might'?(h.st[0]>=h.st[1]?0:1):(h.st[2]>=h.st[3]?2:3);h.st[main]+=1+(r%2);h.st[(r>>>3)%4]+=1;
+  HEROES.push(h);HBY[h.id]=h;return h;}
+function removeCustomHero(id){const i=HEROES.findIndex(h=>h.id===id&&h.custom);if(i>=0)HEROES.splice(i,1);}
+const loadClass=()=>{try{const a=JSON.parse(localStorage.getItem(CU_KEY));return Array.isArray(a)?a:[];}catch(e){return [];}};
+const storeClass=a=>{try{localStorage.setItem(CU_KEY,JSON.stringify(a));return true;}catch(e){return false;}};
+loadClass().forEach(c=>{try{addCustomHero(c);}catch(e){}});
 
 const RELIC_LIST=[
   {name:'Shard of Dawn',col:'#f2d382',lair:'Wolf Den',k:'wolf',n:[14,18],carry:{morale:1},carryTxt:'+1 morale for your troops',deliver:'+1 vision for all your heroes'},

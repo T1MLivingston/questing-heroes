@@ -31,7 +31,7 @@ function rivalEconomy(weekly){if(S.players)return;const facs=[...new Set(S.rival
     // a second (or third, on Expert) hero once the banner can afford it
     const mine=S.rivals.filter(r=>r.fac===fac&&!r.human),cap=S.diff==='expert'?3:2,wk=weekNo();
     if(mine.length<cap&&wk>=(S.diff==='hard'||S.diff==='expert'?2:3)&&e.gold>=3000){
-      const taken=new Set([...S.heroes.map(h=>h.id),...S.rivals.map(r=>r.id)]),hid=(HEROES.find(h=>h.fac===fac&&!h.rogue&&!taken.has(h.id))||{}).id;
+      const taken=new Set([...S.heroes.map(h=>h.id),...S.rivals.map(r=>r.id)]),hid=(HEROES.find(h=>h.fac===fac&&!h.rogue&&!h.custom&&!taken.has(h.id))||{}).id;
       if(hid){e.gold-=2500;const nr=mkRival(hid,home.x,home.y);nr.army=[{k:u[0],n:Math.round(160*rvMul()/U[u[0]].hp)},{k:u[1],n:Math.round(80*rvMul()/U[u[1]].hp)}];
         // take some of the waiting garrison along
         const g=home.garrison.slice(0,2).map(a=>({k:a.k,n:Math.ceil(a.n/2)}));for(const a of g){const src=home.garrison.find(x=>x.k===a.k);src.n-=a.n;const ex=nr.army.find(x=>x.k===a.k);if(ex)ex.n+=a.n;else nr.army.push(a);}
