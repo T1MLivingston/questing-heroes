@@ -4,13 +4,21 @@ Match the existing packs: warm storybook pixel art, dark plum outline, light fro
 
 ## 1. Hero portraits to finish the roster (11)
 
-Each banner shows 8 heroes and keeps 2 tavern wanderers. Format: 128×128 PNG, transparent background, head-and-shoulders bust facing slightly right, crisp pixel grid, no text. Attach two existing portraits of the same banner as a style match.
+Each banner shows 8 heroes and keeps 2 tavern wanderers. Format: 128×128 PNG, transparent background, head-and-shoulders bust facing slightly right, crisp pixel grid, no text. Attach two existing portraits of the same banner as a style match. Each slot fills a gap in that banner (gender, Might or Magic, human or not).
 
-- **Wizards:** 2 heroes to pick (one Might, one Magic) and 1 wanderer
-- **Necromancers:** 1 wanderer
-- **Pirates:** 1 wanderer
-- **Elves:** 4 heroes to pick (two Might, two Magic) and 1 wanderer
-- **Dwarves:** 1 wanderer
+| # | Banner | Slot | Gender | Age | Human? | Type | Idea |
+|---|---|---|---|---|---|---|---|
+| 1 | Wizards | pick | female | grown-up | human | Might | battle-mage in armoured blue robes with a rune shield |
+| 2 | Wizards | pick | male | young | human | Might | apprentice spellblade, glowing sword, star-stitched coat |
+| 3 | Wizards | wanderer | female | grown-up | animal: owl | Might | owl knight in a brass helm |
+| 4 | Necromancers | wanderer | female | grown-up | human | Might | gravekeeper with a lantern and a big shovel |
+| 5 | Elves | pick | female | grown-up | elf | Might | elf archer-captain in leaf armour |
+| 6 | Elves | pick | male | young | elf | Magic | elf moon-singer with a glowing flute |
+| 7 | Elves | wanderer | open | grown-up | animal: stag | Might | stag ranger with antlers and a spear |
+| 8 | Dwarves | wanderer | female | grown-up | dwarf | Magic | rune-priest with glowing runes on her braids |
+| 9 | Pirates | wanderer | male | old | animal: parrot | Magic | parrot navigator with star charts |
+| 10 | Beastmasters | wanderer | female | young | human | Might | beast tamer riding-whip and wolf-pelt cloak |
+| 11 | Beastmasters | wanderer | male | grown-up | animal: rhino | Might | armoured rhino brawler |
 
 ## 2. Rework
 
