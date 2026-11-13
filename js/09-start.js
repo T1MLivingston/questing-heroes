@@ -76,7 +76,8 @@ function paintTroopPics(root,tries=0){let left=0;
 function bannerCard(k,off){const f=FAC[k],hs=HEROES.filter(h=>h.fac===k&&!h.rogue&&!h.tav);
   return`<div class="pick fcard2" style="--c:${f.col};--c2:${f.col2}" data-fac="${k}" ${off?'aria-disabled="true"':''} title="Choose the ${f.arch}">
     <div class="fc-head"><img src="${iconURL('crest',k,52)}" alt=""><div><h3>${f.arch}</h3></div><button class="btn sm fc-det" data-det="${k}">Details</button></div>
-    <div class="fc-heroes">${hs.map(h=>`<span><img src="${iconURL('hero',h.id,128)}" alt="${esc(h.name)}"><b>${esc(h.name)}</b></span>`).join('')}</div></div>`;}
+    <div class="fc-heroes">${hs.map(h=>`<span><img src="${iconURL('hero',h.id,128)}" alt="${esc(h.name)}"><b>${esc(h.name)}</b></span>`).join('')}${'<span class="fc-soon" title="New hero coming soon"><i>?</i><b>Coming soon</b></span>'.repeat(Math.max(0,8-hs.length))}</div>
+    <p class="fc-mech"><b>${esc(f.mech)}:</b> ${esc(f.mechDesc)}</p></div>`;}
 function bannerDetail(k,off){const f=FAC[k],hs=HEROES.filter(h=>h.fac===k&&!h.rogue&&!h.tav),i=FAC_ORDER.indexOf(k),prev=FAC_ORDER[(i+7)%8],next=FAC_ORDER[(i+1)%8];
   const stat=(n,v)=>`<span><em>${n}</em><b>${v}</b></span>`;
   return`<div class="fdet" data-fac="${k}" style="--c:${f.col};--c2:${f.col2}">

@@ -1018,3 +1018,14 @@ img.upg{filter:sepia(.55) saturate(1.9) hue-rotate(-12deg) brightness(1.06) drop
 .creator .cr-col i{width:16px;height:16px;border-radius:50%;background:var(--sw);border:1px solid #2b1a33}
 .creator .cr-col.on{background:#1b2f7a;color:#fff;border-color:#1b2f7a}
 .creator .cr-out p{max-width:none!important}
+/* v43c: banner-card previews are whole square portraits (no cropping of plumes, horns or hats) */
+.fc-heroes{grid-template-rows:none!important;align-content:start!important;flex:0 0 auto!important}
+.fc-heroes span{aspect-ratio:1;overflow:hidden}
+.fc-heroes img{height:auto!important;aspect-ratio:1!important;object-fit:contain!important}
+.sheet.bannersheet:not(.det) .body{overflow:auto}
+.fc-soon{display:flex!important;align-items:center;justify-content:center;border:2px dashed color-mix(in srgb,var(--c) 55%,#000);border-radius:3px;background:color-mix(in srgb,var(--c) 18%,transparent)}
+.fc-soon i{font:800 34px var(--f-display);font-style:normal;color:color-mix(in srgb,var(--c) 70%,#000);opacity:.6;line-height:1}
+.fc-soon b{background:none!important;color:color-mix(in srgb,var(--c) 70%,#000)!important;text-shadow:none!important}
+.fc-head{gap:8px!important;min-width:0}.fc-head h3{font-size:clamp(17px,1.55vw,24px)!important;white-space:nowrap}
+.fc-head>div{min-width:0}.fc-head .fc-det{flex:0 0 auto}
+.fc-mech{margin:8px 2px 0;font-size:14px;line-height:1.35;color:#3a2a14}
