@@ -2,13 +2,9 @@
 
 Match the existing packs: warm storybook pixel art, dark plum outline, light from the upper left, transparent PNGs, nearest-neighbour only, original characters.
 
-## 1. Hero portraits to finish the roster (1)
+## 1. Hero portraits
 
-Every banner has 8 heroes to pick and 2 tavern wanderers except the Merfolk.
-
-| Banner | Slot | Gender | Age | Human? | Type | Idea |
-|---|---|---|---|---|---|---|
-| Merfolk | pick | female | young | merfolk | Magic | tide singer with a conch shell |
+The roster is complete: every banner has 8 heroes to pick and at least 2 tavern wanderers.
 
 ## 2. Reworks
 
