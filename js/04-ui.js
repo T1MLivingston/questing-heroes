@@ -12,7 +12,9 @@ function renderUI(){
   applyTheme();
   $('#res').innerHTML=RES.map(k=>`<span class="${k}" title="${RESNAME[k]}"><img src="${iconURL('res',k,40)}" alt="${RESNAME[k]}">${fmt(S.res[k])}</span>`).join('');
   {const y=Object.fromEntries(RES.map(k=>[k,0]));y.gold=income();for(const o of S.objs)if(o.type==='mine'&&o.owned===ME())y[MINE[o.k].res]+=mineOut(o);if(!S.town.taken){if(facSpecial('amberDay'))y.amber+=1;if(facSpecial('oreDay'))y.ore+=2;}
-    $('#yield').innerHTML=`<small>per day</small>${RES.map(k=>y[k]?`<span><img src="${iconURL('res',k,32)}" alt="${RESNAME[k]}">+${fmt(y[k])}</span>`:'').join('')}${S.players?'':`<span class="upk${unpaid()?' bad':''}" title="Army upkeep, paid each week (3% of every troop's price)${unpaid()?'. Unpaid this week: −2 morale':''}">−${fmt(upkeepNow())}/wk</span>`}`;}
+    {const acts=document.querySelector('.topbar .acts')||$('#bMenu').parentNode;let mb=$('#bMines');if(!mb&&acts){mb=document.createElement('button');mb.className='btn icon minesbtn';mb.id='bMines';mb.title='Your mines';mb.onclick=()=>{if(!S||moving||modalOpen)return;openMines();};acts.insertBefore(mb,acts.firstChild);}
+      if(mb){const n=S.objs.filter(o=>o.type==='mine'&&o.owned===ME()).length;mb.innerHTML=`<span class="mb-ic">⛏</span><b>${n}</b>`;}}
+    $('#yield').innerHTML=`<small>per day</small>${RES.map(k=>y[k]?`<span><img src="${iconURL('res',k,32)}" alt="${RESNAME[k]}">+${fmt(y[k])}</span>`:'').join('')}`;}
   const d=dateParts();$('#date').innerHTML=`<span>Month ${d.m} · Week ${d.w} · Day ${d.d}</span><em>${S.event&&S.event.k!=='plain'?`${S.event.name} · `:''}${S.limit-S.day+1} days left</em>`;$('#date').title=S.event?`${S.event.name}: ${S.event.txt}`:'';
   const h=HERO(),hd=H_(),need=xpFor(h.lvl),prev=h.lvl>1?xpFor(h.lvl-1):0;
   const sw=S.heroes.length>1?`<div class="herosw">${S.heroes.map((x,i)=>`<button class="hsel${i===S.cur?' on':''}" data-hsel="${i}" title="${x.name}${x.mp>0?' (can still move)':''}"><img src="${iconURL('hero',x.id,84)}" alt="${x.name}">${x.mp>60?'<i></i>':''}</button>`).join('')}</div>`:'';
@@ -84,13 +86,31 @@ function openHeroSheet(){const h=HERO(),hd=H_();h.pack=h.pack||[];
       <p class="muted">Attack and Defense make every troop in the army hit harder and take less damage. Power makes spells stronger. Lore sets mana: 10 mana per point, and the hero gets back mana equal to their Lore each day.</p>
       <div class="label">Backpack · click an item to wear it</div><div class="pack">${h.pack.length?h.pack.map(k=>itemBox(k,'p')).join(''):'<p class="muted">Empty.</p>'}</div>
     </div></div>`;
-  const pr=showModal({title:`${esc(h.name)}: equipment`,body:body(),wide:true,top:true,buttons:[{label:'Done',value:1,primary:true}],dismiss:1});
+  const pr=showModal({title:`${esc(h.name)}: equipment`,body:body(),wide:true,top:true,buttons:[...S.heroes.length>1?[{label:'Dismiss hero',value:'dismiss'}]:[],{label:'Done',value:1,primary:true}],dismiss:1});
   const b=$('#modal').querySelector('.body');
   b.addEventListener('click',e=>{const el=e.target.closest('[data-eq]');if(!el)return;const[where,k]=el.dataset.eq.split(':');
     if(where==='w'){h.items.splice(h.items.indexOf(k),1);h.pack.push(k);}
     else{const sl=ITEMS[k].slot;h.pack.splice(h.pack.indexOf(k),1);if(!slotFree(h,sl)){const old=h.items.find(x=>ITEMS[x].slot===sl);h.items.splice(h.items.indexOf(old),1);h.pack.push(old);}h.items.push(k);}
     b.innerHTML=body();renderUI();save();});
-  return pr;}
+  return pr.then(v=>v==='dismiss'?dismissHero(h):v);}
+/* v46: send a hero away. Their troops join the garrison when they stand in one of your towns; otherwise they leave with the hero. Relics must be handed over first. */
+async function dismissHero(h){if(S.heroes.length<2)return;
+  if((h.relics||[]).length){await showModal({title:'Carrying relics',body:`<p>${esc(h.name)} carries a relic. Deliver it to your Relic Hall or hand it to another hero before dismissing them.</p>`,buttons:[{label:'OK',value:1,primary:true}],dismiss:1});return;}
+  const tw=allTowns().find(t=>t.x===h.x&&t.y===h.y&&!t.taken),n=h.army.reduce((a,s)=>a+s.n,0);
+  const v=await showModal({title:`Dismiss ${esc(h.name)}?`,body:`<p style="text-align:center"><img src="${iconURL('hero',h.id,128)}" alt="" style="width:96px;image-rendering:pixelated"></p><p>${esc(h.name)} will leave your company and may turn up in a tavern again later.</p><p>${!n?'They have no troops.':tw?`Their ${fmt(n)} troops stay behind in <b>${esc(tw.name||'your town')}</b>'s garrison (room for 7 stacks).`:`<b>Their ${fmt(n)} troops leave with them.</b> Dismiss them in one of your towns to keep the army.`} Their artifacts go with them.</p>`,buttons:[{label:'Keep',value:0},{label:'Dismiss',value:1,primary:true}],dismiss:0});
+  if(!v)return;
+  if(tw){tw.garrison=tw.garrison||[];for(const s of h.army){const ex=tw.garrison.find(x=>x.k===s.k);if(ex)ex.n+=s.n;else if(tw.garrison.length<7)tw.garrison.push({k:s.k,n:s.n});}}
+  const i=S.heroes.indexOf(h);S.heroes.splice(i,1);S.cur=Math.min(S.cur>i?S.cur-1:S.cur,S.heroes.length-1);if(S.cur<0)S.cur=0;
+  toast(`${h.name} has left your company.`);selectHero(S.cur);renderUI();save();}
+/* v46: every mine you hold in one place, opened from the ⛏ button in the top bar */
+function openMines(){const ms=()=>S.objs.filter(o=>o.type==='mine'&&o.owned===ME());
+  const tot=()=>{const t={};for(const o of ms()){const r=MINE[o.k].res;t[r]=(t[r]||0)+mineOut(o);}return t;};
+  const body=()=>{const t=tot();return`<div class="minesum">${Object.keys(t).length?RES.filter(k=>t[k]).map(k=>`<span><img src="${iconURL('res',k,32)}" alt="">+${fmt(t[k])} ${RESNAME[k].toLowerCase()} a day</span>`).join(''):'<span class="muted">No mines yet.</span>'}</div>${mineList().replace(/<h3[^>]*>Your mines<\/h3>/,'')}`;};
+  showModal({title:`⛏ Your mines (${ms().length})`,body:body(),wide:true,top:true,buttons:[{label:'Close',value:1,primary:true}],dismiss:1});
+  const b=$('#modal').querySelector('.body');
+  b.addEventListener('click',e=>{const el=e.target.closest('[data-mineup],[data-minego]');if(!el)return;
+    if(el.dataset.mineup){const o=S.objs.find(q=>q.id===+el.dataset.mineup);if(!o||(o.lvl||1)>=3)return;const c=MINE_UP[o.lvl||1];if(!canAfford(c))return;pay(c);o.lvl=(o.lvl||1)+1;toast(`${MINE[o.k].name} upgraded to level ${o.lvl}.`);b.innerHTML=body();renderUI();save();}
+    else{const o=S.objs.find(q=>q.id===+el.dataset.minego);if(o){$('#modal')._close(null);centerOn(o.x,o.y);}}});}
 function viewSpellbook(){const h=HERO();
   const list=h.spells.map(k=>{const sp=SP[k];return`<div class="spell${h.mana>=sp.cost?'':' dim'}"><b>${sp.name}</b><span class="scost">${sp.cost} mana</span><p>${sp.desc(hst(h,'pow'))}</p></div>`;}).join('');
   showModal({title:`📖 ${esc(h.name)}'s spellbook`,body:h.book?`<p class="muted" style="margin-top:0">${h.mana} of ${maxMana()} mana. Cast spells in battle by clicking your hero beside the field. Power makes them stronger; Lore gives more mana.</p><div class="spells">${list||'<p>No spells yet.</p>'}</div>

@@ -15,11 +15,17 @@ const heroHere=()=>HERO().x===TW().x&&HERO().y===TW().y;
 /* the tavern offers two heroes of your banner and two rogues (wanderers of other banners if rogues run out); the offer changes each week */
 const hireCost=x=>x.fac===TF()&&!x.rogue?HIRE_COST:HIRE_COST+500;
 const hireable=()=>{const taken=new Set([...S.heroes.map(y=>y.id),...S.rivals.map(r=>r.id),...(S.players||[]).flatMap(p=>(p.heroes||[]).map(h=>h.id))]);
-  const free=HEROES.filter(x=>!taken.has(x.id)&&!x.blank),g=mulberry32((S.seed^Math.imul(weekNo()+1,7919))>>>0),sh=a=>a.map(x=>[g(),x]).sort((p,q)=>p[0]-q[0]).map(x=>x[1]);
-  const rg=sh(free.filter(x=>x.rogue&&!(S.jailed||[]).includes(x.id))).slice(0,1);const own=free.filter(x=>x.fac===TF()&&!x.rogue);
-  /* v43: four heroes: the banner's two wanderers, one of its eight, and a rogue (or a hero from another banner) */
-  const L=[...sh(own.filter(x=>x.tav)).slice(0,2),...sh(own.filter(x=>!x.tav)).slice(0,1),...rg,...sh(free.filter(x=>x.fac!==TF()&&!x.rogue)).slice(0,1-rg.length)];
-  for(const x of sh(own))if(L.length<4&&!L.includes(x))L.push(x);return L;};
+  const free=HEROES.filter(x=>!taken.has(x.id)&&!x.blank);
+  const mk=g=>a=>a.map(x=>[g(),x]).sort((p,q)=>p[0]-q[0]).map(x=>x[1]);
+  /* v46: the banner's two wanderers stay all week; the other two seats change every day, or sooner with a round of drinks (tavRoll) */
+  const shW=mk(mulberry32((S.seed^Math.imul(weekNo()+1,7919))>>>0)),roll=S.tavRoll&&S.tavRoll.day===S.day?S.tavRoll.n:0;
+  const shD=mk(mulberry32((S.seed^Math.imul(S.day+1,104729)^Math.imul(roll+1,2654435761))>>>0));
+  const own=free.filter(x=>x.fac===TF()&&!x.rogue);
+  const L=shW(HEROES.filter(x=>x.fac===TF()&&!x.rogue&&x.tav&&!x.blank)).slice(0,2).filter(x=>!taken.has(x.id));
+  const rg=shD(free.filter(x=>x.rogue&&!(S.jailed||[]).includes(x.id))).slice(0,1);
+  L.push(...shD(own.filter(x=>!x.tav&&!L.includes(x))).slice(0,1),...rg,...shD(free.filter(x=>x.fac!==TF()&&!x.rogue)).slice(0,1-rg.length));
+  for(const x of shD(own))if(L.length<4&&!L.includes(x))L.push(x);return L;};
+const TAV_ROLL=250;
 /* each banner's own buildings: a horde (more of one troop each week), one that teaches visiting heroes, and a special */
 const FAC_BUILD={
   rangers:[{id:'fb1',name:'Bramble Warren',horde:[0,4]},{id:'fb2',name:"Hunter's Lodge",visit:'atk'},{id:'fb3',name:'Waystone Circle',special:'mpTown',desc:'Heroes who start the day in town get +25% movement that day.'}],
@@ -46,7 +52,7 @@ function townBuildings(){
     {id:'hall3',name:'High Seat',cost:{gold:5000,timber:10,ore:10,gems:3},req:['hall2','lib1'],desc:'Raises daily gold to 2,000.'},
     {id:'hall4',name:'Crown Seat',cost:{gold:10000,ore:10,gems:5,moonwater:5},req:['hall3','wall2'],desc:VT?'A grand seat of rule: daily gold rises to 3,000.':'Makes this your capital: daily gold rises to 3,000.'},
     ...VT?[]:[{id:'reliquary',name:altarName(),cost:{gold:1500,ore:5},desc:S.mode==='grail'?'Heroes entering town place their grails here. The three the Oracle wants win the game.':S.mode==='conquest'?'Heroes entering town place their relics here for the bonuses.':'Heroes entering town place their relics here. All seven wins the game.'}],
-    {id:'tavern',name:'Tavern',cost:{gold:800,timber:5},desc:'Hire more heroes (up to four, five with the Heroes\' Lodge): two of this banner and two rogues, new each week.'},
+    {id:'tavern',name:'Tavern',cost:{gold:800,timber:5},desc:'Hire more heroes (up to four, five with the Heroes\' Lodge): two of this banner all week, and two more seats that change every day.'},
     {id:'lodge',name:"Heroes' Lodge",cost:{gold:5000,timber:10,gems:4,moonwater:3},req:['tavern','hall3'],desc:'Room for a fifth hero in your company.'},
     {id:'still',name:"Alchemist's Still",cost:{gold:2000,timber:5,ore:5},req:['hall2'],desc:'Cut gems from ore and distil moonwater from amber, any day, in the Market.'},
   ];
@@ -191,7 +197,7 @@ function townHTML(){
         <p class="tavab"><b>★ ${x.ab}</b><br>${x.ad}</p>
         <div class="scs">${sc('atk',x.st[0])}${sc('def',x.st[1])}${sc('pow',x.st[2])}${sc('lore',x.st[3])}</div>
         <div class="tavkit">${x.sk.map(k=>`<span title="${SK[k].name}: ${SK[k].desc}">${skIco(k,30)}${SK[k].name}</span>`).join('')}${it?`<span title="${esc(it.name)} (${it.tier}): ${esc(itemTxt(x.item))}">${itemIcon(x.item)}${it.name}</span>`:''}</div>
-        <div class="tavbuy"><div class="cost">${costHTML({gold:hireCost(x)},S.res)}</div><button class="btn sm primary" data-hire="${x.id}" ${S.res.gold<hireCost(x)?'disabled':''}>Hire</button></div></div>`;}).join('')}</div><p class="muted">Rogues answer to no banner: they keep their own trick and lead your troops. Some are locked in prisons out on the map, waiting to be freed. New faces arrive each week.</p>`;
+        <div class="tavbuy"><div class="cost">${costHTML({gold:hireCost(x)},S.res)}</div><button class="btn sm primary" data-hire="${x.id}" ${S.res.gold<hireCost(x)?'disabled':''}>Hire</button></div></div>`;}).join('')}</div><p class="muted">Rogues answer to no banner: they keep their own trick and lead your troops. Some are locked in prisons out on the map, waiting to be freed. The first two stay all week; the other two seats change every day.</p><p style="text-align:center"><button class="btn sm" data-tavroll="1" ${S.res.gold<TAV_ROLL?'disabled':''}>🍺 Buy a round: new faces (${TAV_ROLL} gold)</button></p>`;
   }else if(townTab==='library'){
     if(!t.built.lib1)body=`<div class="grid">${locked('The Lantern Library','lib1')}</div>`;
     else{const fs=FAC_SPELLS[TF()];
@@ -417,6 +423,7 @@ async function openTown(tw){
       if(here&&addToArmy(k,n))toast(`${n} ${U[k].pl} join the army.`);else{const g=t.garrison.find(x=>x.k===k);if(g)g.n+=n;else t.garrison.push({k,n});toast(here?`The army has no free slot. ${n} ${U[k].pl} wait in the garrison.`:`${n} ${U[k].pl} wait in the garrison.`);}
       refresh();}
     else if(el.dataset.upg){const a=HERO().army[+el.dataset.upg];if(!a)return;const c=upCost(a.k,a.n);if(!canAfford(c))return;pay(c);const uk=a.k+'_u';const ex=HERO().army.find(x=>x.k===uk);if(ex){ex.n+=a.n;HERO().army.splice(+el.dataset.upg,1);}else a.k=uk;toast(`Upgraded to ${U[uk].pl}.`);refresh();}
+    else if(el.dataset.tavroll){if(S.res.gold<TAV_ROLL)return;S.res.gold-=TAV_ROLL;S.tavRoll={day:S.day,n:(S.tavRoll&&S.tavRoll.day===S.day?S.tavRoll.n:0)+1};toast('A round for the house: new faces at the tables.');refresh();save();}
     else if(el.dataset.hire){const hx=HBY[el.dataset.hire];if(!hx||S.res.gold<hireCost(hx)||S.heroes.length>=heroCap())return;S.res.gold-=hireCost(hx);const nh=mkHero(el.dataset.hire,t.x,t.y);const t1=FAC[TF()].units[0];nh.army=[{k:recruitKey(t1),n:Math.round(150/U[t1].hp)}];
       if(delivered(5)){nh.book=true;nh.spells.push('starfall');}const cur=S.cur;S.heroes.push(nh);S.cur=S.heroes.length-1;nh.mana=maxMana();nh.mp=maxMP();S.cur=cur;toast(`${nh.name} joins your banner and waits at the town gate.`);refresh();}
     else if(el.dataset.book){const x=S.heroes.find(q=>q.id===el.dataset.book);if(!x||x.book||S.res.gold<BOOK_COST)return;S.res.gold-=BOOK_COST;x.book=true;const cur=S.cur;S.cur=S.heroes.indexOf(x);learnLibrary();x.mana=maxMana();S.cur=cur;toast(`${x.name} now carries a spellbook.`);refresh();}

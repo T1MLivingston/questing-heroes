@@ -1059,3 +1059,9 @@ img.upg{filter:sepia(.55) saturate(1.9) hue-rotate(-12deg) brightness(1.06) drop
 .tcredit .linkbtn{font-size:14px}
 @media (max-width:640px){.tb-main{grid-template-columns:1fr;gap:10px}.tbtn{min-height:0;flex-direction:row;padding:10px}.tbtn b{font-size:20px}.tb-sub{flex-direction:column}.tbtn.sm{flex:auto}}
 @media (max-width:640px){.sheet:has(.titlescreen) .body{overflow:auto}.titlescreen{gap:9px}.tb-main .tbtn>span:first-child,.tb-main .tb-face{zoom:.6}.tbtn.sm{padding:8px 14px}.tp-track img{width:56px;height:56px}.tcredit{padding:0 12px}}
+/* v46 mines button and panel */
+.minesbtn{display:inline-flex!important;align-items:center;gap:4px;padding:0 10px!important;font:800 18px var(--f-display)}
+.minesbtn .mb-ic{font-size:22px;line-height:1}
+.acts{display:flex;gap:6px;align-items:center}
+.minesum{display:flex;flex-wrap:wrap;gap:10px 18px;justify-content:center;padding:8px 10px;margin-bottom:4px;background:rgba(255,246,214,.6);border-radius:8px;font-weight:700}
+.minesum span{display:inline-flex;align-items:center;gap:6px}.minesum img{width:22px;height:22px}

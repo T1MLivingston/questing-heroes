@@ -247,7 +247,7 @@ function rollEvent(){const tot=EVENTS.reduce((a,e)=>a+e.w,0);let r=Math.random()
 const troopPrice=k=>U[k].cost||U[k].hp*8;
 function upkeepNow(){let g=0;const add=arr=>{for(const a of arr||[])g+=a.n*troopPrice(a.k)*0.03;};
   S.heroes.forEach(h=>add(h.army));allTowns().forEach(t=>add(t.garrison));S.objs.forEach(o=>{if((o.type==='camp'&&o.owned===ME()&&!o.built)||(o.type==='spire'&&o.owned===ME()))add(o.garrison);});return Math.round(g);}
-const unpaid=()=>!!(S&&S.unpaid===weekNo());
+const unpaid=()=>false;
 function dayUpkeep(weekly){
   const t=S.town,news=[],inc=income();gain('gold',inc);const msg=[t.taken?`no income: ${esc(t.taken.name)} holds ${esc(t.name)}`:`+${fmt(inc)} gold`];
   if(!t.taken){if(facSpecial('amberDay'))gain('amber',1);if(facSpecial('oreDay'))gain('ore',2);}
@@ -256,7 +256,8 @@ function dayUpkeep(weekly){
   if(owned)msg.push(`${owned} mine${owned>1?'s':''} paid out`);
   const cur=S.cur;S.heroes.forEach((h,i)=>{S.cur=i;h.mp=maxMP();if(allTowns().some(q=>specialIn(q,'mpTown')&&h.x===q.x&&h.y===q.y))h.mp=Math.round(h.mp*1.25);h.mana=Math.min(maxMana(),h.mana+Math.max(1,hst(h,'lore'))+2*skL('meditation')+gear(h,'manaRegen')+(facSpecial('manaRegen')?2:0));});S.cur=cur;
   for(const q of allTowns())q.builtToday=false;
-  if(weekly&&!S.players){const up=upkeepNow();if(S.res.gold>=up){S.res.gold-=up;if(up)news.push(`Army upkeep: <b>${fmt(up)}</b> gold paid.`);delete S.unpaid;}else{news.push(`<b>Upkeep unpaid!</b> ${fmt(S.res.gold)} of ${fmt(up)} gold. Your troops grumble: −2 morale this week.`);S.res.gold=0;S.unpaid=weekNo();}}
+  /* v46: no weekly army upkeep */
+  delete S.unpaid;
   if(weekly){const d=dateParts(),ev=S.event||{};if(ev.k==='gold')gain('gold',1000);
     for(const q of allTowns()){if(q.taken)continue;const fk=q.fac||S.fac,F=FAC[fk],fb=FAC_BUILD[fk]||[],gr={};
       const mult=(q.built.muster?1.5:1)*[1,1,1.5,2][wallLvl(q)]*(ev.k==='bounty'?1.25:ev.k==='lean'?0.75:1);

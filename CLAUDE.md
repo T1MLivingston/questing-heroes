@@ -223,6 +223,13 @@ Everything lives in one object, `S`, so it can be saved as JSON:
 - New ability hooks (player side only): `forgePlus` (extra Great Forge attack), `armyDef` (whole army defense), `rangedPct` (shooter damage), `halfCost` (one spell at half mana), `manaCut` (all spells cheaper), `squallPct`, `weakenPct`.
 - Raised: Ivan (Forge half ore, +1 more attack), Oliver (30% cheaper rough ground, +5% movement), Shadow (harvest 20%), Sheila (Squall +30%), Grimes and Griffiths (+1 speed to their troop). Made distinct: Veyra, Gliss, Silka, Murmur, Boone, Mossback, Aster, Nessa Holt. Trimmed: Schmickle and Quillby to +200 gold a day. Battaglia is a Might hero.
 
+### v46 tavern, dismissing heroes, mines panel, no upkeep
+
+- Tavern (`hireable`): the banner's two wanderers are picked per week from all its wanderers (one you hire leaves an empty seat until next week); the other two seats (one of the banner's eight, one rogue or other-banner hero) change every day. **Buy a round** (`TAV_ROLL`, 250 gold, `S.tavRoll` = `{day, n}`) re-rolls the daily seats.
+- Dismiss a hero (`dismissHero`, from the hero sheet's header when you lead 2+): blocked while carrying relics; in one of your towns the army joins its garrison (7 stacks), elsewhere it leaves with the hero. The hero becomes free for taverns again.
+- Mines panel (`openMines`): a ⛏ button with your mine count, added to the top bar's `.acts` by `renderUI`; daily totals per resource and every mine with Upgrade and Show on map (`mineList`).
+- No weekly army upkeep: `dayUpkeep` no longer charges, `unpaid()` is always false, and the top bar and weekly report drop the upkeep figure (`upkeepNow` is kept for reference).
+
 ### v45 twins and tavern heroes
 
 - Twins & Tavern Heroes pack: 15 more heroes (Spur and Flick left out). Fin & Flo complete the Merfolk's eight picks; the rest are wanderers (`tav:true`): Rangers Gus & Glen, Midge; Wizards Mags & Mae, Bloop, Gleam; Necromancers Odo & Otto; Elves Aster & Briar, Rue; Dwarves Ned & Nat, Spike; Pirates Rafe & Reed, Bo; Beastmasters Bess & Bea, Gilt. Every banner now has 8 picks and 2-5 wanderers; the tavern shows two of them, rotating weekly. The rogue Briar is now Rusty. `RECRUIT_PORT`/`recruits.png` hold 76 portraits (8 rows).

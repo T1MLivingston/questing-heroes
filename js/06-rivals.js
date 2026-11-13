@@ -87,7 +87,7 @@ async function weeklyReport(){if(S.players||S.over)return;const d=dateParts(),yo
       <p>Scouts say ${esc(rv.name)} ${covW(covFrac(rv))}. Their coffers look <b>${ww}</b>. Their best troops are <b>${top?U[top.k].pl:'none'}</b>, ${powW(armyPower(rv.army,rv)/best)}.</p>${mineRow(rmines)}</div>
       ${top?`<div class="wtroop" title="Best troop: ${U[top.k].pl}"><img class="${U[top.k].up?'upg':''}" src="${iconURL('unit',top.k,64)}" alt=""><small>Best troop</small><b>${U[top.k].name}</b></div>`:'<div></div>'}</div>`;}).join('');
   await showModal({title:`Weekly report · Month ${d.m}, Week ${d.w}`,body:`<h3 class="gsec">Your kingdom</h3>
-    <div class="wgrid"><div><em>Towns</em><b>${you.length}</b></div><div><em>Outposts</em><b>${S.objs.filter(o=>o.type==='camp'&&o.owned===ME()&&!o.built).length}</b></div><div><em>Heroes</em><b>${S.heroes.length}</b></div><div><em>Gold a day</em><b>${fmt(income())}</b></div><div><em>Upkeep a week</em><b>${fmt(upkeepNow())}</b></div><div><em>Land explored</em><b>${Math.round(exp*100)}%</b></div><div><em>Best army</em><b>${fmt(best)}</b></div></div>
+    <div class="wgrid"><div><em>Towns</em><b>${you.length}</b></div><div><em>Outposts</em><b>${S.objs.filter(o=>o.type==='camp'&&o.owned===ME()&&!o.built).length}</b></div><div><em>Heroes</em><b>${S.heroes.length}</b></div><div><em>Gold a day</em><b>${fmt(income())}</b></div><div><em>Land explored</em><b>${Math.round(exp*100)}%</b></div><div><em>Best army</em><b>${fmt(best)}</b></div></div>
     <div class="wsub">Your mines</div>${mineTxt}
     <h3 class="gsec">Rivals</h3>${rivals||'<p class="muted">No rival banners remain.</p>'}`,wide:true,buttons:[{label:'Onward',value:1,primary:true}],dismiss:1});}
 async function rivalsTurn(){
