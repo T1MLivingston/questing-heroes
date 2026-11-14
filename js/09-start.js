@@ -33,7 +33,7 @@ const seedPick=(seed,salt,w)=>{let r=((seed^salt)*2654435761>>>0)/4294967296*w.r
 const REC_SIZE={1:'small',2:'medium',3:'large',4:'large',5:'xl',6:'xl'};
 async function pickMap(opt={}){
   const mine=loadMaps().filter(m=>m.objs.some(o=>o.type==='town')&&m.objs.filter(o=>o.type==='relic').length>=7);
-  let tut=typeof tutSeen==='function'?!tutSeen():false,type=opt.custom?'custom:'+opt.custom:'wheel',size=tut?'xl':'large',seed=(Math.random()*1e9)|0,mode='relic',np=2,diff='normal',nr=3,nm='r',no='r',art=false,tr='d';
+  let tut=typeof tutSeen==='function'?!tutSeen():false,type=opt.custom?'custom:'+opt.custom:'wheel',size=tut?'xl':'large',seed=(Math.random()*1e9)|0,mode='conquest',np=2,diff='normal',nr=3,nm='r',no='r',art=false,tr='d';
   const NR=()=>nr??MAP_SIZES[size].rivals,NM=()=>nm==='r'?seedPick(seed,0x5bd1,TOWN_W):nm??MAP_SIZES[size].majors,NO=()=>no==='r'?seedPick(seed,0x1f3a,OUT_W):no,OUTW=['Few','Some','Many'];
   const maxR=()=>type==='rivers'?4:6;
   const html=()=>`<div class="gm-top"><div class="diffs" role="group" aria-label="Difficulty"><span class="label">Difficulty</span>${Object.entries(DIFF).map(([k,d])=>`<button class="dchip bare${k===diff?' on':''}" data-diff="${k}" title="${d.desc}">${ico('difficulty_'+k,40)}${d.name}</button>`).join('')}</div><button class="dchip bare tutchip${tut?' on':''}" data-tut="1" title="A guide walks you through your first week: building, recruiting, mines, a second hero and your first fight. Suggested: an Extra large map with a banner you like.">📘 Tutorial${tut?': on':': off'}</button></div>

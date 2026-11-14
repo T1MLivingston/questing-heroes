@@ -176,9 +176,9 @@ function townHTML(){
       let act;if(built)act='<span class="tag ok">Built</span>';
       else if(miss.length)act=`<span class="tag no">Needs ${miss.map(r=>BY[r]?BY[r].name:r).join(', ')}</span>`;
       else act=`<button class="btn sm" data-build="${b.id}" ${t.builtToday||!canAfford(b.cost)?'disabled':''}>Build</button>`;
-      const sug=adv.id===b.id&&!built;
+      const sug=adv.id===b.id&&!built,cant=!built&&(miss.length||t.builtToday||!canAfford(b.cost));
       const th=bldThumb(TF(),b.id);
-      return`<div class="bcard${built?' built':''}${sug?' sugg':''}" id="bc-${b.id}">${sug?'<span class="ribbon">Suggested</span>':''}<div class="bthumb${th?' art':''}">${th&&th.css?`<span class="xbcrop" style="${th.css}"></span>`:th?`<img src="${th}" alt="">`:`<span>${b.wall?'🧱':b.unit?'⛺':b.id.startsWith('hall')?'🏛':b.id.startsWith('lib')?'📚':b.unique?'✦':b.id.startsWith('u')?'⚒':'🏠'}</span>`}</div><h4>${b.name}</h4><p class="bshort">${b.short||b.desc}</p><details class="bdet"><summary>Details</summary><p>${b.desc}</p></details><div class="bfoot">${built?'':`<div class="cost">${costHTML(b.cost,S.res)}</div>`}<div>${act}</div></div></div>`;}).join('')}</div>`;
+      return`<div class="bcard${built?' built':''}${sug?' sugg':''}${cant&&!sug?' cant':''}" id="bc-${b.id}">${sug?'<span class="ribbon">Suggested</span>':''}<div class="bthumb${th?' art':''}">${th&&th.css?`<span class="xbcrop" style="${th.css}"></span>`:th?`<img src="${th}" alt="">`:`<span>${b.wall?'🧱':b.unit?'⛺':b.id.startsWith('hall')?'🏛':b.id.startsWith('lib')?'📚':b.unique?'✦':b.id.startsWith('u')?'⚒':'🏠'}</span>`}</div><h4>${b.name}</h4><p class="bshort">${b.short||b.desc}</p><details class="bdet"><summary>Details</summary><p>${b.desc}</p></details><div class="bfoot">${built?'':`<div class="cost">${costHTML(b.cost,S.res)}</div>`}<div>${act}</div></div></div>`;}).join('')}</div>`;
   }else if(townTab==='upgrade'){
     const fu=FAC[TF()].units;
     const upg=here?h.army.map((a,i)=>{const ti=fu.indexOf(a.k);if(ti<0||!t.built['u'+(ti+1)])return'';const c=upCost(a.k,a.n);

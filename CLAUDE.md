@@ -223,6 +223,12 @@ Everything lives in one object, `S`, so it can be saved as JSON:
 - New ability hooks (player side only): `forgePlus` (extra Great Forge attack), `armyDef` (whole army defense), `rangedPct` (shooter damage), `halfCost` (one spell at half mana), `manaCut` (all spells cheaper), `squallPct`, `weakenPct`.
 - Raised: Ivan (Forge half ore, +1 more attack), Oliver (30% cheaper rough ground, +5% movement), Shadow (harvest 20%), Sheila (Squall +30%), Grimes and Griffiths (+1 speed to their troop). Made distinct: Veyra, Gliss, Silka, Murmur, Boone, Mossback, Aster, Nessa Holt. Trimmed: Schmickle and Quillby to +200 gold a day. Battaglia is a Might hero.
 
+### v49 setup and build tab polish
+
+- Renamed student heroes: Lord Krishna → Larishna, Catherine → Katherine, Rosie → Rousie (`OLD_NAMES`).
+- Choose your game starts on **Conquest** (centre card). Selected choices are framed in bold blue (gold on parchment was too faint); the recommended map size keeps its ★ and a dashed blue outline.
+- Build tab: buildings you can't build yet (missing a building, not enough resources, or already built today) are greyed out (`.bcard.cant`, full colour on hover); the Suggested building has a bold blue frame and ribbon.
+
 ### v48 student heroes, quality of life
 
 - Student Heroes batches 1, 3, 4 and 5: 36 heroes made by students (`student:true`), tavern wanderers of their banner (`tav:true`) or rogues when no banner was given (Nyx, Nala, Nanya, Posy Spinner, Bristle, Posy, Kaf). Simple abilities from the usual hooks. `RECRUIT_PORT`/`recruits.png` hold 112 portraits (12 rows). Legacy Portrait Redesigns replaced Battaglia, Dorothy, Lawrence, Oliver, Parker, Perry, Shadow, Sheila, Vargas and Griffiths (`mer2`); portrait URLs carry `?v=48`.

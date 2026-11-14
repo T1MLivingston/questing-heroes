@@ -1105,3 +1105,11 @@ img.upg{filter:sepia(.55) saturate(1.9) hue-rotate(-12deg) brightness(1.06) drop
 /* taller mines button so the pickaxe shows */
 .minesbtn{height:auto!important;min-height:52px;flex-direction:column;gap:0!important;padding:2px 10px!important;line-height:1}
 .minesbtn .mb-ic{font-size:28px!important}.minesbtn b{font-size:15px}
+/* v49: clear blue selection on Choose your game (gold on parchment was too faint) */
+.sheet:has(.gm-top) .dchip.on,.sheet:has(.gm-top) .mode.on,.sheet:has(.gm-top) .mapc.on,.sheet:has(.gm-top) .dchip.bare.on{border-color:#1f4fd1!important;box-shadow:0 0 0 3px #1f4fd1,0 0 14px rgba(31,79,209,.55)!important;background:linear-gradient(#eef3ff,#cfdcff)!important;color:#0d2a80!important}
+.sheet:has(.gm-top) .dchip.rec:not(.on){outline:2px dashed #1f4fd1;outline-offset:-4px}
+/* build tab: what you can't build yet is greyed; the suggested building gets a bold blue frame */
+.bcard.cant{opacity:.55;filter:grayscale(.7)}
+.bcard.cant:hover{opacity:.85;filter:none}
+.bcard.sugg{border:3px solid #1f4fd1!important;box-shadow:0 0 0 2px #1f4fd1,0 0 16px rgba(31,79,209,.5)!important}
+.bcard.sugg .ribbon{background:#1f4fd1!important;color:#fff!important}
