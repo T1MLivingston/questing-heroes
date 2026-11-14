@@ -223,6 +223,10 @@ Everything lives in one object, `S`, so it can be saved as JSON:
 - New ability hooks (player side only): `forgePlus` (extra Great Forge attack), `armyDef` (whole army defense), `rangedPct` (shooter damage), `halfCost` (one spell at half mana), `manaCut` (all spells cheaper), `squallPct`, `weakenPct`.
 - Raised: Ivan (Forge half ore, +1 more attack), Oliver (30% cheaper rough ground, +5% movement), Shadow (harvest 20%), Sheila (Squall +30%), Grimes and Griffiths (+1 speed to their troop). Made distinct: Veyra, Gliss, Silka, Murmur, Boone, Mossback, Aster, Nessa Holt. Trimmed: Schmickle and Quillby to +200 gold a day. Battaglia is a Might hero.
 
+### v58 kid-friendly tavern
+
+- No beer mugs: the Tavern tile and Roadside Inn use 🏡, **Buy a round** is now **🔔 Ring the bell: new faces** (same 250 gold re-roll), and the Pirates' horde building is the **Galley Hall** (was Grog Hall). The tavern art itself shows barrels and a sign only.
+
 ### v57 blocked roads
 
 - Fixed a v54 crash: `planTo`'s cost callback added the land/sea penalty to a `const`, so any route a hero with a boat planned across a shore threw and the click did nothing (heroes looked stuck). It is `let c` now.
@@ -293,7 +297,7 @@ Everything lives in one object, `S`, so it can be saved as JSON:
 
 ### v46 tavern, dismissing heroes, mines panel, no upkeep
 
-- Tavern (`hireable`): the banner's two wanderers are picked per week from all its wanderers (one you hire leaves an empty seat until next week); the other two seats (one of the banner's eight, one rogue or other-banner hero) change every day. **Buy a round** (`TAV_ROLL`, 250 gold, `S.tavRoll` = `{day, n}`) re-rolls the daily seats.
+- Tavern (`hireable`): the banner's two wanderers are picked per week from all its wanderers (one you hire leaves an empty seat until next week); the other two seats (one of the banner's eight, one rogue or other-banner hero) change every day. **Ring the bell** (was Buy a round; `TAV_ROLL`, 250 gold, `S.tavRoll` = `{day, n}`) re-rolls the daily seats.
 - Dismiss a hero (`dismissHero`, from the hero sheet's header when you lead 2+): blocked while carrying relics; in one of your towns the army joins its garrison (7 stacks), elsewhere it leaves with the hero. The hero becomes free for taverns again.
 - Mines panel (`openMines`): a ⛏ button with your mine count, added to the top bar's `.acts` by `renderUI`; daily totals per resource and every mine with Upgrade and Show on map (`mineList`).
 - No weekly army upkeep: `dayUpkeep` no longer charges, `unpaid()` is always false, and the top bar and weekly report drop the upkeep figure (`upkeepNow` is kept for reference).

@@ -22,7 +22,7 @@ Each banner has a 640×360 town scene (background plus separate building layers)
 | Wizards | Relic Hall, Heroes' Lodge, Star Archive, Alchemist's Still, Owl Roost, Arcane Conduit (6) |
 | Necromancers | Relic Hall, Heroes' Lodge, Star Archive, Alchemist's Still, Ossuary, Soul Vault (6) |
 | Beast Masters | Relic Hall, Heroes' Lodge, Star Archive, Alchemist's Still, Den of Plenty (5; Great Paddock is already the Trail Corral) |
-| Pirates | Relic Hall, Heroes' Lodge, Star Archive, Alchemist's Still, Grog Hall (5; Smugglers' Cove is already the Shipyard) |
+| Pirates | Relic Hall, Heroes' Lodge, Star Archive, Alchemist's Still, Galley Hall (5; Smugglers' Cove is already the Shipyard) |
 | Elves | Relic Hall, Heroes' Lodge, Star Archive, Alchemist's Still, Seedling Grove, Sylvan Spring (6) |
 | Dwarves | Relic Hall, Heroes' Lodge, Star Archive, Alchemist's Still, Delving Halls, Deep Seam (6) |
 | Merfolk | Relic Hall, Heroes' Lodge, Star Archive, Alchemist's Still, Spawning Pools, Tide Market (6) |

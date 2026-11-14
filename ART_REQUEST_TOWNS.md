@@ -53,7 +53,7 @@ Sizes: tier 1-2 about 112×96, tier 3-4 about 128×112, tier 5 about 160×144. E
 | Wizards | Owl Roost, Observatory, Arcane Conduit |
 | Necromancers | Ossuary, Whispering Crypt, Soul Vault |
 | Beast Masters | Den of Plenty, Trial Grounds, Great Paddock |
-| Pirates | Grog Hall, Gunnery Range, Smugglers' Cove |
+| Pirates | Galley Hall, Gunnery Range, Smugglers' Cove |
 | Elves | Seedling Grove, Moonlit Glade, Sylvan Spring |
 | Dwarves | Delving Halls, Runestone, Deep Seam (plus the **Great Forge**, the dwarves' signature building) |
 | Merfolk | Spawning Pools, Coral Shrine, Tide Market |

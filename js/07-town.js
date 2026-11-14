@@ -17,7 +17,7 @@ const hireCost=x=>x.fac===TF()&&!x.rogue?HIRE_COST:HIRE_COST+500;
 const hireable=()=>{const taken=new Set([...S.heroes.map(y=>y.id),...S.rivals.map(r=>r.id),...(S.players||[]).flatMap(p=>(p.heroes||[]).map(h=>h.id))]);
   const free=HEROES.filter(x=>!taken.has(x.id)&&!x.blank&&!x.custom);
   const mk=g=>a=>a.map(x=>[g(),x]).sort((p,q)=>p[0]-q[0]).map(x=>x[1]);
-  /* v46: the banner's two wanderers stay all week; the other two seats change every day, or sooner with a round of drinks (tavRoll) */
+  /* v46: the banner's two wanderers stay all week; the other two seats change every day, or sooner by ringing the bell (tavRoll) */
   const shW=mk(mulberry32((S.seed^Math.imul(weekNo()+1,7919))>>>0)),roll=S.tavRoll&&S.tavRoll.day===S.day?S.tavRoll.n:0;
   const shD=mk(mulberry32((S.seed^Math.imul(S.day+1,104729)^Math.imul(roll+1,2654435761))>>>0));
   const own=free.filter(x=>x.fac===TF()&&!x.rogue);
@@ -34,7 +34,7 @@ const FAC_BUILD={
   wizards:[{id:'fb1',name:'Owl Roost',horde:[0,5]},{id:'fb2',name:'Observatory',visit:'pow'},{id:'fb3',name:'Arcane Conduit',special:'manaRegen',desc:'Every hero regains 2 more mana each day.'}],
   necro:[{id:'fb1',name:'Ossuary',horde:[0,5]},{id:'fb2',name:'Whispering Crypt',visit:'lore'},{id:'fb3',name:'Soul Vault',special:'harvest',desc:'Grave Harvest raises 5% more of the fallen.'}],
   centaurs:[{id:'fb1',name:'Den of Plenty',horde:[0,4]},{id:'fb2',name:'Trial Grounds',visit:'atk'},{id:'fb3',name:'Great Paddock',special:'horde2',desc:'+2 of your second-tier troops each week.'}],
-  pirates:[{id:'fb1',name:'Grog Hall',horde:[0,4]},{id:'fb2',name:'Gunnery Range',visit:'atk'},{id:'fb3',name:"Smugglers' Cove",special:'goldWeek',desc:'Brings in 1,500 gold at the start of each week.'}],
+  pirates:[{id:'fb1',name:'Galley Hall',horde:[0,4]},{id:'fb2',name:'Gunnery Range',visit:'atk'},{id:'fb3',name:"Smugglers' Cove",special:'goldWeek',desc:'Brings in 1,500 gold at the start of each week.'}],
   elves:[{id:'fb1',name:'Seedling Grove',horde:[0,4]},{id:'fb2',name:'Moonlit Glade',visit:'lore'},{id:'fb3',name:'Sylvan Spring',special:'amberDay',desc:'Gives 1 amber each day.'}],
   dwarves:[{id:'fb1',name:'Delving Halls',horde:[0,4]},{id:'fb2',name:'Runestone',visit:'def'},{id:'fb3',name:'Deep Seam',special:'oreDay',desc:'Gives 2 ore each day.'}],
   merfolk:[{id:'fb1',name:'Spawning Pools',horde:[0,5]},{id:'fb2',name:'Coral Shrine',visit:'pow'},{id:'fb3',name:'Tide Market',special:'goldWeek',desc:'Brings in 1,500 gold at the start of each week.'}]};
@@ -164,7 +164,7 @@ function townHTML(){
           <div class="tlabel"><b>⚑ Garrison</b><small>defends the town${wallLvl()?` behind the ${WALLS[wallLvl()-1].name.toLowerCase()}`:''}</small></div>
           <div class="trow small">${slots(t.garrison,'g')}</div>
           <div class="tlabel"><b>Dwellings</b><small>click to recruit</small></div>
-          <div class="tdw">${fu.map((k,i)=>{const on=t.built['d'+(i+1)],rk=recruitKey(k);return`<button class="dwc${on?'':' off'}" data-dw="${k}" ${on?'':'disabled'} title="${on?`${f.dw[i]}: ${t.pool[k]||0} ${U[rk].pl} to recruit`:`${f.dw[i]} not built`}"><img class="${U[rk]&&U[rk].up?'upg':''}" src="${iconURL('unit',rk,64)}" alt=""><b>${on?t.pool[k]||0:'–'}</b></button>`;}).join('')}<button class="dwc tav${t.built.tavern?'':' off'}" data-tab="tavern" title="Tavern: hire heroes"><span>🍺</span><b>Tavern</b></button></div>
+          <div class="tdw">${fu.map((k,i)=>{const on=t.built['d'+(i+1)],rk=recruitKey(k);return`<button class="dwc${on?'':' off'}" data-dw="${k}" ${on?'':'disabled'} title="${on?`${f.dw[i]}: ${t.pool[k]||0} ${U[rk].pl} to recruit`:`${f.dw[i]} not built`}"><img class="${U[rk]&&U[rk].up?'upg':''}" src="${iconURL('unit',rk,64)}" alt=""><b>${on?t.pool[k]||0:'–'}</b></button>`;}).join('')}<button class="dwc tav${t.built.tavern?'':' off'}" data-tab="tavern" title="Tavern: hire heroes"><span>🏡</span><b>Tavern</b></button></div>
         </div>
       </div></div>`;
   }else if(townTab==='recruit'){
@@ -209,7 +209,7 @@ function townHTML(){
         <p class="tavab"><b>★ ${x.ab}</b><br>${x.ad}</p>
         <div class="scs">${sc('atk',x.st[0])}${sc('def',x.st[1])}${sc('pow',x.st[2])}${sc('lore',x.st[3])}</div>
         <div class="tavkit">${x.sk.map(k=>`<span title="${SK[k].name}: ${SK[k].desc}">${skIco(k,30)}${SK[k].name}</span>`).join('')}${it?`<span title="${esc(it.name)} (${it.tier}): ${esc(itemTxt(x.item))}">${itemIcon(x.item)}${it.name}</span>`:''}</div>
-        <div class="tavbuy"><div class="cost">${costHTML({gold:hireCost(x)},S.res)}</div><button class="btn sm primary" data-hire="${x.id}" ${S.res.gold<hireCost(x)?'disabled':''}>Hire</button></div></div>`;}).join('')}</div><p class="muted">Rogues answer to no banner: they keep their own trick and lead your troops. Some are locked in prisons out on the map, waiting to be freed. The first two stay all week; the other two seats change every day. ★ Class heroes, made with <b>Create a hero</b> on this computer, always wait in their own banner's tavern.</p><p style="text-align:center"><button class="btn sm" data-tavroll="1" ${S.res.gold<TAV_ROLL?'disabled':''}>🍺 Buy a round: new faces (${TAV_ROLL} gold)</button></p>`;
+        <div class="tavbuy"><div class="cost">${costHTML({gold:hireCost(x)},S.res)}</div><button class="btn sm primary" data-hire="${x.id}" ${S.res.gold<hireCost(x)?'disabled':''}>Hire</button></div></div>`;}).join('')}</div><p class="muted">Rogues answer to no banner: they keep their own trick and lead your troops. Some are locked in prisons out on the map, waiting to be freed. The first two stay all week; the other two seats change every day. ★ Class heroes, made with <b>Create a hero</b> on this computer, always wait in their own banner's tavern.</p><p style="text-align:center"><button class="btn sm" data-tavroll="1" ${S.res.gold<TAV_ROLL?'disabled':''}>🔔 Ring the bell: new faces (${TAV_ROLL} gold)</button></p>`;
   }else if(townTab==='library'){
     if(!t.built.lib1)body=`<div class="grid">${locked('The Lantern Library','lib1')}</div>`;
     else{const fs=FAC_SPELLS[TF()];
