@@ -7,12 +7,14 @@ function applyTheme(){
   $('#facline').textContent=S?`${S.players?`Player ${S.pi+1} · `:''}${f.arch}`:'Choose your banner';
 }
 const travelName=()=>{const h=HERO();return(h.mount==='hooves'?'Hooves':h.mount==='horse'?'On horseback':'On foot')+(h.boat?' · has a boat':FAC[S.fac].travel==='swim'?' · swims lakes':'');};
+/* v53: the movement left that can actually be used (none once the cheapest next step costs more) */
+function mpUsable(h){if(h!==HERO()||h.mp<=0)return Math.max(0,h.mp);let best=Infinity;for(const[a,b]of[[1,0],[-1,0],[0,1],[0,-1],[1,1],[1,-1],[-1,1],[-1,-1]]){const x=h.x+a,y=h.y+b;if(!inb(x,y))continue;const c=stepCost(h.x,h.y,x,y);if(c<best)best=c;}return h.mp>=best?h.mp:0;}
 function renderUI(){
   if(!S)return;
   applyTheme();
   $('#res').innerHTML=RES.map(k=>`<span class="${k}" title="${RESNAME[k]}"><img src="${iconURL('res',k,40)}" alt="${RESNAME[k]}">${fmt(S.res[k])}</span>`).join('');
   {const y=Object.fromEntries(RES.map(k=>[k,0]));y.gold=income();for(const o of S.objs)if(o.type==='mine'&&o.owned===ME())y[MINE[o.k].res]+=mineOut(o);if(!S.town.taken){if(facSpecial('amberDay'))y.amber+=1;if(facSpecial('oreDay'))y.ore+=2;}
-    {const qh=$('#qHeroes');if(qh&&!$('#bMarket')){const mk=document.createElement('button');mk.className='btn mktbtn';mk.id='bMarket';mk.title='Market: buy and sell goods';mk.innerHTML='⚖ Market';mk.onclick=()=>{if(!S||moving||modalOpen)return;openMarket();};qh.after(mk);}}
+    {const cb=$('#cmdbar');if(cb&&!$('#bMarket')){const mk=document.createElement('button');mk.className='btn mktbtn';mk.id='bMarket';mk.title='Market: buy and sell goods';mk.innerHTML='⚖ Market';mk.onclick=()=>{if(!S||moving||modalOpen)return;openMarket();};cb.prepend(mk);const qt=$('#qTowns'),bt=$('#bTown');if(qt&&bt)cb.insertBefore(qt,bt);}}
     {const acts=document.querySelector('.topbar .acts')||$('#bMenu').parentNode;let mb=$('#bMines');if(!mb&&acts){mb=document.createElement('button');mb.className='btn icon minesbtn';mb.id='bMines';mb.title='Your mines';mb.onclick=()=>{if(!S||moving||modalOpen)return;openMines();};acts.insertBefore(mb,acts.firstChild);}
       if(mb){const n=S.objs.filter(o=>o.type==='mine'&&o.owned===ME()).length;mb.innerHTML=`<span class="mb-ic">⛏</span><b>${n}</b>`;}}
     $('#yield').innerHTML=`<small>per day</small>${RES.map(k=>y[k]?`<span><img src="${iconURL('res',k,32)}" alt="${RESNAME[k]}">+${fmt(y[k])}</span>`:'').join('')}`;}
@@ -25,7 +27,7 @@ function renderUI(){
       <div class="hstats">${['atk','def','pow','lore'].map(k=>`<div class="hs" title="${STAT_TIP[k]}"><b>${hst(h,k)}${carry(h,k)?`<em>+${carry(h,k)}</em>`:''}</b><span class="hsl"><img src="${iconURL('stat',k,44)}" alt="">${STATN[k]}</span></div>`).join('')}</div>
       <div class="hbars">
         <div class="bar mana lbar2" title="Mana"><i style="width:${mm?h.mana/mm*100:0}%"></i><span><b>Mana</b>${h.mana} / ${mm}</span></div>
-        <div class="bar mp lbar2" title="Movement"><i style="width:${h.mp/mx*100}%"></i><span><b>Movement</b>${fmt(h.mp)} / ${fmt(mx)}</span></div>
+        <div class="bar mp lbar2" title="Movement"><i style="width:${mpUsable(h)/mx*100}%"></i><span><b>Movement</b>${fmt(mpUsable(h))} / ${fmt(mx)}</span></div>
         <div class="bar xp" title="Experience ${fmt(h.xp)} / ${fmt(need)}"><i style="width:${clamp((h.xp-prev)/(need-prev)*100,0,100)}%"></i></div></div></div></div>
    <div class="chips"><span class="chip trav" title="${travelName()}"><img src="${iconURL('travel',h.boat&&tileAt(h.x,h.y)===T.LAKE?'boat':h.mount,44)}" alt=""></span><button class="chip team hdet" data-hsheet="1" title="Ability, skills, equipment and backpack"><img src="${ART_BASE}ui/icons/inventory.png" alt="">Hero details</button>${(h.pack||[]).length?`<span class="chip" title="Items in the backpack">🎒 ${h.pack.length}</span>`:''}${h.relics.map(r=>`<span class="chip team" title="${RELICS[r].carryTxt}">◆ ${RELICS[r].name}</span>`).join('')}</div>`;
   let a='';for(let i=0;i<7;i++){const s=h.army[i];a+=s?`<button class="slot" draggable="true" data-slot="${i}" title="${s.n} ${U[s.k].pl}: click for details and to split, drag onto another slot to move or merge"><img class="${U[s.k]&&U[s.k].up?'upg':''}" src="${iconURL('unit',s.k,64)}" alt="${U[s.k].name}"><b>${s.n}</b></button>`:`<div class="slot empty" data-slot="${i}"></div>`;}
@@ -117,12 +119,12 @@ function openMines(){const ms=()=>S.objs.filter(o=>o.type==='mine'&&o.owned===ME
     const cards=Object.keys(MINE).filter(k=>by[k]).map(k=>{const list=by[k].sort((a,b)=>(b.lvl||1)-(a.lvl||1)),out=list.reduce((a,o)=>a+mineOut(o),0),m=MINE[k];
       return`<div class="mgrp"><div class="mstack">${list.slice(0,4).map((o,i)=>`<span style="--i:${i}">${pic(k)}</span>`).join('')}</div>
         <h4>${m.name} <b>×${list.length}</b></h4><p class="mtot"><img src="${iconURL('res',m.res,32)}" alt="">+${fmt(out)} ${RESNAME[m.res].toLowerCase()} a day</p>
-        <div class="mlist">${list.map(o=>{const lv=o.lvl||1,c=MINE_UP[lv];return`<div class="mone"><span>Level ${lv} · +${fmt(mineOut(o))}</span>${lv<3?`<span class="mcost">to level ${lv+1}: ${costHTML(c,S.res)}</span><button class="btn sm" data-mineup="${o.id}" ${canAfford(c)?'':'disabled'}>Upgrade</button>`:'<em>top level</em>'}</div>`;}).join('')}</div></div>`;}).join('');
+        <div class="mlist">${list.map(o=>{const lv=o.lvl||1,c=MINE_UP[lv];return`<div class="mone"><span>Level ${lv} · +${fmt(mineOut(o))}</span>${lv<MINE_MAX?`<span class="mcost">to level ${lv+1}: ${costHTML(c,S.res)}</span><button class="btn sm" data-mineup="${o.id}" ${canAfford(c)?'':'disabled'}>Upgrade</button>`:'<em>top level</em>'}</div>`;}).join('')}</div></div>`;}).join('');
     return`<div class="minesum">${Object.keys(t).length?RES.filter(k=>t[k]).map(k=>`<span><img src="${iconURL('res',k,32)}" alt="">+${fmt(t[k])} ${RESNAME[k].toLowerCase()} a day</span>`).join(''):'<span class="muted">No mines yet. Walk onto a mine on the map to claim it.</span>'}</div><div class="mgrps">${cards}</div><p class="mmarket"><button class="btn" data-mmarket="1">⚖ Market: trade goods</button></p>`;};
   showModal({title:`⛏ Your mines (${ms().length})`,body:body(),wide:true,top:true,buttons:[{label:'Close',value:1,primary:true}],dismiss:1});
   const b=$('#modal').querySelector('.body');
   b.addEventListener('click',e=>{if(e.target.closest('[data-mmarket]')){$('#modal')._close(null);setTimeout(openMarket,0);return;}const el=e.target.closest('[data-mineup],[data-minego]');if(!el)return;
-    if(el.dataset.mineup){const o=S.objs.find(q=>q.id===+el.dataset.mineup);if(!o||(o.lvl||1)>=3)return;const c=MINE_UP[o.lvl||1];if(!canAfford(c))return;pay(c);o.lvl=(o.lvl||1)+1;toast(`${MINE[o.k].name} upgraded to level ${o.lvl}.`);b.innerHTML=body();renderUI();save();}
+    if(el.dataset.mineup){const o=S.objs.find(q=>q.id===+el.dataset.mineup);if(!o||(o.lvl||1)>=MINE_MAX)return;const c=MINE_UP[o.lvl||1];if(!canAfford(c))return;pay(c);o.lvl=(o.lvl||1)+1;toast(`${MINE[o.k].name} upgraded to level ${o.lvl}.`);b.innerHTML=body();renderUI();save();}
     else{const o=S.objs.find(q=>q.id===+el.dataset.minego);if(o){$('#modal')._close(null);centerOn(o.x,o.y);}}});}
 function viewSpellbook(){const h=HERO();
   const list=h.spells.map(k=>{const sp=SP[k];return`<div class="spell${h.mana>=sp.cost?'':' dim'}"><b>${sp.name}</b><span class="scost">${sp.cost} mana</span><p>${sp.desc(hst(h,'pow'))}</p></div>`;}).join('');

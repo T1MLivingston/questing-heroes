@@ -4,7 +4,7 @@
    game works with any subset of tracks. Browsers only allow sound after the first click, so music starts then.
    Volume and mute are remembered in this browser only. */
 /* tracks that are in assets/music: add a name here when its MP3 is added (keeps the console free of missing-file errors) */
-const MUSIC_HAVE=[];
+const MUSIC_HAVE=['theme'];
 const MUSIC_FILES={theme:'theme',map:'map',acoustic:'acoustic',battle:'battle',town:'town',victory:'victory',defeat:'defeat'};
 /* which track each scene wants, in order of preference (the first file that exists plays); the map alternates with the acoustic theme */
 const MUSIC_SCENE={title:['theme','acoustic'],map:['map','acoustic','theme'],town:['town','acoustic','map'],battle:['battle'],menu:['acoustic','theme']};

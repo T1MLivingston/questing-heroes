@@ -164,14 +164,14 @@ const HEROES=[
   {id:'dupengeiser',name:'Dupengeiser',fac:'dwarves',type:'Magic',st:[1,1,2,2],ab:'Steamcaller',ad:'Once per battle, raise a scalding geyser beside an enemy.',sk:['warding'],sp:['geyser'],fx:{}},
   {id:'rimmer',name:'Rimmer',fac:'wizards',type:'Magic',st:[1,1,2,2],ab:'Storm Keeper',ad:'Storm Elementals +2 attack and +1 speed.',sk:['meditation'],sp:['ember'],fx:{unitAtk:{stormel:2},unitSpd:{stormel:1}}},
   {id:'sookie',name:'Sookie',fac:'wizards',type:'Magic',st:[0,1,2,3],ab:'Owl Mother',ad:'Owl Familiars +4 growth per week and +1 speed.',sk:['meditation'],sp:['ember'],fx:{growth:{owl:4},unitSpd:{owl:1}}},
-  {id:'schmickle',rogue:true,name:'Schmickle',fac:'centaurs',type:'Might',st:[2,2,1,1],ab:'Light Fingers',ad:'Brings in +200 gold every day.',sk:['shieldcraft'],sp:[],fx:{goldDay:200}},
+  {id:'schmickle',tav:true,name:'Schmickle',fac:'dwarves',type:'Might',st:[2,2,1,1],ab:'Light Fingers',ad:'Brings in +200 gold every day.',sk:['shieldcraft'],sp:[],fx:{goldDay:200}},
   {id:'elvis',name:'Eelvis',fac:'merfolk',type:'Magic',st:[1,1,2,2],ab:'Siren Voice',ad:'Siren charms last 1 turn longer, and your whole army has +1 morale.',sk:['command'],sp:['ember'],fx:{charmExtra:1,morale:1}},
 ];
 /* rogues: wanderers of no banner, found only in taverns and freed from prisons on the map */
 HEROES.push(
-  {id:'boone',name:'Boone',rogue:true,fac:'elves',type:'Might',st:[2,1,1,1],ab:'Quickdraw',ad:'Your shooters deal 15% more damage.',sk:['steadyaim'],sp:[],fx:{rangedPct:0.15}},
-  {id:'holmes',name:'Holmes',rogue:true,fac:'necro',type:'Magic',st:[0,1,2,2],ab:'Sharp Eyes',ad:'+2 vision, and you see exact enemy army sizes.',sk:['farsight'],sp:['ember'],fx:{vision:2,exact:true}},
-  {id:'tinker',name:'Tinker',rogue:true,fac:'dwarves',type:'Might',st:[2,1,1,2],ab:'Wayfinder',ad:'+15% movement every day.',sk:['forcedmarch'],sp:[],fx:{mpPct:15}},
+  {id:'boone',name:'Boone',tav:true,fac:'merfolk',type:'Might',st:[2,1,1,1],ab:'Quickdraw',ad:'Your shooters deal 15% more damage.',sk:['steadyaim'],sp:[],fx:{rangedPct:0.15}},
+  {id:'holmes',name:'Holmes',tav:true,fac:'necro',type:'Magic',st:[0,1,2,2],ab:'Sharp Eyes',ad:'+2 vision, and you see exact enemy army sizes.',sk:['farsight'],sp:['ember'],fx:{vision:2,exact:true}},
+  {id:'tinker',name:'Tinker',tav:true,fac:'dwarves',type:'Might',st:[2,1,1,2],ab:'Wayfinder',ad:'+15% movement every day.',sk:['forcedmarch'],sp:[],fx:{mpPct:15}},
 );
 /* placeholder heroes fill every faction to four; rename them and give them art later */
 HEROES.push(
@@ -186,7 +186,7 @@ HEROES.push(
   {id:'slack',name:'Slack',fac:'dwarves',type:'Might',st:[2,1,2,1],ab:'Hammer and Hex',ad:'Young Dwarves +2 attack, and Ember Dart deals 50% more. Starts with a spellbook.',sk:[],sp:['ember'],fx:{unitAtk:{delver:2},emberPct:1.5}},
   /* v39: each banner shows six heroes (pickers, rivals' first heroes); one more per banner has tav:true and is only met in the tavern ("on the road"). Rogues have no banner. */
   {id:'alderhide',name:'Alderhide',fac:'elves',type:'Might',st:[2,2,1,1],ab:'Moose Guardian',ad:'Elven Riders +1 attack and +2 defense.',sk:['shieldcraft'],sp:[],fx:{unitAtk:{rider:1},unitDef:{rider:2}}},
-  {id:'briar',rogue:true,name:'Rusty',fac:'centaurs',type:'Might',st:[2,1,1,1],ab:'Fox Scout',ad:'+2 vision and +10% movement.',sk:['farsight'],sp:[],fx:{vision:2,mpPct:10}},
+  {id:'briar',tav:true,name:'Rusty',fac:'centaurs',type:'Might',st:[2,1,1,1],ab:'Fox Scout',ad:'+2 vision and +10% movement.',sk:['farsight'],sp:[],fx:{vision:2,mpPct:10}},
   {id:'mossback',name:'Mossback',fac:'elves',type:'Magic',st:[0,2,2,2],ab:'Tortoise Herbalist',ad:'Your whole army +1 defense.',sk:['meditation'],sp:['mend'],fx:{armyDef:1}},
   {id:'ilyra',retired:true,name:'Ilyra',fac:'elves',type:'Magic',st:[0,1,2,2],ab:'Moon Sentinel',ad:'Sprites +3 growth per week and +1 speed.',sk:['arcane'],sp:['entangle'],fx:{growth:{sprite:3},unitSpd:{sprite:1}}},
   {id:'tavian',retired:true,name:'Tavian',fac:'elves',type:'Might',st:[2,1,1,1],ab:'Veteran Duelist',ad:'Elven Riders +2 attack and +1 speed.',sk:['bladework'],sp:[],fx:{unitAtk:{rider:2},unitSpd:{rider:1}}},
@@ -220,7 +220,7 @@ HEROES.push(
   {id:'silka',name:'Violet',fac:'centaurs',type:'Magic',st:[0,1,2,2],ab:'Silk Keeper',ad:'Entangle costs half and lasts 1 round longer.',sk:['meditation'],sp:['entangle'],fx:{halfCost:'entangle',entangleExtra:1}},
   {id:'flintback',name:'Flintback',fac:'centaurs',type:'Might',st:[1,3,1,1],ab:'Ankylosaur Shieldbearer',ad:'Hounds +1 attack and +3 defense.',sk:['shieldcraft'],sp:[],fx:{unitAtk:{hounds:1},unitDef:{hounds:3}}},
   {id:'bess_bell',name:'Bonnie',fac:'pirates',type:'Might',st:[1,2,1,2],ab:'Salvage Diver',ad:'+150 gold every day, and +10% movement.',sk:['seamanship'],sp:[],fx:{goldDay:150,mpPct:10}},
-  {id:'rusk_hookhorn',rogue:true,name:'Rusk Hookhorn',fac:'pirates',type:'Might',st:[2,1,1,1],ab:'Carnotaur First Mate',ad:'Gunners +2 attack and +1 speed.',sk:['command'],sp:[],fx:{unitAtk:{gunner:2},unitSpd:{gunner:1}}},
+  {id:'rusk_hookhorn',tav:true,name:'Rusk Hookhorn',fac:'merfolk',type:'Might',st:[2,1,1,1],ab:'Carnotaur First Mate',ad:'Spearfolk +2 attack and +1 speed.',sk:['command'],sp:[],fx:{unitAtk:{spear:2},unitSpd:{spear:1}}},
   {id:'aster',retired:true,name:'Aster',fac:'elves',type:'Magic',st:[0,1,2,2],ab:'Dryad Envoy',ad:'Grove Wardens +1 growth per week, and Mend heals 25% more.',sk:['meditation'],sp:['mend'],fx:{growth:{dryad:1},mendPct:1.25}},
   {id:'thornfrill',name:'Thornfrill',fac:'rangers',type:'Might',st:[1,3,1,1],ab:'Frill Knight',ad:'Oak Wardens +1 attack and +2 defense.',sk:['shieldcraft'],sp:[],fx:{unitAtk:{oak:1},unitDef:{oak:2}}},
   {id:'harlan_chalk',name:'Harlan Chalk',fac:'dwarves',type:'Might',st:[1,2,1,2],ab:'Mine Rescue Chief',ad:'Young Dwarves +3 growth per week and +2 defense.',sk:['command'],sp:[],fx:{growth:{delver:3},unitDef:{delver:2}}},
@@ -271,7 +271,7 @@ HEROES.push(
   {id:'ardcat',tav:true,student:true,name:'Ardcat',fac:'pirates',type:'Might',st:[2, 2, 1, 1],ab:'Cat Tamer',ad:'+2 vision, and Powder Monkeys +2 attack.',sk:['command'],sp:[],fx:{vision:2,unitAtk:{powder:2}}},
   {id:'space_toad',tav:true,student:true,name:'Toad',fac:'pirates',type:'Might',st:[2, 2, 1, 1],ab:'Port Tales',ad:'+150 gold a day, and Gunners +1 speed.',sk:['command'],sp:[],fx:{goldDay:150,unitSpd:{gunner:1}}},
   {id:'mr_pinecone',tav:true,student:true,name:'Mr. Pinecone',fac:'elves',type:'Might',st:[2, 2, 1, 1],ab:'Pinecone Patrol',ad:'Sprites +2 attack and +2 defense.',sk:['command'],sp:[],fx:{unitAtk:{sprite:2},unitDef:{sprite:2}}},
-  {id:'nix',rogue:true,student:true,name:'Nyx',fac:'centaurs',type:'Magic',st:[0, 1, 3, 2],ab:'Ignored Villain',ad:'+1 luck for the whole army, and +10% movement.',sk:['meditation'],sp:['ember'],fx:{luck:1,mpPct:10}},
+  {id:'nix',tav:true,student:true,name:'Nyx',fac:'necro',type:'Magic',st:[0, 1, 3, 2],ab:'Ignored Villain',ad:'+1 luck for the whole army, and +10% movement.',sk:['meditation'],sp:['ember'],fx:{luck:1,mpPct:10}},
   {id:'deepwave_the_ai',tav:true,student:true,name:'Deep Wave',fac:'rangers',type:'Magic',st:[0, 1, 3, 2],ab:'Flashlight Scout',ad:'+2 vision, and Moth Seers +1 speed.',sk:['meditation'],sp:['mend'],fx:{vision:2,unitSpd:{moth:1}}},
   {id:'bobbythebob',tav:true,student:true,name:'BobbytheBob',fac:'wizards',type:'Magic',st:[0, 1, 3, 2],ab:'Potion Brewer',ad:'Mend heals 50% more, and Apprentice Mages +1 speed.',sk:['meditation'],sp:['mend'],fx:{mendPct:1.5,unitSpd:{apprentice:1}}},
   {id:'capydara',tav:true,student:true,name:'Capybara',fac:'pirates',type:'Might',st:[2, 2, 1, 1],ab:'Smooth Talker',ad:'Duelists +2 attack and +2 defense.',sk:['command'],sp:[],fx:{unitAtk:{duelist:2},unitDef:{duelist:2}}},
@@ -282,15 +282,15 @@ HEROES.push(
   {id:'luckenzo',tav:true,student:true,name:'Luckenzo',fac:'wizards',type:'Magic',st:[0, 1, 3, 2],ab:'Puppy Tracker',ad:'+2 vision, and Owl Familiars +2 attack.',sk:['meditation'],sp:['swift'],fx:{vision:2,unitAtk:{owl:2}}},
   {id:'lord_krishna',tav:true,student:true,name:'Larishna',fac:'wizards',type:'Magic',st:[0, 1, 3, 2],ab:'Storm Witch',ad:'Storm Elementals +2 defense and +1 speed.',sk:['meditation'],sp:['chain'],fx:{unitDef:{stormel:2},unitSpd:{stormel:1}}},
   {id:'bananna',tav:true,student:true,name:'Bananna',fac:'elves',type:'Magic',st:[0, 1, 3, 2],ab:'Banana Charm',ad:'Your whole army +1 luck, and Sprites +1 speed.',sk:['meditation'],sp:['mend'],fx:{luck:1,unitSpd:{sprite:1}}},
-  {id:'nala',rogue:true,student:true,name:'Nala',fac:'centaurs',type:'Magic',st:[0, 1, 3, 2],ab:'Charm Caster',ad:'+1 luck for the whole army, and +1 vision.',sk:['meditation'],sp:['mend'],fx:{luck:1,vision:1}},
-  {id:'nanya',rogue:true,student:true,name:'Nanya',fac:'centaurs',type:'Magic',st:[0, 1, 3, 2],ab:'Carrot Charm',ad:'+100 gold a day, and +10% movement.',sk:['meditation'],sp:['swift'],fx:{goldDay:100,mpPct:10}},
-  {id:'posy_spinner',rogue:true,student:true,name:'Posy Spinner',fac:'centaurs',type:'Magic',st:[0, 1, 3, 2],ab:'Star Lantern',ad:'+2 vision, and every spell costs 1 less mana.',sk:['meditation'],sp:['ember'],fx:{vision:2,manaCut:1}},
+  {id:'nala',tav:true,student:true,name:'Nala',fac:'merfolk',type:'Magic',st:[0, 1, 3, 2],ab:'Charm Caster',ad:'+1 luck for the whole army, and +1 vision.',sk:['meditation'],sp:['mend'],fx:{luck:1,vision:1}},
+  {id:'nanya',tav:true,student:true,name:'Nanya',fac:'merfolk',type:'Magic',st:[0, 1, 3, 2],ab:'Carrot Charm',ad:'+100 gold a day, and +10% movement.',sk:['meditation'],sp:['swift'],fx:{goldDay:100,mpPct:10}},
+  {id:'posy_spinner',tav:true,student:true,name:'Posy Spinner',fac:'merfolk',type:'Magic',st:[0, 1, 3, 2],ab:'Star Lantern',ad:'+2 vision, and every spell costs 1 less mana.',sk:['meditation'],sp:['ember'],fx:{vision:2,manaCut:1}},
   {id:'catherine',tav:true,student:true,name:'Katherine',fac:'wizards',type:'Magic',st:[0, 1, 3, 2],ab:'Magic Phone',ad:'Mend heals 50% more, and Archmages +1 speed.',sk:['meditation'],sp:['mend'],fx:{mendPct:1.5,unitSpd:{magus:1}}},
-  {id:'bristle',rogue:true,student:true,name:'Bristle',fac:'centaurs',type:'Might',st:[2, 2, 1, 1],ab:'Teapot Adventurer',ad:'Your whole army +1 defense, and +10% movement.',sk:['command'],sp:[],fx:{armyDef:1,mpPct:10}},
+  {id:'bristle',tav:true,student:true,name:'Bristle',fac:'dwarves',type:'Might',st:[2, 2, 1, 1],ab:'Teapot Adventurer',ad:'Your whole army +1 defense, and +10% movement.',sk:['command'],sp:[],fx:{armyDef:1,mpPct:10}},
   {id:'zenvy',tav:true,student:true,name:'Zenvy',fac:'centaurs',type:'Might',st:[2, 2, 1, 1],ab:'Black Diamond Knight',ad:'Lions +2 attack and +1 speed.',sk:['command'],sp:[],fx:{unitAtk:{lion:2},unitSpd:{lion:1}}},
   {id:'king_pharoph_the_3rd',tav:true,student:true,name:'King Pharoph the 3rd',fac:'centaurs',type:'Might',st:[2, 2, 1, 1],ab:'Clockwork King',ad:'Centaurs +2 defense and +1 speed.',sk:['command'],sp:[],fx:{unitDef:{centaur:2},unitSpd:{centaur:1}}},
   {id:'rose_flower',tav:true,student:true,name:'Rose Flower',fac:'wizards',type:'Magic',st:[0, 1, 3, 2],ab:'Songbird Mermaid',ad:'Earth Elementals +2 attack and +1 speed.',sk:['meditation'],sp:['frost'],fx:{unitAtk:{earthel:2},unitSpd:{earthel:1}}},
-  {id:'posy',rogue:true,student:true,name:'Posy',fac:'centaurs',type:'Magic',st:[0, 1, 3, 2],ab:'Potion Maker',ad:'Mend heals 50% more, and +100 gold a day.',sk:['meditation'],sp:['mend'],fx:{mendPct:1.5,goldDay:100}},
+  {id:'posy',tav:true,student:true,name:'Posy',fac:'dwarves',type:'Magic',st:[0, 1, 3, 2],ab:'Potion Maker',ad:'Mend heals 50% more, and +100 gold a day.',sk:['meditation'],sp:['mend'],fx:{mendPct:1.5,goldDay:100}},
   {id:'bannana_boy',tav:true,student:true,name:'Banana Boy',fac:'wizards',type:'Magic',st:[0, 1, 3, 2],ab:'Banana Healer',ad:'Mend heals 50% more, and Owl Familiars +2 growth per week.',sk:['meditation'],sp:['mend'],fx:{mendPct:1.5,growth:{owl:2}}},
   {id:'spirit_of_the_forest',tav:true,student:true,name:'Spirit of the Forest',fac:'wizards',type:'Might',st:[2, 2, 1, 1],ab:'Thorn Armor',ad:'Earth Elementals +2 defense and +1 speed.',sk:['command'],sp:['bark'],fx:{unitDef:{earthel:2},unitSpd:{earthel:1}}},
   {id:'ava_young',tav:true,student:true,name:'Ava',fac:'elves',type:'Magic',st:[0, 1, 3, 2],ab:'Bunny Healer',ad:'Mend heals 50% more, and Grove Wardens +1 speed.',sk:['meditation'],sp:['mend'],fx:{mendPct:1.5,unitSpd:{dryad:1}}},
@@ -299,7 +299,7 @@ HEROES.push(
   {id:'estella',tav:true,student:true,name:'Estella',fac:'elves',type:'Magic',st:[0, 1, 3, 2],ab:'Heart Staff',ad:'Mend heals 50% more, and Giant Eagles +1 speed.',sk:['meditation'],sp:['mend'],fx:{mendPct:1.5,unitSpd:{eagle:1}}},
   {id:'lily',tav:true,student:true,name:'Lily',fac:'elves',type:'Magic',st:[0, 1, 3, 2],ab:'Shadow Vine',ad:'Longbow Rangers +2 attack, and +1 vision.',sk:['meditation'],sp:['entangle'],fx:{unitAtk:{longbow:2},vision:1}},
   {id:'pottery',tav:true,student:true,name:'Pottery',fac:'rangers',type:'Magic',st:[0, 1, 3, 2],ab:'Lantern Witch',ad:'Reedbows +2 attack, and +1 vision.',sk:['meditation'],sp:['mend'],fx:{unitAtk:{reed:2},vision:1}},
-  {id:'kaf_underworld_pharaoh',rogue:true,student:true,name:'Kaf',fac:'centaurs',type:'Might',st:[2, 2, 1, 1],ab:'Underworld Pharaoh',ad:'Your whole army +1 defense, and +100 gold a day.',sk:['command'],sp:[],fx:{armyDef:1,goldDay:100}},
+  {id:'kaf_underworld_pharaoh',tav:true,student:true,name:'Kaf',fac:'necro',type:'Might',st:[2, 2, 1, 1],ab:'Underworld Pharaoh',ad:'Your whole army +1 defense, and +100 gold a day.',sk:['command'],sp:[],fx:{armyDef:1,goldDay:100}},
   {id:'eden',name:'Eden',fac:'elves',type:'Magic',st:[0,1,2,2],ab:'Master Archer',ad:'Longbow Rangers +1 damage and +4 shots.',sk:['steadyaim'],sp:[],fx:{unitDmgFlat:{longbow:1},unitShots:{longbow:4}}},
   {id:'letchworth',name:'Letchworth',fac:'merfolk',type:'Magic',st:[0,1,2,2],ab:'Siren Keeper',ad:'Sirens +2 shots and +1 damage.',sk:[],sp:['squall'],fx:{unitShots:{siren:2},unitDmgFlat:{siren:1}}},
 );
@@ -401,6 +401,7 @@ function removeCustomHero(id){const i=HEROES.findIndex(h=>h.id===id&&h.custom);i
 const BANNER_MAX=16;
 function bannerHeroes(fac){const own=HEROES.filter(h=>h.fac===fac&&!h.rogue&&!h.custom);
   return[...own.filter(h=>!h.tav),...own.filter(h=>h.tav&&h.student),...own.filter(h=>h.tav&&!h.student)].slice(0,BANNER_MAX);}
+const freeAgents=()=>{const shown=new Set(FAC_ORDER.flatMap(f=>bannerHeroes(f).map(h=>h.id)));return HEROES.filter(h=>!h.custom&&!shown.has(h.id));};
 const loadClass=()=>{try{const a=JSON.parse(localStorage.getItem(CU_KEY));return Array.isArray(a)?a:[];}catch(e){return [];}};
 const storeClass=a=>{try{localStorage.setItem(CU_KEY,JSON.stringify(a));return true;}catch(e){return false;}};
 loadClass().forEach(c=>{try{addCustomHero(c);}catch(e){}});
@@ -447,9 +448,11 @@ for(const fk of Object.keys(FAC))for(const k of FAC[fk].units){const b=U[k];U[k+
 /* a few upgrades get their own name instead of the banner prefix */
 Object.assign(U.cannon_u,{name:'Great Crossbow',pl:'Great Crossbows',g:['cannon','#7a5a32'],desc:'A huge crossbow that hurls spears across the field. Devastating at range. Very slow.'});
 /* mines come in three levels; pay at the mine to raise its output */
-const MINE={saw:{name:'Sawmill',res:'timber',out:[1,2,3]},orepit:{name:'Ore Pit',res:'ore',out:[1,2,3]},gold:{name:'Gold Seam',res:'gold',out:[500,750,1000]},amber:{name:'Amber Spring',res:'amber',out:[1,2,3]},
-  gem:{name:'Gem Grotto',res:'gems',out:[1,1,2]},moon:{name:'Moonwater Spring',res:'moonwater',out:[1,1,2]}};
-const MINE_UP=[null,{gold:1500,timber:3,ore:3},{gold:3000,timber:6,ore:6,gems:2}];
+/* v53: five mine levels; levels 4 and 5 are expensive (gems and moonwater) but pay off over a long game */
+const MINE={saw:{name:'Sawmill',res:'timber',out:[1,2,3,5,7]},orepit:{name:'Ore Pit',res:'ore',out:[1,2,3,5,7]},gold:{name:'Gold Seam',res:'gold',out:[500,750,1000,1500,2200]},amber:{name:'Amber Spring',res:'amber',out:[1,2,3,5,7]},
+  gem:{name:'Gem Grotto',res:'gems',out:[1,1,2,3,4]},moon:{name:'Moonwater Spring',res:'moonwater',out:[1,1,2,3,4]}};
+const MINE_MAX=5;
+const MINE_UP=[null,{gold:1500,timber:3,ore:3},{gold:3000,timber:6,ore:6,gems:2},{gold:8000,timber:12,ore:12,gems:6,moonwater:4},{gold:15000,timber:20,ore:20,gems:10,moonwater:8}];
 const mineOut=o=>MINE[o.k].out[(o.lvl||1)-1]+(delivered(4)?(MINE[o.k].res==='gold'?250:1):0);
 /* weekly sites refill every Monday */
 const SITES={wish:{name:'Wishing Well',give:'500-1,000 gold'},clover:{name:'Clover Meadow',give:'+1 luck for 7 days'},woodcamp:{name:"Woodcutters' Camp",give:'5 timber'},orecart:{name:'Abandoned Ore Cart',give:'5 ore'},amberhollow:{name:'Amber Hollow',give:'2 amber'}};

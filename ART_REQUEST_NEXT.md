@@ -14,8 +14,8 @@ Match the existing packs: warm storybook pixel art, dark plum outline (#2b1a33),
 ## 3. Hero map walkers (biggest visual gap)
 About 140 heroes walk the map as their banner's generic figure. One 192×384 sheet per hero (4 frames × 8 directions, 48×48 frames, foot at 24,44), packed 7 sheets a row with a JSON of hero id → cell. Start with each banner's first 8 heroes (about 46 still missing), then the rest of the 16.
 
-## 4. Heroes to fill the 16-per-banner cards
-Merfolk 5 · Dwarves 4 · Necromancers 3 · Beastmasters 1. Student heroes are perfect here. Portrait format as before: 128×128, square, transparent background, chest-up bust facing slightly right.
+## 4. Portrait redraws to match the newer style
+These older portraits look flatter and darker than the rest: Bear, Monkey, Binx, Boopis, Schmickle, Engelman, Rimmer, Tempest, Rago, William IV, Grimes, Ivan, Dupengeiser, Slack, Kiln, Rocky, Eelvis, Skimmer, Inkwake (blue ink squid). Same 128×128 format, transparent background, chest-up bust facing slightly right; keep each character recognisable.
 
 ## 5. Battle hero figures
 Today each banner has one figure beside the battlefield. Ideal: one per hero; a good middle step is two per banner (a Might figure and a Magic figure), 16 in all, same size and flag-mask layout as `battle/heroes/<fac>.png`.

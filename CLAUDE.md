@@ -223,6 +223,15 @@ Everything lives in one object, `S`, so it can be saved as JSON:
 - New ability hooks (player side only): `forgePlus` (extra Great Forge attack), `armyDef` (whole army defense), `rangedPct` (shooter damage), `halfCost` (one spell at half mana), `manaCut` (all spells cheaper), `squallPct`, `weakenPct`.
 - Raised: Ivan (Forge half ore, +1 more attack), Oliver (30% cheaper rough ground, +5% movement), Shadow (harvest 20%), Sheila (Squall +30%), Grimes and Griffiths (+1 speed to their troop). Made distinct: Veyra, Gliss, Silka, Murmur, Boone, Mossback, Aster, Nessa Holt. Trimmed: Schmickle and Quillby to +200 gold a day. Battaglia is a Might hero.
 
+### v53 banners full, five mine levels, polish
+
+- Every banner shows 16 heroes: the 13 heroes who had no banner joined the gaps (Necromancers Holmes, Kaf, Nyx; Beastmasters Rusty; Dwarves Tinker, Bristle, Posy, Schmickle; Merfolk Rusk Hookhorn (now Spearfolk +2 attack, +1 speed), Posy Spinner, Nala, Nanya, Boone), as wanderers (`tav:true`). Prisons and outpost keepers now use `freeAgents()` (heroes beyond any banner's 16, plus any rogues left); the prison card names the hero's banner.
+- Mines have five levels (`MINE_MAX`); levels 4 and 5 cost gems and moonwater (`MINE_UP[3]`, `MINE_UP[4]`) and roughly double the output (`MINE[k].out`).
+- The movement bar empties when no next step is affordable (`mpUsable`).
+- Command bar order: Market, your town icons, Town, Hero, hero icons, End day.
+- Hero sheet: equipment boxes 140 px wide with smaller text, so artifact names and effects stay inside.
+- Music: `assets/music/theme.mp3` (the main theme) is in, listed in `MUSIC_HAVE`.
+
 ### v52 music player
 
 - `js/16-audio.js`: plays `assets/music/<track>.mp3` (theme, acoustic, map, town, battle, victory, defeat; see that folder's README) for each scene, detected twice a second (`muDetect`: battle, title, town, map, menu), with cross-fades; the map alternates between `map` and the global `acoustic` theme. Missing files are skipped. Music starts after the first click (browser rule). A 🔊 button bottom-left mutes; hover shows a volume slider; settings in localStorage (`questing-heroes-audio`). `muSting` plays the victory or defeat sting at the end of a battle.

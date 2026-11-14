@@ -663,7 +663,7 @@ function furnishMap(bases){
   const sites=[['wish',2,0.1,0.5],['clover',2,0.15,0.7],['woodcamp',1,0.1,0.45],['orecart',1,0.1,0.45],['amberhollow',1,0.3,0.8]];
   for(const[k,n,a,b]of sites)for(let i=0;i<Math.max(1,Math.round(n*KS*KS));i++){const p=freeTile(dist,...band(a,b));if(p)add({type:'site',k,x:p.x,y:p.y,week:-1});}
   // prisons: each holds one rogue, waiting to be freed
-  {const rogues=HEROES.filter(x=>x.rogue).map(x=>x.id).sort(()=>R()-0.5);S.jailed=[];
+  {const rogues=freeAgents().map(x=>x.id).sort(()=>R()-0.5);S.jailed=[];
     for(let i=0;i<Math.min(rogues.length,Math.max(1,Math.round(KS*1.2)));i++){const p=freeTile(dist,...band(0.35,0.85));if(!p)break;add({type:'prison',x:p.x,y:p.y,rogue:rogues[i]});S.jailed.push(rogues[i]);
       const g=freeTile(new Map([[idx(p.x+1,p.y),0],[idx(p.x-1,p.y),0],[idx(p.x,p.y+1),0]].filter(([j])=>j>=0&&j<W*H&&dist.has(j))),0,0,1);if(g){const nt=neutralAt(0.55);add({type:'neutral',x:g.x,y:g.y,k:nt.k,n:nt.n});}}}
   // v51 roadside inns: very rare (often none, at most two on the biggest maps), beside a road; a hero can be hired there
@@ -691,7 +691,7 @@ function furnishMap(bases){
     add({type:'camp',free:true,station:true,lvl:1,fac:b.fac,x:p.x,y:p.y,owned:false,garrison:[{k:g.k,n:Math.max(2,Math.round(g.n*0.6))}],pool:{}});}
   // free towns: a few major towns (captured, they become full towns you build up like your home) and smaller outposts (+gold and a few recruits)
   {const su=S.setup||{},nM=su.majors??(MAP_SIZES[S.size]||{}).majors??1,nO=Math.round(((MAP_SIZES[S.size]||{}).outposts??2)*[0.5,1,1.6][su.outposts??1]);
-    const keepers=HEROES.filter(x=>x.rogue&&!(S.jailed||[]).includes(x.id)).map(x=>x.id).sort(()=>R()-0.5);
+    const keepers=freeAgents().filter(x=>!(S.jailed||[]).includes(x.id)).map(x=>x.id).sort(()=>R()-0.5);
     const far=p=>[...bases,...S.objs.filter(o=>o.type==='camp')].every(q=>Math.max(Math.abs(q.x-p.x),Math.abs(q.y-p.y))>=7);
     const spotAt=(lo,hi)=>{for(let t=0;t<12;t++){const p=freeTile(dist,...band(lo,hi),4);if(p&&far(p))return p;}return freeTile(dist,...band(0.2,1),3);};
     for(let i=0;i<nM;i++){const lo=0.3+0.4*i/Math.max(1,nM),p=spotAt(lo,Math.min(1,lo+0.35));if(!p)continue;const d=dist.get(idx(p.x,p.y))/Math.max(1,md);
@@ -1266,7 +1266,7 @@ function describe(x,y){
     case 'altar':return`<b>${ALTAR_NAMES[o.tier]}</b> · teaches ${SP[o.spell].name}${o.tier>1?` · needs Lore ${o.tier}`:''} · needs a spellbook`;
     case 'well':return`<b>Moonwell</b> · ${o.day===S.day?'drained until tomorrow':'restores mana'}`;
     case 'tower':return'<b>Watchtower</b> · reveals the land around it';
-    case 'prison':return o.rogue&&!S.heroes.some(x=>x.id===o.rogue)?`<b>Prison</b> · a rogue waits behind the bars`:'<b>Prison</b> · empty';
+    case 'prison':return o.rogue&&!S.heroes.some(x=>x.id===o.rogue)?`<b>Prison</b> · a hero waits behind the bars`:'<b>Prison</b> · empty';
     case 'dock':return`<b>Dock</b> · ${HERO().boat?'you already have a boat':delivered(2)?'free boats for you':'buy a boat for 1,000 gold to sail lakes'}`;
     case 'fair':return`<b>Horse Fair</b> · ${HERO().mount==='foot'?'buy a horse for 800 gold (+40% movement)':'you are already mounted'}`;
   }

@@ -116,7 +116,7 @@ async function manageHolding(o){const f=FAC[o.fac],h=HERO(),here=h.x===o.x&&h.y=
 /* a beaten rogue who held an outpost offers to join */
 async function keeperJoins(id){const hx=HBY[id],h=HERO();if(!hx)return;
   if(S.heroes.length>=heroCap()){toast(`${hx.name} yields the outpost and slips away to the taverns.`);return;}
-  const v=await showModal({title:`${hx.name} yields`,body:`<div class="rrow"><img src="${iconURL('hero',id,128)}" alt="" style="width:112px;image-rendering:pixelated;border-radius:4px"><div><p class="tag" style="color:#8a2a1e">Rogue · no banner</p><p><b>${hx.name}</b> lowers their blade: "A fair fight. I'll ride with you, if you'll have me."</p><p>★ ${hx.ab}: ${hx.ad}</p></div></div>`,
+  const v=await showModal({title:`${hx.name} yields`,body:`<div class="rrow"><img src="${iconURL('hero',id,128)}" alt="" style="width:112px;image-rendering:pixelated;border-radius:4px"><div><p class="tag" style="color:#8a2a1e">${hx.rogue?'Rogue · no banner':FAC[hx.fac].arch+' · wanderer'}</p><p><b>${hx.name}</b> lowers their blade: "A fair fight. I'll ride with you, if you'll have me."</p><p>★ ${hx.ab}: ${hx.ad}</p></div></div>`,
     buttons:[{label:'Send them off',value:0},{label:`Take ${hx.name} on`,value:1,primary:true}],dismiss:0});
   if(!v)return;const nh=mkHero(id,h.x,h.y);if(delivered(5)){nh.book=true;nh.spells.push('starfall');}const cur=S.cur;S.heroes.push(nh);S.cur=S.heroes.length-1;nh.mana=maxMana();nh.mp=0;S.cur=cur;
   lootPop(`${hx.name} joins you`,iconURL('hero',id,128));}
@@ -161,7 +161,7 @@ async function visit(o,last=true,jumped=false){
     o.rogue=null;S.jailed=(S.jailed||[]).filter(x=>x!==id);lootPop(`${hx.name} is free and joins you`,iconURL('hero',id,128));renderUI();save();return false;}
   case 'pile':gain(o.k,o.n);S.objs=S.objs.filter(q=>q!==o);lootPop(`+${fmt(o.n)} ${RESNAME[o.k].toLowerCase()}`,iconURL('res',o.k,64));renderUI();return false;
   case 'mine':{const m=MINE[o.k];if(o.owned!==ME()){o.owned=ME();o.ownerName=h.name;lootPop(`${m.name} claimed: +${fmt(mineOut(o))} ${RESNAME[m.res].toLowerCase()} a day`,iconURL('res',m.res,64));renderUI();if(!last)return false;}
-    if(!last||(o.lvl||1)>=3)return false;
+    if(!last||(o.lvl||1)>=MINE_MAX)return false;
     const lv=o.lvl||1,c=MINE_UP[lv],next=m.out[lv]+(delivered(4)?(m.res==='gold'?250:1):0);
     const v=await showModal({title:`${m.name}: level ${lv}`,body:`<p>The ${m.name.toLowerCase()} is yours. The foreman says it could dig deeper, if you want to pay for it. You can also upgrade your mines any time from the Barter Yard in town.</p><div class="scs" style="gap:10px;align-items:center"><span class="sc"><img src="${iconURL('res',m.res,32)}" alt="">+${fmt(mineOut(o))}/day</span> → <span class="sc"><img src="${iconURL('res',m.res,32)}" alt="">+${fmt(next)}/day</span></div><div class="cost" style="margin-top:10px">${costHTML(c,S.res)}</div>`,
       buttons:[{label:`Upgrade to level ${lv+1}`,value:true,disabled:!canAfford(c)},{label:'OK',value:false,primary:true}],dismiss:false});

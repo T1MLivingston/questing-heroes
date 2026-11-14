@@ -1133,3 +1133,9 @@ img.upg{filter:sepia(.55) saturate(1.9) hue-rotate(-12deg) brightness(1.06) drop
 #muBtn{background:none;border:0;font-size:20px;cursor:pointer;line-height:1;padding:2px}
 #muVol{width:0;opacity:0;transition:width .2s,opacity .2s;accent-color:#ffd24a}
 #muctl:hover #muVol,#muctl:focus-within #muVol{width:90px;opacity:1}
+/* v53 hero sheet: wider equipment boxes and smaller text so artifact names and effects stay inside */
+.sheetgrid3 .doll{grid-template-columns:repeat(3,140px)!important}
+.sheetgrid3 .eqi{overflow:hidden;padding:4px!important}
+.sheetgrid3 .eqi b{font-size:12.5px!important;line-height:1.1;overflow-wrap:anywhere}
+.sheetgrid3 .eqi small{font-size:11px!important;line-height:1.15;overflow-wrap:anywhere}
+.pack .eqi{max-width:150px}
