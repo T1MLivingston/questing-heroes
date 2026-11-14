@@ -223,6 +223,10 @@ Everything lives in one object, `S`, so it can be saved as JSON:
 - New ability hooks (player side only): `forgePlus` (extra Great Forge attack), `armyDef` (whole army defense), `rangedPct` (shooter damage), `halfCost` (one spell at half mana), `manaCut` (all spells cheaper), `squallPct`, `weakenPct`.
 - Raised: Ivan (Forge half ore, +1 more attack), Oliver (30% cheaper rough ground, +5% movement), Shadow (harvest 20%), Sheila (Squall +30%), Grimes and Griffiths (+1 speed to their troop). Made distinct: Veyra, Gliss, Silka, Murmur, Boone, Mossback, Aster, Nessa Holt. Trimmed: Schmickle and Quillby to +200 gold a day. Battaglia is a Might hero.
 
+### v56 recruit plan
+
+- Recruit tab: `recruitPlan(t)` works out what Recruit all buys with the money you have, strongest dwelling first (the button now follows the same plan). Hovering the button shows the plan in a dark tooltip (`.rtip`): each troop as "n of available", red with the extra gold needed when you can't take them all, and the total. The button reads **Recruit what I can afford** when the plan can't take everyone.
+
 ### v55 mines tooltip, easier diagonals
 
 - Mines panel rows are centred; the upgrade cost moved into a dark tooltip on hovering Upgrade (`.uptip`: next level's output, have / need per resource, red when short) with a ⚖ market button beside Upgrade when you can't afford it. Clicking Upgrade without enough says so.

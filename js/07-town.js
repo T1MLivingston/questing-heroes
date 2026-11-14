@@ -87,6 +87,11 @@ function townBuildings(){
 }
 function canAfford(cost){return Object.entries(cost).every(([k,v])=>S.res[k]>=v);}
 function pay(cost){for(const[k,v]of Object.entries(cost))S.res[k]-=v;}
+/* v56: what Recruit all will buy, strongest dwelling first, with the money you have (the same order the button uses) */
+function recruitPlan(t){const res={...S.res},fu=FAC[TF()].units,out=[];
+  for(let i=fu.length-1;i>=0;i--){const bk=fu[i];if(!t.built['d'+(i+1)])continue;const av=t.pool[bk]||0;if(av<1)continue;const k=recruitKey(bk),c1=unitCost(k,1);
+    let n=av;for(const r in c1)if(c1[r]>0)n=Math.min(n,Math.floor((res[r]||0)/c1[r]));n=Math.max(0,n);const c=unitCost(k,n);for(const r in c)res[r]=(res[r]||0)-c[r];out.push({bk,k,av,n,c,c1});}
+  return out;}
 function unitCost(k,n){const u=U[k];const cut=S&&S.heroes?Math.max(0,...S.heroes.map(h=>gear(h,'costCut'))):0;const c={gold:Math.round(u.cost*n*(1-cut/100))};if(u.amber)c.amber=u.amber*n;return c;}
 const recruitKey=k=>{const i=FAC[TF()].units.indexOf(k);return i>=0&&TW().built['u'+(i+1)]?k+'_u':k;};
 /* every mine you hold, with an upgrade button while it is below level 3 (Barter Yard) */
@@ -171,7 +176,10 @@ function townHTML(){
     const canAny=FAC[TF()].units.some((k,i)=>t.built['d'+(i+1)]&&Math.min(t.pool[k]||0,maxAfford(recruitKey(k)))>0);
     body=`<div class="rtop"><div class="rwho">${here?`<img src="${iconURL('hero',h.id,84)}" alt=""><div><b>${esc(h.name)}'s army</b><div class="trow small">${mini(h.army)}</div></div>`:`<div><b>${esc(h.name)} is away</b><small>Recruits wait in the garrison.</small></div>`}</div>
       <div class="rwho"><div><b>⚑ Garrison</b><div class="trow small">${mini(t.garrison)}</div></div></div>
-      <button class="btn primary" data-recall="1" ${canAny?'':'disabled'} title="Recruit as many as you can afford from every dwelling, strongest first">Recruit all</button></div><div class="ugrid">${dw}</div>`;
+      ${(()=>{const pl=recruitPlan(t),all=pl.length&&pl.every(p=>p.n>=p.av),tot={};for(const p of pl)for(const r in p.c)tot[r]=(tot[r]||0)+p.c[r];
+        const rows=pl.map(p=>`<span class="${p.n<p.av?'short':''}"><img src="${iconURL('unit',p.k,64)}" alt="">${p.n} of ${p.av} ${U[p.k].pl}${p.n<p.av?` · ${fmt((p.av-p.n)*p.c1.gold)} more gold for the rest`:''}</span>`).join('');
+        const tip=pl.length?`<span class="uptip rtip"><b>${all?'Recruits everyone waiting':'Buys the strongest troops first'}</b>${rows}<span class="rtot">Total: ${costHTML(tot,S.res)}</span></span>`:'';
+        return`<span class="upwrap"><button class="btn primary" data-recall="1" ${canAny?'':'disabled'}>${all||!pl.length?'Recruit all':'Recruit what I can afford'}</button>${tip}</span>`;})()}</div><div class="ugrid">${dw}</div>`;
   }else if(townTab==='build'){
     const list=[...BL_].sort((a,b)=>(t.built[a.id]?1:0)-(t.built[b.id]?1:0));
     body=`<div class="grid">${list.map(b=>{const built=!!t.built[b.id];const miss=(b.req||[]).filter(r=>!t.built[r]);
@@ -419,7 +427,7 @@ async function openTown(tw,tab){
     else if(el.dataset.gtx){if(!heroHere())return;const side=el.dataset.gtx[0],i=+el.dataset.gtx.slice(1),hh=HERO(),from=side==='g'?t.garrison:hh.army,to=side==='g'?hh.army:t.garrison,st=from[i];
       if(!st||(side==='h'&&hh.army.length<=1)){if(side==='h')toast('A hero must keep at least one stack.');return;}
       const ex=to.find(a=>a.k===st.k);if(ex)ex.n+=st.n;else if(to.length<7)to.push({...st});else{toast('No free slot there.');return;}from.splice(i,1);refresh();save();}
-    else if(el.dataset.recall){let got=[];const fu=FAC[TF()].units;for(let i=fu.length-1;i>=0;i--){const bk=fu[i];if(!t.built['d'+(i+1)])continue;const k=recruitKey(bk),n=Math.min(t.pool[bk]||0,maxAfford(k));if(n<1)continue;
+    else if(el.dataset.recall){let got=[];for(const p of recruitPlan(t)){const bk=p.bk,k=p.k,n=p.n;if(n<1)continue;
         pay(unitCost(k,n));t.pool[bk]-=n;if(!(heroHere()&&addToArmy(k,n))){const g=t.garrison.find(x=>x.k===k);if(g)g.n+=n;else t.garrison.push({k,n});}got.push(`${n} ${U[k].pl}`);}
       if(got.length)toast(`Recruited ${got.join(', ')}.`);refresh();}
     else if(el.dataset.recruit){const bk=el.dataset.recruit,k=recruitKey(bk);const inp=body.querySelector('#rc-'+bk);let n=Math.floor(+inp.value||0);n=clamp(n,0,Math.min(t.pool[bk]||0,maxAfford(k)));if(n<1)return;

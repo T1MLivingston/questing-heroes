@@ -1165,3 +1165,8 @@ img.upg{filter:sepia(.55) saturate(1.9) hue-rotate(-12deg) brightness(1.06) drop
 .mone{flex-wrap:nowrap!important}
 p.mmarket{display:flex!important;justify-content:center!important;width:100%!important;align-self:stretch!important;justify-self:stretch!important;box-sizing:border-box}
 p.mmarket{max-width:none!important;margin-left:0!important;margin-right:0!important}
+/* v56 recruit plan tooltip (reuses the mines tooltip look) */
+.rtip{min-width:260px;bottom:auto!important;top:calc(100% + 8px);left:auto!important;right:0;transform:none!important}
+.rtip::after{top:auto!important;bottom:100%;left:auto!important;right:24px;border-top-color:transparent!important;border-bottom-color:#14141c!important}
+.rtip img{width:24px!important;height:24px!important}
+.rtip .rtot{margin-top:4px;border-top:1px solid #4a4230;padding-top:4px}.rtip .rtot .cost{display:inline-flex;gap:6px;color:#f3ead2}
