@@ -223,6 +223,10 @@ Everything lives in one object, `S`, so it can be saved as JSON:
 - New ability hooks (player side only): `forgePlus` (extra Great Forge attack), `armyDef` (whole army defense), `rangedPct` (shooter damage), `halfCost` (one spell at half mana), `manaCut` (all spells cheaper), `squallPct`, `weakenPct`.
 - Raised: Ivan (Forge half ore, +1 more attack), Oliver (30% cheaper rough ground, +5% movement), Shadow (harvest 20%), Sheila (Squall +30%), Grimes and Griffiths (+1 speed to their troop). Made distinct: Veyra, Gliss, Silka, Murmur, Boone, Mossback, Aster, Nessa Holt. Trimmed: Schmickle and Quillby to +200 gold a day. Battaglia is a Might hero.
 
+### v52 music player
+
+- `js/16-audio.js`: plays `assets/music/<track>.mp3` (theme, acoustic, map, town, battle, victory, defeat; see that folder's README) for each scene, detected twice a second (`muDetect`: battle, title, town, map, menu), with cross-fades; the map alternates between `map` and the global `acoustic` theme. Missing files are skipped. Music starts after the first click (browser rule). A 🔊 button bottom-left mutes; hover shows a volume slider; settings in localStorage (`questing-heroes-audio`). `muSting` plays the victory or defeat sting at the end of a battle.
+
 ### v51 kid-friendly words, capital start, roadside inns
 
 - Gentler wording for a young audience: **Kick out hero** (was Dismiss; "heads back to the tavern"), and a lost battle says the hero "heads back to the tavern to rest" (the hero really is free to hire again).

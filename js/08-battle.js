@@ -321,6 +321,7 @@ async function endBattle(){
   if(won&&rv&&S.town.taken&&S.town.taken.id===rv.id)extras.push(`<b>${esc(S.town.name)} is free again.</b>`);
   const body=`<p>${won?`The field is yours. ${h.name} gains ${fmt(xp)} experience.`:`${h.name}'s army is beaten, and ${h.name} heads back to the tavern to rest.${S.heroes.length>1?' Your other heroes carry on the quest.':''}`}</p>${extras.map(x=>`<p>${x}</p>`).join('')}
    <div class="casualties"><div><div class="label">Your losses</div><ul>${merge(lost(0))}</ul></div><div><div class="label">Enemy losses</div><ul>${merge(lost(1))}</ul></div></div>`;
+  if(typeof muSting==='function')muSting(won?'victory':'defeat');
   await showModal({title:won?'Victory':'Defeat',body,buttons:[{label:'Continue',value:1,primary:true}]});
   if(won){
     const army=[];for(const s of bt.stacks.filter(s=>s.side===0&&s.alive).sort((a,b)=>a.slot-b.slot)){if(army.length<7)army.push({k:s.k,n:s.n});else{const ex=army.find(a=>a.k===s.k);if(ex)ex.n+=s.n;}}

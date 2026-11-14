@@ -1128,3 +1128,8 @@ img.upg{filter:sepia(.55) saturate(1.9) hue-rotate(-12deg) brightness(1.06) drop
 .inncard{width:200px;display:grid;justify-items:center;gap:4px;text-align:center;background:rgba(255,250,232,.7);border:2px solid var(--rule,#b89a5a);border-radius:10px;padding:10px}
 .inncard img{width:110px;height:110px;image-rendering:pixelated;border-radius:8px}
 .inncard b{font:800 18px var(--f-display);color:#1b2f7a}.inncard small{color:#5a4320}.inncard p{margin:0;font-size:13px}
+/* v52 music control: bottom left, always on top */
+#muctl{position:fixed;left:10px;bottom:10px;z-index:9000;display:flex;align-items:center;gap:6px;background:rgba(14,20,48,.75);border:1px solid rgba(255,230,160,.5);border-radius:20px;padding:3px 8px}
+#muBtn{background:none;border:0;font-size:20px;cursor:pointer;line-height:1;padding:2px}
+#muVol{width:0;opacity:0;transition:width .2s,opacity .2s;accent-color:#ffd24a}
+#muctl:hover #muVol,#muctl:focus-within #muVol{width:90px;opacity:1}
