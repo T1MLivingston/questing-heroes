@@ -223,6 +223,12 @@ Everything lives in one object, `S`, so it can be saved as JSON:
 - New ability hooks (player side only): `forgePlus` (extra Great Forge attack), `armyDef` (whole army defense), `rangedPct` (shooter damage), `halfCost` (one spell at half mana), `manaCut` (all spells cheaper), `squallPct`, `weakenPct`.
 - Raised: Ivan (Forge half ore, +1 more attack), Oliver (30% cheaper rough ground, +5% movement), Shadow (harvest 20%), Sheila (Squall +30%), Grimes and Griffiths (+1 speed to their troop). Made distinct: Veyra, Gliss, Silka, Murmur, Boone, Mossback, Aster, Nessa Holt. Trimmed: Schmickle and Quillby to +200 gold a day. Battaglia is a Might hero.
 
+### v51 kid-friendly words, capital start, roadside inns
+
+- Gentler wording for a young audience: **Kick out hero** (was Dismiss; "heads back to the tavern"), and a lost battle says the hero "heads back to the tavern to rest" (the hero really is free to hire again).
+- On Easy and Normal your town starts as a capital (Crown Seat, `hall2`-`hall4`) with a Barter Yard (`startBuilt(mo)`); Hard and Expert start with the small town.
+- Roadside Inns (`inn` objects, `furnishMap`): very rare (about half of maps have one, the biggest maps sometimes two), always beside a road. Drawn with the Rangers tavern piece from its town atlas. Visiting (`visitInn`) offers three travelling heroes from any banner or none, new each day (seeded by day and place), at tavern prices; hiring adds the hero beside your hero.
+
 ### v50 market, retreat, 16 heroes per banner
 
 - Banner pickers show up to 16 heroes (`bannerHeroes(fac)`, `BANNER_MAX`): the eight picks, then student heroes, then tavern wanderers; banner cards are 4 × 4 (tile size follows the window height, `.fc-mech` hidden on the cards, empty spots "Coming soon"), and the hero picker, Details page and rivals' first heroes use the same list.

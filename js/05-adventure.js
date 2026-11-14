@@ -37,6 +37,17 @@ async function walk(){
     if(mi>=0&&Math.max(Math.abs(S.heroes[mi].x-h.x),Math.abs(S.heroes[mi].y-h.y))<=1){moving=false;renderUI();save();await openTrade(mi);return;}}}
   moving=false;renderUI();save();
 }
+/* v51 Roadside Inn: three travelling heroes (any banner or none), new each day; same price as the tavern */
+async function visitInn(o,h){const taken=new Set([...S.heroes.map(y=>y.id),...S.rivals.map(r=>r.id),...(S.players||[]).flatMap(p=>(p.heroes||[]).map(x=>x.id))]);
+  const g=mulberry32((S.seed^Math.imul(S.day+7,92821)^Math.imul(o.x*131+o.y,7177))>>>0),pool=HEROES.filter(x=>!taken.has(x.id)&&!x.custom&&!x.blank&&!(S.jailed||[]).includes(x.id));
+  const offer=pool.map(x=>[g(),x]).sort((a,b)=>a[0]-b[0]).slice(0,3).map(x=>x[1]),cost=x=>x.fac===S.fac&&!x.rogue?HIRE_COST:HIRE_COST+500;
+  const full=S.heroes.length>=heroCap();
+  const card=x=>`<div class="inncard"><img src="${iconURL('hero',x.id,128)}" alt="" style="background:${x.rogue?'#3a2f2a':FAC[x.fac].col}"><b>${esc(x.name)}</b><small>${x.rogue?'Rogue':FAC[x.fac].arch} · ${x.type}</small><p>★ ${esc(x.ab)}: ${esc(x.ad)}</p>${full?'':`<button class="btn sm primary" data-inn="${x.id}" ${S.res.gold<cost(x)?'disabled':''}>Hire · ${fmt(cost(x))} gold</button>`}</div>`;
+  await showModal({title:'🍺 Roadside Inn',body:`<p>${full?`You already lead ${heroCap()} heroes, so nobody can join right now. `:''}A cosy inn on the road. A few travelling heroes are warming up by the fire${full?'.':', and one might join you.'} New faces every day.</p><div class="inngrid">${offer.map(card).join('')}</div>`,wide:true,buttons:[{label:'Leave',value:0,primary:true}],dismiss:0});}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-inn]');if(!b||b.disabled)return;e.stopPropagation();const x=HBY[b.dataset.inn];if(!x)return;const c=x.fac===S.fac&&!x.rogue?HIRE_COST:HIRE_COST+500;
+  if(S.res.gold<c||S.heroes.length>=heroCap())return;S.res.gold-=c;const h=HERO(),nh=mkHero(x.id,h.x,h.y),t1=FAC[S.fac].units[0];nh.army=[{k:recruitKey(t1),n:Math.round(150/U[t1].hp)}];
+  if(delivered(5)){nh.book=true;nh.spells.push('starfall');}const cur=S.cur;S.heroes.push(nh);S.cur=S.heroes.length-1;nh.mana=maxMana();nh.mp=maxMP();S.cur=cur;
+  $('#modal')._close(1);lootPop(`${nh.name} joins you at the inn`,iconURL('hero',nh.id,64));renderUI();save();},true);
 /* boarding or leaving a ship ends the day's movement (pirates and anyone with a boat; swimmers are not affected) */
 const shipSwap=(h,ax,ay,bx,by)=>!!h.boat&&FAC[S.fac].travel!=='swim'&&(tileAt(ax,ay)===T.LAKE)!==(tileAt(bx,by)===T.LAKE);
 /* a hero's route survives the end of the day: h.route is the destination (and a hero to meet there) */
@@ -141,6 +152,7 @@ async function visit(o,last=true,jumped=false){
       case'coral_relic':{const pool=Object.keys(ITEMS).filter(k=>ITEMS[k].lvl<=3&&!S.heroes.some(x=>(x.items||[]).includes(k)||(x.pack||[]).includes(k)));if(pool.length){const it=pick(pool);giveItem(h,it);msg=`Coral-crusted: the ${ITEMS[it].name} (${itemTxt(it)}).`;}else{gain('gold',800);msg='800 gold in coral.';}break;}}
     lootPop(msg,ART_BASE+`ocean/${o.k}.png`);renderUI();return false;}
   case 'gem':{const gm=GEMS[o.k],rk=gm.res||'gems';gain(rk,gm.n);S.objs=S.objs.filter(q=>q!==o);lootPop(rk==='gems'?`A ${gm.name.toLowerCase()}: +${gm.n} gems`:`A ${gm.name.toLowerCase()}, melted into ${gm.n} moonwater`,iconURL('gem',o.k));renderUI();return false;}
+  case 'inn':{await visitInn(o,h);return false;}
   case 'prison':{const id=o.rogue&&!S.heroes.some(x=>x.id===o.rogue)&&!S.rivals.some(x=>x.id===o.rogue)?o.rogue:null;
     if(!id){toast('The cells stand empty.');return false;}const hx=HBY[id];
     if(S.heroes.length>=heroCap()){await showModal({title:'Prison',body:`<div class="rrow"><img src="${iconURL('hero',id,128)}" alt="" style="width:96px;image-rendering:pixelated"><p><b>${hx.name}</b> rattles the bars. You already lead ${heroCap()} heroes, so there is no one to free them into your company. Come back with room to spare.</p></div>`,buttons:[{label:'OK',value:1,primary:true}],dismiss:1});return false;}
@@ -342,7 +354,7 @@ async function handoff(){const P=S.players[S.pi],f=FAC[S.fac],news=P.news||[];P.
   $('#modal').classList.remove('opaque');}
 async function eliminated(){const who=S.pi;S.players[who].out=true;stashPlayer();const alive=S.players.map((q,j)=>j).filter(j=>!S.players[j].out);
   if(alive.length===1){loadPlayer(alive[0]);afterSwap();await victory();return;}
-  await showModal({title:`Player ${who+1} is out`,body:`<p>The last of Player ${who+1}'s heroes has fallen.</p>`,buttons:[{label:'Continue',value:1,primary:true}]});
+  await showModal({title:`Player ${who+1} is out`,body:`<p>The last of Player ${who+1}'s heroes has been beaten.</p>`,buttons:[{label:'Continue',value:1,primary:true}]});
   moving=false;await endDay();}
 const dirWord=(x,y)=>{const dx=x-S.town.x,dy=y-S.town.y;const ns=dy>3?'south':dy<-3?'north':'',ew=dx>3?'east':dx<-3?'west':'';return(ns||ew?`${ns}${ns&&ew?'-':''}${ew} of ${S.town.name}`:`near ${S.town.name}`)+`, in ${TNAME[tileAt(x,y)].toLowerCase()} country`;};
 function addRumour(first,quiet){

@@ -319,7 +319,7 @@ async function endBattle(){
     let it=null;if(pool.length&&Math.random()<0.6){it=pick(pool);giveItem(h,it);}extras.push(`<b>Elite loot:</b> ${fmt(g)} gold${it?` and the ${ITEMS[it].name} (${itemTxt(it)})`:''}.`);}
   if(won&&o.type==='camp')extras.push(isMajor(o)?`<b>${campName(o)} is yours:</b> a full ${FAC[o.fac].arch} town. Build it up and recruit there like your home.`:`<b>${campName(o)} captured:</b> +${fmt(campIncome(o))} gold a day, and ${FAC[o.fac].arch} recruits there each week.`);
   if(won&&rv&&S.town.taken&&S.town.taken.id===rv.id)extras.push(`<b>${esc(S.town.name)} is free again.</b>`);
-  const body=`<p>${won?`The field is yours. ${h.name} gains ${fmt(xp)} experience.`:`${h.name}'s army is broken, and ${h.name} is lost.${S.heroes.length>1?' Your other heroes fight on.':''}`}</p>${extras.map(x=>`<p>${x}</p>`).join('')}
+  const body=`<p>${won?`The field is yours. ${h.name} gains ${fmt(xp)} experience.`:`${h.name}'s army is beaten, and ${h.name} heads back to the tavern to rest.${S.heroes.length>1?' Your other heroes carry on the quest.':''}`}</p>${extras.map(x=>`<p>${x}</p>`).join('')}
    <div class="casualties"><div><div class="label">Your losses</div><ul>${merge(lost(0))}</ul></div><div><div class="label">Enemy losses</div><ul>${merge(lost(1))}</ul></div></div>`;
   await showModal({title:won?'Victory':'Defeat',body,buttons:[{label:'Continue',value:1,primary:true}]});
   if(won){
@@ -342,7 +342,7 @@ async function endBattle(){
   }
   const res=bt.resolve;$('#battle').hidden=true;bt=null;$('#btCard').innerHTML='';
   if(won){await addXP(xp);if(freedKeeper)await keeperJoins(freedKeeper);renderUI();save();res(true);}
-  else if(!S.heroes.length){res(false);if(S.players)await eliminated();else await defeat('Your last hero has fallen.');}
+  else if(!S.heroes.length){res(false);if(S.players)await eliminated();else await defeat('Your last hero has been beaten.');}
   else{heroDraw.x=HERO().x;heroDraw.y=HERO().y;path=null;centerOn(HERO().x,HERO().y,true);renderUI();save();res(false);}
 }
 /* the commanding hero stands beside the field; click them to open the spellbook */

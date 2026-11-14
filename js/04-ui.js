@@ -87,7 +87,7 @@ function openHeroSheet(){const h=HERO(),hd=H_();h.pack=h.pack||[];
       <p class="muted">Attack and Defense make every troop in the army hit harder and take less damage. Power makes spells stronger. Lore sets mana: 10 mana per point, and the hero gets back mana equal to their Lore each day.</p>
       <div class="label">Backpack · click an item to wear it</div><div class="pack">${h.pack.length?h.pack.map(k=>itemBox(k,'p')).join(''):'<p class="muted">Empty.</p>'}</div>
     </div></div>`;
-  const pr=showModal({title:`${esc(h.name)}: equipment`,body:body(),wide:true,top:true,buttons:[...S.heroes.length>1?[{label:'Dismiss hero',value:'dismiss'}]:[],{label:'Done',value:1,primary:true}],dismiss:1});
+  const pr=showModal({title:`${esc(h.name)}: equipment`,body:body(),wide:true,top:true,buttons:[...S.heroes.length>1?[{label:'Kick out hero',value:'dismiss'}]:[],{label:'Done',value:1,primary:true}],dismiss:1});
   const b=$('#modal').querySelector('.body');
   b.addEventListener('click',e=>{const el=e.target.closest('[data-eq]');if(!el)return;const[where,k]=el.dataset.eq.split(':');
     if(where==='w'){h.items.splice(h.items.indexOf(k),1);h.pack.push(k);}
@@ -98,11 +98,11 @@ function openHeroSheet(){const h=HERO(),hd=H_();h.pack=h.pack||[];
 async function dismissHero(h){if(S.heroes.length<2)return;
   if((h.relics||[]).length){await showModal({title:'Carrying relics',body:`<p>${esc(h.name)} carries a relic. Deliver it to your Relic Hall or hand it to another hero before dismissing them.</p>`,buttons:[{label:'OK',value:1,primary:true}],dismiss:1});return;}
   const tw=allTowns().find(t=>t.x===h.x&&t.y===h.y&&!t.taken),n=h.army.reduce((a,s)=>a+s.n,0);
-  const v=await showModal({title:`Dismiss ${esc(h.name)}?`,body:`<p style="text-align:center"><img src="${iconURL('hero',h.id,128)}" alt="" style="width:96px;image-rendering:pixelated"></p><p>${esc(h.name)} will leave your company and may turn up in a tavern again later.</p><p>${!n?'They have no troops.':tw?`Their ${fmt(n)} troops stay behind in <b>${esc(tw.name||'your town')}</b>'s garrison (room for 7 stacks).`:`<b>Their ${fmt(n)} troops leave with them.</b> Dismiss them in one of your towns to keep the army.`} Their artifacts go with them.</p>`,buttons:[{label:'Keep',value:0},{label:'Dismiss',value:1,primary:true}],dismiss:0});
+  const v=await showModal({title:`Kick ${esc(h.name)} out?`,body:`<p style="text-align:center"><img src="${iconURL('hero',h.id,128)}" alt="" style="width:96px;image-rendering:pixelated"></p><p>${esc(h.name)} packs up and heads back to the tavern. You might meet them there again later.</p><p>${!n?'They have no troops.':tw?`Their ${fmt(n)} troops stay behind in <b>${esc(tw.name||'your town')}</b>'s garrison (room for 7 stacks).`:`<b>Their ${fmt(n)} troops leave with them.</b> Dismiss them in one of your towns to keep the army.`} Their artifacts go with them.</p>`,buttons:[{label:'Keep them',value:0},{label:'Kick out',value:1,primary:true}],dismiss:0});
   if(!v)return;
   if(tw){tw.garrison=tw.garrison||[];for(const s of h.army){const ex=tw.garrison.find(x=>x.k===s.k);if(ex)ex.n+=s.n;else if(tw.garrison.length<7)tw.garrison.push({k:s.k,n:s.n});}}
   const i=S.heroes.indexOf(h);S.heroes.splice(i,1);S.cur=Math.min(S.cur>i?S.cur-1:S.cur,S.heroes.length-1);if(S.cur<0)S.cur=0;
-  toast(`${h.name} has left your company.`);selectHero(S.cur);renderUI();save();}
+  toast(`${h.name} has headed back to the tavern.`);selectHero(S.cur);renderUI();save();}
 /* v50: the Market button (command bar and mines panel): opens the market of the town your hero stands in, else your home, else any town with one */
 function openMarket(){const h=HERO(),ts=allTowns().filter(t=>!t.taken),withM=ts.filter(t=>t.built&&t.built.market);
   const t=withM.find(t=>t.x===h.x&&t.y===h.y)||withM.find(t=>t===S.town)||withM[0];

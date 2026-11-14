@@ -2,6 +2,8 @@
 /* ================= MAP ================= */
 let W=34,H=26;const TS=44;
 /* v48: Starting treasure on Choose your game: by difficulty, or 5,000 gold and 5 of each material, or 10,000 and 10 */
+/* v51: on Easy and Normal your town starts as a capital (Crown Seat) with a market; Hard and Expert start small */
+const startBuilt=mo=>({hall1:1,d1:1,d2:1,lib1:1,...(['easy','normal'].includes(mo.diff||'normal')?{hall2:1,hall3:1,hall4:1,market:1}:{})});
 const startRes=mo=>{const t=+mo.treasure;if(t===5||t===10)return{gold:t*1000,timber:t,ore:t,amber:t,gems:t,moonwater:t};return{...DIFF[mo.diff||'normal'].res};};
 const DIFF={
   easy:{name:'Easy',res:{gold:10000,timber:25,ore:25,amber:8,gems:6,moonwater:6},rv:0.75,mon:0.8,agg:0.7,desc:'10,000 gold and plenty of materials. Rivals start smaller and grow slowly; wild creatures are fewer.'},
@@ -664,6 +666,8 @@ function furnishMap(bases){
   {const rogues=HEROES.filter(x=>x.rogue).map(x=>x.id).sort(()=>R()-0.5);S.jailed=[];
     for(let i=0;i<Math.min(rogues.length,Math.max(1,Math.round(KS*1.2)));i++){const p=freeTile(dist,...band(0.35,0.85));if(!p)break;add({type:'prison',x:p.x,y:p.y,rogue:rogues[i]});S.jailed.push(rogues[i]);
       const g=freeTile(new Map([[idx(p.x+1,p.y),0],[idx(p.x-1,p.y),0],[idx(p.x,p.y+1),0]].filter(([j])=>j>=0&&j<W*H&&dist.has(j))),0,0,1);if(g){const nt=neutralAt(0.55);add({type:'neutral',x:g.x,y:g.y,k:nt.k,n:nt.n});}}}
+  // v51 roadside inns: very rare (often none, at most two on the biggest maps), beside a road; a hero can be hired there
+  {const want=(R()<0.55?1:0)+(KS>1.15&&R()<0.35?1:0);for(let i=0;i<want;i++){let p=null;for(let k=0;k<40&&!p;k++){const q=freeTile(dist,...band(0.25,0.8));if(q&&[[1,0],[-1,0],[0,1],[0,-1]].some(([a,b])=>inb(q.x+a,q.y+b)&&S.tiles[idx(q.x+a,q.y+b)]===T.ROAD))p=q;}if(p)add({type:'inn',x:p.x,y:p.y});}}
   const owned=new Set(S.heroes.flatMap(h=>h.items||[]));
   const byLvl=l=>Object.keys(ITEMS).filter(k=>ITEMS[k].lvl===l&&!owned.has(k)&&!S.objs.some(o=>o.type==='artifact'&&o.item===k));
   const plan=[[1,3,0.08,0.35],[2,3,0.2,0.5],[3,2,0.4,0.7],[4,1,0.6,0.9],[5,1,0.8,1]];
@@ -718,7 +722,7 @@ function newGame(fk,hid,mo={}){
   const [t1,t2]=f.units;
   S={v:3,roster:2,ids27:1,seed,fac:fk,W,H,mapType:type,size:mo.size||'small',limit:sz.limit,tiles:w.tiles,objs:w.objs,uid:w.uid+10,biome:w.biome||'vale',underY:w.underY||0,rivers:w.rivers||null,bridges:w.bridges||null,explored:new Array(W*H).fill(0),day:1,
     res:startRes(mo),diff:mo.diff||'normal',heroes:[],cur:0,rivals:[],rumours:[],delivered:[],setup:{majors:mo.majors,outposts:mo.outposts},
-    town:{x:w.town.x,y:w.town.y,name:f.town,built:{hall1:1,d1:1,d2:1,lib1:1},pool:{[t1]:U[t1].growth,[t2]:U[t2].growth},garrison:[],builtToday:false},
+    town:{x:w.town.x,y:w.town.y,name:f.town,built:startBuilt(mo),pool:{[t1]:U[t1].growth,[t2]:U[t2].growth},garrison:[],builtToday:false},
     over:false};
   const h=mkHero(hid,w.town.x,w.town.y);h.army=[{k:t1,n:Math.round(240/U[t1].hp)},{k:t2,n:Math.round(90/U[t2].hp)}];S.heroes.push(h);
   HERO().mana=maxMana();HERO().mp=maxMP();
@@ -745,7 +749,7 @@ function newGame(fk,hid,mo={}){
       for(let dy=-2;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){const x=sp.x+dx,y=sp.y+dy;if(inb(x,y)&&S.tiles[idx(x,y)]!==T.LAKE)S.tiles[idx(x,y)]=dy===1&&dx===0?T.ROAD:T.GRASS;}
       S.objs.push({type:'town',x:sp.x,y:sp.y,owner:pi,id:S.uid++});
       const[u1,u2]=f2.units,h2=mkHero(pp.hid,sp.x,sp.y);h2.army=[{k:u1,n:Math.round(240/U[u1].hp)},{k:u2,n:Math.round(90/U[u2].hp)}];if(mo.artifact){const pool=Object.keys(ITEMS).filter(k=>ITEMS[k].lvl<=3&&!(h2.items||[]).includes(k));if(pool.length)giveItem(h2,pick(pool));}
-      S.players.push({name:`Player ${pi+1}`,fac:pp.fk,town:{x:sp.x,y:sp.y,name:f2.town,built:{hall1:1,d1:1,d2:1,lib1:1},pool:{[u1]:U[u1].growth,[u2]:U[u2].growth},garrison:[],builtToday:false},
+      S.players.push({name:`Player ${pi+1}`,fac:pp.fk,town:{x:sp.x,y:sp.y,name:f2.town,built:startBuilt(mo),pool:{[u1]:U[u1].growth,[u2]:U[u2].growth},garrison:[],builtToday:false},
         res:startRes(mo),heroes:[h2],cur:0,explored:new Array(W*H).fill(0),delivered:[],rumours:[],goal:[0,1,2,3,4,5,6]});});
     rebuildFoot();
     for(let j=1;j<S.players.length;j++){loadPlayer(j);HERO().mana=maxMana();HERO().mp=maxMP();reveal(S.town.x,S.town.y,6);addRumour(true);stashPlayer();}
@@ -1050,6 +1054,7 @@ function drawObj(c,o){
   case 'pile':if(o.k==='moonwater'||o.k==='gems'){if(wxAt(c,o.k+'_pile',cx,cy+TS/2-4,TS/32*0.7))break;}if(PILE_ART.has(o.k)&&spriteAt(c,`map/pickups/${o.k==='timber'?'wood':o.k}.png`,cx,cy+TS/2-4,TS/32,2,400))break;c.fillStyle='rgba(0,0,0,.3)';c.beginPath();c.ellipse(cx,cy+12,11,4,0,0,7);c.fill();drawRes(c,o.k,cx,cy+2,11);break;
   case 'flot':{const t=performance.now()/500;c.fillStyle='rgba(200,230,240,.35)';c.beginPath();c.ellipse(cx,cy+12,13,4,0,0,7);c.fill();if(!spriteAt(c,`ocean/${o.k}.png`,cx,cy+12+Math.sin(t+o.y)*1.5,TS/32*0.85,o.k==='floating_chest'?4:1,250)){c.fillStyle='#a07040';c.fillRect(cx-6,cy-4,12,10);}break;}
   case 'gem':{const t=performance.now()/500;c.fillStyle='rgba(0,0,0,.3)';c.beginPath();c.ellipse(cx,cy+12,10,4,0,0,7);c.fill();if(!spriteAt(c,`gems/${o.k}.png`,cx,cy+10+Math.sin(t+o.x)*1.5,TS/32*0.85)){c.fillStyle='#c46bff';c.beginPath();c.arc(cx,cy,7,0,7);c.fill();}break;}
+  case 'inn':{const a=artImg(TOWN_SCREEN.rangers.atlas);if(a.ok){const w=TS*1.5,hh=w*97/140;c.drawImage(a.img,228,360,140,97,cx-w/2,cy+TS/2-hh,w,hh);}else{c.font=`${Math.round(TS*0.7)}px serif`;c.textAlign='center';c.fillText('🍺',cx,cy+TS*0.3);}break;}
   case 'site':{const spent=o.week===weekNo();c.globalAlpha=spent?0.55:1;c.fillStyle='rgba(0,0,0,.3)';c.beginPath();c.ellipse(cx,cy+12,16,5,0,0,7);c.fill();c.strokeStyle='#26241f';c.lineWidth=1.2;
     if(o.k==='wish'&&spriteAt(c,'map/sites/wishing_well.png',cx,cy+TS/2-2,TS/32*0.75)){}
     else if((o.k==='woodcamp'||o.k==='orecart'||o.k==='amberhollow')&&wxAt(c,o.k,cx,cy+TS/2-2,TS/32*0.75)){}
@@ -1252,6 +1257,7 @@ function describe(x,y){
     case 'flot':return`<b>${FLOT[o.k].name}</b> · ${FLOT[o.k].give} · needs a boat or swimmers`;
     case 'gem':return`<b>${GEMS[o.k].name}</b> · ${GEMS[o.k].n} ${RESNAME[GEMS[o.k].res||'gems'].toLowerCase()}`;
     case 'chest':return'<b>Weathered chest</b>';
+    case 'inn':return'<b>Roadside Inn</b> · travelling heroes stop here for the night';
     case 'site':return`<b>${SITES[o.k].name}</b> · ${o.week===weekNo()?'spent until next week':`once a week: ${SITES[o.k].give}`}`;
     case 'artifact':{const it=ITEMS[o.item];return`${itemIcon(o.item)}<b>${it.name}</b> · level ${it.lvl} ${it.tier} · ${itemTxt(o.item)}`;}
     case 'stone':return`<b>Training stone of ${STATN[o.stat]}</b> · +1 ${STATN[o.stat]} for each hero, once${(o.usedBy||[]).includes(HERO().id)?' (this hero has trained here)':''}`;

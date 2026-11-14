@@ -1123,3 +1123,8 @@ img.upg{filter:sepia(.55) saturate(1.9) hue-rotate(-12deg) brightness(1.06) drop
 .bannersheet:not(.det) .fc-mech{display:none}
 .fc-heroes{grid-template-columns:repeat(4,min(calc((100vh - 370px)/8),calc(25% - 3px)))!important;justify-content:center}
 .mmarket{display:flex;justify-content:center;width:100%}
+/* v51 roadside inn */
+.inngrid{display:flex;flex-wrap:wrap;justify-content:center;gap:12px}
+.inncard{width:200px;display:grid;justify-items:center;gap:4px;text-align:center;background:rgba(255,250,232,.7);border:2px solid var(--rule,#b89a5a);border-radius:10px;padding:10px}
+.inncard img{width:110px;height:110px;image-rendering:pixelated;border-radius:8px}
+.inncard b{font:800 18px var(--f-display);color:#1b2f7a}.inncard small{color:#5a4320}.inncard p{margin:0;font-size:13px}
