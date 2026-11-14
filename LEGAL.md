@@ -60,6 +60,7 @@ No other libraries, images or audio are included. Art made later with ChatGPT or
 | Final Roster: 13 hero portraits (Peyto, Nissa, the second Livingston, Enzo, Axel, Dot, Gale, Wick, Lore, Fern, Mossback, Alderhide, India) in `assets/portraits/heroes/` and `recruits.png` | Supplied by the author (generated pixel art, ChatGPT) | 2026-11-13 | Invented characters; any modelled on real people are used with their permission and carry no surnames beyond what the author approved |
 | Banner Heroes: 13 new hero portraits and 13 redraws in `assets/portraits/heroes/` and `recruits.png` | Supplied by the author (generated pixel art, ChatGPT) | 2026-11-13 | Invented characters; any modelled on real people are used with their permission |
 | Twins & Tavern Heroes: 15 hero portraits in `assets/portraits/heroes/` and `recruits.png` | Supplied by the author (generated pixel art, ChatGPT) | 2026-11-13 | Invented characters |
+| Legacy Portrait Redesigns (10) and Student Heroes batches 1, 3, 4, 5 (36 portraits) in `assets/portraits/heroes/` and `recruits.png` | Supplied by the author (generated pixel art, ChatGPT, from students' Create a hero worksheets) | 2026-11-14 | Characters designed by students, used with the author's permission |
 | Half-size move cursor (`assets/ui/cursors/move_small.png`) | Downscaled locally from Pack 09's move cursor | 2026-11-08 | Same as above |
 
 The generated source images (high-res magenta PNGs) are kept outside this repo.

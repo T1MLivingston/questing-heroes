@@ -105,7 +105,14 @@ async function dismissHero(h){if(S.heroes.length<2)return;
 /* v46: every mine you hold in one place, opened from the ⛏ button in the top bar */
 function openMines(){const ms=()=>S.objs.filter(o=>o.type==='mine'&&o.owned===ME());
   const tot=()=>{const t={};for(const o of ms()){const r=MINE[o.k].res;t[r]=(t[r]||0)+mineOut(o);}return t;};
-  const body=()=>{const t=tot();return`<div class="minesum">${Object.keys(t).length?RES.filter(k=>t[k]).map(k=>`<span><img src="${iconURL('res',k,32)}" alt="">+${fmt(t[k])} ${RESNAME[k].toLowerCase()} a day</span>`).join(''):'<span class="muted">No mines yet.</span>'}</div>${mineList().replace(/<h3[^>]*>Your mines<\/h3>/,'')}`;};
+  /* v48: one centred card per kind of mine, its pictures stacked, then each mine you hold with its level, output and upgrade */
+  const pic=k=>MINE_ART[k]?`<i class="mpic" style="background-image:url(${ART_BASE}map/mines/${MINE_ART[k][0]}.png)"></i>`:`<img class="mres" src="${iconURL('res',MINE[k].res,40)}" alt="">`;
+  const body=()=>{const t=tot(),by={};for(const o of ms())(by[o.k]=by[o.k]||[]).push(o);
+    const cards=Object.keys(MINE).filter(k=>by[k]).map(k=>{const list=by[k].sort((a,b)=>(b.lvl||1)-(a.lvl||1)),out=list.reduce((a,o)=>a+mineOut(o),0),m=MINE[k];
+      return`<div class="mgrp"><div class="mstack">${list.slice(0,4).map((o,i)=>`<span style="--i:${i}">${pic(k)}</span>`).join('')}</div>
+        <h4>${m.name} <b>×${list.length}</b></h4><p class="mtot"><img src="${iconURL('res',m.res,32)}" alt="">+${fmt(out)} ${RESNAME[m.res].toLowerCase()} a day</p>
+        <div class="mlist">${list.map(o=>{const lv=o.lvl||1,c=MINE_UP[lv];return`<div class="mone"><span>Level ${lv} · +${fmt(mineOut(o))}</span>${lv<3?`<button class="btn sm" data-mineup="${o.id}" ${canAfford(c)?'':'disabled'} title="${Object.entries(c).map(([r,v])=>fmt(v)+' '+RESNAME[r].toLowerCase()).join(', ')}">Upgrade</button>`:'<em>max</em>'}<button class="btn sm" data-minego="${o.id}" title="Show on map">📍</button></div>`;}).join('')}</div></div>`;}).join('');
+    return`<div class="minesum">${Object.keys(t).length?RES.filter(k=>t[k]).map(k=>`<span><img src="${iconURL('res',k,32)}" alt="">+${fmt(t[k])} ${RESNAME[k].toLowerCase()} a day</span>`).join(''):'<span class="muted">No mines yet. Walk onto a mine on the map to claim it.</span>'}</div><div class="mgrps">${cards}</div>`;};
   showModal({title:`⛏ Your mines (${ms().length})`,body:body(),wide:true,top:true,buttons:[{label:'Close',value:1,primary:true}],dismiss:1});
   const b=$('#modal').querySelector('.body');
   b.addEventListener('click',e=>{const el=e.target.closest('[data-mineup],[data-minego]');if(!el)return;
@@ -135,7 +142,7 @@ function heroBonusText(k){const h=HERO(),f=fx(),bits=[];if(hst(h,'atk'))bits.pus
   if(f.unitAtk&&f.unitAtk[k])bits.push(`+${f.unitAtk[k]} attack from ${H_().ab}`);if(f.unitDef&&f.unitDef[k])bits.push(`+${f.unitDef[k]} defense from ${H_().ab}`);if(f.unitSpd&&f.unitSpd[k])bits.push(`+${f.unitSpd[k]} speed from ${H_().ab}`);
   return bits.length?`<p class="muted" style="margin:6px 0 0;font-size:13px">In ${h.name}'s army: ${bits.join(', ')}.</p>`:'';}
 /* pickups announce themselves big at the top of the map */
-function dayFlip(){const d=$('#dayflip');if(!d)return;const p=dateParts();d.querySelector('b').textContent=p.d===1?`Week ${p.w} · Day 1`:`Day ${p.d}`;d.hidden=false;d.classList.remove('go');void d.offsetWidth;d.classList.add('go');clearTimeout(d._t);d._t=setTimeout(()=>{d.hidden=true;},1500);}
+function dayFlip(){const d=$('#dayflip');if(!d)return;const p=dateParts();d.querySelector('b').textContent=`Week ${p.w} · Day ${p.d}`;{let sm=d.querySelector('small');if(!sm){sm=document.createElement('small');d.appendChild(sm);}sm.textContent=`Month ${p.m}`;}d.hidden=false;d.classList.remove('go');void d.offsetWidth;d.classList.add('go');clearTimeout(d._t);d._t=setTimeout(()=>{d.hidden=true;},1500);}
 function lootPop(msg,img){const box=$('#loot');if(!box){toast(msg);return;}const t=document.createElement('div');t.className='lootpop';t.innerHTML=`${img?`<img src="${img}" alt="">`:''}<span>${msg}</span>`;box.appendChild(t);
   while(box.children.length>3)box.firstChild.remove();setTimeout(()=>{t.classList.add('out');setTimeout(()=>t.remove(),400);},2800);}
 function toast(msg){const t=document.createElement('div');t.className='toast';t.innerHTML=msg;$('#toasts').appendChild(t);setTimeout(()=>t.remove(),3400);}

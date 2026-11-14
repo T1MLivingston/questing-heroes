@@ -23,7 +23,10 @@ async function walk(){
       break;
     }
     const jumped=Math.max(Math.abs(n.x-HERO().x),Math.abs(n.y-HERO().y))>1,swap=shipSwap(HERO(),HERO().x,HERO().y,n.x,n.y);
-    HERO().mp-=cost;await stepHero(n);reveal(n.x,n.y,vision());path.shift();renderUI();
+    if(swap&&tileAt(n.x,n.y)===T.LAKE){/* v48: ask before casting off, since it ends the day's movement */
+      const ok=await showModal({title:'⛵ Board your ship?',body:`<p>Casting off ends <b>${esc(HERO().name)}</b>'s movement for today (${fmt(HERO().mp)} movement left).</p><p class="muted">Tomorrow the ship sails at full speed.</p>`,buttons:[{label:'Stay ashore',value:0},{label:'Board the ship',value:1,primary:true}],dismiss:0});
+      if(!ok){path=null;break;}}
+    HERO().mp-=cost;await stepHero(n);reveal(n.x,n.y,vision());if(lightsNear(n.x,n.y)){toast('🗼 The lighthouse lights up the coast around you.');}path.shift();renderUI();
     if(jumped)toast(n.y>=(S.underY||1e9)?'Through the portal: down into the underworld.':'Through the portal and back into daylight.');
     if(o){const stop=await visit(o,!path.length,jumped);if(stop){path=null;break;}}
     if(swap&&path&&path.length){HERO().mp=0;toast(tileAt(n.x,n.y)===T.LAKE?`${HERO().name} boards ship. Casting off takes the rest of the day.`:`${HERO().name} makes landfall. Unloading takes the rest of the day.`);break;}

@@ -1,6 +1,8 @@
 'use strict';
 /* ================= MAP ================= */
 let W=34,H=26;const TS=44;
+/* v48: Starting treasure on Choose your game: by difficulty, or 5,000 gold and 5 of each material, or 10,000 and 10 */
+const startRes=mo=>{const t=+mo.treasure;if(t===5||t===10)return{gold:t*1000,timber:t,ore:t,amber:t,gems:t,moonwater:t};return{...DIFF[mo.diff||'normal'].res};};
 const DIFF={
   easy:{name:'Easy',res:{gold:10000,timber:25,ore:25,amber:8,gems:6,moonwater:6},rv:0.75,mon:0.8,agg:0.7,desc:'10,000 gold and plenty of materials. Rivals start smaller and grow slowly; wild creatures are fewer.'},
   normal:{name:'Normal',res:{gold:5000,timber:15,ore:15,amber:4,gems:2,moonwater:2},rv:1,mon:1,agg:1,desc:'5,000 gold. Rivals are your match.'},
@@ -17,7 +19,7 @@ const MAP_TYPES={
   under:{name:'Underworld',desc:'Daylight above, a dark underworld below, solid bedrock between. Portals are the only way through. Necromancers rule below, and the Glass Lair waits down there.'},
   rivers:{name:'Four Rivers',desc:'Four rivers meet around an island holding the Glass Lair. Every banner has its own quarter. Cross at bridges, some guarded, and hold the bridgeheads with spires.'}};
 const T={GRASS:0,DIRT:1,ROAD:2,HEATH:3,BOG:4,FOREST:5,CRAG:6,LAKE:7};
-const TCOST=[100,100,70,130,175,0,0,0];
+const TCOST=[100,100,55,130,175,0,0,0];/* v48: roads cost 55 (was 70) */
 const TNAME=['Meadow','Dirt track','Old road','Heath','Bog','Deep forest','Crags','Lake'];
 const passableT=t=>t<5;
 let S=null;
@@ -715,7 +717,7 @@ function newGame(fk,hid,mo={}){
   const w=cm?customWorld(cm,rivalFacs):genMap(seed,{type,fac:fk,rivals:rivalFacs});const f=FAC[fk];
   const [t1,t2]=f.units;
   S={v:3,roster:2,ids27:1,seed,fac:fk,W,H,mapType:type,size:mo.size||'small',limit:sz.limit,tiles:w.tiles,objs:w.objs,uid:w.uid+10,biome:w.biome||'vale',underY:w.underY||0,rivers:w.rivers||null,bridges:w.bridges||null,explored:new Array(W*H).fill(0),day:1,
-    res:{...DIFF[mo.diff||'normal'].res},diff:mo.diff||'normal',heroes:[],cur:0,rivals:[],rumours:[],delivered:[],setup:{majors:mo.majors,outposts:mo.outposts},
+    res:startRes(mo),diff:mo.diff||'normal',heroes:[],cur:0,rivals:[],rumours:[],delivered:[],setup:{majors:mo.majors,outposts:mo.outposts},
     town:{x:w.town.x,y:w.town.y,name:f.town,built:{hall1:1,d1:1,d2:1,lib1:1},pool:{[t1]:U[t1].growth,[t2]:U[t2].growth},garrison:[],builtToday:false},
     over:false};
   const h=mkHero(hid,w.town.x,w.town.y);h.army=[{k:t1,n:Math.round(240/U[t1].hp)},{k:t2,n:Math.round(90/U[t2].hp)}];S.heroes.push(h);
@@ -744,7 +746,7 @@ function newGame(fk,hid,mo={}){
       S.objs.push({type:'town',x:sp.x,y:sp.y,owner:pi,id:S.uid++});
       const[u1,u2]=f2.units,h2=mkHero(pp.hid,sp.x,sp.y);h2.army=[{k:u1,n:Math.round(240/U[u1].hp)},{k:u2,n:Math.round(90/U[u2].hp)}];if(mo.artifact){const pool=Object.keys(ITEMS).filter(k=>ITEMS[k].lvl<=3&&!(h2.items||[]).includes(k));if(pool.length)giveItem(h2,pick(pool));}
       S.players.push({name:`Player ${pi+1}`,fac:pp.fk,town:{x:sp.x,y:sp.y,name:f2.town,built:{hall1:1,d1:1,d2:1,lib1:1},pool:{[u1]:U[u1].growth,[u2]:U[u2].growth},garrison:[],builtToday:false},
-        res:{...DIFF[mo.diff||'normal'].res},heroes:[h2],cur:0,explored:new Array(W*H).fill(0),delivered:[],rumours:[],goal:[0,1,2,3,4,5,6]});});
+        res:startRes(mo),heroes:[h2],cur:0,explored:new Array(W*H).fill(0),delivered:[],rumours:[],goal:[0,1,2,3,4,5,6]});});
     rebuildFoot();
     for(let j=1;j<S.players.length;j++){loadPlayer(j);HERO().mana=maxMana();HERO().mp=maxMP();reveal(S.town.x,S.town.y,6);addRumour(true);stashPlayer();}
     loadPlayer(0);
@@ -752,11 +754,14 @@ function newGame(fk,hid,mo={}){
   rebuildFoot();
   if(!w.noFurnish){const bases=[{x:S.town.x,y:S.town.y,fac:S.fac},...(S.players?S.players.slice(1).map(q=>({x:q.town.x,y:q.town.y,fac:q.fac})):S.rivals.map(r=>({x:r.x,y:r.y,fac:r.fac})))];furnishMap(bases);if(!cm)S.accessFixed=ensureAccess(bases);}
 }
+/* v48 lighthouses (shore scenery, positions kept in LIGHTS by the terrain painter): a hero within 2 tiles sees 14 tiles around the light */
+let LIGHTS=[];
+function lightsNear(x,y){let fresh=false;S.lit=S.lit||[];for(const l of LIGHTS)if(Math.max(Math.abs(l.x-x),Math.abs(l.y-y))<=2){reveal(l.x,l.y,14);const k=l.x+','+l.y;if(!S.lit.includes(k)){S.lit.push(k);fresh=true;}}return fresh;}
 function reveal(cx,cy,r){for(let y=cy-r;y<=cy+r;y++)for(let x=cx-r;x<=cx+r;x++)if(inb(x,y)&&(x-cx)**2+(y-cy)**2<=r*r+1)S.explored[idx(x,y)]=1;}
 const vision=()=>5+skL('farsight')+(fx().vision||0)+(S&&S.heroes?gear(HERO(),'vision'):0)+(S&&S.delivered&&delivered(0)?1:0);
 const maxMana=()=>Math.round(hst(HERO(),'lore')*10*(1+0.25*skL('deepres')));
 function maxMP(){const sp=HERO().army.length?Math.min(...HERO().army.map(a=>U[a.k].spd+((fx().unitSpd||{})[a.k]||0))):5;
-  let m=900+45*Math.min(sp,9);if(HERO().mount!=='foot')m*=1.4;m*=1+0.1*skL('forcedmarch');m*=1+(gear(HERO(),'mpPct')+(fx().mpPct||0))/100;if(S.event&&S.event.k==='road')m*=1.1;return Math.round(m);}
+  let m=1200+45*Math.min(sp,9);/* v48: base raised from 900 */if(HERO().mount!=='foot')m*=1.4;m*=1+0.1*skL('forcedmarch');m*=1+(gear(HERO(),'mpPct')+(fx().mpPct||0))/100;if(S.event&&S.event.k==='road')m*=1.1;return Math.round(m);}
 const xpFor=l=>Math.round(1000*l*(1+0.12*(l-1)));
 const income=()=>(S.town.taken?0:hallGold(S.town))+S.heroes.reduce((a,h)=>a+250*skLevel(h,'estates')+gear(h,'goldDay')+((HBY[h.id]&&HBY[h.id].fx||{}).goldDay||0),0)+S.objs.filter(o=>o.type==='camp'&&o.owned===ME()).reduce((a,o)=>a+campIncome(o),0);
 function dateParts(d=S.day){const m=Math.floor((d-1)/28)+1,w=Math.floor(((d-1)%28)/7)+1,dd=(d-1)%7+1;return{m,w,d:dd};}
@@ -825,9 +830,9 @@ function renderTerrainArt(){
     else if(!hills.some(p=>Math.max(Math.abs(p.x-x),Math.abs(p.y-y))<=1)){hills.push({x,y,w:0});P(under(y)?pick2(['leaning_monolith','split_boulder','umber_slate_ledge','taupe_granite_pair']):pick2(['ochre_hill','split_boulder','sandstone_boulders','ochre_rock_ledge','umber_slate_ledge','taupe_granite_pair','leaning_monolith']),x*N+16+j(4),y*N+30);}
     else P('boulder',x*N+16+j(10),y*N+26+j(4));}
   // the waterfront: a wreck out on open water, and the odd lighthouse on a shore
-  {let wrecks=Math.round(W/30),lights=Math.round(W/30);for(let k=0;k<600&&(wrecks>0||lights>0);k++){const x=2+Math.floor(g()*(W-4)),y=2+Math.floor(g()*(H-4)),i=idx(x,y);
+  LIGHTS=[];{let wrecks=Math.round(W/30),lights=Math.round(W/30);for(let k=0;k<600&&(wrecks>0||lights>0);k++){const x=2+Math.floor(g()*(W-4)),y=2+Math.floor(g()*(H-4)),i=idx(x,y);
     if(wrecks>0&&S.tiles[i]===T.LAKE&&!RV.has(i)&&[-1,0,1].every(a=>[-1,0,1].every(b=>S.tiles[idx(x+a,y+b)]===T.LAKE))&&!busy.has(i)){P('shipwreck',x*N+16,y*N+28);busy.add(i);wrecks--;}
-    else if(lights>0&&S.tiles[i]===T.GRASS&&!busy.has(i)&&!busy.has(i-W)&&lakeNear4(x,y)&&!under(y)){P('lighthouse',x*N+16,y*N+30);busy.add(i);lights--;}}}
+    else if(lights>0&&S.tiles[i]===T.GRASS&&!busy.has(i)&&!busy.has(i-W)&&lakeNear4(x,y)&&!under(y)){P('lighthouse',x*N+16,y*N+30);LIGHTS.push({x,y});busy.add(i);lights--;}}}
   // a few landmarks on open meadow: stone arches
   {let arches=Math.round(W/22);for(let k=0;k<400&&arches>0;k++){const x=1+Math.floor(g()*(W-2)),y=2+Math.floor(g()*(H-3));if(under(y))continue;
     const ok=[-1,0,1].every(dx=>{const i=idx(x+dx,y);return S.tiles[i]===T.GRASS&&!busy.has(i)&&!busy.has(i-W);});if(!ok)continue;
@@ -861,7 +866,7 @@ function renderTerrainArt(){
       else if(r<0.035*dk)P('flowers_meadow',X+j(14),Y+j(8));else if(r<0.05*dk)P('flowers_blue',X+j(14),Y+j(8));else if(r<0.08*dk)P('shrub',X+j(14),Y+j(8));else if(r<0.1*dk)P(near4(x,y,T.CRAG)&&r<0.093*dk?pick2(['sandstone_boulders','taupe_granite_pair']):'boulder',X+j(14),Y+j(8));}
     else if(t===T.DIRT&&r<0.06)P(r<0.03?pick2(GROUNDS):'boulder',X+j(14),Y+j(8));}
   props.sort((a,b)=>a.y-b.y);
-  for(const p of props){const img=taImg(`scenery/${p.k}.png`);sc.drawImage(img,Math.round(p.x-img.width/2),Math.round(p.y-img.height+4));}
+  for(const p of props){const img=taImg(`scenery/${p.k}.png`),k=p.k==='lighthouse'?0.7:1,w=Math.round(img.width*k),hh=Math.round(img.height*k);sc.drawImage(img,Math.round(p.x-w/2),Math.round(p.y-hh+4),w,hh);}
   const lake=(x,y)=>tl(x,y)===T.LAKE&&!RV.has(idx(clamp(x,0,W-1),clamp(y,0,H-1))),anim=taImg('water_anim.png');
   const RC=(x,y)=>!inb(x,y)||RV.has(idx(x,y));
   // big maps keep fewer water frames in memory

@@ -223,6 +223,16 @@ Everything lives in one object, `S`, so it can be saved as JSON:
 - New ability hooks (player side only): `forgePlus` (extra Great Forge attack), `armyDef` (whole army defense), `rangedPct` (shooter damage), `halfCost` (one spell at half mana), `manaCut` (all spells cheaper), `squallPct`, `weakenPct`.
 - Raised: Ivan (Forge half ore, +1 more attack), Oliver (30% cheaper rough ground, +5% movement), Shadow (harvest 20%), Sheila (Squall +30%), Grimes and Griffiths (+1 speed to their troop). Made distinct: Veyra, Gliss, Silka, Murmur, Boone, Mossback, Aster, Nessa Holt. Trimmed: Schmickle and Quillby to +200 gold a day. Battaglia is a Might hero.
 
+### v48 student heroes, quality of life
+
+- Student Heroes batches 1, 3, 4 and 5: 36 heroes made by students (`student:true`), tavern wanderers of their banner (`tav:true`) or rogues when no banner was given (Nyx, Nala, Nanya, Posy Spinner, Bristle, Posy, Kaf). Simple abilities from the usual hooks. `RECRUIT_PORT`/`recruits.png` hold 112 portraits (12 rows). Legacy Portrait Redesigns replaced Battaglia, Dorothy, Lawrence, Oliver, Parker, Perry, Shadow, Sheila, Vargas and Griffiths (`mer2`); portrait URLs carry `?v=48`.
+- Movement: `maxMP` base 1200 (was 900); roads cost 55 (`TCOST[T.ROAD]`, was 70).
+- Ships: stepping from land onto water with a boat asks first (**Board the ship?**, in `walk`), since boarding ends the day's movement.
+- Lighthouses (shore scenery) draw at 70% size; `LIGHTS` holds their tiles (filled by the terrain painter) and `lightsNear` reveals 14 tiles around any light within 2 tiles of a hero (first visit toasts, `S.lit`).
+- Day flip: 160 px hourglass, "Week N · Day N" with the month beneath, popping in.
+- Starting treasure on Choose your game (`mo.treasure`, `startRes`): by difficulty, 5,000 gold and 5 of each material, or 10,000 and 10.
+- Mines panel: one centred card per kind of mine with its pictures stacked, total output, and each mine's level, Upgrade and 📍 (show on map); the ⛏ top-bar button is taller with the count under the pickaxe.
+
 ### v47 class heroes
 
 - Students' heroes from **Create a hero** can join the game. Step 7 of the worksheet loads the AI picture (square crop, optional white-background flood fill from the edges, shrunk to 128 × 128 PNG data URL: `crProcess`), checks the rules (`crChecks`: name, all 6 points, an in-game ability, a picture) and adds the hero (`crAdd`). Written abilities and invented spells stay in the story; the game uses the picked troop/map ability and a banner spell (`crGameSpell`; Meteor and Starfall are not allowed, `CU_NOSPELL`).

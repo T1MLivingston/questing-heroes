@@ -1084,3 +1084,24 @@ img.upg{filter:sepia(.55) saturate(1.9) hue-rotate(-12deg) brightness(1.06) drop
 .cr-del{position:absolute;top:2px;right:2px;border:0;background:#b33;color:#fff;border-radius:50%;width:20px;height:20px;cursor:pointer;font-size:11px;line-height:20px;padding:0}
 @media (max-width:640px){.cr-gamegrid{grid-template-columns:1fr}.cr-pic{margin:0 auto}}
 .creator label.cr-up{display:inline-flex!important;grid-template-columns:none!important;align-items:center}
+/* v48 bigger day flip with the week and day */
+#dayflip img{width:160px!important;height:160px!important}
+#dayflip b{font-size:46px!important}
+#dayflip small{font:700 22px var(--f-display);color:#ffe9a6;text-shadow:0 2px 0 #000;letter-spacing:.06em}
+#dayflip.go b{animation:dfPop 1.5s ease}
+@keyframes dfPop{0%{transform:scale(.6);opacity:0}25%{transform:scale(1.12);opacity:1}40%{transform:scale(1)}100%{transform:scale(1)}}
+.trchip img{width:22px;height:22px;margin-right:4px;vertical-align:-5px}
+/* v48 mines panel: centred cards per kind, pictures stacked */
+.mgrps{display:flex;flex-wrap:wrap;justify-content:center;gap:14px;margin-top:10px}
+.mgrp{width:250px;display:grid;justify-items:center;gap:4px;background:rgba(255,250,232,.7);border:2px solid var(--rule,#b89a5a);border-radius:10px;padding:10px;text-align:center}
+.mgrp h4{margin:0;font:800 19px var(--f-display);color:#1b2f7a}.mgrp h4 b{color:#7a5a1e}
+.mstack{position:relative;width:150px;height:76px}
+.mstack span{position:absolute;left:calc(50% - 48px + var(--i)*12px);top:calc(var(--i)*-5px + 15px);z-index:calc(10 - var(--i));filter:drop-shadow(0 2px 2px rgba(0,0,0,.35))}
+.mstack .mpic{width:96px;height:48px;image-rendering:pixelated}.mstack .mres{width:44px;height:44px;margin-left:26px}
+.mtot{margin:0;font-weight:700;display:flex;align-items:center;gap:5px}.mtot img{width:20px;height:20px}
+.mlist{display:grid;gap:4px;width:100%}
+.mone{display:flex;align-items:center;justify-content:center;gap:6px;background:rgba(255,255,255,.55);border-radius:6px;padding:3px 6px;font-size:14px}
+.mone span{flex:1;text-align:left}.mone em{font-size:12px;color:#2c7a3a}
+/* taller mines button so the pickaxe shows */
+.minesbtn{height:auto!important;min-height:52px;flex-direction:column;gap:0!important;padding:2px 10px!important;line-height:1}
+.minesbtn .mb-ic{font-size:28px!important}.minesbtn b{font-size:15px}
