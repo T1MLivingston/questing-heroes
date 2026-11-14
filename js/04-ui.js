@@ -12,6 +12,7 @@ function renderUI(){
   applyTheme();
   $('#res').innerHTML=RES.map(k=>`<span class="${k}" title="${RESNAME[k]}"><img src="${iconURL('res',k,40)}" alt="${RESNAME[k]}">${fmt(S.res[k])}</span>`).join('');
   {const y=Object.fromEntries(RES.map(k=>[k,0]));y.gold=income();for(const o of S.objs)if(o.type==='mine'&&o.owned===ME())y[MINE[o.k].res]+=mineOut(o);if(!S.town.taken){if(facSpecial('amberDay'))y.amber+=1;if(facSpecial('oreDay'))y.ore+=2;}
+    {const qh=$('#qHeroes');if(qh&&!$('#bMarket')){const mk=document.createElement('button');mk.className='btn mktbtn';mk.id='bMarket';mk.title='Market: buy and sell goods';mk.innerHTML='⚖ Market';mk.onclick=()=>{if(!S||moving||modalOpen)return;openMarket();};qh.after(mk);}}
     {const acts=document.querySelector('.topbar .acts')||$('#bMenu').parentNode;let mb=$('#bMines');if(!mb&&acts){mb=document.createElement('button');mb.className='btn icon minesbtn';mb.id='bMines';mb.title='Your mines';mb.onclick=()=>{if(!S||moving||modalOpen)return;openMines();};acts.insertBefore(mb,acts.firstChild);}
       if(mb){const n=S.objs.filter(o=>o.type==='mine'&&o.owned===ME()).length;mb.innerHTML=`<span class="mb-ic">⛏</span><b>${n}</b>`;}}
     $('#yield').innerHTML=`<small>per day</small>${RES.map(k=>y[k]?`<span><img src="${iconURL('res',k,32)}" alt="${RESNAME[k]}">+${fmt(y[k])}</span>`:'').join('')}`;}
@@ -102,6 +103,11 @@ async function dismissHero(h){if(S.heroes.length<2)return;
   if(tw){tw.garrison=tw.garrison||[];for(const s of h.army){const ex=tw.garrison.find(x=>x.k===s.k);if(ex)ex.n+=s.n;else if(tw.garrison.length<7)tw.garrison.push({k:s.k,n:s.n});}}
   const i=S.heroes.indexOf(h);S.heroes.splice(i,1);S.cur=Math.min(S.cur>i?S.cur-1:S.cur,S.heroes.length-1);if(S.cur<0)S.cur=0;
   toast(`${h.name} has left your company.`);selectHero(S.cur);renderUI();save();}
+/* v50: the Market button (command bar and mines panel): opens the market of the town your hero stands in, else your home, else any town with one */
+function openMarket(){const h=HERO(),ts=allTowns().filter(t=>!t.taken),withM=ts.filter(t=>t.built&&t.built.market);
+  const t=withM.find(t=>t.x===h.x&&t.y===h.y)||withM.find(t=>t===S.town)||withM[0];
+  if(!t){toast('Build a Barter Yard in one of your towns to trade.');openTown(null,'build');return;}
+  openTown(t===S.town?null:t,'market');}
 /* v46: every mine you hold in one place, opened from the ⛏ button in the top bar */
 function openMines(){const ms=()=>S.objs.filter(o=>o.type==='mine'&&o.owned===ME());
   const tot=()=>{const t={};for(const o of ms()){const r=MINE[o.k].res;t[r]=(t[r]||0)+mineOut(o);}return t;};
@@ -111,11 +117,11 @@ function openMines(){const ms=()=>S.objs.filter(o=>o.type==='mine'&&o.owned===ME
     const cards=Object.keys(MINE).filter(k=>by[k]).map(k=>{const list=by[k].sort((a,b)=>(b.lvl||1)-(a.lvl||1)),out=list.reduce((a,o)=>a+mineOut(o),0),m=MINE[k];
       return`<div class="mgrp"><div class="mstack">${list.slice(0,4).map((o,i)=>`<span style="--i:${i}">${pic(k)}</span>`).join('')}</div>
         <h4>${m.name} <b>×${list.length}</b></h4><p class="mtot"><img src="${iconURL('res',m.res,32)}" alt="">+${fmt(out)} ${RESNAME[m.res].toLowerCase()} a day</p>
-        <div class="mlist">${list.map(o=>{const lv=o.lvl||1,c=MINE_UP[lv];return`<div class="mone"><span>Level ${lv} · +${fmt(mineOut(o))}</span>${lv<3?`<button class="btn sm" data-mineup="${o.id}" ${canAfford(c)?'':'disabled'} title="${Object.entries(c).map(([r,v])=>fmt(v)+' '+RESNAME[r].toLowerCase()).join(', ')}">Upgrade</button>`:'<em>max</em>'}<button class="btn sm" data-minego="${o.id}" title="Show on map">📍</button></div>`;}).join('')}</div></div>`;}).join('');
-    return`<div class="minesum">${Object.keys(t).length?RES.filter(k=>t[k]).map(k=>`<span><img src="${iconURL('res',k,32)}" alt="">+${fmt(t[k])} ${RESNAME[k].toLowerCase()} a day</span>`).join(''):'<span class="muted">No mines yet. Walk onto a mine on the map to claim it.</span>'}</div><div class="mgrps">${cards}</div>`;};
+        <div class="mlist">${list.map(o=>{const lv=o.lvl||1,c=MINE_UP[lv];return`<div class="mone"><span>Level ${lv} · +${fmt(mineOut(o))}</span>${lv<3?`<span class="mcost">to level ${lv+1}: ${costHTML(c,S.res)}</span><button class="btn sm" data-mineup="${o.id}" ${canAfford(c)?'':'disabled'}>Upgrade</button>`:'<em>top level</em>'}</div>`;}).join('')}</div></div>`;}).join('');
+    return`<div class="minesum">${Object.keys(t).length?RES.filter(k=>t[k]).map(k=>`<span><img src="${iconURL('res',k,32)}" alt="">+${fmt(t[k])} ${RESNAME[k].toLowerCase()} a day</span>`).join(''):'<span class="muted">No mines yet. Walk onto a mine on the map to claim it.</span>'}</div><div class="mgrps">${cards}</div><p class="mmarket"><button class="btn" data-mmarket="1">⚖ Market: trade goods</button></p>`;};
   showModal({title:`⛏ Your mines (${ms().length})`,body:body(),wide:true,top:true,buttons:[{label:'Close',value:1,primary:true}],dismiss:1});
   const b=$('#modal').querySelector('.body');
-  b.addEventListener('click',e=>{const el=e.target.closest('[data-mineup],[data-minego]');if(!el)return;
+  b.addEventListener('click',e=>{if(e.target.closest('[data-mmarket]')){$('#modal')._close(null);setTimeout(openMarket,0);return;}const el=e.target.closest('[data-mineup],[data-minego]');if(!el)return;
     if(el.dataset.mineup){const o=S.objs.find(q=>q.id===+el.dataset.mineup);if(!o||(o.lvl||1)>=3)return;const c=MINE_UP[o.lvl||1];if(!canAfford(c))return;pay(c);o.lvl=(o.lvl||1)+1;toast(`${MINE[o.k].name} upgraded to level ${o.lvl}.`);b.innerHTML=body();renderUI();save();}
     else{const o=S.objs.find(q=>q.id===+el.dataset.minego);if(o){$('#modal')._close(null);centerOn(o.x,o.y);}}});}
 function viewSpellbook(){const h=HERO();

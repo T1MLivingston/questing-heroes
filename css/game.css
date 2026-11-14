@@ -1113,3 +1113,13 @@ img.upg{filter:sepia(.55) saturate(1.9) hue-rotate(-12deg) brightness(1.06) drop
 .bcard.cant:hover{opacity:.85;filter:none}
 .bcard.sugg{border:3px solid #1f4fd1!important;box-shadow:0 0 0 2px #1f4fd1,0 0 16px rgba(31,79,209,.5)!important}
 .bcard.sugg .ribbon{background:#1f4fd1!important;color:#fff!important}
+/* v50 market button, mine costs, haggling, 16 heroes per banner */
+.mktbtn{margin-left:8px;font:800 17px var(--f-display)!important;min-height:48px}
+.mone{flex-wrap:wrap}.mcost{display:inline-flex;align-items:center;gap:3px;font-size:12px;width:100%;justify-content:flex-start;order:3}.mcost .cost,.mcost span{font-size:12px}
+.mmarket{text-align:center;margin:12px 0 0}
+.haggle{margin:0 0 8px;padding:6px 10px;background:#e8f3e0;border:1px solid #7ab06a;border-radius:8px;font-size:15px}
+.fc-heroes{gap:3px!important}.fc-heroes b{font-size:10px!important;padding:6px 1px 1px!important}
+/* v50b: 4 rows of 4 fit each banner card: tile size follows the window height; the ability line moves to Details */
+.bannersheet:not(.det) .fc-mech{display:none}
+.fc-heroes{grid-template-columns:repeat(4,min(calc((100vh - 370px)/8),calc(25% - 3px)))!important;justify-content:center}
+.mmarket{display:flex;justify-content:center;width:100%}

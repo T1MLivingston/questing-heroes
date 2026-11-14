@@ -397,6 +397,10 @@ function addCustomHero(c){if(!cuValid(c))return null;if(HBY[c.id])return HBY[c.i
   const r=hash(h.id);h.st=h.st.map(v=>v+1);const main=h.type==='Might'?(h.st[0]>=h.st[1]?0:1):(h.st[2]>=h.st[3]?2:3);h.st[main]+=1+(r%2);h.st[(r>>>3)%4]+=1;
   HEROES.push(h);HBY[h.id]=h;return h;}
 function removeCustomHero(id){const i=HEROES.findIndex(h=>h.id===id&&h.custom);if(i>=0)HEROES.splice(i,1);}
+/* v50: each banner offers up to 16 heroes in the pickers (4 rows of 4): its eight picks, then student heroes, then its tavern wanderers */
+const BANNER_MAX=16;
+function bannerHeroes(fac){const own=HEROES.filter(h=>h.fac===fac&&!h.rogue&&!h.custom);
+  return[...own.filter(h=>!h.tav),...own.filter(h=>h.tav&&h.student),...own.filter(h=>h.tav&&!h.student)].slice(0,BANNER_MAX);}
 const loadClass=()=>{try{const a=JSON.parse(localStorage.getItem(CU_KEY));return Array.isArray(a)?a:[];}catch(e){return [];}};
 const storeClass=a=>{try{localStorage.setItem(CU_KEY,JSON.stringify(a));return true;}catch(e){return false;}};
 loadClass().forEach(c=>{try{addCustomHero(c);}catch(e){}});

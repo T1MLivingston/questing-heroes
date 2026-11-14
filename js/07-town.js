@@ -100,7 +100,9 @@ function maxAfford(k){const c1=unitCost(k,1);let m=Math.floor(S.res.gold/Math.ma
 const PRICE={timber:[100,400],ore:[100,400],amber:[250,900],gems:[300,1100],moonwater:[300,1100]};
 /* market pressure (v30): each unit bought this week raises that good's price 12%, each sold lowers it 8%; each alchemy batch this week costs 100 more gold */
 function mkt(){if(!S.mkt||S.mkt.week!==weekNo())S.mkt={week:weekNo(),b:{},s:{},a:{}};return S.mkt;}
-const buyPrice=k=>Math.round(PRICE[k][1]*(1+0.12*(mkt().b[k]||0))),sellPrice=k=>Math.max(Math.round(PRICE[k][0]*0.4),Math.round(PRICE[k][0]*(1-0.08*(mkt().s[k]||0))));
+/* v50 Easter egg: a hero standing in one of your towns haggles: 10% off when buying, 15% more when selling */
+const haggler=()=>{const h=HERO();return h&&allTowns().some(t=>t.x===h.x&&t.y===h.y&&!t.taken)?h:null;};
+const buyPrice=k=>Math.round(PRICE[k][1]*(1+0.12*(mkt().b[k]||0))*(haggler()?0.9:1)),sellPrice=k=>Math.round(Math.max(Math.round(PRICE[k][0]*0.4),Math.round(PRICE[k][0]*(1-0.08*(mkt().s[k]||0))))*(haggler()?1.15:1));
 const alchCost=id=>({...ALCHEMY[id].cost,gold:ALCHEMY[id].cost.gold+100*(mkt().a[id]||0)});
 const ALCHEMY={gem:{name:'Cut a gem',cost:{gold:250,ore:3},out:'gems'},moon:{name:'Distil moonwater',cost:{gold:250,amber:2},out:'moonwater'}};
 const anyStill=()=>allTowns().some(q=>q.built&&q.built.still);
@@ -185,7 +187,7 @@ function townHTML(){
       return unitCard(a.k+'_u',{n:a.n,head:`${U[a.k].pl} → ${U[a.k+'_u'].pl}`,cls:canAfford(c)?'sugg':'',foot:`<div class="cost">${costHTML(c,S.res)}</div><div><button class="btn sm${canAfford(c)?' primary':''}" data-upg="${i}" ${canAfford(c)?'':'disabled'}>Upgrade</button></div>`});}).join(''):'';
     body=upg?`<div class="ugrid">${upg}</div>`:`<p class="muted">${here?`Nothing to upgrade. Build a dwelling upgrade on the Build tab, then upgrade ${h.name}'s troops here.`:'A hero must be in town to upgrade troops.'}</p>`;
   }else if(townTab==='market'){
-    body=t.built.market?`<div class="grid">${RES.filter(k=>k!=='gold').map(k=>{const sell=sellPrice(k),buy=buyPrice(k);
+    body=t.built.market?`${haggler()?`<p class="haggle">🤝 <b>${esc(haggler().name)}</b> is in town and haggles with the traders: 10% off what you buy, 15% more for what you sell.</p>`:''}<div class="grid">${RES.filter(k=>k!=='gold').map(k=>{const sell=sellPrice(k),buy=buyPrice(k);
       return`<div class="bcard"><h4><img src="${iconURL('res',k,32)}" alt="" style="width:18px;vertical-align:-3px"> ${RESNAME[k]} · you have ${S.res[k]}</h4><p>Sell for ${sell} gold each, buy for ${buy}.</p>
         <div class="rctl"><button class="btn sm" data-sell="${k}" data-n="1" ${S.res[k]<1?'disabled':''}>Sell 1</button><button class="btn sm" data-sell="${k}" data-n="5" ${S.res[k]<5?'disabled':''}>Sell 5</button>
         <button class="btn sm" data-buy="${k}" data-n="1" ${S.res.gold<buy?'disabled':''}>Buy 1</button><button class="btn sm" data-buy="${k}" data-n="5" ${S.res.gold<buy*5?'disabled':''}>Buy 5</button></div></div>`;}).join('')}</div>${alchemyHTML()}${mineList()}`:`<div class="grid">${locked('The Barter Yard','market')}</div>`;
@@ -390,11 +392,11 @@ document.addEventListener('click',async e=>{
   if(rt){$('#modal')._close(1);await sleep(30);const n=await askName('Rename your town',TW().name);if(n){TW().name=n;save();}renderUI();openTown();}
   else if(!modalOpen&&!moving){const h=HERO(),n=await askName(`Rename ${esc(h.name)}`,h.name);if(n){h.name=n;save();}renderUI();}
 },true);
-async function openTown(tw){
+async function openTown(tw,tab){
   if(modalOpen||S.over)return;
   tw=tw&&tw!==S.town?tw:null;VT=tw;if(TOWN_SCREEN[TF()])artImg(TOWN_SCREEN[TF()].atlas);artImg(XB_ATLAS);artImg(WINGS_ATLAS);
   if(!tw&&S.town.taken){VT=null;toast(`${esc(TW().taken.name)} holds ${esc(TW().name)}. Defeat them at the gate to take it back.`);return;}
-  townTab=townAdvice().tab==='overview'?'overview':'overview';townFocus=null;
+  townTab=tab||'overview';townFocus=null;
   const p=showModal({title:`<img src="${iconURL('crest',TF(),52)}" alt="" style="width:44px;height:44px;vertical-align:-12px;margin-right:8px;image-rendering:pixelated"><span class="tname" data-rename-town="1" title="Double-click to rename">${esc(TW().name)}</span>`,body:townHTML(),wide:true,top:true,buttons:[...(nextTowns(tw).length?[{label:`Next town: ${esc(nextTowns(tw)[0].name)} ▸`,value:'next'}]:[]),{label:'Leave town ▸',value:1,primary:true}],dismiss:1});
   const m=$('#modal'),body=m.querySelector('.body');
   const go=(tab,id)=>{townTab=tab;townFocus=id||null;refresh();};

@@ -165,7 +165,7 @@ function stackCard(s){
   return`<h4><img class="${U[s.k]&&U[s.k].up?'upg':''}" src="${iconURL('unit',s.k,64)}" alt="">${s.n} ${s.u.pl}</h4><div class="scs">${sc('atk',s.u.atk,bA)}${sc('def',s.u.def,bD)}${sc('dmg',s.u.min+'–'+s.u.max)}${sc('hp',`${s.hp}/${s.u.hp}`)}${sc('spd',s.u.spd,bS)}${s.u.shots?sc('shots',s.shots):''}${mo?sc('morale',mo):''}${lu?sc('luck',lu):''}</div>
    <div class="muted">${s.u.desc}</div>${fl.length?`<div class="chips">${fl.map(x=>`<span class="chip team">${x}</span>`).join('')}</div>`:''}`;
 }
-function updateBattleUI(){
+function updateBattleUI(){{const fb=$('#bFlee');if(fb&&bt)fb.disabled=!bt.pending||bt.auto;}
   $('#btRound').textContent=`Round ${bt.round}${S.fac==='merfolk'&&bt.round%3===0?' · High Tide':''}`;
   $('#queue').innerHTML=orderPreview().slice(0,12).map(s=>`<div class="${s.side?'f':'a'}" title="${s.n} ${s.u.pl}"><img class="${U[s.k]&&U[s.k].up?'upg':''}" src="${iconURL('unit',s.k,64)}" alt=""></div>`).join('');
   const s=bt.active,mineTurn=s&&s.side===0&&!bt.auto&&bt.pending;
@@ -190,6 +190,7 @@ async function battleLoop(){
     if(s.skip>0){s.skip--;logB(`${nm(s)} are charmed and lose their turn.`);floatAt(s,'Charmed','#bfe8ff');await sleep(reduced?50:400);}
     else if(s.side===0&&sMorale(s)<0&&R()<-0.06*sMorale(s)){logB(`<b>Low morale!</b> ${nm(s)} falter and lose their turn.`);floatAt(s,'Falters','#e08a8a');await sleep(reduced?50:400);}
     else if(s.side===0&&!bt.auto)r=await playerTurn(s);else{await sleep(reduced?60:bt.auto?140:380);if(s.side===1){if(bt.towersDue){bt.towersDue=false;await towersFire();if(checkEnd())break;}if(!bt.eCast&&bt.enemyHero){bt.eCast=true;await enemyCast();if(checkEnd())break;}}await aiTurn(s);}
+    if(r==='flee'){await fleeBattle();return;}
     if(r!=='waited'){s.acted=true;s.stood=!s.movedTurn;s.movedLast=s.movedTurn;}
     bt.active=null;bt.targeting=null;
     if(checkEnd())break;
@@ -206,6 +207,7 @@ async function battleLoop(){
 async function playerTurn(s){
   while(true){
     const act=await new Promise(r=>{bt.pending=r;updateBattleUI();});bt.pending=null;updateBattleUI();
+    if(act.type==='flee')return'flee';
     if(act.type==='auto'){await aiTurn(s);return;}
     if(act.type==='wait'){if(!s.waited){s.waited=true;logB(`${nm(s)} wait.`);return'waited';}continue;}
     if(act.type==='defend'){s.defending=true;logB(`${nm(s)} brace their defense.`);return;}
@@ -465,4 +467,20 @@ btCv.addEventListener('contextmenu',e=>{if(bt&&bt.targeting){e.preventDefault();
 $('#bWait').onclick=()=>bt&&bt.pending&&bt.pending({type:'wait'});
 $('#bDefend').onclick=()=>bt&&bt.pending&&bt.pending({type:'defend'});
 $('#bSpell').onclick=openSpellbook;
+/* v50 Retreat: the hero escapes to your home town (or another town you hold) with half of each stack, and loses the rest of the day */
+const retreatTown=()=>[S.town,...myMajors()].find(t=>t&&!t.taken)||null;
+{const fb=document.createElement('button');fb.className='btn sm';fb.id='bFlee';fb.textContent='Retreat';fb.title='Flee home: lose half your army and the rest of the day';$('#bAuto').after(fb);
+  fb.onclick=async()=>{if(!bt||!bt.pending||bt.auto)return;const tw=retreatTown();if(!tw){toast('You hold no town to retreat to.');return;}
+    const v=await showModal({title:'Retreat?',body:`<p><b>${esc(HERO().name)}</b> flees the battle and rides back to <b>${esc(tw.name||'your town')}</b>.</p><p>Half of every stack is lost in the escape, and ${esc(HERO().name)} can't move again today.</p>`,buttons:[{label:'Keep fighting',value:0},{label:'Retreat',value:1,primary:true}],dismiss:0});
+    if(v&&bt&&bt.pending)bt.pending({type:'flee'});};}
+async function fleeBattle(){const h=HERO(),o=bt.obj,rv=o.type==='rival'?o.rival:null,tw=retreatTown();
+  const army=[],lostL=[];for(const s of bt.stacks.filter(s=>s.side===0).sort((a,b)=>a.slot-b.slot)){const keep=s.alive?Math.floor(s.n/2):0;const gone=s.n0-keep;if(gone>0)lostL.push(`<li>${gone} ${U[s.k].pl}</li>`);
+    if(keep<1)continue;const ex=army.find(a=>a.k===s.k);if(ex)ex.n+=keep;else if(army.length<7)army.push({k:s.k,n:keep});}
+  const surv=[];for(const s of bt.stacks.filter(s=>s.side===1&&s.alive)){const ex=surv.find(a=>a.k===s.k);if(ex)ex.n+=s.n;else surv.push({k:s.k,n:s.n});}
+  if(rv)rv.army=surv;else if(o.type==='spire'||o.type==='camp')o.garrison=surv;else{const n=surv.reduce((a,x)=>a+x.n,0);if(n)o.n=n;}
+  if(!S.players)stats().lost++;
+  await showModal({title:'Retreat',body:`<p>${esc(h.name)} escapes to <b>${esc(tw.name||'your town')}</b> with what is left of the army.</p><div class="casualties"><div><div class="label">Lost in the escape</div><ul>${lostL.join('')||'<li class="muted">None</li>'}</ul></div></div>`,buttons:[{label:'Continue',value:1,primary:true}]});
+  h.army=army;h.x=tw.x;h.y=tw.y;h.mp=0;delete h.route;
+  const res=bt.resolve;$('#battle').hidden=true;bt=null;$('#btCard').innerHTML='';
+  heroDraw.x=h.x;heroDraw.y=h.y;path=null;reveal(h.x,h.y,vision());centerOn(h.x,h.y,true);renderUI();save();res(false);}
 $('#bAuto').onclick=()=>{if(!bt)return;bt.auto=!bt.auto;if(bt.auto&&bt.pending)bt.pending({type:'auto'});updateBattleUI();};

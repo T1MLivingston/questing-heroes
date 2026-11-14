@@ -223,6 +223,13 @@ Everything lives in one object, `S`, so it can be saved as JSON:
 - New ability hooks (player side only): `forgePlus` (extra Great Forge attack), `armyDef` (whole army defense), `rangedPct` (shooter damage), `halfCost` (one spell at half mana), `manaCut` (all spells cheaper), `squallPct`, `weakenPct`.
 - Raised: Ivan (Forge half ore, +1 more attack), Oliver (30% cheaper rough ground, +5% movement), Shadow (harvest 20%), Sheila (Squall +30%), Grimes and Griffiths (+1 speed to their troop). Made distinct: Veyra, Gliss, Silka, Murmur, Boone, Mossback, Aster, Nessa Holt. Trimmed: Schmickle and Quillby to +200 gold a day. Battaglia is a Might hero.
 
+### v50 market, retreat, 16 heroes per banner
+
+- Banner pickers show up to 16 heroes (`bannerHeroes(fac)`, `BANNER_MAX`): the eight picks, then student heroes, then tavern wanderers; banner cards are 4 × 4 (tile size follows the window height, `.fc-mech` hidden on the cards, empty spots "Coming soon"), and the hero picker, Details page and rivals' first heroes use the same list.
+- Market: a ⚖ Market button in the command bar (after the hero icons, injected by `renderUI`) and in the mines panel opens `openMarket()` (the market of the town the hero stands in, else home, else any with a Barter Yard; with none it opens the Build tab). `openTown(tw, tab)` opens on a tab. Easter egg: a hero standing in one of your towns haggles (`haggler()`): buying costs 10% less and selling pays 15% more, with a note in the market.
+- Mines panel: each mine shows the cost of its next level beside Upgrade; the map pin is gone.
+- Retreat (battle button `#bFlee`, on your turn): the hero escapes to your home town (or another town you hold, `retreatTown`) with half of each stack, ends the day there (`mp` 0), and the enemy keeps its survivors (`fleeBattle`; counts as a loss in the stats).
+
 ### v49 setup and build tab polish
 
 - Renamed student heroes: Lord Krishna → Larishna, Catherine → Katherine, Rosie → Rousie (`OLD_NAMES`).
