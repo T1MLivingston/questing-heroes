@@ -223,6 +223,11 @@ Everything lives in one object, `S`, so it can be saved as JSON:
 - New ability hooks (player side only): `forgePlus` (extra Great Forge attack), `armyDef` (whole army defense), `rangedPct` (shooter damage), `halfCost` (one spell at half mana), `manaCut` (all spells cheaper), `squallPct`, `weakenPct`.
 - Raised: Ivan (Forge half ore, +1 more attack), Oliver (30% cheaper rough ground, +5% movement), Shadow (harvest 20%), Sheila (Squall +30%), Grimes and Griffiths (+1 speed to their troop). Made distinct: Veyra, Gliss, Silka, Murmur, Boone, Mossback, Aster, Nessa Holt. Trimmed: Schmickle and Quillby to +200 gold a day. Battaglia is a Might hero.
 
+### v59 Hero Book
+
+- Title screen: **📖 Hero Book** between Create a hero and Hall of Fame (`openHeroBook` in `13-boot.js`). It shows every hero who isn't retired (136, plus class heroes on this browser) as cards: portrait on the banner colour, name, crest, Might or Magic, the four stats as coloured dots, and the short ability. Filters: banner (all or one of 8), Might / Magic, group (`hbGroup`: banner picks, tavern heroes and rogues, student heroes, class heroes), and a search over names and ability text. State lives in `HB`; clicking a card opens a details view (`hbDetail`: big portrait, stats, ability, skills, artifact, spells, story).
+- **📷 Save as picture** (`hbSave`) draws the filtered heroes onto a canvas (up to 8 a row, with a title and the filter line) and downloads it as `hero-book-<filters>.jpg`. Opened from disk (`file://`), the browser blocks this and a toast explains.
+
 ### v58 kid-friendly tavern
 
 - No beer mugs: the Tavern tile and Roadside Inn use 🏡, **Buy a round** is now **🔔 Ring the bell: new faces** (same 250 gold re-roll), and the Pirates' horde building is the **Galley Hall** (was Grog Hall). The tavern art itself shows barrels and a sign only.
