@@ -33,7 +33,9 @@ mapCv.addEventListener('pointerup',e=>{
   const hi=heroIdxAt(x,y);if(hi>=0&&hi!==S.cur){if(Math.max(Math.abs(x-HERO().x),Math.abs(y-HERO().y))<=1&&!(x===S.town.x&&y===S.town.y&&HERO().x===x&&HERO().y===y)){openTrade(hi);return;}
     const o2=S.heroes[hi],rt=HERO().route;if(path&&rt&&rt.meet===o2.id){walk();return;}const mp=meetPath(hi);if(!mp){toast(`No route to ${o2.name}. Select them with their portrait above the map.`);return;}setPath(mp,o2.id);return;}
   if(path&&path.length&&path[path.length-1].x===x&&path[path.length-1].y===y){walk();return;}
-  const p=planTo(x,y);if(!p){setPath(null);if(S.explored[idx(x,y)])toast(tileAt(x,y)===T.LAKE&&!HERO().boat?'You need a boat to sail there. Buy one at a dock.':'No route leads there.');return;}setPath(p);
+  const p=planTo(x,y);if(!p){const bw=S.explored[idx(x,y)]&&blockerOnWay(x,y);
+    if(bw){setPath(bw.p);const who=bw.rv?bw.rv.name:bw.o.type==='spire'?'An enemy spire':bw.o.type==='camp'?'A defended camp':bw.o.type==='relic'?RELICS[bw.o.r].lair:`${bw.o.guard?'A guard of ':''}${U[bw.o.k].pl}`;toast(`${who} ${bw.o&&bw.o.type==='relic'?'is':'blocks'} the way. Click again to march up and fight, then the road is open.`);return;}
+    setPath(null);if(S.explored[idx(x,y)])toast(tileAt(x,y)===T.LAKE&&!HERO().boat?'You need a boat to sail there. Buy one at a dock.':'No route leads there.');return;}setPath(p);
 });
 mapCv.addEventListener('pointercancel',()=>{drag=null;});
 /* double-click your town on the map to open it */

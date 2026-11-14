@@ -223,6 +223,11 @@ Everything lives in one object, `S`, so it can be saved as JSON:
 - New ability hooks (player side only): `forgePlus` (extra Great Forge attack), `armyDef` (whole army defense), `rangedPct` (shooter damage), `halfCost` (one spell at half mana), `manaCut` (all spells cheaper), `squallPct`, `weakenPct`.
 - Raised: Ivan (Forge half ore, +1 more attack), Oliver (30% cheaper rough ground, +5% movement), Shadow (harvest 20%), Sheila (Squall +30%), Grimes and Griffiths (+1 speed to their troop). Made distinct: Veyra, Gliss, Silka, Murmur, Boone, Mossback, Aster, Nessa Holt. Trimmed: Schmickle and Quillby to +200 gold a day. Battaglia is a Might hero.
 
+### v57 blocked roads
+
+- Fixed a v54 crash: `planTo`'s cost callback added the land/sea penalty to a `const`, so any route a hero with a boat planned across a shore threw and the click did nothing (heroes looked stuck). It is `let c` now.
+- `planTo(x,y,thru)`: with `thru`, guards, lairs, enemy spires and camps, and rivals cost +4000 instead of blocking. `blockerOnWay(x,y)` uses it when a click has no route: the path goes up to the first one in the way (for example the troll on a guarded Four Rivers bridge) with a toast saying it blocks the way; click again to march up and fight.
+
 ### v56 recruit plan
 
 - Recruit tab: `recruitPlan(t)` works out what Recruit all buys with the money you have, strongest dwelling first (the button now follows the same plan). Hovering the button shows the plan in a dark tooltip (`.rtip`): each troop as "n of available", red with the extra gold needed when you can't take them all, and the total. The button reads **Recruit what I can afford** when the plan can't take everyone.

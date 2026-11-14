@@ -1212,18 +1212,25 @@ function drawMap(){
   if(S.tut&&typeof tutDraw==='function')tutDraw(c);
   c.restore();
 }
-function planTo(x,y){
+function planTo(x,y,thru){
   if(!S.explored[idx(x,y)])return null;
   if(townFoot(x,y)){x=S.town.x;y=S.town.y;}
   const Z=zocFor(ME());
   return astar(HERO().x,HERO().y,x,y,(nx,ny,goal,fx0,fy0)=>{
-    const i=idx(nx,ny);if(!S.explored[i]||townFoot(nx,ny))return Infinity;if(Z.has(i)&&!goal)return Infinity;const c=terrainCost(nx,ny);if(!isFinite(c))return Infinity;
-    const o=objAt(nx,ny);if(o&&(o.type==='neutral'||o.type==='relic'||spireFoe(o))&&!goal)return Infinity;
+    const i=idx(nx,ny);if(!S.explored[i]||townFoot(nx,ny))return Infinity;if(Z.has(i)&&!goal)return Infinity;let c=terrainCost(nx,ny);if(!isFinite(c))return Infinity;
+    const o=objAt(nx,ny);if(o&&(o.type==='neutral'||o.type==='relic'||spireFoe(o))&&!goal){if(!thru)return Infinity;c+=4000;}
     if(o&&o.type==='town'&&!townData(o).mine)return Infinity;
-    if(rivalAt(nx,ny)&&!goal)return Infinity;
+    if(rivalAt(nx,ny)&&!goal){if(!thru)return Infinity;c+=4000;}
     const hi=heroIdxAt(nx,ny);if(hi>=0&&hi!==S.cur&&!(nx===S.town.x&&ny===S.town.y))return Infinity;
     if(fx0!==undefined&&HERO().boat&&FAC[S.fac].travel!=='swim'&&(tileAt(fx0,fy0)===T.LAKE)!==(tileAt(nx,ny)===T.LAKE))c+=1500;/* v54: boarding or landing ends the day, so the route only uses the sea when it really saves time */
     return c;});
+}
+/* v57: when nothing leads there, find the first guard (or rival) standing in the way, so a click past a guarded bridge walks up to the guard */
+function blockerOnWay(x,y){
+  const p=planTo(x,y,true);if(!p)return null;
+  for(let i=0;i<p.length-1;i++){const s=p[i],o=objAt(s.x,s.y),rv=rivalAt(s.x,s.y);
+    if(o&&(o.type==='neutral'||o.type==='relic'||spireFoe(o))||rv){const q=planTo(s.x,s.y);return q&&q.length?{p:q,o,rv}:null;}}
+  return null;
 }
 
 /* -------- map info -------- */
