@@ -1139,3 +1139,16 @@ img.upg{filter:sepia(.55) saturate(1.9) hue-rotate(-12deg) brightness(1.06) drop
 .sheetgrid3 .eqi b{font-size:12.5px!important;line-height:1.1;overflow-wrap:anywhere}
 .sheetgrid3 .eqi small{font-size:11px!important;line-height:1.15;overflow-wrap:anywhere}
 .pack .eqi{max-width:150px}
+/* v54: mines button wide, pickaxe with the count on its right */
+.minesbtn{flex-direction:row!important;min-height:0!important;height:auto!important;gap:6px!important;padding:4px 12px!important}
+.minesbtn .mb-ic{font-size:26px!important}.minesbtn b{font-size:20px!important}
+/* the spellbook tile in the army grid stays centred */
+#army .booktile img{width:34px!important;height:34px!important;object-fit:contain}
+#army .booktile{gap:2px;align-content:center;justify-items:center}
+/* start spot markers on the chosen map */
+.spotmk{position:absolute;transform:translate(-50%,-50%);width:16px;height:16px;border-radius:50%;border:2px solid #fff;background:rgba(31,79,209,.55);cursor:pointer;z-index:3;font-style:normal;display:grid;place-items:center;font-size:12px;color:#fff;box-shadow:0 0 0 2px rgba(0,0,0,.35)}
+.spotmk:hover{background:#1f4fd1}
+.spotmk.on{width:26px;height:26px;background:#ffd24a;color:#1b2f7a;border-color:#1b2f7a;font-size:16px;animation:spotPulse 1.4s ease-in-out infinite}
+@keyframes spotPulse{50%{box-shadow:0 0 0 6px rgba(255,210,74,.35)}}
+.startrow{align-items:center;gap:8px}.startrow .stname{min-width:110px;text-align:center;font:800 16px var(--f-display);color:#1b2f7a}
+.mapc.on .mimg{cursor:crosshair}

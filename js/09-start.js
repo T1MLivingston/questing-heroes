@@ -1,10 +1,13 @@
 'use strict';
 /* ================= START: map setup, faction and hero pickers ================= */
 /* draw a small overview of a generated map; the preview uses sample banners, so real games differ in the details */
+const MAP_SPOTS={};
 function mapPreviewURL(type,size,seed,nr){
   const sz=MAP_SIZES[size],oW=W,oH=H;W=sz.W;H=sz.H;
   const rv=['pirates','wizards','necro','elves','dwarves'].slice(0,nr??sz.rivals);
   const w=genMap(seed,{type,fac:'rangers',rivals:rv});
+  /* v54: remember the home spots (yours first, then the rivals') so Choose your game can let you pick where to start */
+  MAP_SPOTS[[type,size,seed,rv.length].join('|')]=[w.town,...w.rivalSpots].map(p=>({x:(p.x+0.5)/W,y:(p.y+0.5)/H}));
   const url=drawPreview(w);W=oW;H=oH;return url;
 }
 function drawPreview(w){
@@ -33,9 +36,11 @@ const seedPick=(seed,salt,w)=>{let r=((seed^salt)*2654435761>>>0)/4294967296*w.r
 const REC_SIZE={1:'small',2:'medium',3:'large',4:'large',5:'xl',6:'xl'};
 async function pickMap(opt={}){
   const mine=loadMaps().filter(m=>m.objs.some(o=>o.type==='town')&&m.objs.filter(o=>o.type==='relic').length>=7);
-  let tut=typeof tutSeen==='function'?!tutSeen():false,type=opt.custom?'custom:'+opt.custom:'wheel',size=tut?'xl':'large',seed=(Math.random()*1e9)|0,mode='conquest',np=2,diff='normal',nr=3,nm='r',no='r',art=false,tr='d';
+  let tut=typeof tutSeen==='function'?!tutSeen():false,type=opt.custom?'custom:'+opt.custom:'wheel',size=tut?'xl':'large',seed=(Math.random()*1e9)|0,mode='conquest',np=2,diff='normal',nr=3,nm='r',no='r',art=false,tr='d',st=0;
   const NR=()=>nr??MAP_SIZES[size].rivals,NM=()=>nm==='r'?seedPick(seed,0x5bd1,TOWN_W):nm??MAP_SIZES[size].majors,NO=()=>no==='r'?seedPick(seed,0x1f3a,OUT_W):no,OUTW=['Few','Some','Many'];
   const maxR=()=>type==='rivers'?4:6;
+  const spotsOf=k=>MAP_SPOTS[[k,size,seed,Math.min(k==='rivers'?4:6,NR())].join('|')]||[];
+  const spotMarks=k=>{const sp=spotsOf(k);if(st>=sp.length)st=0;return sp.map((p,i)=>`<i class="spotmk${i===st?' on':''}" data-spot="${i}" style="left:${(p.x*100).toFixed(1)}%;top:${(p.y*100).toFixed(1)}%" title="${i===st?'You start here':'Start here'}">${i===st?'★':''}</i>`).join('');};
   const html=()=>`<div class="gm-top"><div class="diffs" role="group" aria-label="Difficulty"><span class="label">Difficulty</span>${Object.entries(DIFF).map(([k,d])=>`<button class="dchip bare${k===diff?' on':''}" data-diff="${k}" title="${d.desc}">${ico('difficulty_'+k,40)}${d.name}</button>`).join('')}</div><button class="dchip bare tutchip${tut?' on':''}" data-tut="1" title="A guide walks you through your first week: building, recruiting, mines, a second hero and your first fight. Suggested: an Extra large map with a banner you like.">📘 Tutorial${tut?': on':': off'}</button></div>
     <h3 class="gsec">Game mode</h3>
     <div class="modes4 modes3">${Object.entries(MODES).filter(([k])=>k!=='grail').map(([k,m])=>`<button class="mode${k===mode?' on':''}" data-mode="${k}" title="${m.desc}">${ico({relic:'relic_hunt',conquest:'conquest',multi:'multiplayer'}[k],64)}<b>${m.name}</b><span>${MODE_SHORT[k]}</span></button>`).join('')}</div>
@@ -47,18 +52,24 @@ async function pickMap(opt={}){
     <h3 class="gsec">Map</h3>
     <div class="maprow">${Object.entries(MAP_SIZES).map(([k,z])=>`<button class="dchip${k===size?' on':''}${k===REC_SIZE[mode==='multi'?np-1:NR()]?' rec':''}" data-size="${k}" title="${z.W}×${z.H} tiles · ${Math.round(z.limit/28)} months${k===REC_SIZE[mode==='multi'?np-1:NR()]?' · recommended':''}">${ico({small:'map_small',medium:'map_medium',large:'map_large',xl:'map_extra_large'}[k],28)}${z.label}${k===REC_SIZE[mode==='multi'?np-1:NR()]?' ★':''}</button>`).join('')}<button class="dchip" data-reroll="1" title="Roll a new layout">${ico('new_layout',28)}New layout</button><button class="dchip" data-mkmap="1" title="Open the map editor">${ico('map_editor',28)}Make your own map</button>
       <span class="muted msize">${MAP_SIZES[size].W}×${MAP_SIZES[size].H} · ${Math.round(MAP_SIZES[size].limit/28)} months</span></div>
-    <div class="maps4">${Object.entries(MAP_TYPES).map(([k,m])=>`<button class="mapc${k===type?' on':''}" data-map="${k}" title="${m.desc}"><span class="mimg"><img class="mprev" src="${mapPreviewURL(k,size,seed,Math.min(k==='rivers'?4:6,mode==='multi'?np-1:NR()))}" alt="Preview of ${m.name}"><span class="mdesc">${m.desc}</span></span><b>${m.name}</b><small class="mbio">${biomeOf(seed).name}</small></button>`).join('')}</div>
+    <div class="maps4">${Object.entries(MAP_TYPES).map(([k,m])=>`<button class="mapc${k===type?' on':''}" data-map="${k}" title="${m.desc}"><span class="mimg"><img class="mprev" src="${mapPreviewURL(k,size,seed,Math.min(k==='rivers'?4:6,mode==='multi'?np-1:NR()))}" alt="Preview of ${m.name}">${k===type&&mode!=='multi'?spotMarks(k):''}<span class="mdesc">${m.desc}</span></span><b>${m.name}</b><small class="mbio">${biomeOf(seed).name}</small></button>`).join('')}</div>
+    ${mode!=='multi'&&!type.startsWith('custom:')?`<div class="maprow startrow"><span class="label" title="Pick where your town starts: use the arrows or click a spot on the map picture">Start</span><button class="dchip" data-st="-1" aria-label="Previous start spot">◀</button><b class="stname">${st===0?'Default spot':'Spot '+(st+1)}</b><button class="dchip" data-st="1" aria-label="Next start spot">▶</button><span class="muted">or click a spot on the map picture</span></div>`:''}
     ${mine.length?`<div class="maprow mine"><span class="label">Your maps</span>${mine.map(m=>`<button class="dchip mmap${type==='custom:'+m.id?' on':''}" data-map="custom:${m.id}" title="${esc(m.name)} · ${m.W}×${m.H}"><img src="${customPreviewURL(m)}" alt="">${esc(m.name)}</button>`).join('')}</div>`:''}
     <div class="legend">${[['town','Your town'],['banner_blank_2','Rivals'],['relic_hunt','Relics'],['glass_lair','Glass Lair'],['guards','Guards'],['portal','Portals'],['spire','Spires'],['dock','Docks'],['outpost','Outposts']].map(([i,t])=>`<span>${ico(i,24)}${t}</span>`).join('')}</div>`;
   const p=showModal({title:'Choose your game',body:html(),wide:true,top:true,buttons:[{label:`${ico('back',24)}Back`,value:null},{label:`Next: choose banners${ico('next',24)}`,value:'go',primary:true}],dismiss:null});
   const body=$('#modal').querySelector('.body');
-  body.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+  body.addEventListener('click',e=>{
+    const mk=e.target.closest('[data-spot]');if(mk){e.preventDefault();e.stopPropagation();st=+mk.dataset.spot;body.innerHTML=html();return;}
+    const pv=e.target.closest('.mapc.on .mimg');if(pv&&mode!=='multi'){const sp=spotsOf(type),r=pv.getBoundingClientRect(),px=(e.clientX-r.left)/r.width,py=(e.clientY-r.top)/r.height;
+      if(sp.length){let bi=0,bd=9;sp.forEach((p,i)=>{const d=(p.x-px)**2+(p.y-py)**2;if(d<bd){bd=d;bi=i;}});st=bi;body.innerHTML=html();return;}}
+    const b=e.target.closest('button');if(!b)return;
+    if(b.dataset.st){const n=spotsOf(type).length||1;st=(st+(+b.dataset.st)+n)%n;body.innerHTML=html();return;}
     if(b.dataset.mkmap){$('#modal')._close('edit');return;}
     if(b.dataset.tut){tut=!tut;if(tut){size='xl';nm=nm==='r'?'r':null;}body.innerHTML=html();return;}
     if(b.dataset.mode)mode=b.dataset.mode;else if(b.dataset.diff)diff=b.dataset.diff;else if(b.dataset.np){np=+b.dataset.np;size=REC_SIZE[np-1];}else if(b.dataset.map){type=b.dataset.map;if(type==='rivers'&&NR()>4)nr=4;}else if(b.dataset.size){size=b.dataset.size;nm=nm==='r'?'r':null;}else if(b.dataset.nr){nr=+b.dataset.nr;size=REC_SIZE[nr];nm=nm==='r'?'r':null;}else if(b.dataset.nm)nm=b.dataset.nm==='r'?'r':+b.dataset.nm;else if(b.dataset.no)no=b.dataset.no==='r'?'r':+b.dataset.no;else if(b.dataset.tr)tr=b.dataset.tr;else if(b.dataset.reroll)seed=(Math.random()*1e9)|0;else return;body.innerHTML=html();});
   const v=await p;if(v==='edit')return{edit:true};if(v!=='go')return null;
   if(type.startsWith('custom:')){const id=type.slice(7),m=loadMaps().find(x=>x.id===id);if(m)return{type:'custom',custom:id,size:m.size,seed,mode,diff,majors:NM(),outposts:NO(),artifact:art,treasure:tr,nPlayers:mode==='multi'?Math.min(np,1+m.objs.filter(o=>o.type==='camp'&&!o.free).length):1};}
-  return{type,size,seed,mode,diff,rivals:Math.min(maxR(),NR()),majors:NM(),outposts:NO(),artifact:art,treasure:tr,tutorial:tut&&mode!=='multi',nPlayers:mode==='multi'?np:1};
+  return{type,size,seed,mode,diff,rivals:Math.min(maxR(),NR()),majors:NM(),outposts:NO(),artifact:art,treasure:tr,start:st,tutorial:tut&&mode!=='multi',nPlayers:mode==='multi'?np:1};
 }
 /* Choose your banner: a tall grid of banner cards; Details opens a full page for one banner (heroes, troops, ability), with arrows to flip between banners */
 const UNIT_TAGS=u=>[u.fly&&'Flies',u.shots&&`Shoots (${u.shots})`,u.charge&&'Charge',u.double&&'Strikes twice',u.noRetal&&'No strike-back',u.retal>1&&'Strikes back twice',u.regen&&'Regrows',u.drain&&'Drains life',u.charm&&'Charms',u.undead&&'Undead'].filter(Boolean);

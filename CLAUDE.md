@@ -223,6 +223,12 @@ Everything lives in one object, `S`, so it can be saved as JSON:
 - New ability hooks (player side only): `forgePlus` (extra Great Forge attack), `armyDef` (whole army defense), `rangedPct` (shooter damage), `halfCost` (one spell at half mana), `manaCut` (all spells cheaper), `squallPct`, `weakenPct`.
 - Raised: Ivan (Forge half ore, +1 more attack), Oliver (30% cheaper rough ground, +5% movement), Shadow (harvest 20%), Sheila (Squall +30%), Grimes and Griffiths (+1 speed to their troop). Made distinct: Veyra, Gliss, Silka, Murmur, Boone, Mossback, Aster, Nessa Holt. Trimmed: Schmickle and Quillby to +200 gold a day. Battaglia is a Might hero.
 
+### v54 routes, start spot, small fixes
+
+- Route planning (`planTo`): for heroes with a boat (not Merfolk), each switch between land and sea costs 1,500 extra in the search (`fx0`, `fy0` are the step's origin), so paths only use the sea when it saves real time; actual movement costs are unchanged.
+- Start spot on Choose your game: the selected map's picture shows every home spot (`spotmk`, coordinates cached by `mapPreviewURL` in `MAP_SPOTS`); click one or use the ◀ ▶ arrows on the Start row (`st`, sent as `mo.start`). `newGame` swaps your town with that rival's home. Single player, generated maps only.
+- Mines button: pickaxe with the count on its right. The army grid's spellbook tile keeps its icon small and centred.
+
 ### v53 banners full, five mine levels, polish
 
 - Every banner shows 16 heroes: the 13 heroes who had no banner joined the gaps (Necromancers Holmes, Kaf, Nyx; Beastmasters Rusty; Dwarves Tinker, Bristle, Posy, Schmickle; Merfolk Rusk Hookhorn (now Spearfolk +2 attack, +1 speed), Posy Spinner, Nala, Nanya, Boone), as wanderers (`tav:true`). Prisons and outpost keepers now use `freeAgents()` (heroes beyond any banner's 16, plus any rogues left); the prison card names the hero's banner.

@@ -719,6 +719,9 @@ function newGame(fk,hid,mo={}){
   const nR=cm?cm.objs.filter(o=>o.type==='camp'&&!o.free).length:clamp(mo.rivals??sz.rivals,1,type==='rivers'?4:6);
   const rivalFacs=mo.players?mo.players.slice(1).map(p=>p.fk):FAC_ORDER.filter(k=>k!==fk).sort(()=>Math.random()-0.5).slice(0,nR);
   const w=cm?customWorld(cm,rivalFacs):genMap(seed,{type,fac:fk,rivals:rivalFacs});const f=FAC[fk];
+  /* v54: a start spot picked on Choose your game: your town and that rival's home swap places */
+  if(!cm&&!mo.players&&mo.start>0&&w.rivalSpots[mo.start-1]){const sp=w.rivalSpots[mo.start-1],ox=w.town.x,oy=w.town.y,tw=w.objs.find(o=>o.type==='town'),cp=w.objs.find(o=>o.type==='camp'&&o.x===sp.x&&o.y===sp.y);
+    w.town={...w.town,x:sp.x,y:sp.y};if(tw){tw.x=sp.x;tw.y=sp.y;}if(cp){cp.x=ox;cp.y=oy;}sp.x=ox;sp.y=oy;}
   const [t1,t2]=f.units;
   S={v:3,roster:2,ids27:1,seed,fac:fk,W,H,mapType:type,size:mo.size||'small',limit:sz.limit,tiles:w.tiles,objs:w.objs,uid:w.uid+10,biome:w.biome||'vale',underY:w.underY||0,rivers:w.rivers||null,bridges:w.bridges||null,explored:new Array(W*H).fill(0),day:1,
     res:startRes(mo),diff:mo.diff||'normal',heroes:[],cur:0,rivals:[],rumours:[],delivered:[],setup:{majors:mo.majors,outposts:mo.outposts},
@@ -1213,12 +1216,13 @@ function planTo(x,y){
   if(!S.explored[idx(x,y)])return null;
   if(townFoot(x,y)){x=S.town.x;y=S.town.y;}
   const Z=zocFor(ME());
-  return astar(HERO().x,HERO().y,x,y,(nx,ny,goal)=>{
+  return astar(HERO().x,HERO().y,x,y,(nx,ny,goal,fx0,fy0)=>{
     const i=idx(nx,ny);if(!S.explored[i]||townFoot(nx,ny))return Infinity;if(Z.has(i)&&!goal)return Infinity;const c=terrainCost(nx,ny);if(!isFinite(c))return Infinity;
     const o=objAt(nx,ny);if(o&&(o.type==='neutral'||o.type==='relic'||spireFoe(o))&&!goal)return Infinity;
     if(o&&o.type==='town'&&!townData(o).mine)return Infinity;
     if(rivalAt(nx,ny)&&!goal)return Infinity;
     const hi=heroIdxAt(nx,ny);if(hi>=0&&hi!==S.cur&&!(nx===S.town.x&&ny===S.town.y))return Infinity;
+    if(fx0!==undefined&&HERO().boat&&FAC[S.fac].travel!=='swim'&&(tileAt(fx0,fy0)===T.LAKE)!==(tileAt(nx,ny)===T.LAKE))c+=1500;/* v54: boarding or landing ends the day, so the route only uses the sea when it really saves time */
     return c;});
 }
 
