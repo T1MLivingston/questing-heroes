@@ -3,10 +3,12 @@
    Plays assets/music/<track>.mp3 for each screen, cross-fading between them. Missing files are skipped quietly, so the
    game works with any subset of tracks. Browsers only allow sound after the first click, so music starts then.
    Volume and mute are remembered in this browser only. */
+/* tracks that are in assets/music: add a name here when its MP3 is added (keeps the console free of missing-file errors) */
+const MUSIC_HAVE=[];
 const MUSIC_FILES={theme:'theme',map:'map',acoustic:'acoustic',battle:'battle',town:'town',victory:'victory',defeat:'defeat'};
 /* which track each scene wants, in order of preference (the first file that exists plays); the map alternates with the acoustic theme */
 const MUSIC_SCENE={title:['theme','acoustic'],map:['map','acoustic','theme'],town:['town','acoustic','map'],battle:['battle'],menu:['acoustic','theme']};
-const MU={vol:0.5,muted:false,scene:null,cur:null,curK:null,missing:new Set(),ok:new Set(),unlocked:false,mapTurn:0};
+const MU={vol:0.5,muted:false,scene:null,cur:null,curK:null,missing:new Set(Object.keys({theme:1,map:1,acoustic:1,battle:1,town:1,victory:1,defeat:1}).filter(k=>!MUSIC_HAVE.includes(k))),ok:new Set(),unlocked:false,mapTurn:0};
 try{const v=JSON.parse(localStorage.getItem('questing-heroes-audio')||'{}');if(typeof v.vol==='number')MU.vol=v.vol;MU.muted=!!v.muted;}catch(e){}
 const muSave=()=>{try{localStorage.setItem('questing-heroes-audio',JSON.stringify({vol:MU.vol,muted:MU.muted}));}catch(e){}};
 const muTarget=()=>MU.muted?0:MU.vol*0.6;
