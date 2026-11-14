@@ -79,7 +79,7 @@ function astar(sx,sy,tx,ty,cost){
     const cx=cur%W,cy=(cur/W)|0;
     for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){
       if(!dx&&!dy)continue;const nx=cx+dx,ny=cy+dy;if(!inb(nx,ny))continue;const ni=idx(nx,ny);if(closed[ni])continue;
-      let c=cost(nx,ny,ni===goal,cx,cy);if(!isFinite(c))continue;if(dx&&dy){if(!isFinite(cost(cx+dx,cy,false,cx,cy))||!isFinite(cost(cx,cy+dy,false,cx,cy)))continue;c*=1.414;}
+      let c=cost(nx,ny,ni===goal,cx,cy);if(!isFinite(c))continue;if(dx&&dy){/* v55: a diagonal step needs one open side (was both), so heroes slip past a single bush, pile or fog corner */if(!isFinite(cost(cx+dx,cy,false,cx,cy))&&!isFinite(cost(cx,cy+dy,false,cx,cy)))continue;c*=1.414;}
       const ng=g[cur]+c;if(ng<g[ni]){g[ni]=ng;prev[ni]=cur;open.push(ni);}
     }
     const pj=PORT.get(cur);

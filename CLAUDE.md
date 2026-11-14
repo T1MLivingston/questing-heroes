@@ -223,6 +223,11 @@ Everything lives in one object, `S`, so it can be saved as JSON:
 - New ability hooks (player side only): `forgePlus` (extra Great Forge attack), `armyDef` (whole army defense), `rangedPct` (shooter damage), `halfCost` (one spell at half mana), `manaCut` (all spells cheaper), `squallPct`, `weakenPct`.
 - Raised: Ivan (Forge half ore, +1 more attack), Oliver (30% cheaper rough ground, +5% movement), Shadow (harvest 20%), Sheila (Squall +30%), Grimes and Griffiths (+1 speed to their troop). Made distinct: Veyra, Gliss, Silka, Murmur, Boone, Mossback, Aster, Nessa Holt. Trimmed: Schmickle and Quillby to +200 gold a day. Battaglia is a Might hero.
 
+### v55 mines tooltip, easier diagonals
+
+- Mines panel rows are centred; the upgrade cost moved into a dark tooltip on hovering Upgrade (`.uptip`: next level's output, have / need per resource, red when short) with a ⚖ market button beside Upgrade when you can't afford it. Clicking Upgrade without enough says so.
+- Pathfinding (`astar`): a diagonal step needs one open side square instead of both. This never connects anything new (the open side is a two-step route already) but makes routes past single objects, piles and fog corners shorter and more natural.
+
 ### v54 routes, start spot, small fixes
 
 - Route planning (`planTo`): for heroes with a boat (not Merfolk), each switch between land and sea costs 1,500 extra in the search (`fx0`, `fy0` are the step's origin), so paths only use the sea when it saves real time; actual movement costs are unchanged.

@@ -1152,3 +1152,16 @@ img.upg{filter:sepia(.55) saturate(1.9) hue-rotate(-12deg) brightness(1.06) drop
 @keyframes spotPulse{50%{box-shadow:0 0 0 6px rgba(255,210,74,.35)}}
 .startrow{align-items:center;gap:8px}.startrow .stname{min-width:110px;text-align:center;font:800 16px var(--f-display);color:#1b2f7a}
 .mapc.on .mimg{cursor:crosshair}
+/* v55 mines rows: centred, cost in a hover tooltip */
+.mone{justify-content:center!important;text-align:center;position:relative}.mone span:first-child{flex:0 0 auto!important;text-align:center!important}
+.upwrap{position:relative;display:inline-block}
+.upwrap .btn[aria-disabled]{opacity:.55;filter:grayscale(.5)}
+.uptip{display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);z-index:20;min-width:190px;background:#14141c;color:#f3ead2;border:1px solid #5a5040;border-radius:8px;padding:8px 10px;box-shadow:0 6px 16px rgba(0,0,0,.5);text-align:left;font-size:13px;line-height:1.5}
+.uptip::after{content:'';position:absolute;top:100%;left:50%;margin-left:-6px;border:6px solid transparent;border-top-color:#14141c}
+.upwrap:hover .uptip,.upwrap:focus-within .uptip{display:grid}
+.uptip b{color:#ffd24a;font-size:13px;margin-bottom:2px}.uptip span{display:flex;align-items:center;gap:6px;white-space:nowrap}.uptip img{width:18px;height:18px}
+.uptip .short{color:#ff7a6a;font-weight:700}.uptip em{font-size:12px;color:#c9c0a8;margin-top:3px;white-space:normal}
+.mmk{padding:2px 8px!important}
+.mone{flex-wrap:nowrap!important}
+p.mmarket{display:flex!important;justify-content:center!important;width:100%!important;align-self:stretch!important;justify-self:stretch!important;box-sizing:border-box}
+p.mmarket{max-width:none!important;margin-left:0!important;margin-right:0!important}
