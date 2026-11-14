@@ -223,6 +223,11 @@ Everything lives in one object, `S`, so it can be saved as JSON:
 - New ability hooks (player side only): `forgePlus` (extra Great Forge attack), `armyDef` (whole army defense), `rangedPct` (shooter damage), `halfCost` (one spell at half mana), `manaCut` (all spells cheaper), `squallPct`, `weakenPct`.
 - Raised: Ivan (Forge half ore, +1 more attack), Oliver (30% cheaper rough ground, +5% movement), Shadow (harvest 20%), Sheila (Squall +30%), Grimes and Griffiths (+1 speed to their troop). Made distinct: Veyra, Gliss, Silka, Murmur, Boone, Mossback, Aster, Nessa Holt. Trimmed: Schmickle and Quillby to +200 gold a day. Battaglia is a Might hero.
 
+### v60 student batches 6 and 7, roster trim
+
+- 19 more student heroes (`student:true, tav:true`, after Kaf in `HEROES`), banners and abilities chosen to fit each picture: Beastmasters Nohahahahah (+15% movement), Boja (Lions), Paitence & Jay (Hounds); Merfolk Yatt (Coral Colossi, +1 morale), Stargirl (Sirens), Mangrove (Turtle Knights); Elves Poison (Grove Wardens), Ella (+150 gold a day), Ezlen (Giant Eagles); Rangers Cornelius II (Thornguard growth), Ward (Oak Wardens); Wizards Sir Quackars (Owl Familiars), Buffalo (Apprentice Mages), Gerry (Storm Elementals); Necromancers Sus (Zombies), Samba (Skeletons); Pirates Liam (Duelists), Alora (Powder Monkeys); Dwarves Sir Giggachins (Paladins). Estella has a new portrait. `RECRUIT_PORT`/`recruits.png` hold 131 portraits (14 rows).
+- Retired: Bonnie (`bess_bell`) and the second Livingston (`livingston_cyborg`); the first Livingston lost her partner bonus (now Entangle +1 round and Sprites +1 speed). Harlan Chalk is now Harlan (`OLD_NAMES`). Saltjaw was already retired.
+
 ### v59 Hero Book
 
 - Title screen: **📖 Hero Book** between Create a hero and Hall of Fame (`openHeroBook` in `13-boot.js`). It shows every hero who isn't retired (136, plus class heroes on this browser) as cards: portrait on the banner colour, name, crest, Might or Magic, the four stats as coloured dots, and the short ability. Filters: banner (all or one of 8), Might / Magic, group (`hbGroup`: banner picks, tavern heroes and rogues, student heroes, class heroes), and a search over names and ability text. State lives in `HB`; clicking a card opens a details view (`hbDetail`: big portrait, stats, ability, skills, artifact, spells, story).
