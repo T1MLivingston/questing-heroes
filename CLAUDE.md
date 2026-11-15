@@ -225,7 +225,7 @@ Everything lives in one object, `S`, so it can be saved as JSON:
 
 ### v62 roster trim
 
-- Retired (art not liked): Dot, Gliss, Gleam, Ivy and Rue. Tida is back to his first portrait (the hooded one from batch 7). Sookie and Tempest upgrades and a three-eyed King Pharoph the 3rd are on `ART_REQUEST_NEXT.md`.
+- Retired (art not liked): Dot, Gliss, Gleam, Ivy, Rue and Bananna (Banana Boy stays). Tida is back to his first portrait (the hooded one from batch 7). Sookie and Tempest upgrades and a three-eyed King Pharoph the 3rd are on `ART_REQUEST_NEXT.md`.
 
 ### v61 Batch 08
 
