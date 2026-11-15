@@ -1132,7 +1132,7 @@ function drawHero(c,x,y,h=HERO(),col=teamCol()){
   const onLake=tileAt(Math.round(x),Math.round(y))===T.LAKE;
   const mode=onLake?(h.boat||h.fac==='pirates'?'boat':'swim'):(h.mount||(h.fac==='centaurs'?'hooves':'horse'));
   c.lineWidth=1.2;
-  const sheet=mode!=='boat'&&mode!=='swim'?heroSheet(h.id,col):null;
+  const sheet=mode!=='boat'&&mode!=='swim'?heroSheet(h.id,col,h.mount==='horse'):null;
   if(sheet){const row=Math.max(0,ART_DIRS.indexOf(h.face||'s')),fr=moving&&!bt&&h===HERO()?Math.floor(performance.now()/120)%4:0;
     c.fillStyle='rgba(0,0,0,.4)';c.beginPath();c.ellipse(cx,cy+15,14,5,0,0,7);c.fill();c.strokeStyle=col;c.lineWidth=2;c.beginPath();c.ellipse(cx,cy+15,14,5,0,0,7);c.stroke();
     c.imageSmoothingEnabled=false;c.drawImage(sheet,fr*48,row*48,48,48,Math.round(cx-24),Math.round(cy+16-44),48,48);return;}

@@ -246,7 +246,7 @@ async function aiTurn(s){
   if(tgt){await moveTo(s,tgt.c,tgt.r,rm);logB(`${nm(s)} advance.`);}else{s.defending=true;logB(`${nm(s)} brace their defense.`);}
 }
 /* the enemy hero casts one spell a round from their banner's list (v30); Warding reduces the damage */
-async function enemyCast(){const eh=bt.enemyHero,P=Math.max(1,eh.pow||1),ward=1-0.15*skL('warding');const book=FAC_SPELLS[eh.fac]||[];
+async function enemyCast(){bt.heroAct={side:1,t:performance.now()};const eh=bt.enemyHero,P=Math.max(1,eh.pow||1),ward=1-0.15*skL('warding');const book=FAC_SPELLS[eh.fac]||[];
   const mine=bt.stacks.filter(s=>s.alive&&s.side===0),own=bt.stacks.filter(s=>s.alive&&s.side===1);if(!mine.length||!own.length)return;
   const can=k=>book.includes(k)&&SP[k].cost<=bt.eMana;const worth=s=>unitValue(s)*s.n;const big=mine.slice().sort((a,b)=>worth(b)-worth(a))[0],bigOwn=own.slice().sort((a,b)=>worth(b)-worth(a))[0];
   const dmgOf={ember:15+10*P,frost:14+9*P,squall:8+6*P,chain:12+8*P,meteor:25+14*P,starfall:10+6*P};
@@ -261,6 +261,7 @@ async function enemyCast(){const eh=bt.enemyHero,P=Math.max(1,eh.pow||1),ward=1-
   }finally{curSpell=null;}updateBattleUI();}
 async function towersFire(){const mine=bt.stacks.filter(s=>s.alive&&s.side===0);for(let i=0;i<2&&mine.some(s=>s.alive);i++){const t=pick(mine.filter(s=>s.alive)),dm=Math.round((20+8*weekNo())*monMul());await burst(t,'#ffcf6a');const k=applyDmg(t,dm);floatAt(t,`-${dm}`,'#ffcf6a');logB(`A tower shoots ${nm(t)} for ${dm}.${k?` ${k} fall.`:''}`);}updateBattleUI();}
 async function castSpell(id,target){
+  bt.heroAct={side:0,t:performance.now()};
   const P=Math.round(hst(HERO(),'pow')*(1+0.15*skL('sorcery')));HERO().mana-=spellCost(id);bt.spellCast=true;renderUI();
   const echoN=S.fac==='wizards'?(fx().echo||1):0;const times=bt.spellsCast<echoN?2:1;bt.spellsCast++;
   for(let i=0;i<times;i++){
@@ -353,8 +354,10 @@ function drawBattleHero(c,h,col,x,y,flip,canAct){
   {const kk=Math.min(BL.side*0.95/96,BL.h*0.32/128);y=Math.round(10+124*kk-15*sc);}
   c.save();c.fillStyle='rgba(0,0,0,.35)';c.beginPath();c.ellipse(x,y+30*sc/2,BL.side*0.38,8,0,0,7);c.fill();
   c.strokeStyle=col;c.lineWidth=2;c.stroke();
-  {const bf=h.fac||(HBY[h.id]&&HBY[h.id].fac),im=bf&&tintedPacked(`battle/heroes/${bf}.png`,col,'h');
-   if(im){const k=Math.min(BL.side*0.95/96,BL.h*0.32/128);c.translate(x,y+15*sc);if(flip)c.scale(-1,1);c.imageSmoothingEnabled=false;c.drawImage(im,-48*k,-124*k,96*k,128*k);c.restore();}
+  {const act=bt.heroAct&&bt.heroAct.side===(flip?1:0)&&now-bt.heroAct.t<500,fig=heroFigure(h,act?'attack':'idle');
+   const bf=h.fac||(HBY[h.id]&&HBY[h.id].fac),im=!fig&&bf&&tintedPacked(`battle/heroes/${bf}.png`,col,'h');
+   if(fig){const s=2*Math.min(BL.side*0.95/96,BL.h*0.32/128);c.translate(x,y+15*sc);if(flip)c.scale(-1,1);c.imageSmoothingEnabled=false;c.drawImage(fig.img,fig.sx,fig.sy,96,64,-48*s,-60*s,96*s,64*s);c.restore();}
+   else if(im){const k=Math.min(BL.side*0.95/96,BL.h*0.32/128);c.translate(x,y+15*sc);if(flip)c.scale(-1,1);c.imageSmoothingEnabled=false;c.drawImage(im,-48*k,-124*k,96*k,128*k);c.restore();}
    else{const f0=h.face;h.face=flip?'w':'e';c.translate(x-TS/2*sc,y-TS/2*sc-6*sc);c.scale(sc,sc);drawHero(c,0,0,h,col);h.face=f0;c.restore();}}
   c.font=`800 ${Math.max(11,BL.side*0.13)}px "Alegreya SC",Georgia,serif`;c.textAlign='center';c.textBaseline='top';c.fillStyle='#f2d382';c.strokeStyle='#120f0b';c.lineWidth=3;
   c.strokeText(h.name,x,y+20*sc);c.fillText(h.name,x,y+20*sc);

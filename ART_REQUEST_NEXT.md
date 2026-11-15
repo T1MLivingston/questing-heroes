@@ -14,6 +14,14 @@ Match the existing packs: warm storybook pixel art, dark plum outline (#2b1a33),
 ## 3. Hero map walkers (biggest visual gap)
 About 140 heroes walk the map as their banner's generic figure. One 192×384 sheet per hero (4 frames × 8 directions, 48×48 frames, foot at 24,44), packed 7 sheets a row with a JSON of hero id → cell. Start with each banner's first 8 heroes (about 46 still missing), then the rest of the 16.
 
+## 0. Current list (v63, 2026-11-15)
+
+**Portraits still in the old style** (based on the Hero Book): Sookie, Bear, Monkey, William IV, Eden, Michael, Dusty, Hush, Dupengeiser, Grimes, Ivan, Slack, Kiln, Schmickle, Boone, Rocky, Letchworth, Eelvis, Skimmer, Inkwake (as a blue ink squid captain), plus King Pharoph the 3rd with three eyes. Already updated in v63 from Headshot Workshop 02: Boopis, Engelman, Rimmer, Tempest, Rago, Binx.
+
+**Battle figures still missing** (Movement Sprites format: on foot, 6 poses, 64x64 or 96x64): Mossback, Fern, Spindle, Coral, Penny, India, Rusk Hookhorn, Thornfrill, Mara, Sid & Tess, Wren, Mags & Mae, Odo & Otto, Aster & Briar, Ned & Nat, Spike, Rafe & Reed, Fut, Luckenzo, Larishna, Nanya, Posy Spinner, Katherine, King Pharoph the 3rd.
+
+**Map walkers on foot**: 148 of 166 heroes still walk the map as their banner's walker. A personal on-foot walker (48x48, 4 phases x 8 directions, like the mounted ones) would be the next biggest visual step. Mounted map walkers exist for 23 heroes; the rest ride as their on-foot walker.
+
 ## 4. Portrait redraws to match the newer style
 These older portraits look flatter and darker than the rest: Bear, Monkey, Binx, Boopis, Schmickle, Engelman, Rimmer, Tempest, Rago, William IV, Grimes, Ivan, Dupengeiser, Slack, Kiln, Rocky, Eelvis, Skimmer, Inkwake (blue ink squid). Same 128×128 format, transparent background, chest-up bust facing slightly right; keep each character recognisable.
 
