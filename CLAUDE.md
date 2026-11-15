@@ -223,6 +223,11 @@ Everything lives in one object, `S`, so it can be saved as JSON:
 - New ability hooks (player side only): `forgePlus` (extra Great Forge attack), `armyDef` (whole army defense), `rangedPct` (shooter damage), `halfCost` (one spell at half mana), `manaCut` (all spells cheaper), `squallPct`, `weakenPct`.
 - Raised: Ivan (Forge half ore, +1 more attack), Oliver (30% cheaper rough ground, +5% movement), Shadow (harvest 20%), Sheila (Squall +30%), Grimes and Griffiths (+1 speed to their troop). Made distinct: Veyra, Gliss, Silka, Murmur, Boone, Mossback, Aster, Nessa Holt. Trimmed: Schmickle and Quillby to +200 gold a day. Battaglia is a Might hero.
 
+### v61 Batch 08
+
+- Nine more student heroes (`student:true, tav:true`, after Gerry): Merfolk Teeka (Sirens growth, +1 vision); Beastmasters Python Mage (Boars, +1 luck); Wizards Vash (Archmages, +1 luck); Rangers Anastasia May Dvestia (Reedbows) and Tida (Antler Knights +2 attack, Mend, from the student); Dwarves Babka (Young Dwarves, +1 morale) and Teo (Gem Golems); Necromancers Emirk (Werewolves) and Friendo (Skeletons growth). `RECRUIT_PORT`/`recruits.png` hold 140 portraits.
+- New portraits for Gilt, Bess & Bea, Rumble, Livingston and Love; Love is back as an Elves tavern hero (Lute of Hearts). Lune is now Lunt (`OLD_NAMES`). Portrait URLs carry `?v=61`. The pack's other removals (Tabby Wanderer, Nerissa, Jason, Christian) were never in the game.
+
 ### v60 student batches 6 and 7, roster trim
 
 - 19 more student heroes (`student:true, tav:true`, after Kaf in `HEROES`), banners and abilities chosen to fit each picture: Beastmasters Nohahahahah (+15% movement), Boja (Lions), Paitence & Jay (Hounds); Merfolk Yatt (Coral Colossi, +1 morale), Stargirl (Sirens), Mangrove (Turtle Knights); Elves Poison (Grove Wardens), Ella (+150 gold a day), Ezlen (Giant Eagles); Rangers Cornelius II (Thornguard growth), Ward (Oak Wardens); Wizards Sir Quackars (Owl Familiars), Buffalo (Apprentice Mages), Gerry (Storm Elementals); Necromancers Sus (Zombies), Samba (Skeletons); Pirates Liam (Duelists), Alora (Powder Monkeys); Dwarves Sir Giggachins (Paladins). Estella has a new portrait. `RECRUIT_PORT`/`recruits.png` hold 131 portraits (14 rows).
