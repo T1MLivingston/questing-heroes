@@ -26,6 +26,8 @@ Market (scales), Mines (pickaxe), Retreat (running boot/white flag), Haggle (han
 ## 7. Small fixes
 - **Sorcery** skill icon (borrows the spellbook icon).
 - **Inkwake** redraw as a blue ink squid captain.
+- **Sookie** and **Tempest**: upgraded portraits (Tim has these to upload).
+- **King Pharoph the 3rd**: redraw with three eyes (a third eye in the forehead, as "the 3rd").
 - **Lighthouse** as a lit map site (2 frames: dark, lit) so it shows when it has revealed the coast.
 
 ## 8. From the classroom

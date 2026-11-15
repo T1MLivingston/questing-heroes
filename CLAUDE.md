@@ -223,6 +223,10 @@ Everything lives in one object, `S`, so it can be saved as JSON:
 - New ability hooks (player side only): `forgePlus` (extra Great Forge attack), `armyDef` (whole army defense), `rangedPct` (shooter damage), `halfCost` (one spell at half mana), `manaCut` (all spells cheaper), `squallPct`, `weakenPct`.
 - Raised: Ivan (Forge half ore, +1 more attack), Oliver (30% cheaper rough ground, +5% movement), Shadow (harvest 20%), Sheila (Squall +30%), Grimes and Griffiths (+1 speed to their troop). Made distinct: Veyra, Gliss, Silka, Murmur, Boone, Mossback, Aster, Nessa Holt. Trimmed: Schmickle and Quillby to +200 gold a day. Battaglia is a Might hero.
 
+### v62 roster trim
+
+- Retired (art not liked): Dot, Gliss, Gleam, Ivy and Rue. Tida is back to his first portrait (the hooded one from batch 7). Sookie and Tempest upgrades and a three-eyed King Pharoph the 3rd are on `ART_REQUEST_NEXT.md`.
+
 ### v61 Batch 08
 
 - Nine more student heroes (`student:true, tav:true`, after Gerry): Merfolk Teeka (Sirens growth, +1 vision); Beastmasters Python Mage (Boars, +1 luck); Wizards Vash (Archmages, +1 luck); Rangers Anastasia May Dvestia (Reedbows) and Tida (Antler Knights +2 attack, Mend, from the student); Dwarves Babka (Young Dwarves, +1 morale) and Teo (Gem Golems); Necromancers Emirk (Werewolves) and Friendo (Skeletons growth). `RECRUIT_PORT`/`recruits.png` hold 140 portraits.
