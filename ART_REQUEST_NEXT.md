@@ -16,7 +16,7 @@ About 140 heroes walk the map as their banner's generic figure. One 192×384 she
 
 ## 0. Current list (v63, 2026-11-15)
 
-**Portraits still in the old style** (based on the Hero Book): Sookie, Bear, Monkey, William IV, Eden, Michael, Dusty, Hush, Dupengeiser, Grimes, Ivan, Slack, Kiln, Schmickle, Boone, Rocky, Letchworth, Eelvis, Skimmer, Inkwake (as a blue ink squid captain), plus King Pharoph the 3rd with three eyes. Already updated in v63 from Headshot Workshop 02: Boopis, Engelman, Rimmer, Tempest, Rago, Binx.
+**Portraits still in the old style**: Dusty, plus King Pharoph the 3rd with three eyes. (Upscaled Redraws in v64 replaced Sookie, Bear, Monkey, William IV, Eden, Michael, Hush, Dupengeiser, Grimes, Ivan, Slack, Kiln, Schmickle, Boone, Rocky, Letchworth, Eelvis, Skimmer and Inkwake.) Already updated in v63 from Headshot Workshop 02: Boopis, Engelman, Rimmer, Tempest, Rago, Binx.
 
 **Battle figures still missing** (Movement Sprites format: on foot, 6 poses, 64x64 or 96x64): Mossback, Fern, Spindle, Coral, Penny, India, Rusk Hookhorn, Thornfrill, Mara, Sid & Tess, Wren, Mags & Mae, Odo & Otto, Aster & Briar, Ned & Nat, Spike, Rafe & Reed, Fut, Luckenzo, Larishna, Nanya, Posy Spinner, Katherine, King Pharoph the 3rd.
 

@@ -64,6 +64,7 @@ No other libraries, images or audio are included. Art made later with ChatGPT or
 | Student Heroes batches 6 and 7 (19 new portraits and a redrawn Estella) in `assets/portraits/heroes/` and `recruits.png` | Supplied by the author (generated pixel art, ChatGPT, from students' Create a hero worksheets) | 2026-11-14 | Characters designed by students, used with the author's permission |
 | Batch 08 Hero Fixes (9 new student heroes; redrawn Gilt, Bess & Bea, Rumble, Livingston, Love) in `assets/portraits/heroes/` and `recruits.png` | Supplied by the author (generated pixel art, ChatGPT, from students' worksheets and the author's notes) | 2026-11-15 | Student characters used with the author's permission |
 | Movement Sprites (hero battle figures, mounted battle figures and mounted map walkers) in `assets/battle/heroes/foot.png`, `mounted.png` and `assets/heroes/walkers_mounted.png`; Student Heroes batch 9 portraits; Headshot Workshop 02 portraits (Boopis, Engelman, Rimmer, Tempest, Rago, Binx) | Supplied by the author (generated pixel art, ChatGPT) | 2026-11-15 | Student characters used with the author's permission |
+| Upscaled Redraws (19 legacy hero portraits) in `assets/portraits/heroes/` and `recruits.png` | Supplied by the author (generated pixel art, ChatGPT) | 2026-11-16 | |
 | Half-size move cursor (`assets/ui/cursors/move_small.png`) | Downscaled locally from Pack 09's move cursor | 2026-11-08 | Same as above |
 
 The generated source images (high-res magenta PNGs) are kept outside this repo.
