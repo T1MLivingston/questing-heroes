@@ -9,7 +9,7 @@ function applyTheme(){
 const travelName=()=>{const h=HERO();return(h.mount==='hooves'?'Hooves':h.mount==='horse'?'On horseback':'On foot')+(h.boat?' · has a boat':FAC[S.fac].travel==='swim'?' · swims lakes':'');};
 /* v53: the movement left that can actually be used (none once the cheapest next step costs more) */
 function mpUsable(h){if(h!==HERO()||h.mp<=0)return Math.max(0,h.mp);let best=Infinity;for(const[a,b]of[[1,0],[-1,0],[0,1],[0,-1],[1,1],[1,-1],[-1,1],[-1,-1]]){const x=h.x+a,y=h.y+b;if(!inb(x,y))continue;const c=stepCost(h.x,h.y,x,y);if(c<best)best=c;}return h.mp>=best?h.mp:0;}
-function renderUI(){
+function renderUI(){if(S)document.body.classList.remove('offgame');
   if(!S)return;
   applyTheme();
   $('#res').innerHTML=RES.map(k=>`<span class="${k}" title="${RESNAME[k]}"><img src="${iconURL('res',k,40)}" alt="${RESNAME[k]}">${fmt(S.res[k])}</span>`).join('');

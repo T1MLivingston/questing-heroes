@@ -22,7 +22,7 @@ function edState(m){W=m.W;H=m.H;const town=m.objs.find(o=>o.type==='town')||{x:-
     town:{x:town.x,y:town.y,name:'Your town',built:{hall1:1},pool:{},garrison:[]},goal:[0,1,2,3,4,5,6]};
   setMode('relic');S.objs.filter(o=>o.type==='camp').forEach((o,i)=>{o.dfac=FAC_ORDER[(i+2)%8];});
   rebuildFoot();renderTerrain();sizeMap();centerOn(W/2,H/2,true);}
-async function openEditor(m){
+async function openEditor(m){document.body.classList.remove('offgame');
   if(!m){const pick2=await showModal({title:'Map editor',wide:true,top:true,buttons:[{label:'◂ Back',value:null}],dismiss:null,body:`<div class="edstart">
       <div><h3>New map</h3><p class="muted">Pick a size and what to start from.</p>
         <div class="diffs">${Object.entries(MAP_SIZES).map(([k,z])=>`<button class="dchip${k==='small'?' on':''}" data-esize="${k}">${z.label} · ${z.W}×${z.H}</button>`).join('')}</div>

@@ -13,7 +13,19 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-about]');i
 document.addEventListener('click',e=>{const b=e.target.closest('[data-tv]');if(!b||b.disabled)return;e.stopPropagation();$('#modal')._close(b.dataset.tv);},true);
 function heroParade(){const ids=(a=>a.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(x=>x[1]))(HEROES.filter(h=>!h.rogue).map(h=>h.id));const one=ids.map(id=>`<img src="${iconURL('hero',id,128)}" alt="" loading="lazy">`).join('');
   return `<div class="tparade" aria-hidden="true"><div class="tp-track">${one}${one}</div></div>`;}
+/* v65: leaving a game clears its screen. Before, quitting set S to null but left the old top bar, hero panel and a frozen
+   map canvas behind the title (the map stops drawing without S, so any resize or tab switch turned it black). offGame() hides
+   the game layout (#app, via body.offgame) and resets everything a game leaves running; renderUI and the editor show it again. */
+function offGame(){
+  try{if(typeof closeHeroMenu==='function')closeHeroMenu();}catch(e){}
+  S=null;bt=null;path=null;moving=false;terrainCv=null;terrainPh=null;
+  {const c=$('#coach');if(c)c.remove();const d=$('#dayflip');if(d){clearTimeout(d._t);d.hidden=true;}const l=$('#loot');if(l)l.innerHTML='';}
+  try{const c=mapCv.getContext('2d');c.setTransform(1,0,0,1,0,0);c.clearRect(0,0,mapCv.width,mapCv.height);}catch(e){}
+  try{const mw=$('#miniwrap');if(mw)mw.hidden=true;}catch(e){}
+  document.body.classList.add('offgame');
+}
 async function title(){
+  offGame();
   const has=loadSave(),slots=loadSlots().length;
   const big=(v,icon,label,dis,extra='')=>`<button class="tbtn" data-tv="${v}" ${dis?'disabled':''}>${extra||ico(icon,72)}<b>${label}</b></button>`;
   const cont=has?`<img class="tb-face" src="${iconURL('hero',has.heroes[0].id,128)}" alt="">`:'';
@@ -41,7 +53,7 @@ function hbLabel(){return[HB.fac==='all'?'All banners':FAC[HB.fac].arch,HB.type=
 function hbDetail(h){const book=h.type==='Magic'||h.sp.length>0,f=FAC[h.fac];
   return`<div class="hbdet" style="--c:${hbCol(h)}"><button class="btn sm" data-hbback="1">◂ All heroes</button>
     <div class="hbd-top"><span class="hbd-port"><img src="${iconURL('hero',h.id,128)}" alt=""></span><div><h2 class="hbd-name">${esc(h.name)}</h2>
-      <p class="hbd-sub">${f?`<img src="${iconURL('crest',h.fac,52)}" alt=""> ${f.arch}`:'No banner'} · ${h.type} hero · ${HB_GRP[hbGroup(h)].replace(/s$/,'').replace('Everyone','')}${book?' · 📖 spellbook':''}</p>
+      <p class="hbd-sub">${f?`<img src="${iconURL('crest',h.fac,52)}" alt=""> ${f.arch}`:'No banner'} · ${h.type} hero · ${{pick:'Banner pick',tav:'Tavern hero',stu:'Student hero',cls:'Class hero'}[hbGroup(h)]}${book?' · 📖 spellbook':''}</p>
       <div class="bigstats">${['atk','def','pow','lore'].map((k,i)=>`<span title="${STAT_TIP[k]}"><em><img src="${iconURL('stat',k,44)}" alt="">${STATN[k]}</em><b>${h.st[i]}</b></span>`).join('')}</div></div></div>
     <ul class="hkit"><li><b>★ ${esc(h.ab||'')}:</b> ${esc(h.ad||'')}</li>${h.sk.map(k=>SK[k]?`<li>${skIco(k,22)}<b>${SK[k].name}:</b> ${SK[k].desc}</li>`:'').join('')}${h.item&&ITEMS[h.item]?`<li><b>${ITEMS[h.item].name}:</b> ${itemTxt(h.item)}</li>`:''}${book?`<li><b>Spells:</b> ${(h.sp.length?h.sp:['ember']).map(k=>SP[k]?SP[k].name:k).join(', ')}</li>`:''}</ul>
     ${h.story?`<p class="hbd-story">${esc(h.story)}</p>`:''}</div>`;}

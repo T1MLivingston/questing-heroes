@@ -95,7 +95,7 @@ $('#bMenu').onclick=async()=>{if(!S||moving||modalOpen)return;closeHeroMenu();
   if(v==='save')await saveGame();
   else if(v==='load'){await loadGame();}
   else if(v==='edit'){save();S=null;terrainCv=null;terrainPh=null;openEditor();}
-  else if(v==='quit'){save();S=null;terrainCv=null;terrainPh=null;title();}};
+  else if(v==='quit'){save();title();}};
 $('#bEnd').onclick=()=>{closeHeroMenu();endDay();};
 $('#bTown').onclick=()=>{if(!S||moving||modalOpen)return;const h=HERO();if(h.x===S.town.x&&h.y===S.town.y){arriveTown();return;}const mt=myMajors().find(o=>o.x===h.x&&o.y===h.y);if(mt)arriveTown(mt);else openTown();};
 $('#bCenter').onclick=()=>S&&centerOn(HERO().x,HERO().y);

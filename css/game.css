@@ -1199,3 +1199,6 @@ p.mmarket{max-width:none!important;margin-left:0!important;margin-right:0!import
 .hbd-story{font-style:italic;max-width:640px}
 .hbq{background:#fffaf0;color:#2a1c10}.hbq::placeholder{color:#8a7a5a}
 .hbd-name{font-size:32px;margin:0;color:#2a1c10}
+
+/* v65: no stale game screen behind the title and setup pages */
+body.offgame #app{visibility:hidden}
