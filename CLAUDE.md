@@ -223,6 +223,10 @@ Everything lives in one object, `S`, so it can be saved as JSON:
 - New ability hooks (player side only): `forgePlus` (extra Great Forge attack), `armyDef` (whole army defense), `rangedPct` (shooter damage), `halfCost` (one spell at half mana), `manaCut` (all spells cheaper), `squallPct`, `weakenPct`.
 - Raised: Ivan (Forge half ore, +1 more attack), Oliver (30% cheaper rough ground, +5% movement), Shadow (harvest 20%), Sheila (Squall +30%), Grimes and Griffiths (+1 speed to their troop). Made distinct: Veyra, Gliss, Silka, Murmur, Boone, Mossback, Aster, Nessa Holt. Trimmed: Schmickle and Quillby to +200 gold a day. Battaglia is a Might hero.
 
+### Single-file build
+
+- `python3 tools/build_single_html.py [out.html]` makes one self-contained HTML of the whole game (about 34 MB): CSS with every `url()` inlined, the `js/*.js` files concatenated, and every file under `assets/` embedded in `window.QH_ASSETS` as data URIs. A small shim swaps any `assets/...` path for its data URI wherever the game sets one (image and audio `src`, `innerHTML`, `insertAdjacentHTML`, `setAttribute`, style properties such as `cursor` and `backgroundImage`, `new Audio`). It works from `file://` with team colours, since data-URI images don't taint canvases. The output is gitignored.
+
 ### v65 quit-to-title fix, Zakai
 
 - Bug fix: quitting to the title (☰ menu → Quit to title, and every other path back to `title()`) used to set `S=null` but leave the old game screen under the title: the stale top bar, hero panel and army, and a map canvas that stops drawing without `S`, so it froze half-drawn and went fully black after a resize or tab switch. `offGame()` (13-boot.js, called at the start of `title()`) now resets `S`, `bt`, `path`, `moving` and the terrain canvases, closes the hero menu, removes the tutorial coach, hides the day flip and loot pops, clears the map canvas and minimap, and adds `body.offgame`, which hides `#app` (`visibility:hidden`). `renderUI` (when `S` is set) and `openEditor` remove the class.
