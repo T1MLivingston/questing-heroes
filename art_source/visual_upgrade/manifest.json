@@ -1,0 +1,3321 @@
+{
+  "game": "Questing Heroes",
+  "pack": "Visual upgrade 2026-11",
+  "version": 1,
+  "rendering": {
+    "filter": "nearest",
+    "alpha": "binary"
+  },
+  "battle": {
+    "aster_and_briar": {
+      "path": "assets/battle/heroes/upgrade/aster_and_briar/strip.png",
+      "frame_size": [
+        96,
+        64
+      ],
+      "pose_order": [
+        "idle",
+        "move_a",
+        "move_b",
+        "attack",
+        "hit",
+        "death"
+      ],
+      "pivot": [
+        48,
+        60
+      ],
+      "facing": "e",
+      "mirror_west": true,
+      "durations_ms": [
+        600,
+        120,
+        120,
+        180,
+        150,
+        400
+      ],
+      "name": "Aster & Briar",
+      "banner": "elves"
+    },
+    "atoll": {
+      "path": "assets/battle/heroes/upgrade/atoll/strip.png",
+      "frame_size": [
+        96,
+        64
+      ],
+      "pose_order": [
+        "idle",
+        "move_a",
+        "move_b",
+        "attack",
+        "hit",
+        "death"
+      ],
+      "pivot": [
+        48,
+        60
+      ],
+      "facing": "e",
+      "mirror_west": true,
+      "durations_ms": [
+        600,
+        120,
+        120,
+        180,
+        150,
+        400
+      ],
+      "name": "Coral",
+      "banner": "merfolk"
+    },
+    "catherine": {
+      "path": "assets/battle/heroes/upgrade/catherine/strip.png",
+      "frame_size": [
+        96,
+        64
+      ],
+      "pose_order": [
+        "idle",
+        "move_a",
+        "move_b",
+        "attack",
+        "hit",
+        "death"
+      ],
+      "pivot": [
+        48,
+        60
+      ],
+      "facing": "e",
+      "mirror_west": true,
+      "durations_ms": [
+        600,
+        120,
+        120,
+        180,
+        150,
+        400
+      ],
+      "name": "Katherine",
+      "banner": "wizards"
+    },
+    "fut_esports": {
+      "path": "assets/battle/heroes/upgrade/fut_esports/strip.png",
+      "frame_size": [
+        96,
+        64
+      ],
+      "pose_order": [
+        "idle",
+        "move_a",
+        "move_b",
+        "attack",
+        "hit",
+        "death"
+      ],
+      "pivot": [
+        48,
+        60
+      ],
+      "facing": "e",
+      "mirror_west": true,
+      "durations_ms": [
+        600,
+        120,
+        120,
+        180,
+        150,
+        400
+      ],
+      "name": "Fut",
+      "banner": "centaurs"
+    },
+    "king_pharoph_the_3rd": {
+      "path": "assets/battle/heroes/upgrade/king_pharoph_the_3rd/strip.png",
+      "frame_size": [
+        96,
+        64
+      ],
+      "pose_order": [
+        "idle",
+        "move_a",
+        "move_b",
+        "attack",
+        "hit",
+        "death"
+      ],
+      "pivot": [
+        48,
+        60
+      ],
+      "facing": "e",
+      "mirror_west": true,
+      "durations_ms": [
+        600,
+        120,
+        120,
+        180,
+        150,
+        400
+      ],
+      "name": "King Pharoph the 3rd",
+      "banner": "centaurs"
+    },
+    "lord_krishna": {
+      "path": "assets/battle/heroes/upgrade/lord_krishna/strip.png",
+      "frame_size": [
+        96,
+        64
+      ],
+      "pose_order": [
+        "idle",
+        "move_a",
+        "move_b",
+        "attack",
+        "hit",
+        "death"
+      ],
+      "pivot": [
+        48,
+        60
+      ],
+      "facing": "e",
+      "mirror_west": true,
+      "durations_ms": [
+        600,
+        120,
+        120,
+        180,
+        150,
+        400
+      ],
+      "name": "Larishna",
+      "banner": "wizards"
+    },
+    "luckenzo": {
+      "path": "assets/battle/heroes/upgrade/luckenzo/strip.png",
+      "frame_size": [
+        96,
+        64
+      ],
+      "pose_order": [
+        "idle",
+        "move_a",
+        "move_b",
+        "attack",
+        "hit",
+        "death"
+      ],
+      "pivot": [
+        48,
+        60
+      ],
+      "facing": "e",
+      "mirror_west": true,
+      "durations_ms": [
+        600,
+        120,
+        120,
+        180,
+        150,
+        400
+      ],
+      "name": "Luckenzo",
+      "banner": "wizards"
+    },
+    "mags_and_mae": {
+      "path": "assets/battle/heroes/upgrade/mags_and_mae/strip.png",
+      "frame_size": [
+        96,
+        64
+      ],
+      "pose_order": [
+        "idle",
+        "move_a",
+        "move_b",
+        "attack",
+        "hit",
+        "death"
+      ],
+      "pivot": [
+        48,
+        60
+      ],
+      "facing": "e",
+      "mirror_west": true,
+      "durations_ms": [
+        600,
+        120,
+        120,
+        180,
+        150,
+        400
+      ],
+      "name": "Mags & Mae",
+      "banner": "wizards"
+    },
+    "mara": {
+      "path": "assets/battle/heroes/upgrade/mara/strip.png",
+      "frame_size": [
+        96,
+        64
+      ],
+      "pose_order": [
+        "idle",
+        "move_a",
+        "move_b",
+        "attack",
+        "hit",
+        "death"
+      ],
+      "pivot": [
+        48,
+        60
+      ],
+      "facing": "e",
+      "mirror_west": true,
+      "durations_ms": [
+        600,
+        120,
+        120,
+        180,
+        150,
+        400
+      ],
+      "name": "Mara",
+      "banner": "necro"
+    },
+    "mossback": {
+      "path": "assets/battle/heroes/upgrade/mossback/strip.png",
+      "frame_size": [
+        96,
+        64
+      ],
+      "pose_order": [
+        "idle",
+        "move_a",
+        "move_b",
+        "attack",
+        "hit",
+        "death"
+      ],
+      "pivot": [
+        48,
+        60
+      ],
+      "facing": "e",
+      "mirror_west": true,
+      "durations_ms": [
+        600,
+        120,
+        120,
+        180,
+        150,
+        400
+      ],
+      "name": "Mossback",
+      "banner": "elves"
+    },
+    "nanya": {
+      "path": "assets/battle/heroes/upgrade/nanya/strip.png",
+      "frame_size": [
+        96,
+        64
+      ],
+      "pose_order": [
+        "idle",
+        "move_a",
+        "move_b",
+        "attack",
+        "hit",
+        "death"
+      ],
+      "pivot": [
+        48,
+        60
+      ],
+      "facing": "e",
+      "mirror_west": true,
+      "durations_ms": [
+        600,
+        120,
+        120,
+        180,
+        150,
+        400
+      ],
+      "name": "Nanya",
+      "banner": "merfolk"
+    },
+    "ned_and_nat": {
+      "path": "assets/battle/heroes/upgrade/ned_and_nat/strip.png",
+      "frame_size": [
+        96,
+        64
+      ],
+      "pose_order": [
+        "idle",
+        "move_a",
+        "move_b",
+        "attack",
+        "hit",
+        "death"
+      ],
+      "pivot": [
+        48,
+        60
+      ],
+      "facing": "e",
+      "mirror_west": true,
+      "durations_ms": [
+        600,
+        120,
+        120,
+        180,
+        150,
+        400
+      ],
+      "name": "Ned & Nat",
+      "banner": "dwarves"
+    },
+    "odo_and_otto": {
+      "path": "assets/battle/heroes/upgrade/odo_and_otto/strip.png",
+      "frame_size": [
+        96,
+        64
+      ],
+      "pose_order": [
+        "idle",
+        "move_a",
+        "move_b",
+        "attack",
+        "hit",
+        "death"
+      ],
+      "pivot": [
+        48,
+        60
+      ],
+      "facing": "e",
+      "mirror_west": true,
+      "durations_ms": [
+        600,
+        120,
+        120,
+        180,
+        150,
+        400
+      ],
+      "name": "Odo & Otto",
+      "banner": "necro"
+    },
+    "posy_spinner": {
+      "path": "assets/battle/heroes/upgrade/posy_spinner/strip.png",
+      "frame_size": [
+        96,
+        64
+      ],
+      "pose_order": [
+        "idle",
+        "move_a",
+        "move_b",
+        "attack",
+        "hit",
+        "death"
+      ],
+      "pivot": [
+        48,
+        60
+      ],
+      "facing": "e",
+      "mirror_west": true,
+      "durations_ms": [
+        600,
+        120,
+        120,
+        180,
+        150,
+        400
+      ],
+      "name": "Posy Spinner",
+      "banner": "merfolk"
+    },
+    "rafe_and_reed": {
+      "path": "assets/battle/heroes/upgrade/rafe_and_reed/strip.png",
+      "frame_size": [
+        96,
+        64
+      ],
+      "pose_order": [
+        "idle",
+        "move_a",
+        "move_b",
+        "attack",
+        "hit",
+        "death"
+      ],
+      "pivot": [
+        48,
+        60
+      ],
+      "facing": "e",
+      "mirror_west": true,
+      "durations_ms": [
+        600,
+        120,
+        120,
+        180,
+        150,
+        400
+      ],
+      "name": "Rafe & Reed",
+      "banner": "pirates"
+    },
+    "rusk_hookhorn": {
+      "path": "assets/battle/heroes/upgrade/rusk_hookhorn/strip.png",
+      "frame_size": [
+        96,
+        64
+      ],
+      "pose_order": [
+        "idle",
+        "move_a",
+        "move_b",
+        "attack",
+        "hit",
+        "death"
+      ],
+      "pivot": [
+        48,
+        60
+      ],
+      "facing": "e",
+      "mirror_west": true,
+      "durations_ms": [
+        600,
+        120,
+        120,
+        180,
+        150,
+        400
+      ],
+      "name": "Rusk Hookhorn",
+      "banner": "merfolk"
+    },
+    "sid_and_tess": {
+      "path": "assets/battle/heroes/upgrade/sid_and_tess/strip.png",
+      "frame_size": [
+        96,
+        64
+      ],
+      "pose_order": [
+        "idle",
+        "move_a",
+        "move_b",
+        "attack",
+        "hit",
+        "death"
+      ],
+      "pivot": [
+        48,
+        60
+      ],
+      "facing": "e",
+      "mirror_west": true,
+      "durations_ms": [
+        600,
+        120,
+        120,
+        180,
+        150,
+        400
+      ],
+      "name": "Sid & Tess",
+      "banner": "pirates"
+    },
+    "spike": {
+      "path": "assets/battle/heroes/upgrade/spike/strip.png",
+      "frame_size": [
+        96,
+        64
+      ],
+      "pose_order": [
+        "idle",
+        "move_a",
+        "move_b",
+        "attack",
+        "hit",
+        "death"
+      ],
+      "pivot": [
+        48,
+        60
+      ],
+      "facing": "e",
+      "mirror_west": true,
+      "durations_ms": [
+        600,
+        120,
+        120,
+        180,
+        150,
+        400
+      ],
+      "name": "Spike",
+      "banner": "dwarves"
+    },
+    "spindle": {
+      "path": "assets/battle/heroes/upgrade/spindle/strip.png",
+      "frame_size": [
+        96,
+        64
+      ],
+      "pose_order": [
+        "idle",
+        "move_a",
+        "move_b",
+        "attack",
+        "hit",
+        "death"
+      ],
+      "pivot": [
+        48,
+        60
+      ],
+      "facing": "e",
+      "mirror_west": true,
+      "durations_ms": [
+        600,
+        120,
+        120,
+        180,
+        150,
+        400
+      ],
+      "name": "Spindle",
+      "banner": "merfolk"
+    },
+    "tansy": {
+      "path": "assets/battle/heroes/upgrade/tansy/strip.png",
+      "frame_size": [
+        96,
+        64
+      ],
+      "pose_order": [
+        "idle",
+        "move_a",
+        "move_b",
+        "attack",
+        "hit",
+        "death"
+      ],
+      "pivot": [
+        48,
+        60
+      ],
+      "facing": "e",
+      "mirror_west": true,
+      "durations_ms": [
+        600,
+        120,
+        120,
+        180,
+        150,
+        400
+      ],
+      "name": "Penny",
+      "banner": "dwarves"
+    },
+    "tembor": {
+      "path": "assets/battle/heroes/upgrade/tembor/strip.png",
+      "frame_size": [
+        96,
+        64
+      ],
+      "pose_order": [
+        "idle",
+        "move_a",
+        "move_b",
+        "attack",
+        "hit",
+        "death"
+      ],
+      "pivot": [
+        48,
+        60
+      ],
+      "facing": "e",
+      "mirror_west": true,
+      "durations_ms": [
+        600,
+        120,
+        120,
+        180,
+        150,
+        400
+      ],
+      "name": "India",
+      "banner": "centaurs"
+    },
+    "thornfrill": {
+      "path": "assets/battle/heroes/upgrade/thornfrill/strip.png",
+      "frame_size": [
+        96,
+        64
+      ],
+      "pose_order": [
+        "idle",
+        "move_a",
+        "move_b",
+        "attack",
+        "hit",
+        "death"
+      ],
+      "pivot": [
+        48,
+        60
+      ],
+      "facing": "e",
+      "mirror_west": true,
+      "durations_ms": [
+        600,
+        120,
+        120,
+        180,
+        150,
+        400
+      ],
+      "name": "Thornfrill",
+      "banner": "rangers"
+    },
+    "wren": {
+      "path": "assets/battle/heroes/upgrade/wren/strip.png",
+      "frame_size": [
+        96,
+        64
+      ],
+      "pose_order": [
+        "idle",
+        "move_a",
+        "move_b",
+        "attack",
+        "hit",
+        "death"
+      ],
+      "pivot": [
+        48,
+        60
+      ],
+      "facing": "e",
+      "mirror_west": true,
+      "durations_ms": [
+        600,
+        120,
+        120,
+        180,
+        150,
+        400
+      ],
+      "name": "Wren",
+      "banner": "centaurs"
+    },
+    "yselle": {
+      "path": "assets/battle/heroes/upgrade/yselle/strip.png",
+      "frame_size": [
+        96,
+        64
+      ],
+      "pose_order": [
+        "idle",
+        "move_a",
+        "move_b",
+        "attack",
+        "hit",
+        "death"
+      ],
+      "pivot": [
+        48,
+        60
+      ],
+      "facing": "e",
+      "mirror_west": true,
+      "durations_ms": [
+        600,
+        120,
+        120,
+        180,
+        150,
+        400
+      ],
+      "name": "Fern",
+      "banner": "elves"
+    },
+    "zakai": {
+      "path": "assets/battle/heroes/upgrade/zakai/strip.png",
+      "frame_size": [
+        96,
+        64
+      ],
+      "pose_order": [
+        "idle",
+        "move_a",
+        "move_b",
+        "attack",
+        "hit",
+        "death"
+      ],
+      "pivot": [
+        48,
+        60
+      ],
+      "facing": "e",
+      "mirror_west": true,
+      "durations_ms": [
+        600,
+        120,
+        120,
+        180,
+        150,
+        400
+      ],
+      "name": "Zakai",
+      "banner": "wizards"
+    }
+  },
+  "walkers": {
+    "alderhide": {
+      "path": "assets/heroes/walkers_upgrade/alderhide.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "columns": 4,
+      "rows": 8,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      },
+      "name": "Alderhide",
+      "banner": "elves"
+    },
+    "atoll": {
+      "path": "assets/heroes/walkers_upgrade/atoll.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "columns": 4,
+      "rows": 8,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      },
+      "name": "Coral",
+      "banner": "merfolk"
+    },
+    "ava_young": {
+      "path": "assets/heroes/walkers_upgrade/ava_young.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "columns": 4,
+      "rows": 8,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      },
+      "name": "Ava",
+      "banner": "elves"
+    },
+    "dupengeiser": {
+      "path": "assets/heroes/walkers_upgrade/dupengeiser.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "columns": 4,
+      "rows": 8,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      },
+      "name": "Dupengeiser",
+      "banner": "dwarves"
+    },
+    "eden": {
+      "path": "assets/heroes/walkers_upgrade/eden.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "columns": 4,
+      "rows": 8,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      },
+      "name": "Eden",
+      "banner": "elves"
+    },
+    "elvis": {
+      "path": "assets/heroes/walkers_upgrade/elvis.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "columns": 4,
+      "rows": 8,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      },
+      "name": "Eelvis",
+      "banner": "merfolk"
+    },
+    "enzo": {
+      "path": "assets/heroes/walkers_upgrade/enzo.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "columns": 4,
+      "rows": 8,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      },
+      "name": "Enzo",
+      "banner": "dwarves"
+    },
+    "fin_and_flo": {
+      "path": "assets/heroes/walkers_upgrade/fin_and_flo.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "columns": 4,
+      "rows": 8,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      },
+      "name": "Fin & Flo",
+      "banner": "merfolk"
+    },
+    "flintback": {
+      "path": "assets/heroes/walkers_upgrade/flintback.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "columns": 4,
+      "rows": 8,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      },
+      "name": "Flintback",
+      "banner": "centaurs"
+    },
+    "graven": {
+      "path": "assets/heroes/walkers_upgrade/graven.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "columns": 4,
+      "rows": 8,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      },
+      "name": "Lore",
+      "banner": "necro"
+    },
+    "grimes": {
+      "path": "assets/heroes/walkers_upgrade/grimes.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "columns": 4,
+      "rows": 8,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      },
+      "name": "Grimes",
+      "banner": "dwarves"
+    },
+    "gunt_gunt": {
+      "path": "assets/heroes/walkers_upgrade/gunt_gunt.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "columns": 4,
+      "rows": 8,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      },
+      "name": "Gunt Gunt",
+      "banner": "pirates"
+    },
+    "harlan_chalk": {
+      "path": "assets/heroes/walkers_upgrade/harlan_chalk.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "columns": 4,
+      "rows": 8,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      },
+      "name": "Harlan",
+      "banner": "dwarves"
+    },
+    "inkwake": {
+      "path": "assets/heroes/walkers_upgrade/inkwake.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "columns": 4,
+      "rows": 8,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      },
+      "name": "Inkwake",
+      "banner": "pirates"
+    },
+    "ivan": {
+      "path": "assets/heroes/walkers_upgrade/ivan.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "columns": 4,
+      "rows": 8,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      },
+      "name": "Ivan",
+      "banner": "dwarves"
+    },
+    "kiln": {
+      "path": "assets/heroes/walkers_upgrade/kiln.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "columns": 4,
+      "rows": 8,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      },
+      "name": "Kiln",
+      "banner": "dwarves"
+    },
+    "kit_and_nell": {
+      "path": "assets/heroes/walkers_upgrade/kit_and_nell.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "columns": 4,
+      "rows": 8,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      },
+      "name": "Kit & Nell",
+      "banner": "dwarves"
+    },
+    "lawrence": {
+      "path": "assets/heroes/walkers_upgrade/lawrence.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "columns": 4,
+      "rows": 8,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      },
+      "name": "Lawrence",
+      "banner": "pirates"
+    },
+    "letchworth": {
+      "path": "assets/heroes/walkers_upgrade/letchworth.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "columns": 4,
+      "rows": 8,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      },
+      "name": "Letchworth",
+      "banner": "merfolk"
+    },
+    "livingston": {
+      "path": "assets/heroes/walkers_upgrade/livingston.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "columns": 4,
+      "rows": 8,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      },
+      "name": "Livingston",
+      "banner": "elves"
+    },
+    "lune": {
+      "path": "assets/heroes/walkers_upgrade/lune.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "columns": 4,
+      "rows": 8,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      },
+      "name": "Lunt",
+      "banner": "elves"
+    },
+    "mer2": {
+      "path": "assets/heroes/walkers_upgrade/mer2.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "columns": 4,
+      "rows": 8,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      },
+      "name": "Griffiths",
+      "banner": "merfolk"
+    },
+    "michael": {
+      "path": "assets/heroes/walkers_upgrade/michael.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "columns": 4,
+      "rows": 8,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      },
+      "name": "Michael",
+      "banner": "elves"
+    },
+    "mossback": {
+      "path": "assets/heroes/walkers_upgrade/mossback.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "columns": 4,
+      "rows": 8,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      },
+      "name": "Mossback",
+      "banner": "elves"
+    },
+    "mr_pinecone": {
+      "path": "assets/heroes/walkers_upgrade/mr_pinecone.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "columns": 4,
+      "rows": 8,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      },
+      "name": "Mr. Pinecone",
+      "banner": "elves"
+    },
+    "nerka": {
+      "path": "assets/heroes/walkers_upgrade/nerka.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "columns": 4,
+      "rows": 8,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      },
+      "name": "Nerka",
+      "banner": "merfolk"
+    },
+    "nissa": {
+      "path": "assets/heroes/walkers_upgrade/nissa.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "columns": 4,
+      "rows": 8,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      },
+      "name": "Nissa",
+      "banner": "rangers"
+    },
+    "omalley": {
+      "path": "assets/heroes/walkers_upgrade/omalley.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "columns": 4,
+      "rows": 8,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      },
+      "name": "O'Malley",
+      "banner": "pirates"
+    },
+    "ossin": {
+      "path": "assets/heroes/walkers_upgrade/ossin.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "columns": 4,
+      "rows": 8,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      },
+      "name": "Dusty",
+      "banner": "necro"
+    },
+    "payton": {
+      "path": "assets/heroes/walkers_upgrade/payton.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "columns": 4,
+      "rows": 8,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      },
+      "name": "Peyto",
+      "banner": "pirates"
+    },
+    "pip_quickline": {
+      "path": "assets/heroes/walkers_upgrade/pip_quickline.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "columns": 4,
+      "rows": 8,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      },
+      "name": "Pip Quickline",
+      "banner": "pirates"
+    },
+    "rattleclaw": {
+      "path": "assets/heroes/walkers_upgrade/rattleclaw.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "columns": 4,
+      "rows": 8,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      },
+      "name": "Rattleclaw",
+      "banner": "necro"
+    },
+    "reedcall": {
+      "path": "assets/heroes/walkers_upgrade/reedcall.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "columns": 4,
+      "rows": 8,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      },
+      "name": "Crestwind",
+      "banner": "rangers"
+    },
+    "remy": {
+      "path": "assets/heroes/walkers_upgrade/remy.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "columns": 4,
+      "rows": 8,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      },
+      "name": "Remy",
+      "banner": "wizards"
+    },
+    "rocky": {
+      "path": "assets/heroes/walkers_upgrade/rocky.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "columns": 4,
+      "rows": 8,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      },
+      "name": "Rocky",
+      "banner": "merfolk"
+    },
+    "sera_venn": {
+      "path": "assets/heroes/walkers_upgrade/sera_venn.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "columns": 4,
+      "rows": 8,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      },
+      "name": "Sera Venn",
+      "banner": "wizards"
+    },
+    "sheila": {
+      "path": "assets/heroes/walkers_upgrade/sheila.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "columns": 4,
+      "rows": 8,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      },
+      "name": "Sheila",
+      "banner": "pirates"
+    },
+    "silka": {
+      "path": "assets/heroes/walkers_upgrade/silka.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "columns": 4,
+      "rows": 8,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      },
+      "name": "Violet",
+      "banner": "centaurs"
+    },
+    "skimmer": {
+      "path": "assets/heroes/walkers_upgrade/skimmer.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "columns": 4,
+      "rows": 8,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      },
+      "name": "Skimmer",
+      "banner": "merfolk"
+    },
+    "slack": {
+      "path": "assets/heroes/walkers_upgrade/slack.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "columns": 4,
+      "rows": 8,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      },
+      "name": "Slack",
+      "banner": "dwarves"
+    },
+    "tembor": {
+      "path": "assets/heroes/walkers_upgrade/tembor.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "columns": 4,
+      "rows": 8,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      },
+      "name": "India",
+      "banner": "centaurs"
+    },
+    "thornfrill": {
+      "path": "assets/heroes/walkers_upgrade/thornfrill.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "columns": 4,
+      "rows": 8,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      },
+      "name": "Thornfrill",
+      "banner": "rangers"
+    },
+    "vera": {
+      "path": "assets/heroes/walkers_upgrade/vera.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "columns": 4,
+      "rows": 8,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      },
+      "name": "Vera",
+      "banner": "wizards"
+    },
+    "veyra": {
+      "path": "assets/heroes/walkers_upgrade/veyra.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "columns": 4,
+      "rows": 8,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      },
+      "name": "Willa",
+      "banner": "necro"
+    },
+    "virel": {
+      "path": "assets/heroes/walkers_upgrade/virel.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "columns": 4,
+      "rows": 8,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      },
+      "name": "Plume",
+      "banner": "centaurs"
+    },
+    "zahara": {
+      "path": "assets/heroes/walkers_upgrade/zahara.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "columns": 4,
+      "rows": 8,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      },
+      "name": "Zarra",
+      "banner": "centaurs"
+    },
+    "zakai": {
+      "path": "assets/heroes/walkers_upgrade/zakai.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "columns": 4,
+      "rows": 8,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      },
+      "name": "Zakai",
+      "banner": "wizards"
+    }
+  },
+  "portraits": {
+    "atoll": {
+      "path": "assets/portraits/heroes/upgrade/atoll_128.png",
+      "size": [
+        128,
+        128
+      ],
+      "upscaled_path": "assets/portraits/heroes/upgrade/atoll_256.png",
+      "name": "Coral",
+      "banner": "merfolk"
+    },
+    "kiln": {
+      "path": "assets/portraits/heroes/upgrade/kiln_128.png",
+      "size": [
+        128,
+        128
+      ],
+      "upscaled_path": "assets/portraits/heroes/upgrade/kiln_256.png",
+      "name": "Kiln",
+      "banner": "dwarves"
+    },
+    "king_pharoph_the_3rd": {
+      "path": "assets/portraits/heroes/upgrade/king_pharoph_the_3rd_128.png",
+      "size": [
+        128,
+        128
+      ],
+      "upscaled_path": "assets/portraits/heroes/upgrade/king_pharoph_the_3rd_256.png",
+      "name": "King Pharoph the 3rd",
+      "banner": "centaurs"
+    },
+    "ossin": {
+      "path": "assets/portraits/heroes/upgrade/ossin_128.png",
+      "size": [
+        128,
+        128
+      ],
+      "upscaled_path": "assets/portraits/heroes/upgrade/ossin_256.png",
+      "name": "Dusty",
+      "banner": "necro"
+    },
+    "shadow": {
+      "path": "assets/portraits/heroes/upgrade/shadow_128.png",
+      "size": [
+        128,
+        128
+      ],
+      "upscaled_path": "assets/portraits/heroes/upgrade/shadow_256.png",
+      "name": "Shadow",
+      "banner": "necro"
+    }
+  },
+  "spells": {
+    "ember": {
+      "path": "assets/ui/upgrade/spells/ember.png",
+      "size": [
+        32,
+        32
+      ]
+    },
+    "chain": {
+      "path": "assets/ui/upgrade/spells/chain.png",
+      "size": [
+        32,
+        32
+      ]
+    },
+    "squall": {
+      "path": "assets/ui/upgrade/spells/squall.png",
+      "size": [
+        32,
+        32
+      ]
+    },
+    "entangle": {
+      "path": "assets/ui/upgrade/spells/entangle.png",
+      "size": [
+        32,
+        32
+      ]
+    },
+    "raise": {
+      "path": "assets/ui/upgrade/spells/raise.png",
+      "size": [
+        32,
+        32
+      ]
+    },
+    "geyser": {
+      "path": "assets/ui/upgrade/spells/geyser.png",
+      "size": [
+        32,
+        32
+      ]
+    },
+    "mend": {
+      "path": "assets/ui/upgrade/spells/mend.png",
+      "size": [
+        32,
+        32
+      ]
+    },
+    "swift": {
+      "path": "assets/ui/upgrade/spells/swift.png",
+      "size": [
+        32,
+        32
+      ]
+    },
+    "bark": {
+      "path": "assets/ui/upgrade/spells/bark.png",
+      "size": [
+        32,
+        32
+      ]
+    },
+    "starfall": {
+      "path": "assets/ui/upgrade/spells/starfall.png",
+      "size": [
+        32,
+        32
+      ]
+    },
+    "weaken": {
+      "path": "assets/ui/upgrade/spells/weaken.png",
+      "size": [
+        32,
+        32
+      ]
+    },
+    "frost": {
+      "path": "assets/ui/upgrade/spells/frost.png",
+      "size": [
+        32,
+        32
+      ]
+    },
+    "rally": {
+      "path": "assets/ui/upgrade/spells/rally.png",
+      "size": [
+        32,
+        32
+      ]
+    },
+    "meteor": {
+      "path": "assets/ui/upgrade/spells/meteor.png",
+      "size": [
+        32,
+        32
+      ]
+    }
+  },
+  "ui": {
+    "market": {
+      "path": "assets/ui/upgrade/ui/market.png",
+      "size": [
+        32,
+        32
+      ]
+    },
+    "mines": {
+      "path": "assets/ui/upgrade/ui/mines.png",
+      "size": [
+        32,
+        32
+      ]
+    },
+    "retreat": {
+      "path": "assets/ui/upgrade/ui/retreat.png",
+      "size": [
+        32,
+        32
+      ]
+    },
+    "bell": {
+      "path": "assets/ui/upgrade/ui/bell.png",
+      "size": [
+        32,
+        32
+      ]
+    },
+    "tavern": {
+      "path": "assets/ui/upgrade/ui/tavern.png",
+      "size": [
+        32,
+        32
+      ]
+    },
+    "hero_book": {
+      "path": "assets/ui/upgrade/ui/hero_book.png",
+      "size": [
+        32,
+        32
+      ]
+    },
+    "create_hero": {
+      "path": "assets/ui/upgrade/ui/create_hero.png",
+      "size": [
+        32,
+        32
+      ]
+    },
+    "kick_hero": {
+      "path": "assets/ui/upgrade/ui/kick_hero.png",
+      "size": [
+        32,
+        32
+      ]
+    },
+    "sorcery": {
+      "path": "assets/ui/upgrade/ui/sorcery.png",
+      "size": [
+        32,
+        32
+      ]
+    }
+  },
+  "effects": {
+    "frost_lance": {
+      "path": "assets/battle/spells/frost_lance.png",
+      "frame_size": [
+        64,
+        64
+      ],
+      "frames": 6,
+      "duration_ms": 560,
+      "loop": false
+    },
+    "geyser": {
+      "path": "assets/battle/spells/geyser.png",
+      "frame_size": [
+        64,
+        64
+      ],
+      "frames": 6,
+      "duration_ms": 560,
+      "loop": false
+    },
+    "meteor": {
+      "path": "assets/battle/spells/meteor.png",
+      "frame_size": [
+        64,
+        64
+      ],
+      "frames": 6,
+      "duration_ms": 560,
+      "loop": false
+    },
+    "rally": {
+      "path": "assets/battle/spells/rally.png",
+      "frame_size": [
+        64,
+        64
+      ],
+      "frames": 6,
+      "duration_ms": 560,
+      "loop": false
+    },
+    "weaken": {
+      "path": "assets/battle/spells/weaken.png",
+      "frame_size": [
+        64,
+        64
+      ],
+      "frames": 6,
+      "duration_ms": 560,
+      "loop": false
+    }
+  },
+  "map": {
+    "lighthouse_lit": {
+      "path": "assets/terrain/scenery/lighthouse_lit.png",
+      "size": [
+        64,
+        96
+      ],
+      "pivot": [
+        32,
+        92
+      ]
+    }
+  },
+  "prompts": [
+    {
+      "kind": "battle",
+      "id": "aster_and_briar",
+      "prompt": "Use case: stylized-concept. ONE SIX-FRAME battle animation sprite sheet for Questing Heroes aster_and_briar. Portrait reference identity. PAIR of young blonde female elf seedkeepers, identical pointed ears and curls, one wearing plum cape and other moss green cape, one seed pouch and one branch wand. Layout EXACTLY3 columns x2 rows equal cells no gutters. Reading order idle, walking left leg, walking right leg, attack/cast, hit recoil, defeat lying down. Six complete FULL BODY sprites facing RIGHT/east side three-quarter at consistent scale and costume. Pairs MUST have BOTH figures together in EACH cell. Feet baseline92% of cell, centered with10% padding, weapons and capes inside cells. Native96x64 frame style chunky hand-placed crisp pixel clusters, one-pixel dark outline, original portrait palette, no antialiasing. No mounts. No text, grid, labels or background. Genuinely TRANSPARENT alpha, no shadows or haze behind sprites. Canvas3:2.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "battle",
+      "id": "atoll",
+      "prompt": "Use case: stylized-concept. Asset type: a single transparent SIX-FRAME battle animation sheet for Questing Heroes hero atoll. Input portrait is identity reference. Subject friendly red-pink coral humanoid oracle, clear face with two turquoise eyes, branching coral crown and seaweed green robe with seashell clasp, one coral wand. EXACT LAYOUT: 3 equal columns by 2 equal rows, each cell same dimensions and no gutters. In reading order: idle, stepping left leg, stepping right leg, attack or casting, recoiling hit, defeated lying down. Draw exactly six FULL BODY sprites of THE SAME character, consistent costume and scale in all frames. Camera is side three-quarter view facing RIGHT (east), game tactical battlefield, no perspective change. Each sprite centered in cell with feet on same baseline, leave 10% transparent padding all sides, weapons within own cell. Pixel art equivalent native 96x64 frame, visible crisp pixel clusters, dark one-pixel outline, limited palette, original portrait colors, no blurry glow, no antialiasing, no background, no text, no labels, no grid. Attack uses their specified tool. Death is non-graphic lying down. No mounts, no detached limbs. Sheet landscape 3:2. Genuine alpha background.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "battle",
+      "id": "catherine",
+      "prompt": "Use case: stylized-concept. ONE SIX-FRAME battle animation sprite sheet for Questing Heroes catherine. Portrait reference identity. young human woman with brown skin, black hair ponytail and red streak, round glasses, red cape over charcoal outfit, holding a small glowing green phone in one hand. Layout EXACTLY3 columns x2 rows equal cells no gutters. Reading order idle, walking left leg, walking right leg, attack/cast, hit recoil, defeat lying down. Six complete FULL BODY sprites facing RIGHT/east side three-quarter at consistent scale and costume. Pairs MUST have BOTH figures together in EACH cell. Feet baseline92% of cell, centered with10% padding, weapons and capes inside cells. Native96x64 frame style chunky hand-placed crisp pixel clusters, one-pixel dark outline, original portrait palette, no antialiasing. No mounts. No text, grid, labels or background. Genuinely TRANSPARENT alpha, no shadows or haze behind sprites. Canvas3:2.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "battle",
+      "id": "fut_esports",
+      "prompt": "Use case: stylized-concept. ONE SIX-FRAME battle animation sprite sheet for Questing Heroes fut_esports. Portrait reference identity. young human male scholar president, messy dark brown hair, black rectangular glasses, navy blue gold-trim coat and tan fur collar, holding a CLOSED tan wooden umbrella with curved hook handle. Layout EXACTLY3 columns x2 rows equal cells no gutters. Reading order idle, walking left leg, walking right leg, attack/cast, hit recoil, defeat lying down. Six complete FULL BODY sprites facing RIGHT/east side three-quarter at consistent scale and costume. Pairs MUST have BOTH figures together in EACH cell. Feet baseline92% of cell, centered with10% padding, weapons and capes inside cells. Native96x64 frame style chunky hand-placed crisp pixel clusters, one-pixel dark outline, original portrait palette, no antialiasing. No mounts. No text, grid, labels or background. Genuinely TRANSPARENT alpha, no shadows or haze behind sprites. Canvas3:2.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "battle",
+      "id": "king_pharoph_the_3rd",
+      "prompt": "Use case: stylized-concept. ONE SIX-FRAME battle animation sprite sheet for Questing Heroes king_pharoph_the_3rd. Portrait reference identity. golden clockwork male king, gold brass face with THREE turquoise eyes including forehead eye, crown with gear temples, green fur-trimmed cape over bronze armor, one straight short sword. Layout EXACTLY3 columns x2 rows equal cells no gutters. Reading order idle, walking left leg, walking right leg, attack/cast, hit recoil, defeat lying down. Six complete FULL BODY sprites facing RIGHT/east side three-quarter at consistent scale and costume. Pairs MUST have BOTH figures together in EACH cell. Feet baseline92% of cell, centered with10% padding, weapons and capes inside cells. Native96x64 frame style chunky hand-placed crisp pixel clusters, one-pixel dark outline, original portrait palette, no antialiasing. No mounts. No text, grid, labels or background. Genuinely TRANSPARENT alpha, no shadows or haze behind sprites. Canvas3:2.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "battle",
+      "id": "lord_krishna",
+      "prompt": "Use case: stylized-concept. ONE SIX-FRAME battle animation sprite sheet for Questing Heroes lord_krishna. Portrait reference identity. young human female storm witch, tan skin, long dark blue hair, white pale-blue cloak, deep blue dress, holding one straight blue gem wand. Layout EXACTLY3 columns x2 rows equal cells no gutters. Reading order idle, walking left leg, walking right leg, attack/cast, hit recoil, defeat lying down. Six complete FULL BODY sprites facing RIGHT/east side three-quarter at consistent scale and costume. Pairs MUST have BOTH figures together in EACH cell. Feet baseline92% of cell, centered with10% padding, weapons and capes inside cells. Native96x64 frame style chunky hand-placed crisp pixel clusters, one-pixel dark outline, original portrait palette, no antialiasing. No mounts. No text, grid, labels or background. Genuinely TRANSPARENT alpha, no shadows or haze behind sprites. Canvas3:2.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "battle",
+      "id": "luckenzo",
+      "prompt": "Use case: stylized-concept. ONE SIX-FRAME battle animation sprite sheet for Questing Heroes luckenzo. Portrait reference identity. young curly auburn-haired human male wizard in blue gold-trim coat, friendly face, small cream puppy held close in one arm, simple tracking wand in other. Layout EXACTLY3 columns x2 rows equal cells no gutters. Reading order idle, walking left leg, walking right leg, attack/cast, hit recoil, defeat lying down. Six complete FULL BODY sprites facing RIGHT/east side three-quarter at consistent scale and costume. Pairs MUST have BOTH figures together in EACH cell. Feet baseline92% of cell, centered with10% padding, weapons and capes inside cells. Native96x64 frame style chunky hand-placed crisp pixel clusters, one-pixel dark outline, original portrait palette, no antialiasing. No mounts. No text, grid, labels or background. Genuinely TRANSPARENT alpha, no shadows or haze behind sprites. Canvas3:2.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "battle",
+      "id": "mags_and_mae",
+      "prompt": "Use case: stylized-concept. Single game battle SIX-POSE sprite sheet for mags_and_mae, portrait identity reference. Subject PAIR of elderly white-haired female human astronomers with glasses, one navy moon robe, other peach-orange robe, simple star wands. Exact layout 3 equal columns x 2 equal rows without gutters. Reading order idle, walk A, walk B, attack/cast, hit recoil, defeated lying down. Exactly six complete full-body sprites at same scale, side three-quarter facing RIGHT. If pair, BOTH figures together inside EVERY cell. Feet fixed baseline, centered each cell with generous 12% transparent padding, all weapons fit own cell. Crisp low resolution hand-placed pixel art as native96x64 frames, dark outline, portrait colors, no antialiasing, no blurry glow or shadows. Genuine transparent alpha background, no text, no labels or grid. Landscape3:2.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "battle",
+      "id": "mara",
+      "prompt": "Use case: stylized-concept. Single game battle SIX-POSE sprite sheet for mara, portrait identity reference. Subject older gray-haired human woman gravekeeper, weathered skin, dark purple cape, leather work clothes, one shovel and belt lantern. Exact layout 3 equal columns x 2 equal rows without gutters. Reading order idle, walk A, walk B, attack/cast, hit recoil, defeated lying down. Exactly six complete full-body sprites at same scale, side three-quarter facing RIGHT. If pair, BOTH figures together inside EVERY cell. Feet fixed baseline, centered each cell with generous 12% transparent padding, all weapons fit own cell. Crisp low resolution hand-placed pixel art as native96x64 frames, dark outline, portrait colors, no antialiasing, no blurry glow or shadows. Genuine transparent alpha background, no text, no labels or grid. Landscape3:2.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "battle",
+      "id": "mossback",
+      "prompt": "Use case: stylized-concept. Asset type: a single transparent SIX-FRAME battle animation sheet for Questing Heroes hero mossback. Input portrait is identity reference. Subject elderly anthropomorphic green-and-ochre tortoise herbalist with round spectacles, mossy shell, brown backpack and green robe, holding a wooden walking stick. EXACT LAYOUT: 3 equal columns by 2 equal rows, each cell same dimensions and no gutters. In reading order: idle, stepping left leg, stepping right leg, attack or casting, recoiling hit, defeated lying down. Draw exactly six FULL BODY sprites of THE SAME character, consistent costume and scale in all frames. Camera is side three-quarter view facing RIGHT (east), game tactical battlefield, no perspective change. Each sprite centered in cell with feet on same baseline, leave 10% transparent padding all sides, weapons within own cell. Pixel art equivalent native 96x64 frame, visible crisp pixel clusters, dark one-pixel outline, limited palette, original portrait colors, no blurry glow, no antialiasing, no background, no text, no labels, no grid. Attack uses their specified tool. Death is non-graphic lying down. No mounts, no detached limbs. Sheet landscape 3:2. Genuine alpha background.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "battle",
+      "id": "nanya",
+      "prompt": "Use case: stylized-concept. ONE SIX-FRAME battle animation sprite sheet for Questing Heroes nanya. Portrait reference identity. young human female mage with long dark burgundy hair, pale gray outfit and red scarf, carrot-shaped brooch, small gray owl on shoulder and one short carrot-colored wand. Layout EXACTLY3 columns x2 rows equal cells no gutters. Reading order idle, walking left leg, walking right leg, attack/cast, hit recoil, defeat lying down. Six complete FULL BODY sprites facing RIGHT/east side three-quarter at consistent scale and costume. Pairs MUST have BOTH figures together in EACH cell. Feet baseline92% of cell, centered with10% padding, weapons and capes inside cells. Native96x64 frame style chunky hand-placed crisp pixel clusters, one-pixel dark outline, original portrait palette, no antialiasing. No mounts. No text, grid, labels or background. Genuinely TRANSPARENT alpha, no shadows or haze behind sprites. Canvas3:2.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "battle",
+      "id": "ned_and_nat",
+      "prompt": "Use case: stylized-concept. ONE SIX-FRAME battle animation sprite sheet for Questing Heroes ned_and_nat. Portrait reference identity. PAIR of sturdy elderly male dwarf stonecutters, one white bearded with round glasses in navy work clothes, other gray bearded in red work clothes, each small hammer. Layout EXACTLY3 columns x2 rows equal cells no gutters. Reading order idle, walking left leg, walking right leg, attack/cast, hit recoil, defeat lying down. Six complete FULL BODY sprites facing RIGHT/east side three-quarter at consistent scale and costume. Pairs MUST have BOTH figures together in EACH cell. Feet baseline92% of cell, centered with10% padding, weapons and capes inside cells. Native96x64 frame style chunky hand-placed crisp pixel clusters, one-pixel dark outline, original portrait palette, no antialiasing. No mounts. No text, grid, labels or background. Genuinely TRANSPARENT alpha, no shadows or haze behind sprites. Canvas3:2.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "battle",
+      "id": "odo_and_otto",
+      "prompt": "Use case: stylized-concept. Redraw ONE battle animation atlas for Questing Heroes. Portrait reference for identity. ONE two-headed gray-skinned undertaker ogre. EXACTLY ONE shared torso, TWO heads growing from its two necks, ONE pair arms and ONE pair legs. Dark curly hair on each head, burgundy funerary coat, single shovel. NEVER draw two separate bodies. SIX shared-body creatures total. Exact layout3columns and2rows of equal square cells, six cells total. Reading order idle, walk A, walk B, attacking, recoiling, defeated lying down. Full body facing RIGHT, fixed size and costume, feet at90% cellheight, all body parts inside cell. Hand placed native64pixel sprite detail, crisp limited palette and dark outline. Genuine transparent alpha background around and between sprites, NO checker pattern NO white backdrop NO grids NO labels NO ground shadows. Canvas1536x1024.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "battle",
+      "id": "posy_spinner",
+      "prompt": "Use case: stylized-concept. ONE SIX-FRAME battle animation sprite sheet for Questing Heroes posy_spinner. Portrait reference identity. young warm brown-skinned human woman, brown hair in high bun, navy-purple moon cloak, small white owl on shoulder, holding brass lantern by its handle. Layout EXACTLY3 columns x2 rows equal cells no gutters. Reading order idle, walking left leg, walking right leg, attack/cast, hit recoil, defeat lying down. Six complete FULL BODY sprites facing RIGHT/east side three-quarter at consistent scale and costume. Pairs MUST have BOTH figures together in EACH cell. Feet baseline92% of cell, centered with10% padding, weapons and capes inside cells. Native96x64 frame style chunky hand-placed crisp pixel clusters, one-pixel dark outline, original portrait palette, no antialiasing. No mounts. No text, grid, labels or background. Genuinely TRANSPARENT alpha, no shadows or haze behind sprites. Canvas3:2.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "battle",
+      "id": "rafe_and_reed",
+      "prompt": "Use case: stylized-concept. ONE SIX-FRAME battle animation sprite sheet for Questing Heroes rafe_and_reed. Portrait reference identity. PAIR of gray-and-white raccoon pirate captains, one rust-red tricorn and brown coat, other navy tricorn and red/navy gold-trim coat, masked raccoon faces and ringed tails, short cutlasses. Layout EXACTLY3 columns x2 rows equal cells no gutters. Reading order idle, walking left leg, walking right leg, attack/cast, hit recoil, defeat lying down. Six complete FULL BODY sprites facing RIGHT/east side three-quarter at consistent scale and costume. Pairs MUST have BOTH figures together in EACH cell. Feet baseline92% of cell, centered with10% padding, weapons and capes inside cells. Native96x64 frame style chunky hand-placed crisp pixel clusters, one-pixel dark outline, original portrait palette, no antialiasing. No mounts. No text, grid, labels or background. Genuinely TRANSPARENT alpha, no shadows or haze behind sprites. Canvas3:2.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "battle",
+      "id": "rusk_hookhorn",
+      "prompt": "Use case: stylized-concept. Single game battle SIX-POSE sprite sheet for rusk_hookhorn, portrait identity reference. Subject red-orange anthropomorphic carnotaur dinosaur pirate with two short horns, red bandanna, cream throat and navy gold-trim captain coat, one cutlass. Exact layout 3 equal columns x 2 equal rows without gutters. Reading order idle, walk A, walk B, attack/cast, hit recoil, defeated lying down. Exactly six complete full-body sprites at same scale, side three-quarter facing RIGHT. If pair, BOTH figures together inside EVERY cell. Feet fixed baseline, centered each cell with generous 12% transparent padding, all weapons fit own cell. Crisp low resolution hand-placed pixel art as native96x64 frames, dark outline, portrait colors, no antialiasing, no blurry glow or shadows. Genuine transparent alpha background, no text, no labels or grid. Landscape3:2.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "battle",
+      "id": "sid_and_tess",
+      "prompt": "Use case: stylized-concept. Single game battle SIX-POSE sprite sheet for sid_and_tess, portrait identity reference. Subject PAIR of human sibling pirates: shorter boy blue bandanna brown hair cream/navy clothes; taller girl burgundy tricorn brown hair red/gold clothes, short cutlasses. Exact layout 3 equal columns x 2 equal rows without gutters. Reading order idle, walk A, walk B, attack/cast, hit recoil, defeated lying down. Exactly six complete full-body sprites at same scale, side three-quarter facing RIGHT. If pair, BOTH figures together inside EVERY cell. Feet fixed baseline, centered each cell with generous 12% transparent padding, all weapons fit own cell. Crisp low resolution hand-placed pixel art as native96x64 frames, dark outline, portrait colors, no antialiasing, no blurry glow or shadows. Genuine transparent alpha background, no text, no labels or grid. Landscape3:2.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "battle",
+      "id": "spike",
+      "prompt": "Use case: stylized-concept. Redraw ONE battle animation atlas for Questing Heroes. Portrait reference for identity. ONE single anthropomorphic porcupine blacksmith, brown fur, cream head quills, purple cape leather apron one smith hammer. NOT twins or a pair. EXACTLY ONE porcupine in each cell, six figures total. Exact layout3columns and2rows of equal square cells, six cells total. Reading order idle, walk A, walk B, attacking, recoiling, defeated lying down. Full body facing RIGHT, fixed size and costume, feet at90% cellheight, all body parts inside cell. Hand placed native64pixel sprite detail, crisp limited palette and dark outline. Genuine transparent alpha background around and between sprites, NO checker pattern NO white backdrop NO grids NO labels NO ground shadows. Canvas1536x1024.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "battle",
+      "id": "spindle",
+      "prompt": "Use case: stylized-concept. Asset type: a single transparent SIX-FRAME battle animation sheet for Questing Heroes hero spindle. Input portrait is identity reference. Subject anthropomorphic golden-orange seahorse courier knight with long tubular snout and turquoise eye, fin crest, blue-and-coral tunic, curled tail, slim spear. EXACT LAYOUT: 3 equal columns by 2 equal rows, each cell same dimensions and no gutters. In reading order: idle, stepping left leg, stepping right leg, attack or casting, recoiling hit, defeated lying down. Draw exactly six FULL BODY sprites of THE SAME character, consistent costume and scale in all frames. Camera is side three-quarter view facing RIGHT (east), game tactical battlefield, no perspective change. Each sprite centered in cell with feet on same baseline, leave 10% transparent padding all sides, weapons within own cell. Pixel art equivalent native 96x64 frame, visible crisp pixel clusters, dark one-pixel outline, limited palette, original portrait colors, no blurry glow, no antialiasing, no background, no text, no labels, no grid. Attack uses their specified tool. Death is non-graphic lying down. No mounts, no detached limbs. Sheet landscape 3:2. Genuine alpha background.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "battle",
+      "id": "tansy",
+      "prompt": "Use case: stylized-concept. Asset type: a single transparent SIX-FRAME battle animation sheet for Questing Heroes hero tansy. Input portrait is identity reference. Subject short elderly dwarf female clockmaker with pale pink skin, white hair, bronze goggles on forehead, purple scarf, brown-gold work coat and one small brass wrench. EXACT LAYOUT: 3 equal columns by 2 equal rows, each cell same dimensions and no gutters. In reading order: idle, stepping left leg, stepping right leg, attack or casting, recoiling hit, defeated lying down. Draw exactly six FULL BODY sprites of THE SAME character, consistent costume and scale in all frames. Camera is side three-quarter view facing RIGHT (east), game tactical battlefield, no perspective change. Each sprite centered in cell with feet on same baseline, leave 10% transparent padding all sides, weapons within own cell. Pixel art equivalent native 96x64 frame, visible crisp pixel clusters, dark one-pixel outline, limited palette, original portrait colors, no blurry glow, no antialiasing, no background, no text, no labels, no grid. Attack uses their specified tool. Death is non-graphic lying down. No mounts, no detached limbs. Sheet landscape 3:2. Genuine alpha background.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "battle",
+      "id": "tembor",
+      "prompt": "Use case: stylized-concept. Asset type: a single transparent SIX-FRAME battle animation sheet for Questing Heroes hero tembor. Input portrait is identity reference. Subject strong anthropomorphic gray elephant marshal, broad ears and ivory tusks, red cloak with gold edging, gold headband, purple armor, one short ceremonial mace. EXACT LAYOUT: 3 equal columns by 2 equal rows, each cell same dimensions and no gutters. In reading order: idle, stepping left leg, stepping right leg, attack or casting, recoiling hit, defeated lying down. Draw exactly six FULL BODY sprites of THE SAME character, consistent costume and scale in all frames. Camera is side three-quarter view facing RIGHT (east), game tactical battlefield, no perspective change. Each sprite centered in cell with feet on same baseline, leave 10% transparent padding all sides, weapons within own cell. Pixel art equivalent native 96x64 frame, visible crisp pixel clusters, dark one-pixel outline, limited palette, original portrait colors, no blurry glow, no antialiasing, no background, no text, no labels, no grid. Attack uses their specified tool. Death is non-graphic lying down. No mounts, no detached limbs. Sheet landscape 3:2. Genuine alpha background.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "battle",
+      "id": "thornfrill",
+      "prompt": "Use case: stylized-concept. Single game battle SIX-POSE sprite sheet for thornfrill, portrait identity reference. Subject gray-lavender anthropomorphic triceratops ranger knight with pale horns and mauve frill, green/gold armor, shield and short sword. Exact layout 3 equal columns x 2 equal rows without gutters. Reading order idle, walk A, walk B, attack/cast, hit recoil, defeated lying down. Exactly six complete full-body sprites at same scale, side three-quarter facing RIGHT. If pair, BOTH figures together inside EVERY cell. Feet fixed baseline, centered each cell with generous 12% transparent padding, all weapons fit own cell. Crisp low resolution hand-placed pixel art as native96x64 frames, dark outline, portrait colors, no antialiasing, no blurry glow or shadows. Genuine transparent alpha background, no text, no labels or grid. Landscape3:2.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "battle",
+      "id": "wren",
+      "prompt": "Use case: stylized-concept. Single game battle SIX-POSE sprite sheet for wren, portrait identity reference. Subject young tan human male beast tamer, auburn hair, gray fur cape, moss green shirt, leather boots, one short taming staff. Exact layout 3 equal columns x 2 equal rows without gutters. Reading order idle, walk A, walk B, attack/cast, hit recoil, defeated lying down. Exactly six complete full-body sprites at same scale, side three-quarter facing RIGHT. If pair, BOTH figures together inside EVERY cell. Feet fixed baseline, centered each cell with generous 12% transparent padding, all weapons fit own cell. Crisp low resolution hand-placed pixel art as native96x64 frames, dark outline, portrait colors, no antialiasing, no blurry glow or shadows. Genuine transparent alpha background, no text, no labels or grid. Landscape3:2.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "battle",
+      "id": "yselle",
+      "prompt": "Use case: stylized-concept. Asset type: a single transparent SIX-FRAME battle animation sheet for Questing Heroes hero yselle. Input portrait is identity reference. Subject slender elderly charcoal-gray female feline grove druid, pointed ears, silver hair tufts, golden eyes and deep green leaf-trim cape, wooden branch staff. EXACT LAYOUT: 3 equal columns by 2 equal rows, each cell same dimensions and no gutters. In reading order: idle, stepping left leg, stepping right leg, attack or casting, recoiling hit, defeated lying down. Draw exactly six FULL BODY sprites of THE SAME character, consistent costume and scale in all frames. Camera is side three-quarter view facing RIGHT (east), game tactical battlefield, no perspective change. Each sprite centered in cell with feet on same baseline, leave 10% transparent padding all sides, weapons within own cell. Pixel art equivalent native 96x64 frame, visible crisp pixel clusters, dark one-pixel outline, limited palette, original portrait colors, no blurry glow, no antialiasing, no background, no text, no labels, no grid. Attack uses their specified tool. Death is non-graphic lying down. No mounts, no detached limbs. Sheet landscape 3:2. Genuine alpha background.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "battle",
+      "id": "zakai",
+      "prompt": "Use case: stylized-concept. ONE SIX-FRAME battle animation sprite sheet for Questing Heroes zakai. Portrait reference identity. tan-skinned male masked rogue, tightly shaved sides and curly black mohawk on top, dark brown scarf covers nose and mouth, scratched silver shoulder armor, brown leather clothes, one dagger in hand, sheathed sword on back, no wheel brooch. Layout EXACTLY3 columns x2 rows equal cells no gutters. Reading order idle, walking left leg, walking right leg, attack/cast, hit recoil, defeat lying down. Six complete FULL BODY sprites facing RIGHT/east side three-quarter at consistent scale and costume. Pairs MUST have BOTH figures together in EACH cell. Feet baseline92% of cell, centered with10% padding, weapons and capes inside cells. Native96x64 frame style chunky hand-placed crisp pixel clusters, one-pixel dark outline, original portrait palette, no antialiasing. No mounts. No text, grid, labels or background. Genuinely TRANSPARENT alpha, no shadows or haze behind sprites. Canvas3:2.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "effect",
+      "id": "frost_lance",
+      "prompt": "Use case: stylized-concept. ONE six-frame battle spell animation atlas frost_lance for Questing Heroes. sharp blue-white ice lance forms upright, plunges downward, explodes into angular cyan ice crystals, shards fade. Exact layout3columns x2rows equal square cells, no gutters. Reading order six sequential phases: small anticipation, growing, peak, expanding, fading, last sparse fading bits. Effect stays centered each cell, same ground baseline, all pixels inside own cell with12% padding. Pixel art native64x64 per cell, hand-placed crisp clusters, limited12-color palette, dark outlines, NO smooth blurry glow. Genuine transparent alpha background, no characters no text no grid no labels. Canvas landscape3:2.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "effect",
+      "id": "geyser",
+      "prompt": "Use case: stylized-concept. ONE six-frame battle spell animation atlas geyser for Questing Heroes. turquoise water spout erupts upward from small ground ring, rises then fans into white spray and subsides to droplets. Exact layout3columns x2rows equal square cells, no gutters. Reading order six sequential phases: small anticipation, growing, peak, expanding, fading, last sparse fading bits. Effect stays centered each cell, same ground baseline, all pixels inside own cell with12% padding. Pixel art native64x64 per cell, hand-placed crisp clusters, limited12-color palette, dark outlines, NO smooth blurry glow. Genuine transparent alpha background, no characters no text no grid no labels. Canvas landscape3:2.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "effect",
+      "id": "meteor",
+      "prompt": "Use case: stylized-concept. ONE six-frame battle spell animation atlas meteor for Questing Heroes. orange-red flaming rock descends diagonally from upper right, impacts center bottom, red orange angular blast and brown debris dissipate. Exact layout3columns x2rows equal square cells, no gutters. Reading order six sequential phases: small anticipation, growing, peak, expanding, fading, last sparse fading bits. Effect stays centered each cell, same ground baseline, all pixels inside own cell with12% padding. Pixel art native64x64 per cell, hand-placed crisp clusters, limited12-color palette, dark outlines, NO smooth blurry glow. Genuine transparent alpha background, no characters no text no grid no labels. Canvas landscape3:2.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "effect",
+      "id": "rally",
+      "prompt": "Use case: stylized-concept. ONE six-frame battle spell animation atlas rally for Questing Heroes. golden pennant and rising amber chevrons, bright gold ring expanding beneath, uplifting rays and small stars fade. Exact layout3columns x2rows equal square cells, no gutters. Reading order six sequential phases: small anticipation, growing, peak, expanding, fading, last sparse fading bits. Effect stays centered each cell, same ground baseline, all pixels inside own cell with12% padding. Pixel art native64x64 per cell, hand-placed crisp clusters, limited12-color palette, dark outlines, NO smooth blurry glow. Genuine transparent alpha background, no characters no text no grid no labels. Canvas landscape3:2.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "effect",
+      "id": "weaken",
+      "prompt": "Use case: stylized-concept. ONE six-frame battle spell animation atlas weaken for Questing Heroes. purple spectral coils squeeze a broken red sword emblem, drain downward to smoky violet shards then dissipate. Exact layout3columns x2rows equal square cells, no gutters. Reading order six sequential phases: small anticipation, growing, peak, expanding, fading, last sparse fading bits. Effect stays centered each cell, same ground baseline, all pixels inside own cell with12% padding. Pixel art native64x64 per cell, hand-placed crisp clusters, limited12-color palette, dark outlines, NO smooth blurry glow. Genuine transparent alpha background, no characters no text no grid no labels. Canvas landscape3:2.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "icons",
+      "id": "buttons",
+      "prompt": "Use case: stylized-concept. ONE9-icon game UI atlas for Questing Heroes. Exact layout3columns x3rows equal square cells no gutters. Reading order: Market bronze balance scales with gold coin; Mines crossed steel pickaxes and small rock; Retreat white pennant bending left with curved left arrow; Ring Bell hanging brass bell; Tavern wooden tankard foamy ale; Hero Book closed navy leather tome gold hero crest; Create Hero gold quill next to green plus; Kick Out Hero small dark doorway red outward arrow; Sorcery violet magical crystal embraced by gold runic sparks (NO book). Chunky hand placed medieval pixel art native32x32 icon. Dark outlines, restrained gold slate teal purple palette. Each icon centered and stays15% within own cell, consistent scale. Genuine transparent background no text no numerals no grid lines. Square canvas.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "icons",
+      "id": "spells",
+      "prompt": "Use case: stylized-concept. Asset type ONE 14-icon game spell atlas for Questing Heroes. Exact layout 7 columns by2 rows equal square cells no gutters. Fourteen distinct centered icons in READING order: 1 Ember Dart orange fiery dart; 2 Chain Spark forked yellow lightning with two blue nodes; 3 Squall white blue swirling storm cloud; 4 Entangle coiling green roots; 5 Raise Bones ivory skeletal hand rising; 6 Geyser tall turquoise water eruption; 7 Mend green healing leaf with plus; 8 Swift Wind pale cyan winged boot; 9 Bark Skin brown wood grain shield with leaf; 10 Starfall three falling violet-white stars; 11 Weaken purple broken sword with downward arrow; 12 Frost Lance sharp long cyan ice spear; 13 Rally golden raised pennant with three rays; 14 Meteor orange rock with flaming tail. Match hand-placed low res pixel art native32x32 icon dark outlines limited palette, chunky clear recognizable shapes, detailed but legible at24px. ALL cells centered, 15% transparent padding. Transparent alpha background. No badges no text no numbers no grid. Canvas wide7:2.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "map",
+      "id": "lighthouse_lit",
+      "prompt": "Use case: precise-object-edit. Edit target supplied existing game lighthouse. Keep exact squat gray stone tower, brown door, teal blue pointed roof, balcony and stone plinth, three-quarter angle and proportions. Make beacon clearly ACTIVATED with bright white-gold lens, warm lit balcony windows and short angular gold rays on both sides near lens. No large beam outside cell. Brighter yellow beacon distinguishes lit from unlit. Same pixel art native64wide96high, crisp hard pixel clusters dark outlines limited palette. Isolated entire structure fully visible with transparent padding all sides, genuine alpha background. No scenery no water no text. Portrait2:3 canvas.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "portrait",
+      "id": "atoll",
+      "prompt": "Coral, a living coral humanoid sea hero. Keep warm red-pink branching coral crown and coral orange brain coral curls, green seaweed cape, seashell clasp. Replace faceless coral tangle with a clear coral humanoid face, two expressive turquoise eyes, defined cheek planes, small nose, friendly determined mouth. Clearly a person made of coral rather than a plant. Branches surround face.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "portrait",
+      "id": "kiln",
+      "prompt": "Kiln, a living stone dwarf. Keep purple basalt boulders and orange molten seams, broad rocky beard. Make the face unmistakably readable: two larger bright amber eyes, strong stone brow, broad nose and clear mouth, lighter slate face planes. Face is the focal point. Separate beard from cheeks. No skin or hair.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "portrait",
+      "id": "king_pharoph_the_3rd",
+      "prompt": "King Pharoph the 3rd, a golden clockwork monarch. Preserve gold mechanical face, brass crown, temple gears, green fur-trimmed cape, armor. Add a clearly open THIRD EYE centered vertically on his forehead between crown and brows: bright turquoise almond eye with dark outline. Three distinct eyes total. Keep two normal eyes visible.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "portrait",
+      "id": "ossin",
+      "prompt": "Dusty, an ancient desert court mage. Replace mummy wraps with an aged sand-colored exposed face, pale amber eyes, gray eyebrows and short gray beard, weathered proud expression. Keep cream turban, amber forehead jewel, rust-red and navy gold-trimmed robe. His face must be fully visible. No bandages. Distinguish from a mummy.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "portrait",
+      "id": "shadow",
+      "prompt": "Shadow, a black skeleton in gold armor. Keep skeletal anatomy, warm glowing amber eye sockets, gold cracks in skull, gold trim on purple-black armor. Brighten skull and shoulders into cool slate-violet midtones, add pale cool rim pixels around silhouette. Keep undead and dark personality but high contrast readable on dark background.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "walker",
+      "id": "alderhide",
+      "prompt": "Use case: stylized-concept. Asset type: ONE hero's directional WALK animation SPRITE SHEET for pixel strategy game Questing Heroes. Portrait reference defines identity. Subject: anthropomorphic moose grove warden, big branching antlers, brown fur face, green mossy bark armor. Full body on foot, NOT mounted. EXACT GRID: 4 columns, 5 rows, ALL20 cells equal and exactly filled, no gutters. EACH ROW is FOUR sequential walk cycle frames contact/passing/opposite contact/passing, slight alternating legs and arm sway, stable size and baseline. Row1 FACE SOUTH toward viewer; Row2 FACE SOUTHEAST down-right; Row3 FACE EAST right in profile; Row4 FACE NORTHEAST up-right AWAY from viewer showing back/side; Row5 FACE NORTH directly AWAY from viewer, back of head and back of cape ONLY NO face. Crucial: bottom TWO rows show character walking AWAY, not facing viewer. For paired hero BOTH partners in EVERY cell. Same costume in all cells. Each FULL BODY sprite centered within its cell with 12% clear padding and feet baseline88% cell height. Pixel art like native48x48, crisp chunky pixels, limited24-color palette, dark one-pixel outline, strongly readable at map scale. No labels, no grid lines, no environment, no shadows, no glow outside silhouette. Genuine transparent alpha background, even empty transparent cells. Canvas aspect4:5 portrait.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "walker",
+      "id": "atoll",
+      "prompt": "Use case: stylized-concept. Asset type: ONE hero's directional WALK animation SPRITE SHEET for pixel strategy game Questing Heroes. Portrait reference defines identity. Subject: red-pink coral HUMANOID oracle with readable turquoise eyes nose mouth, branching coral crown, seaweed cape seashell clasp. Full body on foot, NOT mounted. EXACT GRID: 4 columns, 5 rows, ALL20 cells equal and exactly filled, no gutters. EACH ROW is FOUR sequential walk cycle frames contact/passing/opposite contact/passing, slight alternating legs and arm sway, stable size and baseline. Row1 FACE SOUTH toward viewer; Row2 FACE SOUTHEAST down-right; Row3 FACE EAST right in profile; Row4 FACE NORTHEAST up-right AWAY from viewer showing back/side; Row5 FACE NORTH directly AWAY from viewer, back of head and back of cape ONLY NO face. Crucial: bottom TWO rows show character walking AWAY, not facing viewer. For paired hero BOTH partners in EVERY cell. Same costume in all cells. Each FULL BODY sprite centered within its cell with 12% clear padding and feet baseline88% cell height. Pixel art like native48x48, crisp chunky pixels, limited24-color palette, dark one-pixel outline, strongly readable at map scale. No labels, no grid lines, no environment, no shadows, no glow outside silhouette. Genuine transparent alpha background, even empty transparent cells. Canvas aspect4:5 portrait.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "walker",
+      "id": "ava_young",
+      "prompt": "Use case: stylized-concept. ONE directional WALK animation sprite sheet for Questing Heroes. Reference portrait defines identity. ONE young warm brown-skinned female elf, long dark auburn braid, pale pink dress and moss-green cape, securely cradling ONE small white rabbit. EXACTLY20 full body figures, one hero in each cell. Layout4columns x5rows, all equal square cells no gutters. Four frames per row are left foot forward, passing, right foot forward, passing, same scale baseline88% cellheight. Row1 faces SOUTH toward viewer. Row2 SOUTHEAST down-right. Row3 EAST right profile. Row4 NORTHEAST up-right AWAY, back/side visible. Row5 NORTH directly AWAY, BACK of head and cape visible NO face. No twins, no extra duplicates within a cell. One connected tool and anatomically correct hands. Full body with15% transparent padding. Chunky hand-placed crisp pixel art native48x48 style, dark one-pixel outline limited24colors matching reference. Genuine transparent alpha background. No ground, no shadows, no text, no labels, no grid. Canvas4:5 portrait.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "walker",
+      "id": "dupengeiser",
+      "prompt": "Use case: stylized-concept. Asset type: ONE hero's directional WALK animation SPRITE SHEET for pixel strategy game Questing Heroes. Portrait reference defines identity. Subject: elderly male dwarf, white mustache and braided beard, white turban and orange gold robes, wood staff. Full body on foot, NOT mounted. EXACT GRID: 4 columns, 5 rows, ALL20 cells equal and exactly filled, no gutters. EACH ROW is FOUR sequential walk cycle frames contact/passing/opposite contact/passing, slight alternating legs and arm sway, stable size and baseline. Row1 FACE SOUTH toward viewer; Row2 FACE SOUTHEAST down-right; Row3 FACE EAST right in profile; Row4 FACE NORTHEAST up-right AWAY from viewer showing back/side; Row5 FACE NORTH directly AWAY from viewer, back of head and back of cape ONLY NO face. Crucial: bottom TWO rows show character walking AWAY, not facing viewer. For paired hero BOTH partners in EVERY cell. Same costume in all cells. Each FULL BODY sprite centered within its cell with 12% clear padding and feet baseline88% cell height. Pixel art like native48x48, crisp chunky pixels, limited24-color palette, dark one-pixel outline, strongly readable at map scale. No labels, no grid lines, no environment, no shadows, no glow outside silhouette. Genuine transparent alpha background, even empty transparent cells. Canvas aspect4:5 portrait.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "walker",
+      "id": "eden",
+      "prompt": "Use case: stylized-concept. Asset type: ONE hero's directional WALK animation SPRITE SHEET for pixel strategy game Questing Heroes. Portrait reference defines identity. Subject: female redhead elf, curly auburn hair, green gold-trim cloak and leaf armor. Full body on foot, NOT mounted. EXACT GRID: 4 columns, 5 rows, ALL20 cells equal and exactly filled, no gutters. EACH ROW is FOUR sequential walk cycle frames contact/passing/opposite contact/passing, slight alternating legs and arm sway, stable size and baseline. Row1 FACE SOUTH toward viewer; Row2 FACE SOUTHEAST down-right; Row3 FACE EAST right in profile; Row4 FACE NORTHEAST up-right AWAY from viewer showing back/side; Row5 FACE NORTH directly AWAY from viewer, back of head and back of cape ONLY NO face. Crucial: bottom TWO rows show character walking AWAY, not facing viewer. For paired hero BOTH partners in EVERY cell. Same costume in all cells. Each FULL BODY sprite centered within its cell with 12% clear padding and feet baseline88% cell height. Pixel art like native48x48, crisp chunky pixels, limited24-color palette, dark one-pixel outline, strongly readable at map scale. No labels, no grid lines, no environment, no shadows, no glow outside silhouette. Genuine transparent alpha background, even empty transparent cells. Canvas aspect4:5 portrait.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "walker",
+      "id": "elvis",
+      "prompt": "Use case: stylized-concept. Asset type: ONE hero's directional WALK animation SPRITE SHEET for pixel strategy game Questing Heroes. Portrait reference defines identity. Subject: slim blue-skinned male merfolk bard, dark swept-back blue hair, gold-trim blue outfit, fin ears. Full body on foot, NOT mounted. EXACT GRID: 4 columns, 5 rows, ALL20 cells equal and exactly filled, no gutters. EACH ROW is FOUR sequential walk cycle frames contact/passing/opposite contact/passing, slight alternating legs and arm sway, stable size and baseline. Row1 FACE SOUTH toward viewer; Row2 FACE SOUTHEAST down-right; Row3 FACE EAST right in profile; Row4 FACE NORTHEAST up-right AWAY from viewer showing back/side; Row5 FACE NORTH directly AWAY from viewer, back of head and back of cape ONLY NO face. Crucial: bottom TWO rows show character walking AWAY, not facing viewer. For paired hero BOTH partners in EVERY cell. Same costume in all cells. Each FULL BODY sprite centered within its cell with 12% clear padding and feet baseline88% cell height. Pixel art like native48x48, crisp chunky pixels, limited24-color palette, dark one-pixel outline, strongly readable at map scale. No labels, no grid lines, no environment, no shadows, no glow outside silhouette. Genuine transparent alpha background, even empty transparent cells. Canvas aspect4:5 portrait.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "walker",
+      "id": "enzo",
+      "prompt": "Use case: stylized-concept. Asset type: ONE hero's directional WALK animation SPRITE SHEET for pixel strategy game Questing Heroes. Portrait reference defines identity. Subject: young tan male dwarf adventurer, dark curly hair, navy gold-trim tunic red neck scarf. Full body on foot, NOT mounted. EXACT GRID: 4 columns, 5 rows, ALL20 cells equal and exactly filled, no gutters. EACH ROW is FOUR sequential walk cycle frames contact/passing/opposite contact/passing, slight alternating legs and arm sway, stable size and baseline. Row1 FACE SOUTH toward viewer; Row2 FACE SOUTHEAST down-right; Row3 FACE EAST right in profile; Row4 FACE NORTHEAST up-right AWAY from viewer showing back/side; Row5 FACE NORTH directly AWAY from viewer, back of head and back of cape ONLY NO face. Crucial: bottom TWO rows show character walking AWAY, not facing viewer. For paired hero BOTH partners in EVERY cell. Same costume in all cells. Each FULL BODY sprite centered within its cell with 12% clear padding and feet baseline88% cell height. Pixel art like native48x48, crisp chunky pixels, limited24-color palette, dark one-pixel outline, strongly readable at map scale. No labels, no grid lines, no environment, no shadows, no glow outside silhouette. Genuine transparent alpha background, even empty transparent cells. Canvas aspect4:5 portrait.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "walker",
+      "id": "fin_and_flo",
+      "prompt": "Use case: stylized-concept. Asset type: ONE hero's directional WALK animation SPRITE SHEET for pixel strategy game Questing Heroes. Portrait reference defines identity. Subject: PAIR of orange-haired fin-eared merfolk siblings, lavender and gold outfits, matching shell pouches. Full body on foot, NOT mounted. EXACT GRID: 4 columns, 5 rows, ALL20 cells equal and exactly filled, no gutters. EACH ROW is FOUR sequential walk cycle frames contact/passing/opposite contact/passing, slight alternating legs and arm sway, stable size and baseline. Row1 FACE SOUTH toward viewer; Row2 FACE SOUTHEAST down-right; Row3 FACE EAST right in profile; Row4 FACE NORTHEAST up-right AWAY from viewer showing back/side; Row5 FACE NORTH directly AWAY from viewer, back of head and back of cape ONLY NO face. Crucial: bottom TWO rows show character walking AWAY, not facing viewer. For paired hero BOTH partners in EVERY cell. Same costume in all cells. Each FULL BODY sprite centered within its cell with 12% clear padding and feet baseline88% cell height. Pixel art like native48x48, crisp chunky pixels, limited24-color palette, dark one-pixel outline, strongly readable at map scale. No labels, no grid lines, no environment, no shadows, no glow outside silhouette. Genuine transparent alpha background, even empty transparent cells. Canvas aspect4:5 portrait.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "walker",
+      "id": "flintback",
+      "prompt": "Use case: stylized-concept. Asset type: ONE hero's directional WALK animation SPRITE SHEET for pixel strategy game Questing Heroes. Portrait reference defines identity. Subject: stocky living rock tortoise warrior, ochre stone shell and head, red scarf brown leather clothes. Full body on foot, NOT mounted. EXACT GRID: 4 columns, 5 rows, ALL20 cells equal and exactly filled, no gutters. EACH ROW is FOUR sequential walk cycle frames contact/passing/opposite contact/passing, slight alternating legs and arm sway, stable size and baseline. Row1 FACE SOUTH toward viewer; Row2 FACE SOUTHEAST down-right; Row3 FACE EAST right in profile; Row4 FACE NORTHEAST up-right AWAY from viewer showing back/side; Row5 FACE NORTH directly AWAY from viewer, back of head and back of cape ONLY NO face. Crucial: bottom TWO rows show character walking AWAY, not facing viewer. For paired hero BOTH partners in EVERY cell. Same costume in all cells. Each FULL BODY sprite centered within its cell with 12% clear padding and feet baseline88% cell height. Pixel art like native48x48, crisp chunky pixels, limited24-color palette, dark one-pixel outline, strongly readable at map scale. No labels, no grid lines, no environment, no shadows, no glow outside silhouette. Genuine transparent alpha background, even empty transparent cells. Canvas aspect4:5 portrait.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "walker",
+      "id": "graven",
+      "prompt": "Use case: stylized-concept. Asset type: ONE hero's directional WALK animation SPRITE SHEET for pixel strategy game Questing Heroes. Portrait reference defines identity. Subject: closed-face black steel armored death knight, purple-black tabard, red cape, short sword sheathed at hip. Full body on foot, NOT mounted. EXACT GRID: 4 columns, 5 rows, ALL20 cells equal and exactly filled, no gutters. EACH ROW is FOUR sequential walk cycle frames contact/passing/opposite contact/passing, slight alternating legs and arm sway, stable size and baseline. Row1 FACE SOUTH toward viewer; Row2 FACE SOUTHEAST down-right; Row3 FACE EAST right in profile; Row4 FACE NORTHEAST up-right AWAY from viewer showing back/side; Row5 FACE NORTH directly AWAY from viewer, back of head and back of cape ONLY NO face. Crucial: bottom TWO rows show character walking AWAY, not facing viewer. For paired hero BOTH partners in EVERY cell. Same costume in all cells. Each FULL BODY sprite centered within its cell with 12% clear padding and feet baseline88% cell height. Pixel art like native48x48, crisp chunky pixels, limited24-color palette, dark one-pixel outline, strongly readable at map scale. No labels, no grid lines, no environment, no shadows, no glow outside silhouette. Genuine transparent alpha background, even empty transparent cells. Canvas aspect4:5 portrait.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "walker",
+      "id": "grimes",
+      "prompt": "Use case: stylized-concept. Asset type: ONE hero's directional WALK animation SPRITE SHEET for pixel strategy game Questing Heroes. Portrait reference defines identity. Subject: elderly male dwarf, enormous white braided beard, bushy white eyebrows, round glasses, navy gold-trim armor. Full body on foot, NOT mounted. EXACT GRID: 4 columns, 5 rows, ALL20 cells equal and exactly filled, no gutters. EACH ROW is FOUR sequential walk cycle frames contact/passing/opposite contact/passing, slight alternating legs and arm sway, stable size and baseline. Row1 FACE SOUTH toward viewer; Row2 FACE SOUTHEAST down-right; Row3 FACE EAST right in profile; Row4 FACE NORTHEAST up-right AWAY from viewer showing back/side; Row5 FACE NORTH directly AWAY from viewer, back of head and back of cape ONLY NO face. Crucial: bottom TWO rows show character walking AWAY, not facing viewer. For paired hero BOTH partners in EVERY cell. Same costume in all cells. Each FULL BODY sprite centered within its cell with 12% clear padding and feet baseline88% cell height. Pixel art like native48x48, crisp chunky pixels, limited24-color palette, dark one-pixel outline, strongly readable at map scale. No labels, no grid lines, no environment, no shadows, no glow outside silhouette. Genuine transparent alpha background, even empty transparent cells. Canvas aspect4:5 portrait.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "walker",
+      "id": "gunt_gunt",
+      "prompt": "Use case: stylized-concept. ONE directional WALK animation sprite sheet for Questing Heroes. Reference portrait defines identity. ONE wooden living male golem, orange woodgrain skin, wooden topknot, red scarf and red diagonal sash, wood shoulder armor, carrying one wooden club. EXACTLY20 full body figures, one hero in each cell. Layout4columns x5rows, all equal square cells no gutters. Four frames per row are left foot forward, passing, right foot forward, passing, same scale baseline88% cellheight. Row1 faces SOUTH toward viewer. Row2 SOUTHEAST down-right. Row3 EAST right profile. Row4 NORTHEAST up-right AWAY, back/side visible. Row5 NORTH directly AWAY, BACK of head and cape visible NO face. No twins, no extra duplicates within a cell. One connected tool and anatomically correct hands. Full body with15% transparent padding. Chunky hand-placed crisp pixel art native48x48 style, dark one-pixel outline limited24colors matching reference. Genuine transparent alpha background. No ground, no shadows, no text, no labels, no grid. Canvas4:5 portrait.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "walker",
+      "id": "harlan_chalk",
+      "prompt": "Use case: stylized-concept. Asset type: ONE hero's directional WALK animation SPRITE SHEET for pixel strategy game Questing Heroes. Portrait reference defines identity. Subject: older human male miner with gray beard, charcoal cap with gold lamp, gray work coat. Full body on foot, NOT mounted. EXACT GRID: 4 columns, 5 rows, ALL20 cells equal and exactly filled, no gutters. EACH ROW is FOUR sequential walk cycle frames contact/passing/opposite contact/passing, slight alternating legs and arm sway, stable size and baseline. Row1 FACE SOUTH toward viewer; Row2 FACE SOUTHEAST down-right; Row3 FACE EAST right in profile; Row4 FACE NORTHEAST up-right AWAY from viewer showing back/side; Row5 FACE NORTH directly AWAY from viewer, back of head and back of cape ONLY NO face. Crucial: bottom TWO rows show character walking AWAY, not facing viewer. For paired hero BOTH partners in EVERY cell. Same costume in all cells. Each FULL BODY sprite centered within its cell with 12% clear padding and feet baseline88% cell height. Pixel art like native48x48, crisp chunky pixels, limited24-color palette, dark one-pixel outline, strongly readable at map scale. No labels, no grid lines, no environment, no shadows, no glow outside silhouette. Genuine transparent alpha background, even empty transparent cells. Canvas aspect4:5 portrait.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "walker",
+      "id": "inkwake",
+      "prompt": "Use case: stylized-concept. Asset type: ONE hero's directional WALK animation SPRITE SHEET for pixel strategy game Questing Heroes. Portrait reference defines identity. Subject: BLUE INK SQUID pirate captain, blue tentacle face not human, navy tricorn gold trim red feather, navy coat, compact tentacles for legs. Full body on foot, NOT mounted. EXACT GRID: 4 columns, 5 rows, ALL20 cells equal and exactly filled, no gutters. EACH ROW is FOUR sequential walk cycle frames contact/passing/opposite contact/passing, slight alternating legs and arm sway, stable size and baseline. Row1 FACE SOUTH toward viewer; Row2 FACE SOUTHEAST down-right; Row3 FACE EAST right in profile; Row4 FACE NORTHEAST up-right AWAY from viewer showing back/side; Row5 FACE NORTH directly AWAY from viewer, back of head and back of cape ONLY NO face. Crucial: bottom TWO rows show character walking AWAY, not facing viewer. For paired hero BOTH partners in EVERY cell. Same costume in all cells. Each FULL BODY sprite centered within its cell with 12% clear padding and feet baseline88% cell height. Pixel art like native48x48, crisp chunky pixels, limited24-color palette, dark one-pixel outline, strongly readable at map scale. No labels, no grid lines, no environment, no shadows, no glow outside silhouette. Genuine transparent alpha background, even empty transparent cells. Canvas aspect4:5 portrait.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "walker",
+      "id": "ivan",
+      "prompt": "Use case: stylized-concept. Asset type: ONE hero's directional WALK animation SPRITE SHEET for pixel strategy game Questing Heroes. Portrait reference defines identity. Subject: stocky male dwarf, red hair and red beard braided, red/navy gold-trim armor, small axe. Full body on foot, NOT mounted. EXACT GRID: 4 columns, 5 rows, ALL20 cells equal and exactly filled, no gutters. EACH ROW is FOUR sequential walk cycle frames contact/passing/opposite contact/passing, slight alternating legs and arm sway, stable size and baseline. Row1 FACE SOUTH toward viewer; Row2 FACE SOUTHEAST down-right; Row3 FACE EAST right in profile; Row4 FACE NORTHEAST up-right AWAY from viewer showing back/side; Row5 FACE NORTH directly AWAY from viewer, back of head and back of cape ONLY NO face. Crucial: bottom TWO rows show character walking AWAY, not facing viewer. For paired hero BOTH partners in EVERY cell. Same costume in all cells. Each FULL BODY sprite centered within its cell with 12% clear padding and feet baseline88% cell height. Pixel art like native48x48, crisp chunky pixels, limited24-color palette, dark one-pixel outline, strongly readable at map scale. No labels, no grid lines, no environment, no shadows, no glow outside silhouette. Genuine transparent alpha background, even empty transparent cells. Canvas aspect4:5 portrait.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "walker",
+      "id": "kiln",
+      "prompt": "Use case: stylized-concept. Asset type: ONE hero's directional WALK animation SPRITE SHEET for pixel strategy game Questing Heroes. Portrait reference defines identity. Subject: LIVING STONE DWARF, purple basalt body, rocky beard, distinct amber eyes broad nose and mouth, orange glowing seams, no skin. Full body on foot, NOT mounted. EXACT GRID: 4 columns, 5 rows, ALL20 cells equal and exactly filled, no gutters. EACH ROW is FOUR sequential walk cycle frames contact/passing/opposite contact/passing, slight alternating legs and arm sway, stable size and baseline. Row1 FACE SOUTH toward viewer; Row2 FACE SOUTHEAST down-right; Row3 FACE EAST right in profile; Row4 FACE NORTHEAST up-right AWAY from viewer showing back/side; Row5 FACE NORTH directly AWAY from viewer, back of head and back of cape ONLY NO face. Crucial: bottom TWO rows show character walking AWAY, not facing viewer. For paired hero BOTH partners in EVERY cell. Same costume in all cells. Each FULL BODY sprite centered within its cell with 12% clear padding and feet baseline88% cell height. Pixel art like native48x48, crisp chunky pixels, limited24-color palette, dark one-pixel outline, strongly readable at map scale. No labels, no grid lines, no environment, no shadows, no glow outside silhouette. Genuine transparent alpha background, even empty transparent cells. Canvas aspect4:5 portrait.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "walker",
+      "id": "kit_and_nell",
+      "prompt": "Use case: stylized-concept. Asset type: ONE hero's directional WALK animation SPRITE SHEET for pixel strategy game Questing Heroes. Portrait reference defines identity. Subject: PAIR twin red-haired freckled little dwarf girls, green and navy tunics, brown boots and small backpacks. Full body on foot, NOT mounted. EXACT GRID: 4 columns, 5 rows, ALL20 cells equal and exactly filled, no gutters. EACH ROW is FOUR sequential walk cycle frames contact/passing/opposite contact/passing, slight alternating legs and arm sway, stable size and baseline. Row1 FACE SOUTH toward viewer; Row2 FACE SOUTHEAST down-right; Row3 FACE EAST right in profile; Row4 FACE NORTHEAST up-right AWAY from viewer showing back/side; Row5 FACE NORTH directly AWAY from viewer, back of head and back of cape ONLY NO face. Crucial: bottom TWO rows show character walking AWAY, not facing viewer. For paired hero BOTH partners in EVERY cell. Same costume in all cells. Each FULL BODY sprite centered within its cell with 12% clear padding and feet baseline88% cell height. Pixel art like native48x48, crisp chunky pixels, limited24-color palette, dark one-pixel outline, strongly readable at map scale. No labels, no grid lines, no environment, no shadows, no glow outside silhouette. Genuine transparent alpha background, even empty transparent cells. Canvas aspect4:5 portrait.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "walker",
+      "id": "lawrence",
+      "prompt": "Use case: stylized-concept. Asset type: ONE hero's directional WALK animation SPRITE SHEET for pixel strategy game Questing Heroes. Portrait reference defines identity. Subject: curly auburn-haired male scholar pirate, round glasses, navy/brown coat, closed brown book. Full body on foot, NOT mounted. EXACT GRID: 4 columns, 5 rows, ALL20 cells equal and exactly filled, no gutters. EACH ROW is FOUR sequential walk cycle frames contact/passing/opposite contact/passing, slight alternating legs and arm sway, stable size and baseline. Row1 FACE SOUTH toward viewer; Row2 FACE SOUTHEAST down-right; Row3 FACE EAST right in profile; Row4 FACE NORTHEAST up-right AWAY from viewer showing back/side; Row5 FACE NORTH directly AWAY from viewer, back of head and back of cape ONLY NO face. Crucial: bottom TWO rows show character walking AWAY, not facing viewer. For paired hero BOTH partners in EVERY cell. Same costume in all cells. Each FULL BODY sprite centered within its cell with 12% clear padding and feet baseline88% cell height. Pixel art like native48x48, crisp chunky pixels, limited24-color palette, dark one-pixel outline, strongly readable at map scale. No labels, no grid lines, no environment, no shadows, no glow outside silhouette. Genuine transparent alpha background, even empty transparent cells. Canvas aspect4:5 portrait.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "walker",
+      "id": "letchworth",
+      "prompt": "Use case: stylized-concept. Asset type: ONE hero's directional WALK animation SPRITE SHEET for pixel strategy game Questing Heroes. Portrait reference defines identity. Subject: pale blue sea elf mage, mint green hair, jade green gold-trim robe, fin ears, seaweed wand. Full body on foot, NOT mounted. EXACT GRID: 4 columns, 5 rows, ALL20 cells equal and exactly filled, no gutters. EACH ROW is FOUR sequential walk cycle frames contact/passing/opposite contact/passing, slight alternating legs and arm sway, stable size and baseline. Row1 FACE SOUTH toward viewer; Row2 FACE SOUTHEAST down-right; Row3 FACE EAST right in profile; Row4 FACE NORTHEAST up-right AWAY from viewer showing back/side; Row5 FACE NORTH directly AWAY from viewer, back of head and back of cape ONLY NO face. Crucial: bottom TWO rows show character walking AWAY, not facing viewer. For paired hero BOTH partners in EVERY cell. Same costume in all cells. Each FULL BODY sprite centered within its cell with 12% clear padding and feet baseline88% cell height. Pixel art like native48x48, crisp chunky pixels, limited24-color palette, dark one-pixel outline, strongly readable at map scale. No labels, no grid lines, no environment, no shadows, no glow outside silhouette. Genuine transparent alpha background, even empty transparent cells. Canvas aspect4:5 portrait.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "walker",
+      "id": "livingston",
+      "prompt": "Use case: stylized-concept. Asset type: ONE hero's directional WALK animation SPRITE SHEET for pixel strategy game Questing Heroes. Portrait reference defines identity. Subject: female blonde elf, brown eyes, green silver leaf armor and pink sleeves, small black pet cat cradled. Full body on foot, NOT mounted. EXACT GRID: 4 columns, 5 rows, ALL20 cells equal and exactly filled, no gutters. EACH ROW is FOUR sequential walk cycle frames contact/passing/opposite contact/passing, slight alternating legs and arm sway, stable size and baseline. Row1 FACE SOUTH toward viewer; Row2 FACE SOUTHEAST down-right; Row3 FACE EAST right in profile; Row4 FACE NORTHEAST up-right AWAY from viewer showing back/side; Row5 FACE NORTH directly AWAY from viewer, back of head and back of cape ONLY NO face. Crucial: bottom TWO rows show character walking AWAY, not facing viewer. For paired hero BOTH partners in EVERY cell. Same costume in all cells. Each FULL BODY sprite centered within its cell with 12% clear padding and feet baseline88% cell height. Pixel art like native48x48, crisp chunky pixels, limited24-color palette, dark one-pixel outline, strongly readable at map scale. No labels, no grid lines, no environment, no shadows, no glow outside silhouette. Genuine transparent alpha background, even empty transparent cells. Canvas aspect4:5 portrait.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "walker",
+      "id": "lune",
+      "prompt": "Use case: stylized-concept. Asset type: ONE hero's directional WALK animation SPRITE SHEET for pixel strategy game Questing Heroes. Portrait reference defines identity. Subject: young tan male elf bard, navy hair, purple-blue cloak, small brown lute strapped to chest. Full body on foot, NOT mounted. EXACT GRID: 4 columns, 5 rows, ALL20 cells equal and exactly filled, no gutters. EACH ROW is FOUR sequential walk cycle frames contact/passing/opposite contact/passing, slight alternating legs and arm sway, stable size and baseline. Row1 FACE SOUTH toward viewer; Row2 FACE SOUTHEAST down-right; Row3 FACE EAST right in profile; Row4 FACE NORTHEAST up-right AWAY from viewer showing back/side; Row5 FACE NORTH directly AWAY from viewer, back of head and back of cape ONLY NO face. Crucial: bottom TWO rows show character walking AWAY, not facing viewer. For paired hero BOTH partners in EVERY cell. Same costume in all cells. Each FULL BODY sprite centered within its cell with 12% clear padding and feet baseline88% cell height. Pixel art like native48x48, crisp chunky pixels, limited24-color palette, dark one-pixel outline, strongly readable at map scale. No labels, no grid lines, no environment, no shadows, no glow outside silhouette. Genuine transparent alpha background, even empty transparent cells. Canvas aspect4:5 portrait.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "walker",
+      "id": "mer2",
+      "prompt": "Use case: stylized-concept. Asset type: ONE hero's directional WALK animation SPRITE SHEET for pixel strategy game Questing Heroes. Portrait reference defines identity. Subject: golden-haired female merfolk mage, tan skin, gold orange robe, fin ears. Full body on foot, NOT mounted. EXACT GRID: 4 columns, 5 rows, ALL20 cells equal and exactly filled, no gutters. EACH ROW is FOUR sequential walk cycle frames contact/passing/opposite contact/passing, slight alternating legs and arm sway, stable size and baseline. Row1 FACE SOUTH toward viewer; Row2 FACE SOUTHEAST down-right; Row3 FACE EAST right in profile; Row4 FACE NORTHEAST up-right AWAY from viewer showing back/side; Row5 FACE NORTH directly AWAY from viewer, back of head and back of cape ONLY NO face. Crucial: bottom TWO rows show character walking AWAY, not facing viewer. For paired hero BOTH partners in EVERY cell. Same costume in all cells. Each FULL BODY sprite centered within its cell with 12% clear padding and feet baseline88% cell height. Pixel art like native48x48, crisp chunky pixels, limited24-color palette, dark one-pixel outline, strongly readable at map scale. No labels, no grid lines, no environment, no shadows, no glow outside silhouette. Genuine transparent alpha background, even empty transparent cells. Canvas aspect4:5 portrait.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "walker",
+      "id": "michael",
+      "prompt": "Use case: stylized-concept. Asset type: ONE hero's directional WALK animation SPRITE SHEET for pixel strategy game Questing Heroes. Portrait reference defines identity. Subject: young male elf knight, long black hair white forelock, silver pale-blue armor and navy cape. Full body on foot, NOT mounted. EXACT GRID: 4 columns, 5 rows, ALL20 cells equal and exactly filled, no gutters. EACH ROW is FOUR sequential walk cycle frames contact/passing/opposite contact/passing, slight alternating legs and arm sway, stable size and baseline. Row1 FACE SOUTH toward viewer; Row2 FACE SOUTHEAST down-right; Row3 FACE EAST right in profile; Row4 FACE NORTHEAST up-right AWAY from viewer showing back/side; Row5 FACE NORTH directly AWAY from viewer, back of head and back of cape ONLY NO face. Crucial: bottom TWO rows show character walking AWAY, not facing viewer. For paired hero BOTH partners in EVERY cell. Same costume in all cells. Each FULL BODY sprite centered within its cell with 12% clear padding and feet baseline88% cell height. Pixel art like native48x48, crisp chunky pixels, limited24-color palette, dark one-pixel outline, strongly readable at map scale. No labels, no grid lines, no environment, no shadows, no glow outside silhouette. Genuine transparent alpha background, even empty transparent cells. Canvas aspect4:5 portrait.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "walker",
+      "id": "mossback",
+      "prompt": "Use case: stylized-concept. Asset type: ONE hero's directional WALK animation SPRITE SHEET for pixel strategy game Questing Heroes. Portrait reference defines identity. Subject: elderly anthropomorphic green-ochre tortoise herbalist, round glasses, mossy shell, brown backpack green robe, wood walking stick. Full body on foot, NOT mounted. EXACT GRID: 4 columns, 5 rows, ALL20 cells equal and exactly filled, no gutters. EACH ROW is FOUR sequential walk cycle frames contact/passing/opposite contact/passing, slight alternating legs and arm sway, stable size and baseline. Row1 FACE SOUTH toward viewer; Row2 FACE SOUTHEAST down-right; Row3 FACE EAST right in profile; Row4 FACE NORTHEAST up-right AWAY from viewer showing back/side; Row5 FACE NORTH directly AWAY from viewer, back of head and back of cape ONLY NO face. Crucial: bottom TWO rows show character walking AWAY, not facing viewer. For paired hero BOTH partners in EVERY cell. Same costume in all cells. Each FULL BODY sprite centered within its cell with 12% clear padding and feet baseline88% cell height. Pixel art like native48x48, crisp chunky pixels, limited24-color palette, dark one-pixel outline, strongly readable at map scale. No labels, no grid lines, no environment, no shadows, no glow outside silhouette. Genuine transparent alpha background, even empty transparent cells. Canvas aspect4:5 portrait.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "walker",
+      "id": "mr_pinecone",
+      "prompt": "Use case: stylized-concept. ONE directional WALK animation sprite sheet for Questing Heroes. Reference portrait defines identity. ONE young male elf, auburn curls, green eyes, pointed ears, hair shaped into a brown pinecone topknot, green leaf cape over dark green gold-edged tunic. EXACTLY20 full body figures, one hero in each cell. Layout4columns x5rows, all equal square cells no gutters. Four frames per row are left foot forward, passing, right foot forward, passing, same scale baseline88% cellheight. Row1 faces SOUTH toward viewer. Row2 SOUTHEAST down-right. Row3 EAST right profile. Row4 NORTHEAST up-right AWAY, back/side visible. Row5 NORTH directly AWAY, BACK of head and cape visible NO face. No twins, no extra duplicates within a cell. One connected tool and anatomically correct hands. Full body with15% transparent padding. Chunky hand-placed crisp pixel art native48x48 style, dark one-pixel outline limited24colors matching reference. Genuine transparent alpha background. No ground, no shadows, no text, no labels, no grid. Canvas4:5 portrait.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "walker",
+      "id": "nerka",
+      "prompt": "Use case: stylized-concept. Asset type: ONE hero's directional WALK animation SPRITE SHEET for pixel strategy game Questing Heroes. Portrait reference defines identity. Subject: anthropomorphic blue-green long-snouted crocodilian merfolk, cream throat, small orange head crest, navy cape. Full body on foot, NOT mounted. EXACT GRID: 4 columns, 5 rows, ALL20 cells equal and exactly filled, no gutters. EACH ROW is FOUR sequential walk cycle frames contact/passing/opposite contact/passing, slight alternating legs and arm sway, stable size and baseline. Row1 FACE SOUTH toward viewer; Row2 FACE SOUTHEAST down-right; Row3 FACE EAST right in profile; Row4 FACE NORTHEAST up-right AWAY from viewer showing back/side; Row5 FACE NORTH directly AWAY from viewer, back of head and back of cape ONLY NO face. Crucial: bottom TWO rows show character walking AWAY, not facing viewer. For paired hero BOTH partners in EVERY cell. Same costume in all cells. Each FULL BODY sprite centered within its cell with 12% clear padding and feet baseline88% cell height. Pixel art like native48x48, crisp chunky pixels, limited24-color palette, dark one-pixel outline, strongly readable at map scale. No labels, no grid lines, no environment, no shadows, no glow outside silhouette. Genuine transparent alpha background, even empty transparent cells. Canvas aspect4:5 portrait.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "walker",
+      "id": "nissa",
+      "prompt": "Use case: stylized-concept. Asset type: ONE hero's directional WALK animation SPRITE SHEET for pixel strategy game Questing Heroes. Portrait reference defines identity. Subject: young brown-skinned woman with burgundy braided updo, green tunic, pink scarf, tiny rabbit held securely. Full body on foot, NOT mounted. EXACT GRID: 4 columns, 5 rows, ALL20 cells equal and exactly filled, no gutters. EACH ROW is FOUR sequential walk cycle frames contact/passing/opposite contact/passing, slight alternating legs and arm sway, stable size and baseline. Row1 FACE SOUTH toward viewer; Row2 FACE SOUTHEAST down-right; Row3 FACE EAST right in profile; Row4 FACE NORTHEAST up-right AWAY from viewer showing back/side; Row5 FACE NORTH directly AWAY from viewer, back of head and back of cape ONLY NO face. Crucial: bottom TWO rows show character walking AWAY, not facing viewer. For paired hero BOTH partners in EVERY cell. Same costume in all cells. Each FULL BODY sprite centered within its cell with 12% clear padding and feet baseline88% cell height. Pixel art like native48x48, crisp chunky pixels, limited24-color palette, dark one-pixel outline, strongly readable at map scale. No labels, no grid lines, no environment, no shadows, no glow outside silhouette. Genuine transparent alpha background, even empty transparent cells. Canvas aspect4:5 portrait.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "walker",
+      "id": "omalley",
+      "prompt": "Use case: stylized-concept. Asset type: ONE hero's directional WALK animation SPRITE SHEET for pixel strategy game Questing Heroes. Portrait reference defines identity. Subject: red-haired red-bearded male pirate captain, navy gold-edged tricorn and burgundy gold-trim coat, one cutlass. Full body on foot, NOT mounted. EXACT GRID: 4 columns, 5 rows, ALL20 cells equal and exactly filled, no gutters. EACH ROW is FOUR sequential walk cycle frames contact/passing/opposite contact/passing, slight alternating legs and arm sway, stable size and baseline. Row1 FACE SOUTH toward viewer; Row2 FACE SOUTHEAST down-right; Row3 FACE EAST right in profile; Row4 FACE NORTHEAST up-right AWAY from viewer showing back/side; Row5 FACE NORTH directly AWAY from viewer, back of head and back of cape ONLY NO face. Crucial: bottom TWO rows show character walking AWAY, not facing viewer. For paired hero BOTH partners in EVERY cell. Same costume in all cells. Each FULL BODY sprite centered within its cell with 12% clear padding and feet baseline88% cell height. Pixel art like native48x48, crisp chunky pixels, limited24-color palette, dark one-pixel outline, strongly readable at map scale. No labels, no grid lines, no environment, no shadows, no glow outside silhouette. Genuine transparent alpha background, even empty transparent cells. Canvas aspect4:5 portrait.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "walker",
+      "id": "ossin",
+      "prompt": "Use case: stylized-concept. Asset type: ONE hero's directional WALK animation SPRITE SHEET for pixel strategy game Questing Heroes. Portrait reference defines identity. Subject: aged sandy-skinned desert court mage, VISIBLE FACE gray beard and eyebrows, cream turban amber jewel, rust-red/navy gold-trim robe, no mummy bandages. Full body on foot, NOT mounted. EXACT GRID: 4 columns, 5 rows, ALL20 cells equal and exactly filled, no gutters. EACH ROW is FOUR sequential walk cycle frames contact/passing/opposite contact/passing, slight alternating legs and arm sway, stable size and baseline. Row1 FACE SOUTH toward viewer; Row2 FACE SOUTHEAST down-right; Row3 FACE EAST right in profile; Row4 FACE NORTHEAST up-right AWAY from viewer showing back/side; Row5 FACE NORTH directly AWAY from viewer, back of head and back of cape ONLY NO face. Crucial: bottom TWO rows show character walking AWAY, not facing viewer. For paired hero BOTH partners in EVERY cell. Same costume in all cells. Each FULL BODY sprite centered within its cell with 12% clear padding and feet baseline88% cell height. Pixel art like native48x48, crisp chunky pixels, limited24-color palette, dark one-pixel outline, strongly readable at map scale. No labels, no grid lines, no environment, no shadows, no glow outside silhouette. Genuine transparent alpha background, even empty transparent cells. Canvas aspect4:5 portrait.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "walker",
+      "id": "payton",
+      "prompt": "Use case: stylized-concept. Asset type: ONE hero's directional WALK animation SPRITE SHEET for pixel strategy game Questing Heroes. Portrait reference defines identity. Subject: young female human pirate, long dark burgundy hair, red neck scarf and charcoal cape. Full body on foot, NOT mounted. EXACT GRID: 4 columns, 5 rows, ALL20 cells equal and exactly filled, no gutters. EACH ROW is FOUR sequential walk cycle frames contact/passing/opposite contact/passing, slight alternating legs and arm sway, stable size and baseline. Row1 FACE SOUTH toward viewer; Row2 FACE SOUTHEAST down-right; Row3 FACE EAST right in profile; Row4 FACE NORTHEAST up-right AWAY from viewer showing back/side; Row5 FACE NORTH directly AWAY from viewer, back of head and back of cape ONLY NO face. Crucial: bottom TWO rows show character walking AWAY, not facing viewer. For paired hero BOTH partners in EVERY cell. Same costume in all cells. Each FULL BODY sprite centered within its cell with 12% clear padding and feet baseline88% cell height. Pixel art like native48x48, crisp chunky pixels, limited24-color palette, dark one-pixel outline, strongly readable at map scale. No labels, no grid lines, no environment, no shadows, no glow outside silhouette. Genuine transparent alpha background, even empty transparent cells. Canvas aspect4:5 portrait.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "walker",
+      "id": "pip_quickline",
+      "prompt": "Use case: stylized-concept. Asset type: ONE hero's directional WALK animation SPRITE SHEET for pixel strategy game Questing Heroes. Portrait reference defines identity. Subject: small mouse pirate with white-gray fur, large pink ears, navy tricorn red feather, red coat. Full body on foot, NOT mounted. EXACT GRID: 4 columns, 5 rows, ALL20 cells equal and exactly filled, no gutters. EACH ROW is FOUR sequential walk cycle frames contact/passing/opposite contact/passing, slight alternating legs and arm sway, stable size and baseline. Row1 FACE SOUTH toward viewer; Row2 FACE SOUTHEAST down-right; Row3 FACE EAST right in profile; Row4 FACE NORTHEAST up-right AWAY from viewer showing back/side; Row5 FACE NORTH directly AWAY from viewer, back of head and back of cape ONLY NO face. Crucial: bottom TWO rows show character walking AWAY, not facing viewer. For paired hero BOTH partners in EVERY cell. Same costume in all cells. Each FULL BODY sprite centered within its cell with 12% clear padding and feet baseline88% cell height. Pixel art like native48x48, crisp chunky pixels, limited24-color palette, dark one-pixel outline, strongly readable at map scale. No labels, no grid lines, no environment, no shadows, no glow outside silhouette. Genuine transparent alpha background, even empty transparent cells. Canvas aspect4:5 portrait.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "walker",
+      "id": "rattleclaw",
+      "prompt": "Use case: stylized-concept. Asset type: ONE hero's directional WALK animation SPRITE SHEET for pixel strategy game Questing Heroes. Portrait reference defines identity. Subject: skeletal dinosaur necromancer, cream long dinosaur skull head, burgundy cape over black robe, small bone staff. Full body on foot, NOT mounted. EXACT GRID: 4 columns, 5 rows, ALL20 cells equal and exactly filled, no gutters. EACH ROW is FOUR sequential walk cycle frames contact/passing/opposite contact/passing, slight alternating legs and arm sway, stable size and baseline. Row1 FACE SOUTH toward viewer; Row2 FACE SOUTHEAST down-right; Row3 FACE EAST right in profile; Row4 FACE NORTHEAST up-right AWAY from viewer showing back/side; Row5 FACE NORTH directly AWAY from viewer, back of head and back of cape ONLY NO face. Crucial: bottom TWO rows show character walking AWAY, not facing viewer. For paired hero BOTH partners in EVERY cell. Same costume in all cells. Each FULL BODY sprite centered within its cell with 12% clear padding and feet baseline88% cell height. Pixel art like native48x48, crisp chunky pixels, limited24-color palette, dark one-pixel outline, strongly readable at map scale. No labels, no grid lines, no environment, no shadows, no glow outside silhouette. Genuine transparent alpha background, even empty transparent cells. Canvas aspect4:5 portrait.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "walker",
+      "id": "reedcall",
+      "prompt": "Use case: stylized-concept. Asset type: ONE hero's directional WALK animation SPRITE SHEET for pixel strategy game Questing Heroes. Portrait reference defines identity. Subject: anthropomorphic green lizard with long gold-edged head crest, green hoodless cape, leather armor, wood flute at belt. Full body on foot, NOT mounted. EXACT GRID: 4 columns, 5 rows, ALL20 cells equal and exactly filled, no gutters. EACH ROW is FOUR sequential walk cycle frames contact/passing/opposite contact/passing, slight alternating legs and arm sway, stable size and baseline. Row1 FACE SOUTH toward viewer; Row2 FACE SOUTHEAST down-right; Row3 FACE EAST right in profile; Row4 FACE NORTHEAST up-right AWAY from viewer showing back/side; Row5 FACE NORTH directly AWAY from viewer, back of head and back of cape ONLY NO face. Crucial: bottom TWO rows show character walking AWAY, not facing viewer. For paired hero BOTH partners in EVERY cell. Same costume in all cells. Each FULL BODY sprite centered within its cell with 12% clear padding and feet baseline88% cell height. Pixel art like native48x48, crisp chunky pixels, limited24-color palette, dark one-pixel outline, strongly readable at map scale. No labels, no grid lines, no environment, no shadows, no glow outside silhouette. Genuine transparent alpha background, even empty transparent cells. Canvas aspect4:5 portrait.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "walker",
+      "id": "remy",
+      "prompt": "Use case: stylized-concept. Asset type: ONE hero's directional WALK animation SPRITE SHEET for pixel strategy game Questing Heroes. Portrait reference defines identity. Subject: young pale freckled male with tousled orange hair, navy-purple cape, light cyan crystal wand. Full body on foot, NOT mounted. EXACT GRID: 4 columns, 5 rows, ALL20 cells equal and exactly filled, no gutters. EACH ROW is FOUR sequential walk cycle frames contact/passing/opposite contact/passing, slight alternating legs and arm sway, stable size and baseline. Row1 FACE SOUTH toward viewer; Row2 FACE SOUTHEAST down-right; Row3 FACE EAST right in profile; Row4 FACE NORTHEAST up-right AWAY from viewer showing back/side; Row5 FACE NORTH directly AWAY from viewer, back of head and back of cape ONLY NO face. Crucial: bottom TWO rows show character walking AWAY, not facing viewer. For paired hero BOTH partners in EVERY cell. Same costume in all cells. Each FULL BODY sprite centered within its cell with 12% clear padding and feet baseline88% cell height. Pixel art like native48x48, crisp chunky pixels, limited24-color palette, dark one-pixel outline, strongly readable at map scale. No labels, no grid lines, no environment, no shadows, no glow outside silhouette. Genuine transparent alpha background, even empty transparent cells. Canvas aspect4:5 portrait.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "walker",
+      "id": "rocky",
+      "prompt": "Use case: stylized-concept. Asset type: ONE hero's directional WALK animation SPRITE SHEET for pixel strategy game Questing Heroes. Portrait reference defines identity. Subject: blue-gray barnacled male triton with red branching coral horns, pale seafoam beard, cream-gold shell shoulder armor. Full body on foot, NOT mounted. EXACT GRID: 4 columns, 5 rows, ALL20 cells equal and exactly filled, no gutters. EACH ROW is FOUR sequential walk cycle frames contact/passing/opposite contact/passing, slight alternating legs and arm sway, stable size and baseline. Row1 FACE SOUTH toward viewer; Row2 FACE SOUTHEAST down-right; Row3 FACE EAST right in profile; Row4 FACE NORTHEAST up-right AWAY from viewer showing back/side; Row5 FACE NORTH directly AWAY from viewer, back of head and back of cape ONLY NO face. Crucial: bottom TWO rows show character walking AWAY, not facing viewer. For paired hero BOTH partners in EVERY cell. Same costume in all cells. Each FULL BODY sprite centered within its cell with 12% clear padding and feet baseline88% cell height. Pixel art like native48x48, crisp chunky pixels, limited24-color palette, dark one-pixel outline, strongly readable at map scale. No labels, no grid lines, no environment, no shadows, no glow outside silhouette. Genuine transparent alpha background, even empty transparent cells. Canvas aspect4:5 portrait.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "walker",
+      "id": "sera_venn",
+      "prompt": "Use case: stylized-concept. Asset type: ONE hero's directional WALK animation SPRITE SHEET for pixel strategy game Questing Heroes. Portrait reference defines identity. Subject: mature pale woman, long navy hair with silver forelock, red cape, blue gold-trim mage robe. Full body on foot, NOT mounted. EXACT GRID: 4 columns, 5 rows, ALL20 cells equal and exactly filled, no gutters. EACH ROW is FOUR sequential walk cycle frames contact/passing/opposite contact/passing, slight alternating legs and arm sway, stable size and baseline. Row1 FACE SOUTH toward viewer; Row2 FACE SOUTHEAST down-right; Row3 FACE EAST right in profile; Row4 FACE NORTHEAST up-right AWAY from viewer showing back/side; Row5 FACE NORTH directly AWAY from viewer, back of head and back of cape ONLY NO face. Crucial: bottom TWO rows show character walking AWAY, not facing viewer. For paired hero BOTH partners in EVERY cell. Same costume in all cells. Each FULL BODY sprite centered within its cell with 12% clear padding and feet baseline88% cell height. Pixel art like native48x48, crisp chunky pixels, limited24-color palette, dark one-pixel outline, strongly readable at map scale. No labels, no grid lines, no environment, no shadows, no glow outside silhouette. Genuine transparent alpha background, even empty transparent cells. Canvas aspect4:5 portrait.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "walker",
+      "id": "sheila",
+      "prompt": "Use case: stylized-concept. Asset type: ONE hero's directional WALK animation SPRITE SHEET for pixel strategy game Questing Heroes. Portrait reference defines identity. Subject: human female pirate black hair, purple/gold captain coat, feathered gold shoulder armor, short sword. Full body on foot, NOT mounted. EXACT GRID: 4 columns, 5 rows, ALL20 cells equal and exactly filled, no gutters. EACH ROW is FOUR sequential walk cycle frames contact/passing/opposite contact/passing, slight alternating legs and arm sway, stable size and baseline. Row1 FACE SOUTH toward viewer; Row2 FACE SOUTHEAST down-right; Row3 FACE EAST right in profile; Row4 FACE NORTHEAST up-right AWAY from viewer showing back/side; Row5 FACE NORTH directly AWAY from viewer, back of head and back of cape ONLY NO face. Crucial: bottom TWO rows show character walking AWAY, not facing viewer. For paired hero BOTH partners in EVERY cell. Same costume in all cells. Each FULL BODY sprite centered within its cell with 12% clear padding and feet baseline88% cell height. Pixel art like native48x48, crisp chunky pixels, limited24-color palette, dark one-pixel outline, strongly readable at map scale. No labels, no grid lines, no environment, no shadows, no glow outside silhouette. Genuine transparent alpha background, even empty transparent cells. Canvas aspect4:5 portrait.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "walker",
+      "id": "silka",
+      "prompt": "Use case: stylized-concept. Asset type: ONE hero's directional WALK animation SPRITE SHEET for pixel strategy game Questing Heroes. Portrait reference defines identity. Subject: lavender-skinned elfin bat woman, pointed ears and dark purple hair, mauve cape, small folded leathery wings. Full body on foot, NOT mounted. EXACT GRID: 4 columns, 5 rows, ALL20 cells equal and exactly filled, no gutters. EACH ROW is FOUR sequential walk cycle frames contact/passing/opposite contact/passing, slight alternating legs and arm sway, stable size and baseline. Row1 FACE SOUTH toward viewer; Row2 FACE SOUTHEAST down-right; Row3 FACE EAST right in profile; Row4 FACE NORTHEAST up-right AWAY from viewer showing back/side; Row5 FACE NORTH directly AWAY from viewer, back of head and back of cape ONLY NO face. Crucial: bottom TWO rows show character walking AWAY, not facing viewer. For paired hero BOTH partners in EVERY cell. Same costume in all cells. Each FULL BODY sprite centered within its cell with 12% clear padding and feet baseline88% cell height. Pixel art like native48x48, crisp chunky pixels, limited24-color palette, dark one-pixel outline, strongly readable at map scale. No labels, no grid lines, no environment, no shadows, no glow outside silhouette. Genuine transparent alpha background, even empty transparent cells. Canvas aspect4:5 portrait.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "walker",
+      "id": "skimmer",
+      "prompt": "Use case: stylized-concept. Asset type: ONE hero's directional WALK animation SPRITE SHEET for pixel strategy game Questing Heroes. Portrait reference defines identity. Subject: anthropomorphic purple dolphin seafarer with long beak, teal scarf and purple/navy jacket. Full body on foot, NOT mounted. EXACT GRID: 4 columns, 5 rows, ALL20 cells equal and exactly filled, no gutters. EACH ROW is FOUR sequential walk cycle frames contact/passing/opposite contact/passing, slight alternating legs and arm sway, stable size and baseline. Row1 FACE SOUTH toward viewer; Row2 FACE SOUTHEAST down-right; Row3 FACE EAST right in profile; Row4 FACE NORTHEAST up-right AWAY from viewer showing back/side; Row5 FACE NORTH directly AWAY from viewer, back of head and back of cape ONLY NO face. Crucial: bottom TWO rows show character walking AWAY, not facing viewer. For paired hero BOTH partners in EVERY cell. Same costume in all cells. Each FULL BODY sprite centered within its cell with 12% clear padding and feet baseline88% cell height. Pixel art like native48x48, crisp chunky pixels, limited24-color palette, dark one-pixel outline, strongly readable at map scale. No labels, no grid lines, no environment, no shadows, no glow outside silhouette. Genuine transparent alpha background, even empty transparent cells. Canvas aspect4:5 portrait.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "walker",
+      "id": "slack",
+      "prompt": "Use case: stylized-concept. Asset type: ONE hero's directional WALK animation SPRITE SHEET for pixel strategy game Questing Heroes. Portrait reference defines identity. Subject: male dwarf scholar, brown beard, thick brows, spectacles, burgundy gold-trim clothes, spellbook. Full body on foot, NOT mounted. EXACT GRID: 4 columns, 5 rows, ALL20 cells equal and exactly filled, no gutters. EACH ROW is FOUR sequential walk cycle frames contact/passing/opposite contact/passing, slight alternating legs and arm sway, stable size and baseline. Row1 FACE SOUTH toward viewer; Row2 FACE SOUTHEAST down-right; Row3 FACE EAST right in profile; Row4 FACE NORTHEAST up-right AWAY from viewer showing back/side; Row5 FACE NORTH directly AWAY from viewer, back of head and back of cape ONLY NO face. Crucial: bottom TWO rows show character walking AWAY, not facing viewer. For paired hero BOTH partners in EVERY cell. Same costume in all cells. Each FULL BODY sprite centered within its cell with 12% clear padding and feet baseline88% cell height. Pixel art like native48x48, crisp chunky pixels, limited24-color palette, dark one-pixel outline, strongly readable at map scale. No labels, no grid lines, no environment, no shadows, no glow outside silhouette. Genuine transparent alpha background, even empty transparent cells. Canvas aspect4:5 portrait.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "walker",
+      "id": "tembor",
+      "prompt": "Use case: stylized-concept. Asset type: ONE hero's directional WALK animation SPRITE SHEET for pixel strategy game Questing Heroes. Portrait reference defines identity. Subject: anthropomorphic gray elephant marshal, tusks and broad ears, red cloak gold edging purple armor. Full body on foot, NOT mounted. EXACT GRID: 4 columns, 5 rows, ALL20 cells equal and exactly filled, no gutters. EACH ROW is FOUR sequential walk cycle frames contact/passing/opposite contact/passing, slight alternating legs and arm sway, stable size and baseline. Row1 FACE SOUTH toward viewer; Row2 FACE SOUTHEAST down-right; Row3 FACE EAST right in profile; Row4 FACE NORTHEAST up-right AWAY from viewer showing back/side; Row5 FACE NORTH directly AWAY from viewer, back of head and back of cape ONLY NO face. Crucial: bottom TWO rows show character walking AWAY, not facing viewer. For paired hero BOTH partners in EVERY cell. Same costume in all cells. Each FULL BODY sprite centered within its cell with 12% clear padding and feet baseline88% cell height. Pixel art like native48x48, crisp chunky pixels, limited24-color palette, dark one-pixel outline, strongly readable at map scale. No labels, no grid lines, no environment, no shadows, no glow outside silhouette. Genuine transparent alpha background, even empty transparent cells. Canvas aspect4:5 portrait.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "walker",
+      "id": "thornfrill",
+      "prompt": "Use case: stylized-concept. Asset type: ONE hero's directional WALK animation SPRITE SHEET for pixel strategy game Questing Heroes. Portrait reference defines identity. Subject: gray-lavender triceratops humanoid ranger knight, pale horns, mauve frill, green and gold cape and armor. Full body on foot, NOT mounted. EXACT GRID: 4 columns, 5 rows, ALL20 cells equal and exactly filled, no gutters. EACH ROW is FOUR sequential walk cycle frames contact/passing/opposite contact/passing, slight alternating legs and arm sway, stable size and baseline. Row1 FACE SOUTH toward viewer; Row2 FACE SOUTHEAST down-right; Row3 FACE EAST right in profile; Row4 FACE NORTHEAST up-right AWAY from viewer showing back/side; Row5 FACE NORTH directly AWAY from viewer, back of head and back of cape ONLY NO face. Crucial: bottom TWO rows show character walking AWAY, not facing viewer. For paired hero BOTH partners in EVERY cell. Same costume in all cells. Each FULL BODY sprite centered within its cell with 12% clear padding and feet baseline88% cell height. Pixel art like native48x48, crisp chunky pixels, limited24-color palette, dark one-pixel outline, strongly readable at map scale. No labels, no grid lines, no environment, no shadows, no glow outside silhouette. Genuine transparent alpha background, even empty transparent cells. Canvas aspect4:5 portrait.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "walker",
+      "id": "vera",
+      "prompt": "Use case: stylized-concept. Asset type: ONE hero's directional WALK animation SPRITE SHEET for pixel strategy game Questing Heroes. Portrait reference defines identity. Subject: tan woman with dark violet wavy hair, blue gold-trim armored mage outfit, round blue runic shield and simple blue wand. Full body on foot, NOT mounted. EXACT GRID: 4 columns, 5 rows, ALL20 cells equal and exactly filled, no gutters. EACH ROW is FOUR sequential walk cycle frames contact/passing/opposite contact/passing, slight alternating legs and arm sway, stable size and baseline. Row1 FACE SOUTH toward viewer; Row2 FACE SOUTHEAST down-right; Row3 FACE EAST right in profile; Row4 FACE NORTHEAST up-right AWAY from viewer showing back/side; Row5 FACE NORTH directly AWAY from viewer, back of head and back of cape ONLY NO face. Crucial: bottom TWO rows show character walking AWAY, not facing viewer. For paired hero BOTH partners in EVERY cell. Same costume in all cells. Each FULL BODY sprite centered within its cell with 12% clear padding and feet baseline88% cell height. Pixel art like native48x48, crisp chunky pixels, limited24-color palette, dark one-pixel outline, strongly readable at map scale. No labels, no grid lines, no environment, no shadows, no glow outside silhouette. Genuine transparent alpha background, even empty transparent cells. Canvas aspect4:5 portrait.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "walker",
+      "id": "veyra",
+      "prompt": "Use case: stylized-concept. Asset type: ONE hero's directional WALK animation SPRITE SHEET for pixel strategy game Questing Heroes. Portrait reference defines identity. Subject: pale gray vampire woman with dark curls and white hair forelock, black burgundy cape, red gemstone clasp. Full body on foot, NOT mounted. EXACT GRID: 4 columns, 5 rows, ALL20 cells equal and exactly filled, no gutters. EACH ROW is FOUR sequential walk cycle frames contact/passing/opposite contact/passing, slight alternating legs and arm sway, stable size and baseline. Row1 FACE SOUTH toward viewer; Row2 FACE SOUTHEAST down-right; Row3 FACE EAST right in profile; Row4 FACE NORTHEAST up-right AWAY from viewer showing back/side; Row5 FACE NORTH directly AWAY from viewer, back of head and back of cape ONLY NO face. Crucial: bottom TWO rows show character walking AWAY, not facing viewer. For paired hero BOTH partners in EVERY cell. Same costume in all cells. Each FULL BODY sprite centered within its cell with 12% clear padding and feet baseline88% cell height. Pixel art like native48x48, crisp chunky pixels, limited24-color palette, dark one-pixel outline, strongly readable at map scale. No labels, no grid lines, no environment, no shadows, no glow outside silhouette. Genuine transparent alpha background, even empty transparent cells. Canvas aspect4:5 portrait.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "walker",
+      "id": "virel",
+      "prompt": "Use case: stylized-concept. Asset type: ONE hero's directional WALK animation SPRITE SHEET for pixel strategy game Questing Heroes. Portrait reference defines identity. Subject: anthropomorphic blue peacock beast mage, colorful green blue gold tail feathers folded compactly, purple/gold robe. Full body on foot, NOT mounted. EXACT GRID: 4 columns, 5 rows, ALL20 cells equal and exactly filled, no gutters. EACH ROW is FOUR sequential walk cycle frames contact/passing/opposite contact/passing, slight alternating legs and arm sway, stable size and baseline. Row1 FACE SOUTH toward viewer; Row2 FACE SOUTHEAST down-right; Row3 FACE EAST right in profile; Row4 FACE NORTHEAST up-right AWAY from viewer showing back/side; Row5 FACE NORTH directly AWAY from viewer, back of head and back of cape ONLY NO face. Crucial: bottom TWO rows show character walking AWAY, not facing viewer. For paired hero BOTH partners in EVERY cell. Same costume in all cells. Each FULL BODY sprite centered within its cell with 12% clear padding and feet baseline88% cell height. Pixel art like native48x48, crisp chunky pixels, limited24-color palette, dark one-pixel outline, strongly readable at map scale. No labels, no grid lines, no environment, no shadows, no glow outside silhouette. Genuine transparent alpha background, even empty transparent cells. Canvas aspect4:5 portrait.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "walker",
+      "id": "zahara",
+      "prompt": "Use case: stylized-concept. Asset type: ONE hero's directional WALK animation SPRITE SHEET for pixel strategy game Questing Heroes. Portrait reference defines identity. Subject: anthropomorphic spotted golden leopard queen, teal feathered headdress, purple/gold cape and robes. Full body on foot, NOT mounted. EXACT GRID: 4 columns, 5 rows, ALL20 cells equal and exactly filled, no gutters. EACH ROW is FOUR sequential walk cycle frames contact/passing/opposite contact/passing, slight alternating legs and arm sway, stable size and baseline. Row1 FACE SOUTH toward viewer; Row2 FACE SOUTHEAST down-right; Row3 FACE EAST right in profile; Row4 FACE NORTHEAST up-right AWAY from viewer showing back/side; Row5 FACE NORTH directly AWAY from viewer, back of head and back of cape ONLY NO face. Crucial: bottom TWO rows show character walking AWAY, not facing viewer. For paired hero BOTH partners in EVERY cell. Same costume in all cells. Each FULL BODY sprite centered within its cell with 12% clear padding and feet baseline88% cell height. Pixel art like native48x48, crisp chunky pixels, limited24-color palette, dark one-pixel outline, strongly readable at map scale. No labels, no grid lines, no environment, no shadows, no glow outside silhouette. Genuine transparent alpha background, even empty transparent cells. Canvas aspect4:5 portrait.",
+      "method": "built-in image generation"
+    },
+    {
+      "kind": "walker",
+      "id": "zakai",
+      "prompt": "Use case: stylized-concept. Asset type: ONE hero's directional WALK animation SPRITE SHEET for pixel strategy game Questing Heroes. Portrait reference defines identity. Subject: tan masked male rogue, black curly mohawk with close shaved sides, silver shoulder armor, brown leather and face scarf, single dagger and sheathed sword back, NO wheel brooch. Full body on foot, NOT mounted. EXACT GRID: 4 columns, 5 rows, ALL20 cells equal and exactly filled, no gutters. EACH ROW is FOUR sequential walk cycle frames contact/passing/opposite contact/passing, slight alternating legs and arm sway, stable size and baseline. Row1 FACE SOUTH toward viewer; Row2 FACE SOUTHEAST down-right; Row3 FACE EAST right in profile; Row4 FACE NORTHEAST up-right AWAY from viewer showing back/side; Row5 FACE NORTH directly AWAY from viewer, back of head and back of cape ONLY NO face. Crucial: bottom TWO rows show character walking AWAY, not facing viewer. For paired hero BOTH partners in EVERY cell. Same costume in all cells. Each FULL BODY sprite centered within its cell with 12% clear padding and feet baseline88% cell height. Pixel art like native48x48, crisp chunky pixels, limited24-color palette, dark one-pixel outline, strongly readable at map scale. No labels, no grid lines, no environment, no shadows, no glow outside silhouette. Genuine transparent alpha background, even empty transparent cells. Canvas aspect4:5 portrait.",
+      "method": "built-in image generation"
+    }
+  ]
+}

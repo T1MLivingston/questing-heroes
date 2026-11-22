@@ -1,0 +1,168 @@
+Hero,Hero ID,Banner,Battle figure,On-foot walker,Revised portrait
+Bear,bear,centaurs,existing personal,existing personal,False
+Perry,perry,rangers,existing personal,existing personal,False
+Dorothy,dorothy,rangers,existing personal,existing personal,False
+Oliver,oliver,rangers,existing personal,existing personal,False
+Engelman,engelman,wizards,existing personal,existing personal,False
+Tempest,tempest,wizards,existing personal,existing personal,False
+Parker,parker,necro,existing personal,existing personal,False
+Shadow,shadow,necro,existing personal,existing personal,True
+Grimes,grimes,dwarves,existing personal,new personal,False
+Boopis,boopis,rangers,existing personal,existing personal,False
+Rocky,rocky,merfolk,existing personal,new personal,False
+Monkey,monkey,centaurs,existing personal,existing personal,False
+Binx,binx,centaurs,existing personal,existing personal,False
+O'Malley,omalley,pirates,existing personal,new personal,False
+Vargas,vargas,pirates,existing personal,existing personal,False
+Sheila,sheila,pirates,existing personal,new personal,False
+Love,love,elves,existing personal,generic banner,False
+Ivan,ivan,dwarves,existing personal,new personal,False
+Rago,rago,necro,existing personal,existing personal,False
+Dupengeiser,dupengeiser,dwarves,existing personal,new personal,False
+Rimmer,rimmer,wizards,existing personal,existing personal,False
+Sookie,sookie,wizards,existing personal,existing personal,False
+Schmickle,schmickle,dwarves,existing personal,existing personal,False
+Eelvis,elvis,merfolk,existing personal,new personal,False
+Boone,boone,merfolk,existing personal,generic banner,False
+William IV,necro4,necro,existing personal,existing personal,False
+Griffiths,mer2,merfolk,existing personal,new personal,False
+Battaglia,battaglia,rangers,existing personal,existing personal,False
+Lawrence,lawrence,pirates,existing personal,new personal,False
+Michael,michael,elves,existing personal,new personal,False
+Livingston,livingston,elves,existing personal,new personal,False
+Slack,slack,dwarves,existing personal,new personal,False
+Alderhide,alderhide,elves,existing personal,new personal,False
+Rusty,briar,centaurs,existing personal,generic banner,False
+Mossback,mossback,elves,new personal,new personal,False
+Fern,yselle,elves,new personal,generic banner,False
+Willa,veyra,necro,existing personal,new personal,False
+Lore,graven,necro,existing personal,new personal,False
+Dusty,ossin,necro,existing personal,new personal,True
+Spindle,spindle,merfolk,new personal,generic banner,False
+Skimmer,skimmer,merfolk,existing personal,new personal,False
+Coral,atoll,merfolk,new personal,new personal,True
+Penny,tansy,dwarves,new personal,generic banner,False
+Kiln,kiln,dwarves,existing personal,new personal,True
+Wick,cresset,rangers,existing personal,generic banner,False
+Inkwake,inkwake,pirates,existing personal,new personal,False
+Pip Quickline,pip_quickline,pirates,existing personal,new personal,False
+Zarra,zahara,centaurs,existing personal,new personal,False
+India,tembor,centaurs,new personal,new personal,False
+Plume,virel,centaurs,existing personal,new personal,False
+Crestwind,reedcall,rangers,existing personal,new personal,False
+Sera Venn,sera_venn,wizards,existing personal,new personal,False
+Hush,murmur,necro,existing personal,generic banner,False
+Rattleclaw,rattleclaw,necro,existing personal,new personal,False
+Violet,silka,centaurs,existing personal,new personal,False
+Flintback,flintback,centaurs,existing personal,new personal,False
+Rusk Hookhorn,rusk_hookhorn,merfolk,new personal,generic banner,False
+Thornfrill,thornfrill,rangers,new personal,new personal,False
+Harlan,harlan_chalk,dwarves,existing personal,new personal,False
+Nerka,nerka,merfolk,existing personal,new personal,False
+Peyto,payton,pirates,existing personal,new personal,False
+Nissa,nissa,rangers,existing personal,new personal,False
+Enzo,enzo,dwarves,existing personal,new personal,False
+Axel,axel,merfolk,existing personal,generic banner,False
+Gale,gale,wizards,existing personal,generic banner,False
+Vera,vera,wizards,existing personal,new personal,False
+Remy,remy,wizards,existing personal,new personal,False
+Ada,ada,wizards,existing personal,generic banner,False
+Mara,mara,necro,new personal,generic banner,False
+Lunt,lune,elves,existing personal,new personal,False
+Hart,hart,elves,existing personal,generic banner,False
+Orla,orla,dwarves,existing personal,generic banner,False
+Kit & Nell,kit_and_nell,dwarves,existing personal,new personal,False
+Cato,cato,pirates,existing personal,generic banner,False
+Sid & Tess,sid_and_tess,pirates,new personal,generic banner,False
+Wren,wren,centaurs,new personal,generic banner,False
+Rumble,rumble,centaurs,existing personal,generic banner,False
+Gus & Glen,gus_and_glen,rangers,existing personal,generic banner,False
+Midge,midge,rangers,existing personal,generic banner,False
+Mags & Mae,mags_and_mae,wizards,new personal,generic banner,False
+Bloop,bloop,wizards,existing personal,generic banner,False
+Odo & Otto,odo_and_otto,necro,new personal,generic banner,False
+Aster & Briar,aster_and_briar,elves,new personal,generic banner,False
+Ned & Nat,ned_and_nat,dwarves,new personal,generic banner,False
+Spike,spike,dwarves,new personal,generic banner,False
+Rafe & Reed,rafe_and_reed,pirates,new personal,generic banner,False
+Bo,bo,pirates,existing personal,generic banner,False
+Bess & Bea,bess_and_bea,centaurs,existing personal,generic banner,False
+Gilt,gilt,centaurs,existing personal,generic banner,False
+Fin & Flo,fin_and_flo,merfolk,existing personal,new personal,False
+Bort,bort_simesin,necro,existing personal,generic banner,False
+Gunt Gunt,gunt_gunt,pirates,existing personal,new personal,False
+Azure Hype,azure_hype,rangers,existing personal,generic banner,False
+Ericsonion,ericsonion,rangers,existing personal,generic banner,False
+Ardcat,ardcat,pirates,existing personal,generic banner,False
+Toad,space_toad,pirates,existing personal,generic banner,False
+Mr. Pinecone,mr_pinecone,elves,existing personal,new personal,False
+Nyx,nix,necro,existing personal,generic banner,False
+Deep Wave,deepwave_the_ai,rangers,existing personal,generic banner,False
+BobbytheBob,bobbythebob,wizards,existing personal,generic banner,False
+Capybara,capydara,pirates,existing personal,generic banner,False
+Lishi,lishy,pirates,existing personal,generic banner,False
+Kushalito,kushalito_banana,necro,existing personal,generic banner,False
+Fut,fut_esports,centaurs,new personal,generic banner,False
+Noël Dragonfire,noel_dragonfire,merfolk,existing personal,generic banner,False
+Luckenzo,luckenzo,wizards,new personal,generic banner,False
+Larishna,lord_krishna,wizards,new personal,generic banner,False
+Nala,nala,merfolk,existing personal,generic banner,False
+Nanya,nanya,merfolk,new personal,generic banner,False
+Posy Spinner,posy_spinner,merfolk,new personal,generic banner,False
+Katherine,catherine,wizards,new personal,generic banner,False
+Bristle,bristle,dwarves,existing personal,generic banner,False
+Zenvy,zenvy,centaurs,existing personal,generic banner,False
+King Pharoph the 3rd,king_pharoph_the_3rd,centaurs,new personal,generic banner,True
+Rose Flower,rose_flower,wizards,existing personal,generic banner,False
+Posy,posy,dwarves,existing personal,generic banner,False
+Banana Boy,bannana_boy,wizards,existing personal,generic banner,False
+Spirit of the Forest,spirit_of_the_forest,wizards,existing personal,generic banner,False
+Ava,ava_young,elves,existing personal,new personal,False
+Rousie,rosie,elves,existing personal,generic banner,False
+Celestine Circe,celestine_circe,wizards,existing personal,generic banner,False
+Estella,estella,elves,existing personal,generic banner,False
+Lily,lily,elves,existing personal,generic banner,False
+Pottery,pottery,rangers,existing personal,generic banner,False
+Kaf,kaf_underworld_pharaoh,necro,existing personal,generic banner,False
+Nohahahahah,nohahahahah,centaurs,existing personal,generic banner,False
+Yatt,yatt,merfolk,existing personal,generic banner,False
+Boja,boja,centaurs,existing personal,generic banner,False
+Poison,poison,elves,existing personal,generic banner,False
+Paitence & Jay,paitence_and_jay,centaurs,existing personal,generic banner,False
+Liam,liam,pirates,existing personal,generic banner,False
+Cornelius II,cornelius_ii,rangers,existing personal,generic banner,False
+Ward,ward,rangers,existing personal,generic banner,False
+Sir Quackars,sir_quackars,wizards,existing personal,generic banner,False
+Sir Giggachins,sir_giggachins,dwarves,existing personal,generic banner,False
+Buffalo,buffalo,wizards,existing personal,generic banner,False
+Ella,ella,elves,existing personal,generic banner,False
+Sus,sus,necro,existing personal,generic banner,False
+Samba,samba,necro,existing personal,generic banner,False
+Alora,alora,pirates,existing personal,generic banner,False
+Ezlen,ezlen,elves,existing personal,generic banner,False
+Stargirl,stargirl,merfolk,existing personal,generic banner,False
+Mangrove,mangrove,merfolk,existing personal,generic banner,False
+Gerry,gerry,wizards,existing personal,generic banner,False
+Teeka,teeka,merfolk,existing personal,generic banner,False
+Python Mage,python_mage,centaurs,existing personal,generic banner,False
+Vash,vash,wizards,existing personal,generic banner,False
+Anastasia May Dvestia,anastasia_may_dvestia,rangers,existing personal,generic banner,False
+Babka,babka,dwarves,existing personal,generic banner,False
+Emirk,emirk,necro,existing personal,generic banner,False
+Friendo,friendo,necro,existing personal,generic banner,False
+Teo,teo,dwarves,existing personal,generic banner,False
+Tida,tida,rangers,existing personal,generic banner,False
+Dee,dee,necro,existing personal,generic banner,False
+Astronaut Steve,astronaut_steve,dwarves,existing personal,generic banner,False
+H4L1S3,h4l1s3,merfolk,existing personal,generic banner,False
+Drew,drew,rangers,existing personal,generic banner,False
+Vinay,vinay,pirates,existing personal,generic banner,False
+J@ke,jake,rangers,existing personal,generic banner,False
+Anna,anna,elves,existing personal,generic banner,False
+Liya,liya,wizards,existing personal,generic banner,False
+Trey,trey,necro,existing personal,generic banner,False
+Boston,boston,wizards,existing personal,generic banner,False
+Percifire,percifire,centaurs,existing personal,generic banner,False
+Zakai,zakai,wizards,new personal,new personal,False
+Eden,eden,elves,existing personal,new personal,False
+Letchworth,letchworth,merfolk,existing personal,new personal,False

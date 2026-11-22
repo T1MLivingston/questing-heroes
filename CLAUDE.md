@@ -131,7 +131,7 @@ Everything lives in one object, `S`, so it can be saved as JSON:
 - Resources & Map Sites pack (v29): one atlas `map/world_extras.png` (`WX` table, drawn by `wxAt`, bottom-centre): Gem Grotto and Moonwater Spring mines (2 frames), moonwater and gem piles, prison, horse fair, Woodcutters' Camp, Abandoned Ore Cart, Amber Hollow and the outpost/recruiting post sprite. Gem and moonwater icons are `ui/icons/gem.png` and `moonwater.png`. Heartwood Grove (Rangers tier 5) is column 6 of `towns/extra_buildings.png` (`XB_ONLY`), standing in the Rangers town's right margin (`XB_SPOT_FAC`).
 - Setup Icons pack (v31): 70 icons of 64×64 in one atlas `ui/setup_icons.png` (10 a row, names in `SICONS`), placed with `ico(name, px)` (a background-sprite span): difficulty, game modes, rivals 1-6 and great towns 0-6 (numbered banners and castles), outposts, map sizes, New layout, Make your own map, Back/Next, the title buttons, the legend and the Start-with-an-artifact toggle. The faction shields `shields/<fac>_96.png` now hold the pack's 128 px crests. Hero names wear a thick black outline in the player's colour (`.qh-name`: side panel and hero picker).
 - Portraits redrawn in v31 (Dorothy, Sookie, O'Malley, Vargas, Griffiths `mer2`) are 256 px files kept under the `_128.png` name; portrait URLs carry `?v=30`.
-- Art storage: every PNG under `assets/` is committed to the private GitHub repo (v30; `*.png` is no longer gitignored), so the repo is the full backup and the game runs locally with no file limit. The published artifact is separate: it allows 511 files and holds about 499, so art for it still goes into atlases. It cannot load images from the private repo. The artifact copy loads one bundled `js/game.js` (the `js/*.js` files concatenated in order) plus `css/game.css`, to stay under the file limit.
+- Art storage: every PNG under `assets/` is committed to the private GitHub repo (v30; `*.png` is no longer gitignored), so the repo is the full backup and the game runs locally with no file limit. The claude.ai copy is a secondary preview (511-file limit); the repository is the complete game (see v68). The artifact copy loads one bundled `js/game.js` (the `js/*.js` files concatenated in order) plus `css/game.css`, to stay under the file limit.
 - Opening `index.html` straight from disk (`file://`) works: browsers refuse to export canvases holding our art there, so `bldThumb` falls back to a CSS crop of the atlas (`thumbOut` returns `{css}`), and pixel reads (`tinted`, `artTownAlpha`) are wrapped in try/catch (team colours show as drawn).
 - Add new art by dropping files in the same layout and adding the id to the matching table. `assets/manifest.json` is the art pack's full registry.
 
@@ -222,6 +222,12 @@ Everything lives in one object, `S`, so it can be saved as JSON:
 - Every hero starts with an artifact: `START_ITEM` fills in the newer heroes that had none.
 - New ability hooks (player side only): `forgePlus` (extra Great Forge attack), `armyDef` (whole army defense), `rangedPct` (shooter damage), `halfCost` (one spell at half mana), `manaCut` (all spells cheaper), `squallPct`, `weakenPct`.
 - Raised: Ivan (Forge half ore, +1 more attack), Oliver (30% cheaper rough ground, +5% movement), Shadow (harvest 20%), Sheila (Squall +30%), Grimes and Griffiths (+1 speed to their troop). Made distinct: Veyra, Gliss, Silka, Murmur, Boone, Mossback, Aster, Nessa Holt. Trimmed: Schmickle and Quillby to +200 gold a day. Battaglia is a Might hero.
+
+### v68 repository first
+
+- The repository and GitHub Pages are the home of the game. Nothing is left out of the repo to suit the claude.ai copy: that copy is a secondary preview with a 511-file limit, and the files trimmed from it (Holmes and Tinker portraits, `waterfront/lighthouse.png`, `waterfront/shipwreck.png`) were never removed from the repo. New art may stay as separate files when that is simpler; atlases are used only where they help loading.
+- `art_source/` keeps the original files of the Movement Sprites and Visual Upgrade packs (battle strips, walker sheets, portraits at 128/256 px, icons, effects, manifests). The game never loads this folder.
+- `ART_REQUEST_NEXT.md` lists, by banner, all 102 heroes still walking as their banner's generic figure.
 
 ### v67 Visual Upgrade pack
 
