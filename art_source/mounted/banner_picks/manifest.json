@@ -1,0 +1,548 @@
+{
+  "game": "Questing Heroes",
+  "format_version": 1,
+  "heroes": [
+    {
+      "id": "boopis",
+      "name": "Boopis",
+      "group": "banner pick",
+      "banner": "Rangers",
+      "battle_path": "assets/battle/heroes/boopis/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/boopis/mounted/sheet.png",
+      "mount": "a friendly horse-sized giant hare with four long steed legs, a proper saddle and a bridle",
+      "tack_color": "teal"
+    },
+    {
+      "id": "reedcall",
+      "name": "Crestwind",
+      "group": "banner pick",
+      "banner": "Rangers",
+      "battle_path": "assets/battle/heroes/reedcall/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/reedcall/mounted/sheet.png",
+      "mount": "a sturdy friendly horse",
+      "tack_color": "teal"
+    },
+    {
+      "id": "thornfrill",
+      "name": "Thornfrill",
+      "group": "banner pick",
+      "banner": "Rangers",
+      "battle_path": "assets/battle/heroes/thornfrill/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/thornfrill/mounted/sheet.png",
+      "mount": "a sturdy friendly horse",
+      "tack_color": "teal"
+    },
+    {
+      "id": "nissa",
+      "name": "Nissa",
+      "group": "banner pick",
+      "banner": "Rangers",
+      "battle_path": "assets/battle/heroes/nissa/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/nissa/mounted/sheet.png",
+      "mount": "a sturdy friendly horse",
+      "tack_color": "teal"
+    },
+    {
+      "id": "engelman",
+      "name": "Engelman",
+      "group": "banner pick",
+      "banner": "Wizards",
+      "battle_path": "assets/battle/heroes/engelman/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/engelman/mounted/sheet.png",
+      "mount": "a sturdy friendly horse",
+      "tack_color": "sky blue"
+    },
+    {
+      "id": "tempest",
+      "name": "Tempest",
+      "group": "banner pick",
+      "banner": "Wizards",
+      "battle_path": "assets/battle/heroes/tempest/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/tempest/mounted/sheet.png",
+      "mount": "a sturdy friendly horse",
+      "tack_color": "sky blue"
+    },
+    {
+      "id": "rimmer",
+      "name": "Rimmer",
+      "group": "banner pick",
+      "banner": "Wizards",
+      "battle_path": "assets/battle/heroes/rimmer/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/rimmer/mounted/sheet.png",
+      "mount": "a sturdy friendly horse",
+      "tack_color": "sky blue"
+    },
+    {
+      "id": "sookie",
+      "name": "Sookie",
+      "group": "banner pick",
+      "banner": "Wizards",
+      "battle_path": "assets/battle/heroes/sookie/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/sookie/mounted/sheet.png",
+      "mount": "a sturdy friendly horse",
+      "tack_color": "sky blue"
+    },
+    {
+      "id": "remy",
+      "name": "Remy",
+      "group": "banner pick",
+      "banner": "Wizards",
+      "battle_path": "assets/battle/heroes/remy/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/remy/mounted/sheet.png",
+      "mount": "a sturdy friendly horse",
+      "tack_color": "sky blue"
+    },
+    {
+      "id": "zakai",
+      "name": "Zakai",
+      "group": "banner pick",
+      "banner": "Wizards",
+      "battle_path": "assets/battle/heroes/zakai/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/zakai/mounted/sheet.png",
+      "mount": "a sturdy friendly horse",
+      "tack_color": "sky blue"
+    },
+    {
+      "id": "parker",
+      "name": "Parker",
+      "group": "banner pick",
+      "banner": "Necromancers",
+      "battle_path": "assets/battle/heroes/parker/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/parker/mounted/sheet.png",
+      "mount": "a healthy gentle pale grey horse with soft blue accents, ordinary flesh and fur, absolutely no skeletal anatomy",
+      "tack_color": "crimson"
+    },
+    {
+      "id": "shadow",
+      "name": "Shadow",
+      "group": "banner pick",
+      "banner": "Necromancers",
+      "battle_path": "assets/battle/heroes/shadow/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/shadow/mounted/sheet.png",
+      "mount": "a healthy gentle pale grey horse with soft blue accents, ordinary flesh and fur, absolutely no skeletal anatomy",
+      "tack_color": "crimson"
+    },
+    {
+      "id": "rago",
+      "name": "Rago",
+      "group": "banner pick",
+      "banner": "Necromancers",
+      "battle_path": "assets/battle/heroes/rago/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/rago/mounted/sheet.png",
+      "mount": "a healthy gentle pale grey horse with soft blue accents, ordinary flesh and fur, absolutely no skeletal anatomy",
+      "tack_color": "crimson"
+    },
+    {
+      "id": "necro4",
+      "name": "William IV",
+      "group": "banner pick",
+      "banner": "Necromancers",
+      "battle_path": "assets/battle/heroes/necro4/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/necro4/mounted/sheet.png",
+      "mount": "a healthy gentle pale grey horse with soft blue accents, ordinary flesh and fur, absolutely no skeletal anatomy",
+      "tack_color": "crimson"
+    },
+    {
+      "id": "veyra",
+      "name": "Willa",
+      "group": "banner pick",
+      "banner": "Necromancers",
+      "battle_path": "assets/battle/heroes/veyra/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/veyra/mounted/sheet.png",
+      "mount": "a healthy gentle pale grey horse with soft blue accents, ordinary flesh and fur, absolutely no skeletal anatomy",
+      "tack_color": "crimson"
+    },
+    {
+      "id": "graven",
+      "name": "Lore",
+      "group": "banner pick",
+      "banner": "Necromancers",
+      "battle_path": "assets/battle/heroes/graven/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/graven/mounted/sheet.png",
+      "mount": "a healthy gentle pale grey horse with soft blue accents, ordinary flesh and fur, absolutely no skeletal anatomy",
+      "tack_color": "crimson"
+    },
+    {
+      "id": "ossin",
+      "name": "Dusty",
+      "group": "banner pick",
+      "banner": "Necromancers",
+      "battle_path": "assets/battle/heroes/ossin/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/ossin/mounted/sheet.png",
+      "mount": "a healthy gentle pale grey horse with soft blue accents, ordinary flesh and fur, absolutely no skeletal anatomy",
+      "tack_color": "crimson"
+    },
+    {
+      "id": "rattleclaw",
+      "name": "Rattleclaw",
+      "group": "banner pick",
+      "banner": "Necromancers",
+      "battle_path": "assets/battle/heroes/rattleclaw/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/rattleclaw/mounted/sheet.png",
+      "mount": "a healthy gentle pale grey horse with soft blue accents, ordinary flesh and fur, absolutely no skeletal anatomy",
+      "tack_color": "crimson"
+    },
+    {
+      "id": "bear",
+      "name": "Bear",
+      "group": "banner pick",
+      "banner": "Beastmasters",
+      "battle_path": "assets/battle/heroes/bear/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/bear/mounted/sheet.png",
+      "mount": "a sturdy friendly horse",
+      "tack_color": "leaf green"
+    },
+    {
+      "id": "monkey",
+      "name": "Monkey",
+      "group": "banner pick",
+      "banner": "Beastmasters",
+      "battle_path": "assets/battle/heroes/monkey/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/monkey/mounted/sheet.png",
+      "mount": "a sturdy friendly horse",
+      "tack_color": "leaf green"
+    },
+    {
+      "id": "binx",
+      "name": "Binx",
+      "group": "banner pick",
+      "banner": "Beastmasters",
+      "battle_path": "assets/battle/heroes/binx/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/binx/mounted/sheet.png",
+      "mount": "a sturdy friendly horse",
+      "tack_color": "leaf green"
+    },
+    {
+      "id": "tembor",
+      "name": "India",
+      "group": "banner pick",
+      "banner": "Beastmasters",
+      "battle_path": "assets/battle/heroes/tembor/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/tembor/mounted/sheet.png",
+      "mount": "a sturdy friendly horse",
+      "tack_color": "leaf green"
+    },
+    {
+      "id": "virel",
+      "name": "Plume",
+      "group": "banner pick",
+      "banner": "Beastmasters",
+      "battle_path": "assets/battle/heroes/virel/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/virel/mounted/sheet.png",
+      "mount": "a sturdy friendly horse",
+      "tack_color": "leaf green"
+    },
+    {
+      "id": "silka",
+      "name": "Violet",
+      "group": "banner pick",
+      "banner": "Beastmasters",
+      "battle_path": "assets/battle/heroes/silka/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/silka/mounted/sheet.png",
+      "mount": "a sturdy friendly horse",
+      "tack_color": "leaf green"
+    },
+    {
+      "id": "flintback",
+      "name": "Flintback",
+      "group": "banner pick",
+      "banner": "Beastmasters",
+      "battle_path": "assets/battle/heroes/flintback/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/flintback/mounted/sheet.png",
+      "mount": "a sturdy friendly horse",
+      "tack_color": "leaf green"
+    },
+    {
+      "id": "lawrence",
+      "name": "Lawrence",
+      "group": "banner pick",
+      "banner": "Pirates",
+      "battle_path": "assets/battle/heroes/lawrence/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/lawrence/mounted/sheet.png",
+      "mount": "a sturdy friendly horse",
+      "tack_color": "gold"
+    },
+    {
+      "id": "inkwake",
+      "name": "Inkwake",
+      "group": "banner pick",
+      "banner": "Pirates",
+      "battle_path": "assets/battle/heroes/inkwake/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/inkwake/mounted/sheet.png",
+      "mount": "a sturdy friendly horse",
+      "tack_color": "gold"
+    },
+    {
+      "id": "pip_quickline",
+      "name": "Pip Quickline",
+      "group": "banner pick",
+      "banner": "Pirates",
+      "battle_path": "assets/battle/heroes/pip_quickline/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/pip_quickline/mounted/sheet.png",
+      "mount": "a friendly horse-sized giant hare with four long steed legs, a proper saddle and a bridle",
+      "tack_color": "gold"
+    },
+    {
+      "id": "payton",
+      "name": "Peyto",
+      "group": "banner pick",
+      "banner": "Pirates",
+      "battle_path": "assets/battle/heroes/payton/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/payton/mounted/sheet.png",
+      "mount": "a sturdy friendly horse",
+      "tack_color": "gold"
+    },
+    {
+      "id": "alderhide",
+      "name": "Alderhide",
+      "group": "banner pick",
+      "banner": "Elves",
+      "battle_path": "assets/battle/heroes/alderhide/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/alderhide/mounted/sheet.png",
+      "mount": "a friendly horse-sized stag with a proper saddle and bridle",
+      "tack_color": "forest green"
+    },
+    {
+      "id": "mossback",
+      "name": "Mossback",
+      "group": "banner pick",
+      "banner": "Elves",
+      "battle_path": "assets/battle/heroes/mossback/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/mossback/mounted/sheet.png",
+      "mount": "a friendly horse-sized stag with a proper saddle and bridle",
+      "tack_color": "forest green"
+    },
+    {
+      "id": "lune",
+      "name": "Lunt",
+      "group": "banner pick",
+      "banner": "Elves",
+      "battle_path": "assets/battle/heroes/lune/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/lune/mounted/sheet.png",
+      "mount": "a friendly horse-sized stag with a proper saddle and bridle",
+      "tack_color": "forest green"
+    },
+    {
+      "id": "grimes",
+      "name": "Grimes",
+      "group": "banner pick",
+      "banner": "Dwarves",
+      "battle_path": "assets/battle/heroes/grimes/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/grimes/mounted/sheet.png",
+      "mount": "a friendly horse-sized sturdy ram with rounded curled horns and a proper saddle",
+      "tack_color": "dark red"
+    },
+    {
+      "id": "ivan",
+      "name": "Ivan",
+      "group": "banner pick",
+      "banner": "Dwarves",
+      "battle_path": "assets/battle/heroes/ivan/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/ivan/mounted/sheet.png",
+      "mount": "a friendly horse-sized sturdy ram with rounded curled horns and a proper saddle",
+      "tack_color": "dark red"
+    },
+    {
+      "id": "dupengeiser",
+      "name": "Dupengeiser",
+      "group": "banner pick",
+      "banner": "Dwarves",
+      "battle_path": "assets/battle/heroes/dupengeiser/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/dupengeiser/mounted/sheet.png",
+      "mount": "a friendly horse-sized sturdy ram with rounded curled horns and a proper saddle",
+      "tack_color": "dark red"
+    },
+    {
+      "id": "slack",
+      "name": "Slack",
+      "group": "banner pick",
+      "banner": "Dwarves",
+      "battle_path": "assets/battle/heroes/slack/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/slack/mounted/sheet.png",
+      "mount": "a friendly horse-sized sturdy ram with rounded curled horns and a proper saddle",
+      "tack_color": "dark red"
+    },
+    {
+      "id": "kiln",
+      "name": "Kiln",
+      "group": "banner pick",
+      "banner": "Dwarves",
+      "battle_path": "assets/battle/heroes/kiln/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/kiln/mounted/sheet.png",
+      "mount": "a friendly horse-sized sturdy ram with rounded curled horns and a proper saddle",
+      "tack_color": "dark red"
+    },
+    {
+      "id": "harlan_chalk",
+      "name": "Harlan",
+      "group": "banner pick",
+      "banner": "Dwarves",
+      "battle_path": "assets/battle/heroes/harlan_chalk/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/harlan_chalk/mounted/sheet.png",
+      "mount": "a friendly horse-sized sturdy ram with rounded curled horns and a proper saddle",
+      "tack_color": "dark red"
+    },
+    {
+      "id": "enzo",
+      "name": "Enzo",
+      "group": "banner pick",
+      "banner": "Dwarves",
+      "battle_path": "assets/battle/heroes/enzo/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/enzo/mounted/sheet.png",
+      "mount": "a friendly horse-sized sturdy ram with rounded curled horns and a proper saddle",
+      "tack_color": "dark red"
+    },
+    {
+      "id": "kit_and_nell",
+      "name": "Kit & Nell",
+      "group": "banner pick",
+      "banner": "Dwarves",
+      "battle_path": "assets/battle/heroes/kit_and_nell/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/kit_and_nell/mounted/sheet.png",
+      "mount": "a friendly horse-sized sturdy ram with rounded curled horns and a proper saddle",
+      "tack_color": "dark red"
+    },
+    {
+      "id": "rocky",
+      "name": "Rocky",
+      "group": "banner pick",
+      "banner": "Merfolk",
+      "battle_path": "assets/battle/heroes/rocky/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/rocky/mounted/sheet.png",
+      "mount": "a sturdy friendly horse",
+      "tack_color": "deep blue"
+    },
+    {
+      "id": "elvis",
+      "name": "Eelvis",
+      "group": "banner pick",
+      "banner": "Merfolk",
+      "battle_path": "assets/battle/heroes/elvis/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/elvis/mounted/sheet.png",
+      "mount": "a sturdy friendly horse",
+      "tack_color": "deep blue"
+    },
+    {
+      "id": "mer2",
+      "name": "Griffiths",
+      "group": "banner pick",
+      "banner": "Merfolk",
+      "battle_path": "assets/battle/heroes/mer2/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/mer2/mounted/sheet.png",
+      "mount": "a sturdy friendly horse",
+      "tack_color": "deep blue"
+    },
+    {
+      "id": "skimmer",
+      "name": "Skimmer",
+      "group": "banner pick",
+      "banner": "Merfolk",
+      "battle_path": "assets/battle/heroes/skimmer/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/skimmer/mounted/sheet.png",
+      "mount": "a sturdy friendly horse",
+      "tack_color": "deep blue"
+    },
+    {
+      "id": "atoll",
+      "name": "Coral",
+      "group": "banner pick",
+      "banner": "Merfolk",
+      "battle_path": "assets/battle/heroes/atoll/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/atoll/mounted/sheet.png",
+      "mount": "a sturdy friendly horse",
+      "tack_color": "deep blue"
+    },
+    {
+      "id": "nerka",
+      "name": "Nerka",
+      "group": "banner pick",
+      "banner": "Merfolk",
+      "battle_path": "assets/battle/heroes/nerka/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/nerka/mounted/sheet.png",
+      "mount": "a sturdy friendly horse",
+      "tack_color": "deep blue"
+    },
+    {
+      "id": "fin_and_flo",
+      "name": "Fin & Flo",
+      "group": "banner pick",
+      "banner": "Merfolk",
+      "battle_path": "assets/battle/heroes/fin_and_flo/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/fin_and_flo/mounted/sheet.png",
+      "mount": "a sturdy friendly horse",
+      "tack_color": "deep blue"
+    },
+    {
+      "id": "letchworth",
+      "name": "Letchworth",
+      "group": "banner pick",
+      "banner": "Merfolk",
+      "battle_path": "assets/battle/heroes/letchworth/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/letchworth/mounted/sheet.png",
+      "mount": "a sturdy friendly horse",
+      "tack_color": "deep blue"
+    }
+  ],
+  "battle_format": {
+    "sheet_size": [
+      768,
+      64
+    ],
+    "frame_size": [
+      96,
+      64
+    ],
+    "pivot": [
+      48,
+      60
+    ],
+    "facing": "E",
+    "pose_order": [
+      "idle",
+      "move_a",
+      "move_b",
+      "move_c",
+      "move_d",
+      "attack",
+      "hit",
+      "defeated"
+    ],
+    "gallop_frames": [
+      1,
+      2,
+      3,
+      4
+    ]
+  },
+  "walker_format": {
+    "sheet_size": [
+      192,
+      384
+    ],
+    "frame_size": [
+      48,
+      48
+    ],
+    "pivot": [
+      24,
+      44
+    ],
+    "direction_order": [
+      "S",
+      "SW",
+      "W",
+      "NW",
+      "N",
+      "NE",
+      "E",
+      "SE"
+    ],
+    "frames_per_direction": 4,
+    "frame_duration_ms": 120,
+    "mirrored_rows": {
+      "SW": "SE",
+      "W": "E",
+      "NW": "NE"
+    }
+  }
+}

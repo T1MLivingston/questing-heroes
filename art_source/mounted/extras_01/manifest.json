@@ -1,0 +1,128 @@
+{
+  "game": "Questing Heroes",
+  "format_version": 1,
+  "heroes": [
+    {
+      "id": "cresset",
+      "name": "Wick",
+      "group": "tavern",
+      "banner": "Rangers",
+      "battle_path": "assets/battle/heroes/cresset/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/cresset/mounted/sheet.png",
+      "mount": "a sturdy friendly horse",
+      "tack_color": "teal"
+    },
+    {
+      "id": "gus_and_glen",
+      "name": "Gus & Glen",
+      "group": "tavern",
+      "banner": "Rangers",
+      "battle_path": "assets/battle/heroes/gus_and_glen/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/gus_and_glen/mounted/sheet.png",
+      "mount": "a sturdy friendly horse",
+      "tack_color": "teal"
+    },
+    {
+      "id": "midge",
+      "name": "Midge",
+      "group": "tavern",
+      "banner": "Rangers",
+      "battle_path": "assets/battle/heroes/midge/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/midge/mounted/sheet.png",
+      "mount": "a friendly horse-sized giant hare with four long steed legs, a proper saddle and a bridle",
+      "tack_color": "teal"
+    },
+    {
+      "id": "azure_hype",
+      "name": "Azure Hype",
+      "group": "student",
+      "banner": "Rangers",
+      "battle_path": "assets/battle/heroes/azure_hype/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/azure_hype/mounted/sheet.png",
+      "mount": "a sturdy friendly horse",
+      "tack_color": "teal"
+    },
+    {
+      "id": "ericsonion",
+      "name": "Ericsonion",
+      "group": "student",
+      "banner": "Rangers",
+      "battle_path": "assets/battle/heroes/ericsonion/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/ericsonion/mounted/sheet.png",
+      "mount": "a sturdy friendly horse",
+      "tack_color": "teal"
+    },
+    {
+      "id": "deepwave_the_ai",
+      "name": "Deep Wave",
+      "group": "student",
+      "banner": "Rangers",
+      "battle_path": "assets/battle/heroes/deepwave_the_ai/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/deepwave_the_ai/mounted/sheet.png",
+      "mount": "a sturdy friendly horse",
+      "tack_color": "teal"
+    }
+  ],
+  "battle_format": {
+    "sheet_size": [
+      768,
+      64
+    ],
+    "frame_size": [
+      96,
+      64
+    ],
+    "pivot": [
+      48,
+      60
+    ],
+    "facing": "E",
+    "pose_order": [
+      "idle",
+      "move_a",
+      "move_b",
+      "move_c",
+      "move_d",
+      "attack",
+      "hit",
+      "defeated"
+    ],
+    "gallop_frames": [
+      1,
+      2,
+      3,
+      4
+    ]
+  },
+  "walker_format": {
+    "sheet_size": [
+      192,
+      384
+    ],
+    "frame_size": [
+      48,
+      48
+    ],
+    "pivot": [
+      24,
+      44
+    ],
+    "direction_order": [
+      "S",
+      "SW",
+      "W",
+      "NW",
+      "N",
+      "NE",
+      "E",
+      "SE"
+    ],
+    "frames_per_direction": 4,
+    "frame_duration_ms": 120,
+    "mirrored_rows": {
+      "SW": "SE",
+      "W": "E",
+      "NW": "NE"
+    }
+  }
+}

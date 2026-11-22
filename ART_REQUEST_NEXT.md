@@ -11,7 +11,7 @@ Done in v67: every hero has one.
 Done in v70: all 175 heroes walk the map as themselves.
 
 ## 2b. Horseback heroes (optional)
-Only 20 heroes have mounted art; the brief for the other 155 is `ART_REQUEST_MOUNTED.md`.
+74 heroes have mounted art (v71); the brief for the other 101 is `ART_REQUEST_MOUNTED.md`.
 
 ## 3. Portraits
 Dusty, King Pharoph the 3rd, Kiln, Shadow and Coral were redrawn in v67. Toad, Kaf/Teo and Gerry/Trey stay as the students designed them.

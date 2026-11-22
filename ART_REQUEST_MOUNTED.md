@@ -1,6 +1,6 @@
-# Art brief: horseback heroes (v70, 2026-11-22)
+# Art brief: horseback heroes (v71, 2026-11-22)
 
-Every hero now has a portrait, an on-foot battle figure and an on-foot map walker. Only 20 heroes also have **horseback** art. A hero picks up a horse at a Horse Fair or the town's Stables. When that happens, the 20 switch to their mounted figure and walker; everyone else keeps walking and fighting on foot. This brief asks for horseback art for the other **155 heroes**.
+Every hero now has a portrait, an on-foot battle figure and an on-foot map walker. Only 20 heroes also have **horseback** art. A hero picks up a horse at a Horse Fair or the town's Stables. When that happens, the 20 switch to their mounted figure and walker; everyone else keeps walking and fighting on foot. This brief asks for horseback art for the other **155 heroes**. **Progress (v71): 74 heroes now ride; 101 to go.** The Mounted Banner Picks pack covered all 48 remaining banner picks, and Mounted Extras 01 added Azure Hype, Wick, Deep Wave, Ericsonion, Gus & Glen and Midge.
 
 Already done, nothing needed: Anastasia May Dvestia, Battaglia, Boone, Dorothy, Eden, Liam, Livingston, Michael, O'Malley, Oliver, Perry, Sera Venn, Sheila, Sir Giggachins, Tida, Vargas, Vera, Vinay, Zarra, Zenvy.
 
@@ -71,24 +71,14 @@ Four zips of about 40 heroes each:
 
 A smaller first batch of the banner picks alone would cover the heroes people play most.
 
-## Heroes still needing horseback art (155)
+## Heroes still needing horseback art (101)
 
 Group: **banner pick** = one of the eight shown first on the banner card; **tavern** = met in the tavern; **student** = designed by a student (use the hero name only). Every hero below needs both the battle strip and the map walker.
 
-### Rangers (16)
+### Rangers (6)
 
 | id | Name | Group | Needs |
 |---|---|---|---|
-| `boopis` | Boopis | banner pick | both |
-| `cresset` | Wick | tavern | both |
-| `reedcall` | Crestwind | banner pick | both |
-| `thornfrill` | Thornfrill | banner pick | both |
-| `nissa` | Nissa | banner pick | both |
-| `gus_and_glen` | Gus & Glen | tavern | both |
-| `midge` | Midge | tavern | both |
-| `azure_hype` | Azure Hype | student | both |
-| `ericsonion` | Ericsonion | student | both |
-| `deepwave_the_ai` | Deep Wave | student | both |
 | `pottery` | Pottery | student | both |
 | `cornelius_ii` | Cornelius II | student | both |
 | `ward` | Ward | student | both |
@@ -96,16 +86,11 @@ Group: **banner pick** = one of the eight shown first on the banner card; **tave
 | `jake` | J@ke | student | both |
 | `juniper` | Juniper | student | both |
 
-### Wizards (25)
+### Wizards (19)
 
 | id | Name | Group | Needs |
 |---|---|---|---|
-| `engelman` | Engelman | banner pick | both |
-| `tempest` | Tempest | banner pick | both |
-| `rimmer` | Rimmer | banner pick | both |
-| `sookie` | Sookie | banner pick | both |
 | `gale` | Gale | tavern | both |
-| `remy` | Remy | banner pick | both |
 | `ada` | Ada | tavern | both |
 | `mags_and_mae` | Mags & Mae | tavern | both |
 | `bloop` | Bloop | tavern | both |
@@ -123,22 +108,13 @@ Group: **banner pick** = one of the eight shown first on the banner card; **tave
 | `vash` | Vash | student | both |
 | `liya` | Liya | student | both |
 | `boston` | Boston | student | both |
-| `zakai` | Zakai | banner pick | both |
 | `jun` | Jun | student | both |
 
-### Necromancers (22)
+### Necromancers (14)
 
 | id | Name | Group | Needs |
 |---|---|---|---|
-| `parker` | Parker | banner pick | both |
-| `shadow` | Shadow | banner pick | both |
-| `rago` | Rago | banner pick | both |
-| `necro4` | William IV | banner pick | both |
-| `veyra` | Willa | banner pick | both |
-| `graven` | Lore | banner pick | both |
-| `ossin` | Dusty | banner pick | both |
 | `murmur` | Hush | tavern | both |
-| `rattleclaw` | Rattleclaw | banner pick | both |
 | `mara` | Mara | tavern | both |
 | `odo_and_otto` | Odo & Otto | tavern | both |
 | `bort_simesin` | Bort | student | both |
@@ -153,18 +129,11 @@ Group: **banner pick** = one of the eight shown first on the banner card; **tave
 | `trey` | Trey | student | both |
 | `x` | X | student | both |
 
-### Beastmasters (20)
+### Beastmasters (13)
 
 | id | Name | Group | Needs |
 |---|---|---|---|
-| `bear` | Bear | banner pick | both |
-| `monkey` | Monkey | banner pick | both |
-| `binx` | Binx | banner pick | both |
 | `briar` | Rusty | tavern | both |
-| `tembor` | India | banner pick | both |
-| `virel` | Plume | banner pick | both |
-| `silka` | Violet | banner pick | both |
-| `flintback` | Flintback | banner pick | both |
 | `wren` | Wren | tavern | both |
 | `rumble` | Rumble | tavern | both |
 | `bess_and_bea` | Bess & Bea | tavern | both |
@@ -178,14 +147,10 @@ Group: **banner pick** = one of the eight shown first on the banner card; **tave
 | `percifire` | Percifire | student | both |
 | `petunia` | Petunia | student | both |
 
-### Pirates (15)
+### Pirates (11)
 
 | id | Name | Group | Needs |
 |---|---|---|---|
-| `lawrence` | Lawrence | banner pick | both |
-| `inkwake` | Inkwake | banner pick | both |
-| `pip_quickline` | Pip Quickline | banner pick | both |
-| `payton` | Peyto | banner pick | both |
 | `cato` | Cato | tavern | both |
 | `sid_and_tess` | Sid & Tess | tavern | both |
 | `rafe_and_reed` | Rafe & Reed | tavern | both |
@@ -198,15 +163,12 @@ Group: **banner pick** = one of the eight shown first on the banner card; **tave
 | `alora` | Alora | student | both |
 | `pihu` | Pihu | student | both |
 
-### Elves (17)
+### Elves (14)
 
 | id | Name | Group | Needs |
 |---|---|---|---|
 | `love` | Love | tavern | both |
-| `alderhide` | Alderhide | banner pick | both |
-| `mossback` | Mossback | banner pick | both |
 | `yselle` | Fern | tavern | both |
-| `lune` | Lunt | banner pick | both |
 | `hart` | Hart | tavern | both |
 | `aster_and_briar` | Aster & Briar | tavern | both |
 | `mr_pinecone` | Mr. Pinecone | student | both |
@@ -220,21 +182,13 @@ Group: **banner pick** = one of the eight shown first on the banner card; **tave
 | `anna` | Anna | student | both |
 | `macie` | Macie | student | both |
 
-### Dwarves (19)
+### Dwarves (11)
 
 | id | Name | Group | Needs |
 |---|---|---|---|
-| `grimes` | Grimes | banner pick | both |
-| `ivan` | Ivan | banner pick | both |
-| `dupengeiser` | Dupengeiser | banner pick | both |
 | `schmickle` | Schmickle | tavern | both |
-| `slack` | Slack | banner pick | both |
 | `tansy` | Penny | tavern | both |
-| `kiln` | Kiln | banner pick | both |
-| `harlan_chalk` | Harlan | banner pick | both |
-| `enzo` | Enzo | banner pick | both |
 | `orla` | Orla | tavern | both |
-| `kit_and_nell` | Kit & Nell | banner pick | both |
 | `ned_and_nat` | Ned & Nat | tavern | both |
 | `spike` | Spike | tavern | both |
 | `bristle` | Bristle | student | both |
@@ -244,20 +198,13 @@ Group: **banner pick** = one of the eight shown first on the banner card; **tave
 | `astronaut_steve` | Astronaut Steve | student | both |
 | `aarna` | Aarna | student | both |
 
-### Merfolk (21)
+### Merfolk (13)
 
 | id | Name | Group | Needs |
 |---|---|---|---|
-| `rocky` | Rocky | banner pick | both |
-| `elvis` | Eelvis | banner pick | both |
-| `mer2` | Griffiths | banner pick | both |
 | `spindle` | Spindle | tavern | both |
-| `skimmer` | Skimmer | banner pick | both |
-| `atoll` | Coral | banner pick | both |
 | `rusk_hookhorn` | Rusk Hookhorn | tavern | both |
-| `nerka` | Nerka | banner pick | both |
 | `axel` | Axel | tavern | both |
-| `fin_and_flo` | Fin & Flo | banner pick | both |
 | `noel_dragonfire` | Noël Dragonfire | student | both |
 | `nala` | Nala | student | both |
 | `nanya` | Nanya | student | both |
@@ -268,4 +215,3 @@ Group: **banner pick** = one of the eight shown first on the banner card; **tave
 | `teeka` | Teeka | student | both |
 | `h4l1s3` | H4L1S3 | student | both |
 | `saki` | Saki | student | both |
-| `letchworth` | Letchworth | banner pick | both |

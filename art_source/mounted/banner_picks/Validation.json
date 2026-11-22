@@ -1,0 +1,11 @@
+{
+  "heroes": 48,
+  "battle_strips": 48,
+  "map_sheets": 48,
+  "frames_checked": 1920,
+  "dimensions_alpha_and_padding": "passed",
+  "shared_palette_colors_per_hero": 24,
+  "anchor_bounds": "passed",
+  "coverage": "exact IDs from supplied ART_REQUEST_MOUNTED.md",
+  "game_integration": "asset pack only"
+}

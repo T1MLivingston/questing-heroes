@@ -1,0 +1,156 @@
+id,name,banner,group,status
+boopis,Boopis,Rangers,banner pick,both complete
+reedcall,Crestwind,Rangers,banner pick,both complete
+thornfrill,Thornfrill,Rangers,banner pick,both complete
+nissa,Nissa,Rangers,banner pick,both complete
+engelman,Engelman,Wizards,banner pick,both complete
+tempest,Tempest,Wizards,banner pick,both complete
+rimmer,Rimmer,Wizards,banner pick,both complete
+sookie,Sookie,Wizards,banner pick,both complete
+remy,Remy,Wizards,banner pick,both complete
+zakai,Zakai,Wizards,banner pick,both complete
+parker,Parker,Necromancers,banner pick,both complete
+shadow,Shadow,Necromancers,banner pick,both complete
+rago,Rago,Necromancers,banner pick,both complete
+necro4,William IV,Necromancers,banner pick,both complete
+veyra,Willa,Necromancers,banner pick,both complete
+graven,Lore,Necromancers,banner pick,both complete
+ossin,Dusty,Necromancers,banner pick,both complete
+rattleclaw,Rattleclaw,Necromancers,banner pick,both complete
+bear,Bear,Beastmasters,banner pick,both complete
+monkey,Monkey,Beastmasters,banner pick,both complete
+binx,Binx,Beastmasters,banner pick,both complete
+tembor,India,Beastmasters,banner pick,both complete
+virel,Plume,Beastmasters,banner pick,both complete
+silka,Violet,Beastmasters,banner pick,both complete
+flintback,Flintback,Beastmasters,banner pick,both complete
+lawrence,Lawrence,Pirates,banner pick,both complete
+inkwake,Inkwake,Pirates,banner pick,both complete
+pip_quickline,Pip Quickline,Pirates,banner pick,both complete
+payton,Peyto,Pirates,banner pick,both complete
+alderhide,Alderhide,Elves,banner pick,both complete
+mossback,Mossback,Elves,banner pick,both complete
+lune,Lunt,Elves,banner pick,both complete
+grimes,Grimes,Dwarves,banner pick,both complete
+ivan,Ivan,Dwarves,banner pick,both complete
+dupengeiser,Dupengeiser,Dwarves,banner pick,both complete
+slack,Slack,Dwarves,banner pick,both complete
+kiln,Kiln,Dwarves,banner pick,both complete
+harlan_chalk,Harlan,Dwarves,banner pick,both complete
+enzo,Enzo,Dwarves,banner pick,both complete
+kit_and_nell,Kit & Nell,Dwarves,banner pick,both complete
+rocky,Rocky,Merfolk,banner pick,both complete
+elvis,Eelvis,Merfolk,banner pick,both complete
+mer2,Griffiths,Merfolk,banner pick,both complete
+skimmer,Skimmer,Merfolk,banner pick,both complete
+atoll,Coral,Merfolk,banner pick,both complete
+nerka,Nerka,Merfolk,banner pick,both complete
+fin_and_flo,Fin & Flo,Merfolk,banner pick,both complete
+letchworth,Letchworth,Merfolk,banner pick,both complete
+cresset,Wick,Rangers,tavern,both complete
+gus_and_glen,Gus & Glen,Rangers,tavern,both complete
+midge,Midge,Rangers,tavern,both complete
+azure_hype,Azure Hype,Rangers,student,both complete
+ericsonion,Ericsonion,Rangers,student,both complete
+deepwave_the_ai,Deep Wave,Rangers,student,both complete
+pottery,Pottery,Rangers,student,both pending - generation limit
+cornelius_ii,Cornelius II,Rangers,student,both pending - generation limit
+ward,Ward,Rangers,student,both pending - generation limit
+drew,Drew,Rangers,student,both pending - generation limit
+jake,J@ke,Rangers,student,both pending - generation limit
+juniper,Juniper,Rangers,student,both pending - generation limit
+gale,Gale,Wizards,tavern,both pending - generation limit
+ada,Ada,Wizards,tavern,both pending - generation limit
+mags_and_mae,Mags & Mae,Wizards,tavern,both pending - generation limit
+bloop,Bloop,Wizards,tavern,both pending - generation limit
+bobbythebob,BobbytheBob,Wizards,student,both pending - generation limit
+luckenzo,Luckenzo,Wizards,student,both pending - generation limit
+lord_krishna,Larishna,Wizards,student,both pending - generation limit
+catherine,Katherine,Wizards,student,both pending - generation limit
+rose_flower,Rose Flower,Wizards,student,both pending - generation limit
+bannana_boy,Banana Boy,Wizards,student,both pending - generation limit
+spirit_of_the_forest,Spirit of the Forest,Wizards,student,both pending - generation limit
+celestine_circe,Celestine Circe,Wizards,student,both pending - generation limit
+sir_quackars,Sir Quackars,Wizards,student,both pending - generation limit
+buffalo,Buffalo,Wizards,student,both pending - generation limit
+gerry,Gerry,Wizards,student,both pending - generation limit
+vash,Vash,Wizards,student,both pending - generation limit
+liya,Liya,Wizards,student,both pending - generation limit
+boston,Boston,Wizards,student,both pending - generation limit
+jun,Jun,Wizards,student,both pending - generation limit
+murmur,Hush,Necromancers,tavern,both pending - generation limit
+mara,Mara,Necromancers,tavern,both pending - generation limit
+odo_and_otto,Odo & Otto,Necromancers,tavern,both pending - generation limit
+bort_simesin,Bort,Necromancers,student,both pending - generation limit
+nix,Nyx,Necromancers,student,both pending - generation limit
+kushalito_banana,Kushalito,Necromancers,student,both pending - generation limit
+kaf_underworld_pharaoh,Kaf,Necromancers,student,both pending - generation limit
+sus,Sus,Necromancers,student,both pending - generation limit
+samba,Samba,Necromancers,student,both pending - generation limit
+emirk,Emirk,Necromancers,student,both pending - generation limit
+friendo,Friendo,Necromancers,student,both pending - generation limit
+dee,Dee,Necromancers,student,both pending - generation limit
+trey,Trey,Necromancers,student,both pending - generation limit
+x,X,Necromancers,student,both pending - generation limit
+briar,Rusty,Beastmasters,tavern,both pending - generation limit
+wren,Wren,Beastmasters,tavern,both pending - generation limit
+rumble,Rumble,Beastmasters,tavern,both pending - generation limit
+bess_and_bea,Bess & Bea,Beastmasters,tavern,both pending - generation limit
+gilt,Gilt,Beastmasters,tavern,both pending - generation limit
+fut_esports,Fut,Beastmasters,student,both pending - generation limit
+king_pharoph_the_3rd,King Pharoph the 3rd,Beastmasters,student,both pending - generation limit
+nohahahahah,Nohahahahah,Beastmasters,student,both pending - generation limit
+boja,Boja,Beastmasters,student,both pending - generation limit
+paitence_and_jay,Paitence & Jay,Beastmasters,student,both pending - generation limit
+python_mage,Python Mage,Beastmasters,student,both pending - generation limit
+percifire,Percifire,Beastmasters,student,both pending - generation limit
+petunia,Petunia,Beastmasters,student,both pending - generation limit
+cato,Cato,Pirates,tavern,both pending - generation limit
+sid_and_tess,Sid & Tess,Pirates,tavern,both pending - generation limit
+rafe_and_reed,Rafe & Reed,Pirates,tavern,both pending - generation limit
+bo,Bo,Pirates,tavern,both pending - generation limit
+gunt_gunt,Gunt Gunt,Pirates,student,both pending - generation limit
+ardcat,Ardcat,Pirates,student,both pending - generation limit
+space_toad,Toad,Pirates,student,both pending - generation limit
+capydara,Capybara,Pirates,student,both pending - generation limit
+lishy,Lishi,Pirates,student,both pending - generation limit
+alora,Alora,Pirates,student,both pending - generation limit
+pihu,Pihu,Pirates,student,both pending - generation limit
+love,Love,Elves,tavern,both pending - generation limit
+yselle,Fern,Elves,tavern,both pending - generation limit
+hart,Hart,Elves,tavern,both pending - generation limit
+aster_and_briar,Aster & Briar,Elves,tavern,both pending - generation limit
+mr_pinecone,Mr. Pinecone,Elves,student,both pending - generation limit
+ava_young,Ava,Elves,student,both pending - generation limit
+rosie,Rousie,Elves,student,both pending - generation limit
+estella,Estella,Elves,student,both pending - generation limit
+lily,Lily,Elves,student,both pending - generation limit
+poison,Poison,Elves,student,both pending - generation limit
+ella,Ella,Elves,student,both pending - generation limit
+ezlen,Ezlen,Elves,student,both pending - generation limit
+anna,Anna,Elves,student,both pending - generation limit
+macie,Macie,Elves,student,both pending - generation limit
+schmickle,Schmickle,Dwarves,tavern,both pending - generation limit
+tansy,Penny,Dwarves,tavern,both pending - generation limit
+orla,Orla,Dwarves,tavern,both pending - generation limit
+ned_and_nat,Ned & Nat,Dwarves,tavern,both pending - generation limit
+spike,Spike,Dwarves,tavern,both pending - generation limit
+bristle,Bristle,Dwarves,student,both pending - generation limit
+posy,Posy,Dwarves,student,both pending - generation limit
+babka,Babka,Dwarves,student,both pending - generation limit
+teo,Teo,Dwarves,student,both pending - generation limit
+astronaut_steve,Astronaut Steve,Dwarves,student,both pending - generation limit
+aarna,Aarna,Dwarves,student,both pending - generation limit
+spindle,Spindle,Merfolk,tavern,both pending - generation limit
+rusk_hookhorn,Rusk Hookhorn,Merfolk,tavern,both pending - generation limit
+axel,Axel,Merfolk,tavern,both pending - generation limit
+noel_dragonfire,Noël Dragonfire,Merfolk,student,both pending - generation limit
+nala,Nala,Merfolk,student,both pending - generation limit
+nanya,Nanya,Merfolk,student,both pending - generation limit
+posy_spinner,Posy Spinner,Merfolk,student,both pending - generation limit
+yatt,Yatt,Merfolk,student,both pending - generation limit
+stargirl,Stargirl,Merfolk,student,both pending - generation limit
+mangrove,Mangrove,Merfolk,student,both pending - generation limit
+teeka,Teeka,Merfolk,student,both pending - generation limit
+h4l1s3,H4L1S3,Merfolk,student,both pending - generation limit
+saki,Saki,Merfolk,student,both pending - generation limit
