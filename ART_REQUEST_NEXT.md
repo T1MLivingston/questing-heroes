@@ -30,7 +30,7 @@ Mossback, Fern, Spindle, Coral, Penny, India, Rusk Hookhorn, Thornfrill, Mara, S
 - **Lit lighthouse** map site (2 frames: dark, lit) so a lighthouse shows once it has revealed the coast.
 
 ## 6. Sound
-- **Music, 6 tracks** (`assets/music/`, see its README; Suno prompts were written earlier): acoustic (global theme), map, town, battle, victory sting, defeat sting. Only `theme.mp3` exists.
+- **Music**: only `map.mp3` is still wanted (theme, acoustic, town, battle, victory and defeat are in).
 - **Sound effects, about 20** (none yet): click, footstep, coins, pickup, build, recruit, day end, new week, sword, bow, cannon, hit, unit defeated, spell, heal, morale, claim mine, portal, boat, level up, relic, bell, error bonk. A sound player and volume control would be added when they arrive.
 
 ## 7. From the classroom

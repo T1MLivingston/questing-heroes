@@ -66,6 +66,7 @@ No other libraries, images or audio are included. Art made later with ChatGPT or
 | Movement Sprites (hero battle figures, mounted battle figures and mounted map walkers) in `assets/battle/heroes/foot.png`, `mounted.png` and `assets/heroes/walkers_mounted.png`; Student Heroes batch 9 portraits; Headshot Workshop 02 portraits (Boopis, Engelman, Rimmer, Tempest, Rago, Binx) | Supplied by the author (generated pixel art, ChatGPT) | 2026-11-15 | Student characters used with the author's permission |
 | Upscaled Redraws (19 legacy hero portraits) in `assets/portraits/heroes/` and `recruits.png` | Supplied by the author (generated pixel art, ChatGPT) | 2026-11-16 | |
 | Zakai portrait in `assets/portraits/heroes/zakai_128.png` and `recruits.png` | Supplied by the author (generated pixel art) | 2026-11-18 | |
+| Music: acoustic, town, battle, victory and defeat tracks in `assets/music/` | Made by the author with Suno | 2026-11-22 | |
 | Half-size move cursor (`assets/ui/cursors/move_small.png`) | Downscaled locally from Pack 09's move cursor | 2026-11-08 | Same as above |
 
 The generated source images (high-res magenta PNGs) are kept outside this repo.
