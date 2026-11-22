@@ -63,13 +63,10 @@ The **ids must be exactly as written below** (they come from `js/01-data.js`).
 
 ## Suggested batches
 
-Four zips of about 40 heroes each:
-1. Rangers and Wizards (41)
-2. Necromancers and Beastmasters (42)
-3. Pirates and Elves (32)
-4. Dwarves and Merfolk (40)
-
-A smaller first batch of the banner picks alone would cover the heroes people play most.
+Three zips of about 34 heroes each:
+1. Rangers, Wizards and Necromancers (39)
+2. Beastmasters, Pirates and Elves (38)
+3. Dwarves and Merfolk (24)
 
 ## Heroes still needing horseback art (101)
 
