@@ -1,0 +1,1263 @@
+{
+  "game": "Questing Heroes",
+  "pack": "Questing Heroes \u00b7 Remaining Walkers 2",
+  "version": 1,
+  "rendering": {
+    "filter": "nearest",
+    "alpha": "binary"
+  },
+  "battle": {},
+  "walkers": {
+    "bess_and_bea": {
+      "name": "Bess & Bea",
+      "banner": "",
+      "path": "assets/heroes/walkers_upgrade/bess_and_bea.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "sheet_size": [
+        192,
+        384
+      ],
+      "columns": 4,
+      "rows": 8,
+      "frame_count": 32,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      }
+    },
+    "boja": {
+      "name": "Boja",
+      "banner": "",
+      "path": "assets/heroes/walkers_upgrade/boja.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "sheet_size": [
+        192,
+        384
+      ],
+      "columns": 4,
+      "rows": 8,
+      "frame_count": 32,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      }
+    },
+    "bort_simesin": {
+      "name": "Bort",
+      "banner": "",
+      "path": "assets/heroes/walkers_upgrade/bort_simesin.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "sheet_size": [
+        192,
+        384
+      ],
+      "columns": 4,
+      "rows": 8,
+      "frame_count": 32,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      }
+    },
+    "briar": {
+      "name": "Rusty",
+      "banner": "",
+      "path": "assets/heroes/walkers_upgrade/briar.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "sheet_size": [
+        192,
+        384
+      ],
+      "columns": 4,
+      "rows": 8,
+      "frame_count": 32,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      }
+    },
+    "dee": {
+      "name": "Dee",
+      "banner": "",
+      "path": "assets/heroes/walkers_upgrade/dee.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "sheet_size": [
+        192,
+        384
+      ],
+      "columns": 4,
+      "rows": 8,
+      "frame_count": 32,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      }
+    },
+    "emirk": {
+      "name": "Emirk",
+      "banner": "",
+      "path": "assets/heroes/walkers_upgrade/emirk.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "sheet_size": [
+        192,
+        384
+      ],
+      "columns": 4,
+      "rows": 8,
+      "frame_count": 32,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      }
+    },
+    "friendo": {
+      "name": "Friendo",
+      "banner": "",
+      "path": "assets/heroes/walkers_upgrade/friendo.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "sheet_size": [
+        192,
+        384
+      ],
+      "columns": 4,
+      "rows": 8,
+      "frame_count": 32,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      }
+    },
+    "fut_esports": {
+      "name": "Fut",
+      "banner": "",
+      "path": "assets/heroes/walkers_upgrade/fut_esports.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "sheet_size": [
+        192,
+        384
+      ],
+      "columns": 4,
+      "rows": 8,
+      "frame_count": 32,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      }
+    },
+    "gilt": {
+      "name": "Gilt",
+      "banner": "",
+      "path": "assets/heroes/walkers_upgrade/gilt.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "sheet_size": [
+        192,
+        384
+      ],
+      "columns": 4,
+      "rows": 8,
+      "frame_count": 32,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      }
+    },
+    "kaf_underworld_pharaoh": {
+      "name": "Kaf",
+      "banner": "",
+      "path": "assets/heroes/walkers_upgrade/kaf_underworld_pharaoh.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "sheet_size": [
+        192,
+        384
+      ],
+      "columns": 4,
+      "rows": 8,
+      "frame_count": 32,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      }
+    },
+    "king_pharoph_the_3rd": {
+      "name": "King Pharoph the 3rd",
+      "banner": "",
+      "path": "assets/heroes/walkers_upgrade/king_pharoph_the_3rd.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "sheet_size": [
+        192,
+        384
+      ],
+      "columns": 4,
+      "rows": 8,
+      "frame_count": 32,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      }
+    },
+    "kushalito_banana": {
+      "name": "Kushalito",
+      "banner": "",
+      "path": "assets/heroes/walkers_upgrade/kushalito_banana.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "sheet_size": [
+        192,
+        384
+      ],
+      "columns": 4,
+      "rows": 8,
+      "frame_count": 32,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      }
+    },
+    "mara": {
+      "name": "Mara",
+      "banner": "",
+      "path": "assets/heroes/walkers_upgrade/mara.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "sheet_size": [
+        192,
+        384
+      ],
+      "columns": 4,
+      "rows": 8,
+      "frame_count": 32,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      }
+    },
+    "murmur": {
+      "name": "Hush",
+      "banner": "",
+      "path": "assets/heroes/walkers_upgrade/murmur.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "sheet_size": [
+        192,
+        384
+      ],
+      "columns": 4,
+      "rows": 8,
+      "frame_count": 32,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      }
+    },
+    "nix": {
+      "name": "Nyx",
+      "banner": "",
+      "path": "assets/heroes/walkers_upgrade/nix.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "sheet_size": [
+        192,
+        384
+      ],
+      "columns": 4,
+      "rows": 8,
+      "frame_count": 32,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      }
+    },
+    "nohahahahah": {
+      "name": "Nohahahahah",
+      "banner": "",
+      "path": "assets/heroes/walkers_upgrade/nohahahahah.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "sheet_size": [
+        192,
+        384
+      ],
+      "columns": 4,
+      "rows": 8,
+      "frame_count": 32,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      }
+    },
+    "odo_and_otto": {
+      "name": "Odo & Otto",
+      "banner": "",
+      "path": "assets/heroes/walkers_upgrade/odo_and_otto.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "sheet_size": [
+        192,
+        384
+      ],
+      "columns": 4,
+      "rows": 8,
+      "frame_count": 32,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      }
+    },
+    "paitence_and_jay": {
+      "name": "Paitence & Jay",
+      "banner": "",
+      "path": "assets/heroes/walkers_upgrade/paitence_and_jay.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "sheet_size": [
+        192,
+        384
+      ],
+      "columns": 4,
+      "rows": 8,
+      "frame_count": 32,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      }
+    },
+    "percifire": {
+      "name": "Percifire",
+      "banner": "",
+      "path": "assets/heroes/walkers_upgrade/percifire.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "sheet_size": [
+        192,
+        384
+      ],
+      "columns": 4,
+      "rows": 8,
+      "frame_count": 32,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      }
+    },
+    "python_mage": {
+      "name": "Python Mage",
+      "banner": "",
+      "path": "assets/heroes/walkers_upgrade/python_mage.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "sheet_size": [
+        192,
+        384
+      ],
+      "columns": 4,
+      "rows": 8,
+      "frame_count": 32,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      }
+    },
+    "rumble": {
+      "name": "Rumble",
+      "banner": "",
+      "path": "assets/heroes/walkers_upgrade/rumble.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "sheet_size": [
+        192,
+        384
+      ],
+      "columns": 4,
+      "rows": 8,
+      "frame_count": 32,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      }
+    },
+    "samba": {
+      "name": "Samba",
+      "banner": "",
+      "path": "assets/heroes/walkers_upgrade/samba.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "sheet_size": [
+        192,
+        384
+      ],
+      "columns": 4,
+      "rows": 8,
+      "frame_count": 32,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      }
+    },
+    "sus": {
+      "name": "Sus",
+      "banner": "",
+      "path": "assets/heroes/walkers_upgrade/sus.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "sheet_size": [
+        192,
+        384
+      ],
+      "columns": 4,
+      "rows": 8,
+      "frame_count": 32,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      }
+    },
+    "trey": {
+      "name": "Trey",
+      "banner": "",
+      "path": "assets/heroes/walkers_upgrade/trey.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "sheet_size": [
+        192,
+        384
+      ],
+      "columns": 4,
+      "rows": 8,
+      "frame_count": 32,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      }
+    },
+    "wren": {
+      "name": "Wren",
+      "banner": "",
+      "path": "assets/heroes/walkers_upgrade/wren.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "sheet_size": [
+        192,
+        384
+      ],
+      "columns": 4,
+      "rows": 8,
+      "frame_count": 32,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      }
+    },
+    "zenvy": {
+      "name": "Zenvy",
+      "banner": "",
+      "path": "assets/heroes/walkers_upgrade/zenvy.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "sheet_size": [
+        192,
+        384
+      ],
+      "columns": 4,
+      "rows": 8,
+      "frame_count": 32,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      }
+    }
+  },
+  "portraits": {},
+  "prompts": [
+    {
+      "hero": "bess_and_bea",
+      "asset": "walker",
+      "method": "built-in image generation",
+      "prompt": "Use case: stylized-concept. ONE Questing Heroes on-foot directional WALK animation sprite sheet for Bess & Bea.\nImage1 is approved IDENTITY portrait. Image2 is LAYOUT and pixel-style reference only; do NOT copy its character.\nIdentity: INTENTIONAL PAIR of red curly-haired beastmaster caravan guard women, preserve their reference's exact facial species/features, rusty-red and ochre-gold clothes, broad shoulders. Preserve portrait species, face, hair, outfit palette and characteristic props. Infer simple matching lower-body clothes and boots or species-appropriate feet. No horses or new pets.\nLayout EXACTLY FOUR columns \u00d7 FIVE rows equal cells, no gutters, twenty frames total. EXACTLY TWO named partners together in EACH cell, twenty shared frames, forty bodies total. The pair is the hero. Never four partners in one cell.\nEach row is FOUR sequential walking frames with visible alternating legs: LEFT contact, passing, RIGHT contact, passing. Props held consistently and continuously joined through hands. Stable scale, feet on SAME baseline at88% cell height.\nROW1 SOUTH directly toward viewer. ROW2 SOUTHEAST down-right. ROW3 EAST right profile. ROW4 NORTHEAST up-right AWAY with back/side visible. ROW5 NORTH directly AWAY, show BACK of head and cape, NO face. Bottom two rows must show back views. Do not repeat front-facing bodies in rear rows. For rolling or flying species use four clear wheel/tail/wing motion phases instead of unnatural human legs.\nFull bodies and props entirely within cells with12% transparent padding; face readable at native48\u00d748. Crisp chunky hand-placed PIXEL ART, dark one-pixel outlines, limited24-color palette and flat three-tone shading, no anti-aliasing, no smooth gradients, no painterly texture or tiny detail noise.\nGenuinely TRANSPARENT alpha backdrop around and between ALL sprites, no white/gray backdrop, checkerboard pattern, shadows, grid, labels, words or numbers. Portrait canvas4:5."
+    },
+    {
+      "hero": "boja",
+      "asset": "walker",
+      "method": "built-in image generation",
+      "prompt": "Use case: stylized-concept. ONE Questing Heroes on-foot directional WALK animation sprite sheet for Boja.\nImage1 is approved IDENTITY portrait. Image2 is LAYOUT and pixel-style reference only; do NOT copy its character.\nIdentity: human woman brown hair BLUE cloak and outfit gold trim, ONE BLACK PANTHER draped over shoulders with its head resting above her head, natural secure compact pose. Preserve portrait species, face, hair, outfit palette and characteristic props. Infer simple matching lower-body clothes and boots or species-appropriate feet. No horses or new pets.\nLayout EXACTLY FOUR columns \u00d7 FIVE rows equal cells, no gutters, twenty frames total. EXACTLY ONE main character in EACH cell, twenty main bodies total, no twins or clones. Any small pet specified stays with the ONE hero.\nEach row is FOUR sequential walking frames with visible alternating legs: LEFT contact, passing, RIGHT contact, passing. Props held consistently and continuously joined through hands. Stable scale, feet on SAME baseline at88% cell height.\nROW1 SOUTH directly toward viewer. ROW2 SOUTHEAST down-right. ROW3 EAST right profile. ROW4 NORTHEAST up-right AWAY with back/side visible. ROW5 NORTH directly AWAY, show BACK of head and cape, NO face. Bottom two rows must show back views. Do not repeat front-facing bodies in rear rows. For rolling or flying species use four clear wheel/tail/wing motion phases instead of unnatural human legs.\nFull bodies and props entirely within cells with12% transparent padding; face readable at native48\u00d748. Crisp chunky hand-placed PIXEL ART, dark one-pixel outlines, limited24-color palette and flat three-tone shading, no anti-aliasing, no smooth gradients, no painterly texture or tiny detail noise.\nGenuinely TRANSPARENT alpha backdrop around and between ALL sprites, no white/gray backdrop, checkerboard pattern, shadows, grid, labels, words or numbers. Portrait canvas4:5."
+    },
+    {
+      "hero": "bort_simesin",
+      "asset": "walker",
+      "method": "built-in image generation",
+      "prompt": "Use case: stylized-concept. ONE Questing Heroes on-foot directional WALK animation sprite sheet for Bort.\nImage1 is approved IDENTITY portrait. Image2 is LAYOUT and pixel-style reference only; do NOT copy its character.\nIdentity: young curly red-haired human male, red cape purple-gray armor, one large stone gauntlet. Preserve portrait species, face, hair, outfit palette and characteristic props. Infer simple matching lower-body clothes and boots or species-appropriate feet. No horses or new pets.\nLayout EXACTLY FOUR columns \u00d7 FIVE rows equal cells, no gutters, twenty frames total. EXACTLY ONE main character in EACH cell, twenty main bodies total, no twins or clones. Any small pet specified stays with the ONE hero.\nEach row is FOUR sequential walking frames with visible alternating legs: LEFT contact, passing, RIGHT contact, passing. Props held consistently and continuously joined through hands. Stable scale, feet on SAME baseline at88% cell height.\nROW1 SOUTH directly toward viewer. ROW2 SOUTHEAST down-right. ROW3 EAST right profile. ROW4 NORTHEAST up-right AWAY with back/side visible. ROW5 NORTH directly AWAY, show BACK of head and cape, NO face. Bottom two rows must show back views. Do not repeat front-facing bodies in rear rows. For rolling or flying species use four clear wheel/tail/wing motion phases instead of unnatural human legs.\nFull bodies and props entirely within cells with12% transparent padding; face readable at native48\u00d748. Crisp chunky hand-placed PIXEL ART, dark one-pixel outlines, limited24-color palette and flat three-tone shading, no anti-aliasing, no smooth gradients, no painterly texture or tiny detail noise.\nGenuinely TRANSPARENT alpha backdrop around and between ALL sprites, no white/gray backdrop, checkerboard pattern, shadows, grid, labels, words or numbers. Portrait canvas4:5."
+    },
+    {
+      "hero": "briar",
+      "asset": "walker",
+      "method": "built-in image generation",
+      "prompt": "Use case: stylized-concept. ONE Questing Heroes on-foot directional WALK animation sprite sheet for Rusty.\nImage1 is approved IDENTITY portrait. Image2 is LAYOUT and pixel-style reference only; do NOT copy its character.\nIdentity: anthropomorphic red FOX scout, large ears white muzzle, blue-gray scarf and burgundy leather clothes, long fox tail. Preserve portrait species, face, hair, outfit palette and characteristic props. Infer simple matching lower-body clothes and boots or species-appropriate feet. No horses or new pets.\nLayout EXACTLY FOUR columns \u00d7 FIVE rows equal cells, no gutters, twenty frames total. EXACTLY ONE main character in EACH cell, twenty main bodies total, no twins or clones. Any small pet specified stays with the ONE hero.\nEach row is FOUR sequential walking frames with visible alternating legs: LEFT contact, passing, RIGHT contact, passing. Props held consistently and continuously joined through hands. Stable scale, feet on SAME baseline at88% cell height.\nROW1 SOUTH directly toward viewer. ROW2 SOUTHEAST down-right. ROW3 EAST right profile. ROW4 NORTHEAST up-right AWAY with back/side visible. ROW5 NORTH directly AWAY, show BACK of head and cape, NO face. Bottom two rows must show back views. Do not repeat front-facing bodies in rear rows. For rolling or flying species use four clear wheel/tail/wing motion phases instead of unnatural human legs.\nFull bodies and props entirely within cells with12% transparent padding; face readable at native48\u00d748. Crisp chunky hand-placed PIXEL ART, dark one-pixel outlines, limited24-color palette and flat three-tone shading, no anti-aliasing, no smooth gradients, no painterly texture or tiny detail noise.\nGenuinely TRANSPARENT alpha backdrop around and between ALL sprites, no white/gray backdrop, checkerboard pattern, shadows, grid, labels, words or numbers. Portrait canvas4:5."
+    },
+    {
+      "hero": "dee",
+      "asset": "walker",
+      "method": "built-in image generation",
+      "prompt": "Use case: stylized-concept. ONE Questing Heroes on-foot directional WALK animation sprite sheet for Dee.\nImage1 is approved IDENTITY portrait. Image2 is LAYOUT and pixel-style reference only; do NOT copy its character.\nIdentity: anthropomorphic GREEN DRAGON warrior, large cream horns orange mane, green silver armor tan fur collar, ONE sheathed sword on back. Preserve portrait species, face, hair, outfit palette and characteristic props. Infer simple matching lower-body clothes and boots or species-appropriate feet. No horses or new pets.\nLayout EXACTLY FOUR columns \u00d7 FIVE rows equal cells, no gutters, twenty frames total. EXACTLY ONE main character in EACH cell, twenty main bodies total, no twins or clones. Any small pet specified stays with the ONE hero.\nEach row is FOUR sequential walking frames with visible alternating legs: LEFT contact, passing, RIGHT contact, passing. Props held consistently and continuously joined through hands. Stable scale, feet on SAME baseline at88% cell height.\nROW1 SOUTH directly toward viewer. ROW2 SOUTHEAST down-right. ROW3 EAST right profile. ROW4 NORTHEAST up-right AWAY with back/side visible. ROW5 NORTH directly AWAY, show BACK of head and cape, NO face. Bottom two rows must show back views. Do not repeat front-facing bodies in rear rows. For rolling or flying species use four clear wheel/tail/wing motion phases instead of unnatural human legs.\nFull bodies and props entirely within cells with12% transparent padding; face readable at native48\u00d748. Crisp chunky hand-placed PIXEL ART, dark one-pixel outlines, limited24-color palette and flat three-tone shading, no anti-aliasing, no smooth gradients, no painterly texture or tiny detail noise.\nGenuinely TRANSPARENT alpha backdrop around and between ALL sprites, no white/gray backdrop, checkerboard pattern, shadows, grid, labels, words or numbers. Portrait canvas4:5."
+    },
+    {
+      "hero": "emirk",
+      "asset": "walker",
+      "method": "built-in image generation",
+      "prompt": "Use case: stylized-concept. ONE Questing Heroes on-foot directional WALK animation sprite sheet for Emirk.\nImage1 is approved IDENTITY portrait. Image2 is LAYOUT and pixel-style reference only; do NOT copy its character.\nIdentity: strong black-haired young human male necromancer, purple HOOD cream purple cloak skull clasp, ONE open purple skull book held, katana sheathed on back, NO cat companion. Preserve portrait species, face, hair, outfit palette and characteristic props. Infer simple matching lower-body clothes and boots or species-appropriate feet. No horses or new pets.\nLayout EXACTLY FOUR columns \u00d7 FIVE rows equal cells, no gutters, twenty frames total. EXACTLY ONE main character in EACH cell, twenty main bodies total, no twins or clones. Any small pet specified stays with the ONE hero.\nEach row is FOUR sequential walking frames with visible alternating legs: LEFT contact, passing, RIGHT contact, passing. Props held consistently and continuously joined through hands. Stable scale, feet on SAME baseline at88% cell height.\nROW1 SOUTH directly toward viewer. ROW2 SOUTHEAST down-right. ROW3 EAST right profile. ROW4 NORTHEAST up-right AWAY with back/side visible. ROW5 NORTH directly AWAY, show BACK of head and cape, NO face. Bottom two rows must show back views. Do not repeat front-facing bodies in rear rows. For rolling or flying species use four clear wheel/tail/wing motion phases instead of unnatural human legs.\nFull bodies and props entirely within cells with12% transparent padding; face readable at native48\u00d748. Crisp chunky hand-placed PIXEL ART, dark one-pixel outlines, limited24-color palette and flat three-tone shading, no anti-aliasing, no smooth gradients, no painterly texture or tiny detail noise.\nGenuinely TRANSPARENT alpha backdrop around and between ALL sprites, no white/gray backdrop, checkerboard pattern, shadows, grid, labels, words or numbers. Portrait canvas4:5."
+    },
+    {
+      "hero": "friendo",
+      "asset": "walker",
+      "method": "built-in image generation",
+      "prompt": "Use case: stylized-concept. ONE Questing Heroes on-foot directional WALK animation sprite sheet for Friendo.\nImage1 is approved IDENTITY portrait. Image2 is LAYOUT and pixel-style reference only; do NOT copy its character.\nIdentity: black-haired blue-eyed young human male, GREEN worn armor purple cloak and skull clasp, ONE wooden crescent skull STAFF held, NO candles anywhere. Preserve portrait species, face, hair, outfit palette and characteristic props. Infer simple matching lower-body clothes and boots or species-appropriate feet. No horses or new pets.\nLayout EXACTLY FOUR columns \u00d7 FIVE rows equal cells, no gutters, twenty frames total. EXACTLY ONE main character in EACH cell, twenty main bodies total, no twins or clones. Any small pet specified stays with the ONE hero.\nEach row is FOUR sequential walking frames with visible alternating legs: LEFT contact, passing, RIGHT contact, passing. Props held consistently and continuously joined through hands. Stable scale, feet on SAME baseline at88% cell height.\nROW1 SOUTH directly toward viewer. ROW2 SOUTHEAST down-right. ROW3 EAST right profile. ROW4 NORTHEAST up-right AWAY with back/side visible. ROW5 NORTH directly AWAY, show BACK of head and cape, NO face. Bottom two rows must show back views. Do not repeat front-facing bodies in rear rows. For rolling or flying species use four clear wheel/tail/wing motion phases instead of unnatural human legs.\nFull bodies and props entirely within cells with12% transparent padding; face readable at native48\u00d748. Crisp chunky hand-placed PIXEL ART, dark one-pixel outlines, limited24-color palette and flat three-tone shading, no anti-aliasing, no smooth gradients, no painterly texture or tiny detail noise.\nGenuinely TRANSPARENT alpha backdrop around and between ALL sprites, no white/gray backdrop, checkerboard pattern, shadows, grid, labels, words or numbers. Portrait canvas4:5."
+    },
+    {
+      "hero": "fut_esports",
+      "asset": "walker",
+      "method": "built-in image generation",
+      "prompt": "Use case: stylized-concept. ONE Questing Heroes on-foot directional WALK animation sprite sheet for Fut.\nImage1 is approved IDENTITY portrait. Image2 is LAYOUT and pixel-style reference only; do NOT copy its character.\nIdentity: young human male scholar, messy brown hair black rectangular glasses navy gold-trim coat tan fur collar, ONE CLOSED tan umbrella with curved hook handle. Preserve portrait species, face, hair, outfit palette and characteristic props. Infer simple matching lower-body clothes and boots or species-appropriate feet. No horses or new pets.\nLayout EXACTLY FOUR columns \u00d7 FIVE rows equal cells, no gutters, twenty frames total. EXACTLY ONE main character in EACH cell, twenty main bodies total, no twins or clones. Any small pet specified stays with the ONE hero.\nEach row is FOUR sequential walking frames with visible alternating legs: LEFT contact, passing, RIGHT contact, passing. Props held consistently and continuously joined through hands. Stable scale, feet on SAME baseline at88% cell height.\nROW1 SOUTH directly toward viewer. ROW2 SOUTHEAST down-right. ROW3 EAST right profile. ROW4 NORTHEAST up-right AWAY with back/side visible. ROW5 NORTH directly AWAY, show BACK of head and cape, NO face. Bottom two rows must show back views. Do not repeat front-facing bodies in rear rows. For rolling or flying species use four clear wheel/tail/wing motion phases instead of unnatural human legs.\nFull bodies and props entirely within cells with12% transparent padding; face readable at native48\u00d748. Crisp chunky hand-placed PIXEL ART, dark one-pixel outlines, limited24-color palette and flat three-tone shading, no anti-aliasing, no smooth gradients, no painterly texture or tiny detail noise.\nGenuinely TRANSPARENT alpha backdrop around and between ALL sprites, no white/gray backdrop, checkerboard pattern, shadows, grid, labels, words or numbers. Portrait canvas4:5."
+    },
+    {
+      "hero": "gilt",
+      "asset": "walker",
+      "method": "built-in image generation",
+      "prompt": "Use case: stylized-concept. ONE Questing Heroes on-foot directional WALK animation sprite sheet for Gilt.\nImage1 is approved IDENTITY portrait. Image2 is LAYOUT and pixel-style reference only; do NOT copy its character.\nIdentity: anthropomorphic golden MANTIS insect scout, two long antennae pointed insect face, silver segmented armor and red scarf, thin insect limbs. Preserve portrait species, face, hair, outfit palette and characteristic props. Infer simple matching lower-body clothes and boots or species-appropriate feet. No horses or new pets.\nLayout EXACTLY FOUR columns \u00d7 FIVE rows equal cells, no gutters, twenty frames total. EXACTLY ONE main character in EACH cell, twenty main bodies total, no twins or clones. Any small pet specified stays with the ONE hero.\nEach row is FOUR sequential walking frames with visible alternating legs: LEFT contact, passing, RIGHT contact, passing. Props held consistently and continuously joined through hands. Stable scale, feet on SAME baseline at88% cell height.\nROW1 SOUTH directly toward viewer. ROW2 SOUTHEAST down-right. ROW3 EAST right profile. ROW4 NORTHEAST up-right AWAY with back/side visible. ROW5 NORTH directly AWAY, show BACK of head and cape, NO face. Bottom two rows must show back views. Do not repeat front-facing bodies in rear rows. For rolling or flying species use four clear wheel/tail/wing motion phases instead of unnatural human legs.\nFull bodies and props entirely within cells with12% transparent padding; face readable at native48\u00d748. Crisp chunky hand-placed PIXEL ART, dark one-pixel outlines, limited24-color palette and flat three-tone shading, no anti-aliasing, no smooth gradients, no painterly texture or tiny detail noise.\nGenuinely TRANSPARENT alpha backdrop around and between ALL sprites, no white/gray backdrop, checkerboard pattern, shadows, grid, labels, words or numbers. Portrait canvas4:5."
+    },
+    {
+      "hero": "kaf_underworld_pharaoh",
+      "asset": "walker",
+      "method": "built-in image generation",
+      "prompt": "Use case: stylized-concept. ONE Questing Heroes on-foot directional WALK animation sprite sheet for Kaf.\nImage1 is approved IDENTITY portrait. Image2 is LAYOUT and pixel-style reference only; do NOT copy its character.\nIdentity: human Egyptian pharaoh with brown skin black hair white tall crown blue gold broad collar navy gold robe, ceremonial staff, no mechanical face. Preserve portrait species, face, hair, outfit palette and characteristic props. Infer simple matching lower-body clothes and boots or species-appropriate feet. No horses or new pets.\nLayout EXACTLY FOUR columns \u00d7 FIVE rows equal cells, no gutters, twenty frames total. EXACTLY ONE main character in EACH cell, twenty main bodies total, no twins or clones. Any small pet specified stays with the ONE hero.\nEach row is FOUR sequential walking frames with visible alternating legs: LEFT contact, passing, RIGHT contact, passing. Props held consistently and continuously joined through hands. Stable scale, feet on SAME baseline at88% cell height.\nROW1 SOUTH directly toward viewer. ROW2 SOUTHEAST down-right. ROW3 EAST right profile. ROW4 NORTHEAST up-right AWAY with back/side visible. ROW5 NORTH directly AWAY, show BACK of head and cape, NO face. Bottom two rows must show back views. Do not repeat front-facing bodies in rear rows. For rolling or flying species use four clear wheel/tail/wing motion phases instead of unnatural human legs.\nFull bodies and props entirely within cells with12% transparent padding; face readable at native48\u00d748. Crisp chunky hand-placed PIXEL ART, dark one-pixel outlines, limited24-color palette and flat three-tone shading, no anti-aliasing, no smooth gradients, no painterly texture or tiny detail noise.\nGenuinely TRANSPARENT alpha backdrop around and between ALL sprites, no white/gray backdrop, checkerboard pattern, shadows, grid, labels, words or numbers. Portrait canvas4:5."
+    },
+    {
+      "hero": "king_pharoph_the_3rd",
+      "asset": "walker",
+      "method": "built-in image generation",
+      "prompt": "Use case: stylized-concept. ONE Questing Heroes on-foot directional WALK animation sprite sheet for King Pharoph the 3rd.\nImage1 is approved IDENTITY portrait. Image2 is LAYOUT and pixel-style reference only; do NOT copy its character.\nIdentity: GOLDEN CLOCKWORK KING, brass crown temple gears gold mechanical face, THREE eyes including turquoise THIRD EYE centered on forehead, green fur-trim cape bronze armor, one sword. Preserve portrait species, face, hair, outfit palette and characteristic props. Infer simple matching lower-body clothes and boots or species-appropriate feet. No horses or new pets.\nLayout EXACTLY FOUR columns \u00d7 FIVE rows equal cells, no gutters, twenty frames total. EXACTLY ONE main character in EACH cell, twenty main bodies total, no twins or clones. Any small pet specified stays with the ONE hero.\nEach row is FOUR sequential walking frames with visible alternating legs: LEFT contact, passing, RIGHT contact, passing. Props held consistently and continuously joined through hands. Stable scale, feet on SAME baseline at88% cell height.\nROW1 SOUTH directly toward viewer. ROW2 SOUTHEAST down-right. ROW3 EAST right profile. ROW4 NORTHEAST up-right AWAY with back/side visible. ROW5 NORTH directly AWAY, show BACK of head and cape, NO face. Bottom two rows must show back views. Do not repeat front-facing bodies in rear rows. For rolling or flying species use four clear wheel/tail/wing motion phases instead of unnatural human legs.\nFull bodies and props entirely within cells with12% transparent padding; face readable at native48\u00d748. Crisp chunky hand-placed PIXEL ART, dark one-pixel outlines, limited24-color palette and flat three-tone shading, no anti-aliasing, no smooth gradients, no painterly texture or tiny detail noise.\nGenuinely TRANSPARENT alpha backdrop around and between ALL sprites, no white/gray backdrop, checkerboard pattern, shadows, grid, labels, words or numbers. Portrait canvas4:5."
+    },
+    {
+      "hero": "kushalito_banana",
+      "asset": "walker",
+      "method": "built-in image generation",
+      "prompt": "Use case: stylized-concept. ONE Questing Heroes on-foot directional WALK animation sprite sheet for Kushalito.\nImage1 is approved IDENTITY portrait. Image2 is LAYOUT and pixel-style reference only; do NOT copy its character.\nIdentity: anthropomorphic orange white DOG, floppy ears white muzzle, orange hoodie cloak, one small straight knife held by hilt. Preserve portrait species, face, hair, outfit palette and characteristic props. Infer simple matching lower-body clothes and boots or species-appropriate feet. No horses or new pets.\nLayout EXACTLY FOUR columns \u00d7 FIVE rows equal cells, no gutters, twenty frames total. EXACTLY ONE main character in EACH cell, twenty main bodies total, no twins or clones. Any small pet specified stays with the ONE hero.\nEach row is FOUR sequential walking frames with visible alternating legs: LEFT contact, passing, RIGHT contact, passing. Props held consistently and continuously joined through hands. Stable scale, feet on SAME baseline at88% cell height.\nROW1 SOUTH directly toward viewer. ROW2 SOUTHEAST down-right. ROW3 EAST right profile. ROW4 NORTHEAST up-right AWAY with back/side visible. ROW5 NORTH directly AWAY, show BACK of head and cape, NO face. Bottom two rows must show back views. Do not repeat front-facing bodies in rear rows. For rolling or flying species use four clear wheel/tail/wing motion phases instead of unnatural human legs.\nFull bodies and props entirely within cells with12% transparent padding; face readable at native48\u00d748. Crisp chunky hand-placed PIXEL ART, dark one-pixel outlines, limited24-color palette and flat three-tone shading, no anti-aliasing, no smooth gradients, no painterly texture or tiny detail noise.\nGenuinely TRANSPARENT alpha backdrop around and between ALL sprites, no white/gray backdrop, checkerboard pattern, shadows, grid, labels, words or numbers. Portrait canvas4:5."
+    },
+    {
+      "hero": "mara",
+      "asset": "walker",
+      "method": "built-in image generation",
+      "prompt": "Use case: stylized-concept. ONE Questing Heroes on-foot directional WALK animation sprite sheet for Mara.\nImage1 is approved IDENTITY portrait. Image2 is LAYOUT and pixel-style reference only; do NOT copy its character.\nIdentity: older gray-haired human woman gravekeeper, weathered tan face, dark purple cape leather work clothes, ONE shovel and small belt lantern. Preserve portrait species, face, hair, outfit palette and characteristic props. Infer simple matching lower-body clothes and boots or species-appropriate feet. No horses or new pets.\nLayout EXACTLY FOUR columns \u00d7 FIVE rows equal cells, no gutters, twenty frames total. EXACTLY ONE main character in EACH cell, twenty main bodies total, no twins or clones. Any small pet specified stays with the ONE hero.\nEach row is FOUR sequential walking frames with visible alternating legs: LEFT contact, passing, RIGHT contact, passing. Props held consistently and continuously joined through hands. Stable scale, feet on SAME baseline at88% cell height.\nROW1 SOUTH directly toward viewer. ROW2 SOUTHEAST down-right. ROW3 EAST right profile. ROW4 NORTHEAST up-right AWAY with back/side visible. ROW5 NORTH directly AWAY, show BACK of head and cape, NO face. Bottom two rows must show back views. Do not repeat front-facing bodies in rear rows. For rolling or flying species use four clear wheel/tail/wing motion phases instead of unnatural human legs.\nFull bodies and props entirely within cells with12% transparent padding; face readable at native48\u00d748. Crisp chunky hand-placed PIXEL ART, dark one-pixel outlines, limited24-color palette and flat three-tone shading, no anti-aliasing, no smooth gradients, no painterly texture or tiny detail noise.\nGenuinely TRANSPARENT alpha backdrop around and between ALL sprites, no white/gray backdrop, checkerboard pattern, shadows, grid, labels, words or numbers. Portrait canvas4:5."
+    },
+    {
+      "hero": "murmur",
+      "asset": "walker",
+      "method": "built-in image generation",
+      "prompt": "Use case: stylized-concept. ONE Questing Heroes on-foot directional WALK animation sprite sheet for Hush.\nImage1 is approved IDENTITY portrait. Image2 is LAYOUT and pixel-style reference only; do NOT copy its character.\nIdentity: SCARECROW wizard with orange stitched burlap face button eye, crooked blue-purple wizard hat, ragged purple cape, red scarf. Preserve portrait species, face, hair, outfit palette and characteristic props. Infer simple matching lower-body clothes and boots or species-appropriate feet. No horses or new pets.\nLayout EXACTLY FOUR columns \u00d7 FIVE rows equal cells, no gutters, twenty frames total. EXACTLY ONE main character in EACH cell, twenty main bodies total, no twins or clones. Any small pet specified stays with the ONE hero.\nEach row is FOUR sequential walking frames with visible alternating legs: LEFT contact, passing, RIGHT contact, passing. Props held consistently and continuously joined through hands. Stable scale, feet on SAME baseline at88% cell height.\nROW1 SOUTH directly toward viewer. ROW2 SOUTHEAST down-right. ROW3 EAST right profile. ROW4 NORTHEAST up-right AWAY with back/side visible. ROW5 NORTH directly AWAY, show BACK of head and cape, NO face. Bottom two rows must show back views. Do not repeat front-facing bodies in rear rows. For rolling or flying species use four clear wheel/tail/wing motion phases instead of unnatural human legs.\nFull bodies and props entirely within cells with12% transparent padding; face readable at native48\u00d748. Crisp chunky hand-placed PIXEL ART, dark one-pixel outlines, limited24-color palette and flat three-tone shading, no anti-aliasing, no smooth gradients, no painterly texture or tiny detail noise.\nGenuinely TRANSPARENT alpha backdrop around and between ALL sprites, no white/gray backdrop, checkerboard pattern, shadows, grid, labels, words or numbers. Portrait canvas4:5."
+    },
+    {
+      "hero": "nix",
+      "asset": "walker",
+      "method": "built-in image generation",
+      "prompt": "Use case: stylized-concept. ONE Questing Heroes on-foot directional WALK animation sprite sheet for Nyx.\nImage1 is approved IDENTITY portrait. Image2 is LAYOUT and pixel-style reference only; do NOT copy its character.\nIdentity: young human male villain, black hair purple fur-trim cloak over burgundy clothes, simple dark dagger sheathed. Preserve portrait species, face, hair, outfit palette and characteristic props. Infer simple matching lower-body clothes and boots or species-appropriate feet. No horses or new pets.\nLayout EXACTLY FOUR columns \u00d7 FIVE rows equal cells, no gutters, twenty frames total. EXACTLY ONE main character in EACH cell, twenty main bodies total, no twins or clones. Any small pet specified stays with the ONE hero.\nEach row is FOUR sequential walking frames with visible alternating legs: LEFT contact, passing, RIGHT contact, passing. Props held consistently and continuously joined through hands. Stable scale, feet on SAME baseline at88% cell height.\nROW1 SOUTH directly toward viewer. ROW2 SOUTHEAST down-right. ROW3 EAST right profile. ROW4 NORTHEAST up-right AWAY with back/side visible. ROW5 NORTH directly AWAY, show BACK of head and cape, NO face. Bottom two rows must show back views. Do not repeat front-facing bodies in rear rows. For rolling or flying species use four clear wheel/tail/wing motion phases instead of unnatural human legs.\nFull bodies and props entirely within cells with12% transparent padding; face readable at native48\u00d748. Crisp chunky hand-placed PIXEL ART, dark one-pixel outlines, limited24-color palette and flat three-tone shading, no anti-aliasing, no smooth gradients, no painterly texture or tiny detail noise.\nGenuinely TRANSPARENT alpha backdrop around and between ALL sprites, no white/gray backdrop, checkerboard pattern, shadows, grid, labels, words or numbers. Portrait canvas4:5."
+    },
+    {
+      "hero": "nohahahahah",
+      "asset": "walker",
+      "method": "built-in image generation",
+      "prompt": "Use case: stylized-concept. ONE Questing Heroes on-foot directional WALK animation sprite sheet for Nohahahahah.\nImage1 is approved IDENTITY portrait. Image2 is LAYOUT and pixel-style reference only; do NOT copy its character.\nIdentity: human CLOWN, curly RED hair white face red nose red bow green fur collar striped bright clothes, ONE small RED balloon animal held securely. Preserve portrait species, face, hair, outfit palette and characteristic props. Infer simple matching lower-body clothes and boots or species-appropriate feet. No horses or new pets.\nLayout EXACTLY FOUR columns \u00d7 FIVE rows equal cells, no gutters, twenty frames total. EXACTLY ONE main character in EACH cell, twenty main bodies total, no twins or clones. Any small pet specified stays with the ONE hero.\nEach row is FOUR sequential walking frames with visible alternating legs: LEFT contact, passing, RIGHT contact, passing. Props held consistently and continuously joined through hands. Stable scale, feet on SAME baseline at88% cell height.\nROW1 SOUTH directly toward viewer. ROW2 SOUTHEAST down-right. ROW3 EAST right profile. ROW4 NORTHEAST up-right AWAY with back/side visible. ROW5 NORTH directly AWAY, show BACK of head and cape, NO face. Bottom two rows must show back views. Do not repeat front-facing bodies in rear rows. For rolling or flying species use four clear wheel/tail/wing motion phases instead of unnatural human legs.\nFull bodies and props entirely within cells with12% transparent padding; face readable at native48\u00d748. Crisp chunky hand-placed PIXEL ART, dark one-pixel outlines, limited24-color palette and flat three-tone shading, no anti-aliasing, no smooth gradients, no painterly texture or tiny detail noise.\nGenuinely TRANSPARENT alpha backdrop around and between ALL sprites, no white/gray backdrop, checkerboard pattern, shadows, grid, labels, words or numbers. Portrait canvas4:5."
+    },
+    {
+      "hero": "odo_and_otto",
+      "asset": "walker",
+      "method": "built-in image generation",
+      "prompt": "Use case: stylized-concept. ONE Questing Heroes on-foot directional WALK animation sprite sheet for Odo & Otto.\nImage1 is approved IDENTITY portrait. Image2 is LAYOUT and pixel-style reference only; do NOT copy its character.\nIdentity: ONE two-headed gray-skinned undertaker, TWO distinct curly-haired male heads growing from ONE broad shared torso with ONE pair arms and ONE pair legs, burgundy coat and spade; NEVER two separate bodies. Preserve portrait species, face, hair, outfit palette and characteristic props. Infer simple matching lower-body clothes and boots or species-appropriate feet. No horses or new pets.\nLayout EXACTLY FOUR columns \u00d7 FIVE rows equal cells, no gutters, twenty frames total. EXACTLY ONE main character in EACH cell, twenty main bodies total, no twins or clones. Any small pet specified stays with the ONE hero.\nEach row is FOUR sequential walking frames with visible alternating legs: LEFT contact, passing, RIGHT contact, passing. Props held consistently and continuously joined through hands. Stable scale, feet on SAME baseline at88% cell height.\nROW1 SOUTH directly toward viewer. ROW2 SOUTHEAST down-right. ROW3 EAST right profile. ROW4 NORTHEAST up-right AWAY with back/side visible. ROW5 NORTH directly AWAY, show BACK of head and cape, NO face. Bottom two rows must show back views. Do not repeat front-facing bodies in rear rows. For rolling or flying species use four clear wheel/tail/wing motion phases instead of unnatural human legs.\nFull bodies and props entirely within cells with12% transparent padding; face readable at native48\u00d748. Crisp chunky hand-placed PIXEL ART, dark one-pixel outlines, limited24-color palette and flat three-tone shading, no anti-aliasing, no smooth gradients, no painterly texture or tiny detail noise.\nGenuinely TRANSPARENT alpha backdrop around and between ALL sprites, no white/gray backdrop, checkerboard pattern, shadows, grid, labels, words or numbers. Portrait canvas4:5."
+    },
+    {
+      "hero": "paitence_and_jay",
+      "asset": "walker",
+      "method": "built-in image generation",
+      "prompt": "Use case: stylized-concept. ONE Questing Heroes on-foot directional WALK animation sprite sheet for Paitence & Jay.\nImage1 is approved IDENTITY portrait. Image2 is LAYOUT and pixel-style reference only; do NOT copy its character.\nIdentity: ONE young purple-haired human girl or boy exactly as portrait, purple silver outfit, ONE small PANDA companion resting on shoulder, one pink magical sword; NOT two human bodies. Preserve portrait species, face, hair, outfit palette and characteristic props. Infer simple matching lower-body clothes and boots or species-appropriate feet. No horses or new pets.\nLayout EXACTLY FOUR columns \u00d7 FIVE rows equal cells, no gutters, twenty frames total. EXACTLY ONE main character in EACH cell, twenty main bodies total, no twins or clones. Any small pet specified stays with the ONE hero.\nEach row is FOUR sequential walking frames with visible alternating legs: LEFT contact, passing, RIGHT contact, passing. Props held consistently and continuously joined through hands. Stable scale, feet on SAME baseline at88% cell height.\nROW1 SOUTH directly toward viewer. ROW2 SOUTHEAST down-right. ROW3 EAST right profile. ROW4 NORTHEAST up-right AWAY with back/side visible. ROW5 NORTH directly AWAY, show BACK of head and cape, NO face. Bottom two rows must show back views. Do not repeat front-facing bodies in rear rows. For rolling or flying species use four clear wheel/tail/wing motion phases instead of unnatural human legs.\nFull bodies and props entirely within cells with12% transparent padding; face readable at native48\u00d748. Crisp chunky hand-placed PIXEL ART, dark one-pixel outlines, limited24-color palette and flat three-tone shading, no anti-aliasing, no smooth gradients, no painterly texture or tiny detail noise.\nGenuinely TRANSPARENT alpha backdrop around and between ALL sprites, no white/gray backdrop, checkerboard pattern, shadows, grid, labels, words or numbers. Portrait canvas4:5."
+    },
+    {
+      "hero": "percifire",
+      "asset": "walker",
+      "method": "built-in image generation",
+      "prompt": "Use case: stylized-concept. ONE Questing Heroes on-foot directional WALK animation sprite sheet for Percifire.\nImage1 is approved IDENTITY portrait. Image2 is LAYOUT and pixel-style reference only; do NOT copy its character.\nIdentity: GREEN horned winged imp/goblin, yellow eyes orange face markings cream fur shoulder collar tan leather, folded green BAT WINGS, ONE green crystal shard held in claw. Preserve portrait species, face, hair, outfit palette and characteristic props. Infer simple matching lower-body clothes and boots or species-appropriate feet. No horses or new pets.\nLayout EXACTLY FOUR columns \u00d7 FIVE rows equal cells, no gutters, twenty frames total. EXACTLY ONE main character in EACH cell, twenty main bodies total, no twins or clones. Any small pet specified stays with the ONE hero.\nEach row is FOUR sequential walking frames with visible alternating legs: LEFT contact, passing, RIGHT contact, passing. Props held consistently and continuously joined through hands. Stable scale, feet on SAME baseline at88% cell height.\nROW1 SOUTH directly toward viewer. ROW2 SOUTHEAST down-right. ROW3 EAST right profile. ROW4 NORTHEAST up-right AWAY with back/side visible. ROW5 NORTH directly AWAY, show BACK of head and cape, NO face. Bottom two rows must show back views. Do not repeat front-facing bodies in rear rows. For rolling or flying species use four clear wheel/tail/wing motion phases instead of unnatural human legs.\nFull bodies and props entirely within cells with12% transparent padding; face readable at native48\u00d748. Crisp chunky hand-placed PIXEL ART, dark one-pixel outlines, limited24-color palette and flat three-tone shading, no anti-aliasing, no smooth gradients, no painterly texture or tiny detail noise.\nGenuinely TRANSPARENT alpha backdrop around and between ALL sprites, no white/gray backdrop, checkerboard pattern, shadows, grid, labels, words or numbers. Portrait canvas4:5."
+    },
+    {
+      "hero": "python_mage",
+      "asset": "walker",
+      "method": "built-in image generation",
+      "prompt": "Use case: stylized-concept. ONE Questing Heroes on-foot directional WALK animation sprite sheet for Python Mage.\nImage1 is approved IDENTITY portrait. Image2 is LAYOUT and pixel-style reference only; do NOT copy its character.\nIdentity: anthropomorphic GREEN PYTHON snake mage with broad snake snout BLUE crest/hair, dark green robe SILVER leaf shoulder armor, ONE wood silver crescent staff, NO glasses. Preserve portrait species, face, hair, outfit palette and characteristic props. Infer simple matching lower-body clothes and boots or species-appropriate feet. No horses or new pets.\nLayout EXACTLY FOUR columns \u00d7 FIVE rows equal cells, no gutters, twenty frames total. EXACTLY ONE main character in EACH cell, twenty main bodies total, no twins or clones. Any small pet specified stays with the ONE hero.\nEach row is FOUR sequential walking frames with visible alternating legs: LEFT contact, passing, RIGHT contact, passing. Props held consistently and continuously joined through hands. Stable scale, feet on SAME baseline at88% cell height.\nROW1 SOUTH directly toward viewer. ROW2 SOUTHEAST down-right. ROW3 EAST right profile. ROW4 NORTHEAST up-right AWAY with back/side visible. ROW5 NORTH directly AWAY, show BACK of head and cape, NO face. Bottom two rows must show back views. Do not repeat front-facing bodies in rear rows. For rolling or flying species use four clear wheel/tail/wing motion phases instead of unnatural human legs.\nFull bodies and props entirely within cells with12% transparent padding; face readable at native48\u00d748. Crisp chunky hand-placed PIXEL ART, dark one-pixel outlines, limited24-color palette and flat three-tone shading, no anti-aliasing, no smooth gradients, no painterly texture or tiny detail noise.\nGenuinely TRANSPARENT alpha backdrop around and between ALL sprites, no white/gray backdrop, checkerboard pattern, shadows, grid, labels, words or numbers. Portrait canvas4:5."
+    },
+    {
+      "hero": "rumble",
+      "asset": "walker",
+      "method": "built-in image generation",
+      "prompt": "Use case: stylized-concept. ONE Questing Heroes on-foot directional WALK animation sprite sheet for Rumble.\nImage1 is approved IDENTITY portrait. Image2 is LAYOUT and pixel-style reference only; do NOT copy its character.\nIdentity: large stocky anthropomorphic purple-gray RHINO brawler, single pale horn, navy armor red scarf, broad fists. Preserve portrait species, face, hair, outfit palette and characteristic props. Infer simple matching lower-body clothes and boots or species-appropriate feet. No horses or new pets.\nLayout EXACTLY FOUR columns \u00d7 FIVE rows equal cells, no gutters, twenty frames total. EXACTLY ONE main character in EACH cell, twenty main bodies total, no twins or clones. Any small pet specified stays with the ONE hero.\nEach row is FOUR sequential walking frames with visible alternating legs: LEFT contact, passing, RIGHT contact, passing. Props held consistently and continuously joined through hands. Stable scale, feet on SAME baseline at88% cell height.\nROW1 SOUTH directly toward viewer. ROW2 SOUTHEAST down-right. ROW3 EAST right profile. ROW4 NORTHEAST up-right AWAY with back/side visible. ROW5 NORTH directly AWAY, show BACK of head and cape, NO face. Bottom two rows must show back views. Do not repeat front-facing bodies in rear rows. For rolling or flying species use four clear wheel/tail/wing motion phases instead of unnatural human legs.\nFull bodies and props entirely within cells with12% transparent padding; face readable at native48\u00d748. Crisp chunky hand-placed PIXEL ART, dark one-pixel outlines, limited24-color palette and flat three-tone shading, no anti-aliasing, no smooth gradients, no painterly texture or tiny detail noise.\nGenuinely TRANSPARENT alpha backdrop around and between ALL sprites, no white/gray backdrop, checkerboard pattern, shadows, grid, labels, words or numbers. Portrait canvas4:5."
+    },
+    {
+      "hero": "samba",
+      "asset": "walker",
+      "method": "built-in image generation",
+      "prompt": "Use case: stylized-concept. ONE Questing Heroes on-foot directional WALK animation sprite sheet for Samba.\nImage1 is approved IDENTITY portrait. Image2 is LAYOUT and pixel-style reference only; do NOT copy its character.\nIdentity: human male with genuine SKULL FACE blending smoothly at temples, black hair black rectangular glasses blue fur-trim cloak, ONE closed black umbrella on back. Preserve portrait species, face, hair, outfit palette and characteristic props. Infer simple matching lower-body clothes and boots or species-appropriate feet. No horses or new pets.\nLayout EXACTLY FOUR columns \u00d7 FIVE rows equal cells, no gutters, twenty frames total. EXACTLY ONE main character in EACH cell, twenty main bodies total, no twins or clones. Any small pet specified stays with the ONE hero.\nEach row is FOUR sequential walking frames with visible alternating legs: LEFT contact, passing, RIGHT contact, passing. Props held consistently and continuously joined through hands. Stable scale, feet on SAME baseline at88% cell height.\nROW1 SOUTH directly toward viewer. ROW2 SOUTHEAST down-right. ROW3 EAST right profile. ROW4 NORTHEAST up-right AWAY with back/side visible. ROW5 NORTH directly AWAY, show BACK of head and cape, NO face. Bottom two rows must show back views. Do not repeat front-facing bodies in rear rows. For rolling or flying species use four clear wheel/tail/wing motion phases instead of unnatural human legs.\nFull bodies and props entirely within cells with12% transparent padding; face readable at native48\u00d748. Crisp chunky hand-placed PIXEL ART, dark one-pixel outlines, limited24-color palette and flat three-tone shading, no anti-aliasing, no smooth gradients, no painterly texture or tiny detail noise.\nGenuinely TRANSPARENT alpha backdrop around and between ALL sprites, no white/gray backdrop, checkerboard pattern, shadows, grid, labels, words or numbers. Portrait canvas4:5."
+    },
+    {
+      "hero": "sus",
+      "asset": "walker",
+      "method": "built-in image generation",
+      "prompt": "Use case: stylized-concept. ONE Questing Heroes on-foot directional WALK animation sprite sheet for Sus.\nImage1 is approved IDENTITY portrait. Image2 is LAYOUT and pixel-style reference only; do NOT copy its character.\nIdentity: MUMMY totally wrapped in pale bandages, red HOOD and cape backpack, NO visible eyes, NO visor or face openings, ONE small screwdriver. Preserve portrait species, face, hair, outfit palette and characteristic props. Infer simple matching lower-body clothes and boots or species-appropriate feet. No horses or new pets.\nLayout EXACTLY FOUR columns \u00d7 FIVE rows equal cells, no gutters, twenty frames total. EXACTLY ONE main character in EACH cell, twenty main bodies total, no twins or clones. Any small pet specified stays with the ONE hero.\nEach row is FOUR sequential walking frames with visible alternating legs: LEFT contact, passing, RIGHT contact, passing. Props held consistently and continuously joined through hands. Stable scale, feet on SAME baseline at88% cell height.\nROW1 SOUTH directly toward viewer. ROW2 SOUTHEAST down-right. ROW3 EAST right profile. ROW4 NORTHEAST up-right AWAY with back/side visible. ROW5 NORTH directly AWAY, show BACK of head and cape, NO face. Bottom two rows must show back views. Do not repeat front-facing bodies in rear rows. For rolling or flying species use four clear wheel/tail/wing motion phases instead of unnatural human legs.\nFull bodies and props entirely within cells with12% transparent padding; face readable at native48\u00d748. Crisp chunky hand-placed PIXEL ART, dark one-pixel outlines, limited24-color palette and flat three-tone shading, no anti-aliasing, no smooth gradients, no painterly texture or tiny detail noise.\nGenuinely TRANSPARENT alpha backdrop around and between ALL sprites, no white/gray backdrop, checkerboard pattern, shadows, grid, labels, words or numbers. Portrait canvas4:5."
+    },
+    {
+      "hero": "trey",
+      "asset": "walker",
+      "method": "built-in image generation",
+      "prompt": "Use case: stylized-concept. ONE Questing Heroes on-foot directional WALK animation sprite sheet for Trey.\nImage1 is approved IDENTITY portrait. Image2 is LAYOUT and pixel-style reference only; do NOT copy its character.\nIdentity: young brown-haired green-eyed human male reaper, RED HOOD burgundy purple cream-trim cloak skull ornaments, ONE skull-headed THREE-BLADE scythe, NO shoulder candle. Preserve portrait species, face, hair, outfit palette and characteristic props. Infer simple matching lower-body clothes and boots or species-appropriate feet. No horses or new pets.\nLayout EXACTLY FOUR columns \u00d7 FIVE rows equal cells, no gutters, twenty frames total. EXACTLY ONE main character in EACH cell, twenty main bodies total, no twins or clones. Any small pet specified stays with the ONE hero.\nEach row is FOUR sequential walking frames with visible alternating legs: LEFT contact, passing, RIGHT contact, passing. Props held consistently and continuously joined through hands. Stable scale, feet on SAME baseline at88% cell height.\nROW1 SOUTH directly toward viewer. ROW2 SOUTHEAST down-right. ROW3 EAST right profile. ROW4 NORTHEAST up-right AWAY with back/side visible. ROW5 NORTH directly AWAY, show BACK of head and cape, NO face. Bottom two rows must show back views. Do not repeat front-facing bodies in rear rows. For rolling or flying species use four clear wheel/tail/wing motion phases instead of unnatural human legs.\nFull bodies and props entirely within cells with12% transparent padding; face readable at native48\u00d748. Crisp chunky hand-placed PIXEL ART, dark one-pixel outlines, limited24-color palette and flat three-tone shading, no anti-aliasing, no smooth gradients, no painterly texture or tiny detail noise.\nGenuinely TRANSPARENT alpha backdrop around and between ALL sprites, no white/gray backdrop, checkerboard pattern, shadows, grid, labels, words or numbers. Portrait canvas4:5."
+    },
+    {
+      "hero": "wren",
+      "asset": "walker",
+      "method": "built-in image generation",
+      "prompt": "Use case: stylized-concept. ONE Questing Heroes on-foot directional WALK animation sprite sheet for Wren.\nImage1 is approved IDENTITY portrait. Image2 is LAYOUT and pixel-style reference only; do NOT copy its character.\nIdentity: young tan human male beast tamer, tousled auburn hair gray fur cape green shirt leather boots, small taming stick, no extra person. Preserve portrait species, face, hair, outfit palette and characteristic props. Infer simple matching lower-body clothes and boots or species-appropriate feet. No horses or new pets.\nLayout EXACTLY FOUR columns \u00d7 FIVE rows equal cells, no gutters, twenty frames total. EXACTLY ONE main character in EACH cell, twenty main bodies total, no twins or clones. Any small pet specified stays with the ONE hero.\nEach row is FOUR sequential walking frames with visible alternating legs: LEFT contact, passing, RIGHT contact, passing. Props held consistently and continuously joined through hands. Stable scale, feet on SAME baseline at88% cell height.\nROW1 SOUTH directly toward viewer. ROW2 SOUTHEAST down-right. ROW3 EAST right profile. ROW4 NORTHEAST up-right AWAY with back/side visible. ROW5 NORTH directly AWAY, show BACK of head and cape, NO face. Bottom two rows must show back views. Do not repeat front-facing bodies in rear rows. For rolling or flying species use four clear wheel/tail/wing motion phases instead of unnatural human legs.\nFull bodies and props entirely within cells with12% transparent padding; face readable at native48\u00d748. Crisp chunky hand-placed PIXEL ART, dark one-pixel outlines, limited24-color palette and flat three-tone shading, no anti-aliasing, no smooth gradients, no painterly texture or tiny detail noise.\nGenuinely TRANSPARENT alpha backdrop around and between ALL sprites, no white/gray backdrop, checkerboard pattern, shadows, grid, labels, words or numbers. Portrait canvas4:5."
+    },
+    {
+      "hero": "zenvy",
+      "asset": "walker",
+      "method": "built-in image generation",
+      "prompt": "Use case: stylized-concept. ONE Questing Heroes on-foot directional WALK animation sprite sheet for Zenvy.\nImage1 is approved IDENTITY portrait. Image2 is LAYOUT and pixel-style reference only; do NOT copy its character.\nIdentity: young black-haired human male diamond knight, charcoal gold-trim armor cream fur collar black cape, ONE straight dark sword. Preserve portrait species, face, hair, outfit palette and characteristic props. Infer simple matching lower-body clothes and boots or species-appropriate feet. No horses or new pets.\nLayout EXACTLY FOUR columns \u00d7 FIVE rows equal cells, no gutters, twenty frames total. EXACTLY ONE main character in EACH cell, twenty main bodies total, no twins or clones. Any small pet specified stays with the ONE hero.\nEach row is FOUR sequential walking frames with visible alternating legs: LEFT contact, passing, RIGHT contact, passing. Props held consistently and continuously joined through hands. Stable scale, feet on SAME baseline at88% cell height.\nROW1 SOUTH directly toward viewer. ROW2 SOUTHEAST down-right. ROW3 EAST right profile. ROW4 NORTHEAST up-right AWAY with back/side visible. ROW5 NORTH directly AWAY, show BACK of head and cape, NO face. Bottom two rows must show back views. Do not repeat front-facing bodies in rear rows. For rolling or flying species use four clear wheel/tail/wing motion phases instead of unnatural human legs.\nFull bodies and props entirely within cells with12% transparent padding; face readable at native48\u00d748. Crisp chunky hand-placed PIXEL ART, dark one-pixel outlines, limited24-color palette and flat three-tone shading, no anti-aliasing, no smooth gradients, no painterly texture or tiny detail noise.\nGenuinely TRANSPARENT alpha backdrop around and between ALL sprites, no white/gray backdrop, checkerboard pattern, shadows, grid, labels, words or numbers. Portrait canvas4:5."
+    }
+  ]
+}

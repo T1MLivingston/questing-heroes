@@ -1,0 +1,1119 @@
+{
+  "game": "Questing Heroes",
+  "pack": "Questing Heroes \u00b7 Remaining Walkers 4",
+  "version": 1,
+  "rendering": {
+    "filter": "nearest",
+    "alpha": "binary"
+  },
+  "battle": {},
+  "walkers": {
+    "astronaut_steve": {
+      "name": "Astronaut Steve",
+      "banner": "",
+      "path": "assets/heroes/walkers_upgrade/astronaut_steve.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "sheet_size": [
+        192,
+        384
+      ],
+      "columns": 4,
+      "rows": 8,
+      "frame_count": 32,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      }
+    },
+    "axel": {
+      "name": "Axel",
+      "banner": "",
+      "path": "assets/heroes/walkers_upgrade/axel.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "sheet_size": [
+        192,
+        384
+      ],
+      "columns": 4,
+      "rows": 8,
+      "frame_count": 32,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      }
+    },
+    "babka": {
+      "name": "Babka",
+      "banner": "",
+      "path": "assets/heroes/walkers_upgrade/babka.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "sheet_size": [
+        192,
+        384
+      ],
+      "columns": 4,
+      "rows": 8,
+      "frame_count": 32,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      }
+    },
+    "boone": {
+      "name": "Boone",
+      "banner": "",
+      "path": "assets/heroes/walkers_upgrade/boone.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "sheet_size": [
+        192,
+        384
+      ],
+      "columns": 4,
+      "rows": 8,
+      "frame_count": 32,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      }
+    },
+    "bristle": {
+      "name": "Bristle",
+      "banner": "",
+      "path": "assets/heroes/walkers_upgrade/bristle.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "sheet_size": [
+        192,
+        384
+      ],
+      "columns": 4,
+      "rows": 8,
+      "frame_count": 32,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      }
+    },
+    "h4l1s3": {
+      "name": "H4L1S3",
+      "banner": "",
+      "path": "assets/heroes/walkers_upgrade/h4l1s3.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "sheet_size": [
+        192,
+        384
+      ],
+      "columns": 4,
+      "rows": 8,
+      "frame_count": 32,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      }
+    },
+    "mangrove": {
+      "name": "Mangrove",
+      "banner": "",
+      "path": "assets/heroes/walkers_upgrade/mangrove.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "sheet_size": [
+        192,
+        384
+      ],
+      "columns": 4,
+      "rows": 8,
+      "frame_count": 32,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      }
+    },
+    "nala": {
+      "name": "Nala",
+      "banner": "",
+      "path": "assets/heroes/walkers_upgrade/nala.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "sheet_size": [
+        192,
+        384
+      ],
+      "columns": 4,
+      "rows": 8,
+      "frame_count": 32,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      }
+    },
+    "nanya": {
+      "name": "Nanya",
+      "banner": "",
+      "path": "assets/heroes/walkers_upgrade/nanya.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "sheet_size": [
+        192,
+        384
+      ],
+      "columns": 4,
+      "rows": 8,
+      "frame_count": 32,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      }
+    },
+    "ned_and_nat": {
+      "name": "Ned & Nat",
+      "banner": "",
+      "path": "assets/heroes/walkers_upgrade/ned_and_nat.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "sheet_size": [
+        192,
+        384
+      ],
+      "columns": 4,
+      "rows": 8,
+      "frame_count": 32,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      }
+    },
+    "noel_dragonfire": {
+      "name": "No\u00ebl Dragonfire",
+      "banner": "",
+      "path": "assets/heroes/walkers_upgrade/noel_dragonfire.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "sheet_size": [
+        192,
+        384
+      ],
+      "columns": 4,
+      "rows": 8,
+      "frame_count": 32,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      }
+    },
+    "orla": {
+      "name": "Orla",
+      "banner": "",
+      "path": "assets/heroes/walkers_upgrade/orla.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "sheet_size": [
+        192,
+        384
+      ],
+      "columns": 4,
+      "rows": 8,
+      "frame_count": 32,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      }
+    },
+    "posy": {
+      "name": "Posy",
+      "banner": "",
+      "path": "assets/heroes/walkers_upgrade/posy.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "sheet_size": [
+        192,
+        384
+      ],
+      "columns": 4,
+      "rows": 8,
+      "frame_count": 32,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      }
+    },
+    "posy_spinner": {
+      "name": "Posy Spinner",
+      "banner": "",
+      "path": "assets/heroes/walkers_upgrade/posy_spinner.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "sheet_size": [
+        192,
+        384
+      ],
+      "columns": 4,
+      "rows": 8,
+      "frame_count": 32,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      }
+    },
+    "rusk_hookhorn": {
+      "name": "Rusk Hookhorn",
+      "banner": "",
+      "path": "assets/heroes/walkers_upgrade/rusk_hookhorn.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "sheet_size": [
+        192,
+        384
+      ],
+      "columns": 4,
+      "rows": 8,
+      "frame_count": 32,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      }
+    },
+    "sir_giggachins": {
+      "name": "Sir Giggachins",
+      "banner": "",
+      "path": "assets/heroes/walkers_upgrade/sir_giggachins.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "sheet_size": [
+        192,
+        384
+      ],
+      "columns": 4,
+      "rows": 8,
+      "frame_count": 32,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      }
+    },
+    "spike": {
+      "name": "Spike",
+      "banner": "",
+      "path": "assets/heroes/walkers_upgrade/spike.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "sheet_size": [
+        192,
+        384
+      ],
+      "columns": 4,
+      "rows": 8,
+      "frame_count": 32,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      }
+    },
+    "spindle": {
+      "name": "Spindle",
+      "banner": "",
+      "path": "assets/heroes/walkers_upgrade/spindle.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "sheet_size": [
+        192,
+        384
+      ],
+      "columns": 4,
+      "rows": 8,
+      "frame_count": 32,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      }
+    },
+    "stargirl": {
+      "name": "Stargirl",
+      "banner": "",
+      "path": "assets/heroes/walkers_upgrade/stargirl.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "sheet_size": [
+        192,
+        384
+      ],
+      "columns": 4,
+      "rows": 8,
+      "frame_count": 32,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      }
+    },
+    "tansy": {
+      "name": "Penny",
+      "banner": "",
+      "path": "assets/heroes/walkers_upgrade/tansy.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "sheet_size": [
+        192,
+        384
+      ],
+      "columns": 4,
+      "rows": 8,
+      "frame_count": 32,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      }
+    },
+    "teeka": {
+      "name": "Teeka",
+      "banner": "",
+      "path": "assets/heroes/walkers_upgrade/teeka.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "sheet_size": [
+        192,
+        384
+      ],
+      "columns": 4,
+      "rows": 8,
+      "frame_count": 32,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      }
+    },
+    "teo": {
+      "name": "Teo",
+      "banner": "",
+      "path": "assets/heroes/walkers_upgrade/teo.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "sheet_size": [
+        192,
+        384
+      ],
+      "columns": 4,
+      "rows": 8,
+      "frame_count": 32,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      }
+    },
+    "yatt": {
+      "name": "Yatt",
+      "banner": "",
+      "path": "assets/heroes/walkers_upgrade/yatt.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "sheet_size": [
+        192,
+        384
+      ],
+      "columns": 4,
+      "rows": 8,
+      "frame_count": 32,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      }
+    }
+  },
+  "portraits": {},
+  "prompts": [
+    {
+      "hero": "astronaut_steve",
+      "asset": "walker",
+      "method": "built-in image generation",
+      "prompt": "Use case: stylized-concept. ONE Questing Heroes on-foot directional WALK animation sprite sheet for Astronaut Steve.\nImage1 is approved IDENTITY portrait. Image2 is LAYOUT and pixel-style reference only; do NOT copy its character.\nIdentity: brown-haired human male astronaut in white gray teal gold spacesuit clear round helmet backpack, NO gun or weapon anywhere. Preserve portrait species, face, hair, outfit palette and characteristic props. Infer simple matching lower-body clothes and boots or species-appropriate feet. No horses or new pets.\nLayout EXACTLY FOUR columns \u00d7 FIVE rows equal cells, no gutters, twenty frames total. EXACTLY ONE main character in EACH cell, twenty main bodies total, no twins or clones. Any small pet specified stays with the ONE hero.\nEach row is FOUR sequential walking frames with visible alternating legs: LEFT contact, passing, RIGHT contact, passing. Props held consistently and continuously joined through hands. Stable scale, feet on SAME baseline at88% cell height.\nROW1 SOUTH directly toward viewer. ROW2 SOUTHEAST down-right. ROW3 EAST right profile. ROW4 NORTHEAST up-right AWAY with back/side visible. ROW5 NORTH directly AWAY, show BACK of head and cape, NO face. Bottom two rows must show back views. Do not repeat front-facing bodies in rear rows. For rolling or flying species use four clear wheel/tail/wing motion phases instead of unnatural human legs.\nFull bodies and props entirely within cells with12% transparent padding; face readable at native48\u00d748. Crisp chunky hand-placed PIXEL ART, dark one-pixel outlines, limited24-color palette and flat three-tone shading, no anti-aliasing, no smooth gradients, no painterly texture or tiny detail noise.\nGenuinely TRANSPARENT alpha backdrop around and between ALL sprites, no white/gray backdrop, checkerboard pattern, shadows, grid, labels, words or numbers. Portrait canvas4:5."
+    },
+    {
+      "hero": "axel",
+      "asset": "walker",
+      "method": "built-in image generation",
+      "prompt": "Use case: stylized-concept. ONE Questing Heroes on-foot directional WALK animation sprite sheet for Axel.\nImage1 is approved IDENTITY portrait. Image2 is LAYOUT and pixel-style reference only; do NOT copy its character.\nIdentity: pink AXOLOTL sea mage, branching coral-pink external gills, teal green cape cream shirt, simple shell clasp. Preserve portrait species, face, hair, outfit palette and characteristic props. Infer simple matching lower-body clothes and boots or species-appropriate feet. No horses or new pets.\nLayout EXACTLY FOUR columns \u00d7 FIVE rows equal cells, no gutters, twenty frames total. EXACTLY ONE main character in EACH cell, twenty main bodies total, no twins or clones. Any small pet specified stays with the ONE hero.\nEach row is FOUR sequential walking frames with visible alternating legs: LEFT contact, passing, RIGHT contact, passing. Props held consistently and continuously joined through hands. Stable scale, feet on SAME baseline at88% cell height.\nROW1 SOUTH directly toward viewer. ROW2 SOUTHEAST down-right. ROW3 EAST right profile. ROW4 NORTHEAST up-right AWAY with back/side visible. ROW5 NORTH directly AWAY, show BACK of head and cape, NO face. Bottom two rows must show back views. Do not repeat front-facing bodies in rear rows. For rolling or flying species use four clear wheel/tail/wing motion phases instead of unnatural human legs.\nFull bodies and props entirely within cells with12% transparent padding; face readable at native48\u00d748. Crisp chunky hand-placed PIXEL ART, dark one-pixel outlines, limited24-color palette and flat three-tone shading, no anti-aliasing, no smooth gradients, no painterly texture or tiny detail noise.\nGenuinely TRANSPARENT alpha backdrop around and between ALL sprites, no white/gray backdrop, checkerboard pattern, shadows, grid, labels, words or numbers. Portrait canvas4:5."
+    },
+    {
+      "hero": "babka",
+      "asset": "walker",
+      "method": "built-in image generation",
+      "prompt": "Use case: stylized-concept. ONE Questing Heroes on-foot directional WALK animation sprite sheet for Babka.\nImage1 is approved IDENTITY portrait. Image2 is LAYOUT and pixel-style reference only; do NOT copy its character.\nIdentity: elderly human woman white hair red bow, blue gold-trim work robe brown leather shoulder straps, scolding expression, ONE wood walking staff. Preserve portrait species, face, hair, outfit palette and characteristic props. Infer simple matching lower-body clothes and boots or species-appropriate feet. No horses or new pets.\nLayout EXACTLY FOUR columns \u00d7 FIVE rows equal cells, no gutters, twenty frames total. EXACTLY ONE main character in EACH cell, twenty main bodies total, no twins or clones. Any small pet specified stays with the ONE hero.\nEach row is FOUR sequential walking frames with visible alternating legs: LEFT contact, passing, RIGHT contact, passing. Props held consistently and continuously joined through hands. Stable scale, feet on SAME baseline at88% cell height.\nROW1 SOUTH directly toward viewer. ROW2 SOUTHEAST down-right. ROW3 EAST right profile. ROW4 NORTHEAST up-right AWAY with back/side visible. ROW5 NORTH directly AWAY, show BACK of head and cape, NO face. Bottom two rows must show back views. Do not repeat front-facing bodies in rear rows. For rolling or flying species use four clear wheel/tail/wing motion phases instead of unnatural human legs.\nFull bodies and props entirely within cells with12% transparent padding; face readable at native48\u00d748. Crisp chunky hand-placed PIXEL ART, dark one-pixel outlines, limited24-color palette and flat three-tone shading, no anti-aliasing, no smooth gradients, no painterly texture or tiny detail noise.\nGenuinely TRANSPARENT alpha backdrop around and between ALL sprites, no white/gray backdrop, checkerboard pattern, shadows, grid, labels, words or numbers. Portrait canvas4:5."
+    },
+    {
+      "hero": "boone",
+      "asset": "walker",
+      "method": "built-in image generation",
+      "prompt": "Use case: stylized-concept. ONE Questing Heroes on-foot directional WALK animation sprite sheet for Boone.\nImage1 is approved IDENTITY portrait. Image2 is LAYOUT and pixel-style reference only; do NOT copy its character.\nIdentity: young dark-haired male human archer, brown leather and charcoal cloak, bow secured on back, small quiver. Preserve portrait species, face, hair, outfit palette and characteristic props. Infer simple matching lower-body clothes and boots or species-appropriate feet. No horses or new pets.\nLayout EXACTLY FOUR columns \u00d7 FIVE rows equal cells, no gutters, twenty frames total. EXACTLY ONE main character in EACH cell, twenty main bodies total, no twins or clones. Any small pet specified stays with the ONE hero.\nEach row is FOUR sequential walking frames with visible alternating legs: LEFT contact, passing, RIGHT contact, passing. Props held consistently and continuously joined through hands. Stable scale, feet on SAME baseline at88% cell height.\nROW1 SOUTH directly toward viewer. ROW2 SOUTHEAST down-right. ROW3 EAST right profile. ROW4 NORTHEAST up-right AWAY with back/side visible. ROW5 NORTH directly AWAY, show BACK of head and cape, NO face. Bottom two rows must show back views. Do not repeat front-facing bodies in rear rows. For rolling or flying species use four clear wheel/tail/wing motion phases instead of unnatural human legs.\nFull bodies and props entirely within cells with12% transparent padding; face readable at native48\u00d748. Crisp chunky hand-placed PIXEL ART, dark one-pixel outlines, limited24-color palette and flat three-tone shading, no anti-aliasing, no smooth gradients, no painterly texture or tiny detail noise.\nGenuinely TRANSPARENT alpha backdrop around and between ALL sprites, no white/gray backdrop, checkerboard pattern, shadows, grid, labels, words or numbers. Portrait canvas4:5."
+    },
+    {
+      "hero": "bristle",
+      "asset": "walker",
+      "method": "built-in image generation",
+      "prompt": "Use case: stylized-concept. ONE Questing Heroes on-foot directional WALK animation sprite sheet for Bristle.\nImage1 is approved IDENTITY portrait. Image2 is LAYOUT and pixel-style reference only; do NOT copy its character.\nIdentity: anthropomorphic BLUE BOAR teapot adventurer, blue bristles and tusks, burgundy gold coat, small brass teapot secured to backpack. Preserve portrait species, face, hair, outfit palette and characteristic props. Infer simple matching lower-body clothes and boots or species-appropriate feet. No horses or new pets.\nLayout EXACTLY FOUR columns \u00d7 FIVE rows equal cells, no gutters, twenty frames total. EXACTLY ONE main character in EACH cell, twenty main bodies total, no twins or clones. Any small pet specified stays with the ONE hero.\nEach row is FOUR sequential walking frames with visible alternating legs: LEFT contact, passing, RIGHT contact, passing. Props held consistently and continuously joined through hands. Stable scale, feet on SAME baseline at88% cell height.\nROW1 SOUTH directly toward viewer. ROW2 SOUTHEAST down-right. ROW3 EAST right profile. ROW4 NORTHEAST up-right AWAY with back/side visible. ROW5 NORTH directly AWAY, show BACK of head and cape, NO face. Bottom two rows must show back views. Do not repeat front-facing bodies in rear rows. For rolling or flying species use four clear wheel/tail/wing motion phases instead of unnatural human legs.\nFull bodies and props entirely within cells with12% transparent padding; face readable at native48\u00d748. Crisp chunky hand-placed PIXEL ART, dark one-pixel outlines, limited24-color palette and flat three-tone shading, no anti-aliasing, no smooth gradients, no painterly texture or tiny detail noise.\nGenuinely TRANSPARENT alpha backdrop around and between ALL sprites, no white/gray backdrop, checkerboard pattern, shadows, grid, labels, words or numbers. Portrait canvas4:5."
+    },
+    {
+      "hero": "h4l1s3",
+      "asset": "walker",
+      "method": "built-in image generation",
+      "prompt": "Use case: stylized-concept. ONE Questing Heroes on-foot directional WALK animation sprite sheet for H4L1S3.\nImage1 is approved IDENTITY portrait. Image2 is LAYOUT and pixel-style reference only; do NOT copy its character.\nIdentity: purple-haired violet-eyed human female singer, purple gown small beige cheek bandage, ONE PURPLE microphone, no decorative frame around body. Preserve portrait species, face, hair, outfit palette and characteristic props. Infer simple matching lower-body clothes and boots or species-appropriate feet. No horses or new pets.\nLayout EXACTLY FOUR columns \u00d7 FIVE rows equal cells, no gutters, twenty frames total. EXACTLY ONE main character in EACH cell, twenty main bodies total, no twins or clones. Any small pet specified stays with the ONE hero.\nEach row is FOUR sequential walking frames with visible alternating legs: LEFT contact, passing, RIGHT contact, passing. Props held consistently and continuously joined through hands. Stable scale, feet on SAME baseline at88% cell height.\nROW1 SOUTH directly toward viewer. ROW2 SOUTHEAST down-right. ROW3 EAST right profile. ROW4 NORTHEAST up-right AWAY with back/side visible. ROW5 NORTH directly AWAY, show BACK of head and cape, NO face. Bottom two rows must show back views. Do not repeat front-facing bodies in rear rows. For rolling or flying species use four clear wheel/tail/wing motion phases instead of unnatural human legs.\nFull bodies and props entirely within cells with12% transparent padding; face readable at native48\u00d748. Crisp chunky hand-placed PIXEL ART, dark one-pixel outlines, limited24-color palette and flat three-tone shading, no anti-aliasing, no smooth gradients, no painterly texture or tiny detail noise.\nGenuinely TRANSPARENT alpha backdrop around and between ALL sprites, no white/gray backdrop, checkerboard pattern, shadows, grid, labels, words or numbers. Portrait canvas4:5."
+    },
+    {
+      "hero": "mangrove",
+      "asset": "walker",
+      "method": "built-in image generation",
+      "prompt": "Use case: stylized-concept. ONE Questing Heroes on-foot directional WALK animation sprite sheet for Mangrove.\nImage1 is approved IDENTITY portrait. Image2 is LAYOUT and pixel-style reference only; do NOT copy its character.\nIdentity: orange-haired human male mage knight, gold cape BLUE gold-trim tabard silver armor, ONE staff topped by symmetrical AVOCADO half with brown seed. Preserve portrait species, face, hair, outfit palette and characteristic props. Infer simple matching lower-body clothes and boots or species-appropriate feet. No horses or new pets.\nLayout EXACTLY FOUR columns \u00d7 FIVE rows equal cells, no gutters, twenty frames total. EXACTLY ONE main character in EACH cell, twenty main bodies total, no twins or clones. Any small pet specified stays with the ONE hero.\nEach row is FOUR sequential walking frames with visible alternating legs: LEFT contact, passing, RIGHT contact, passing. Props held consistently and continuously joined through hands. Stable scale, feet on SAME baseline at88% cell height.\nROW1 SOUTH directly toward viewer. ROW2 SOUTHEAST down-right. ROW3 EAST right profile. ROW4 NORTHEAST up-right AWAY with back/side visible. ROW5 NORTH directly AWAY, show BACK of head and cape, NO face. Bottom two rows must show back views. Do not repeat front-facing bodies in rear rows. For rolling or flying species use four clear wheel/tail/wing motion phases instead of unnatural human legs.\nFull bodies and props entirely within cells with12% transparent padding; face readable at native48\u00d748. Crisp chunky hand-placed PIXEL ART, dark one-pixel outlines, limited24-color palette and flat three-tone shading, no anti-aliasing, no smooth gradients, no painterly texture or tiny detail noise.\nGenuinely TRANSPARENT alpha backdrop around and between ALL sprites, no white/gray backdrop, checkerboard pattern, shadows, grid, labels, words or numbers. Portrait canvas4:5."
+    },
+    {
+      "hero": "nala",
+      "asset": "walker",
+      "method": "built-in image generation",
+      "prompt": "Use case: stylized-concept. ONE Questing Heroes on-foot directional WALK animation sprite sheet for Nala.\nImage1 is approved IDENTITY portrait. Image2 is LAYOUT and pixel-style reference only; do NOT copy its character.\nIdentity: anthropomorphic small white cream CAT girl, dark brown hair visible beneath PINK cat-eared hood, green scarf white robe, one small charm. Preserve portrait species, face, hair, outfit palette and characteristic props. Infer simple matching lower-body clothes and boots or species-appropriate feet. No horses or new pets.\nLayout EXACTLY FOUR columns \u00d7 FIVE rows equal cells, no gutters, twenty frames total. EXACTLY ONE main character in EACH cell, twenty main bodies total, no twins or clones. Any small pet specified stays with the ONE hero.\nEach row is FOUR sequential walking frames with visible alternating legs: LEFT contact, passing, RIGHT contact, passing. Props held consistently and continuously joined through hands. Stable scale, feet on SAME baseline at88% cell height.\nROW1 SOUTH directly toward viewer. ROW2 SOUTHEAST down-right. ROW3 EAST right profile. ROW4 NORTHEAST up-right AWAY with back/side visible. ROW5 NORTH directly AWAY, show BACK of head and cape, NO face. Bottom two rows must show back views. Do not repeat front-facing bodies in rear rows. For rolling or flying species use four clear wheel/tail/wing motion phases instead of unnatural human legs.\nFull bodies and props entirely within cells with12% transparent padding; face readable at native48\u00d748. Crisp chunky hand-placed PIXEL ART, dark one-pixel outlines, limited24-color palette and flat three-tone shading, no anti-aliasing, no smooth gradients, no painterly texture or tiny detail noise.\nGenuinely TRANSPARENT alpha backdrop around and between ALL sprites, no white/gray backdrop, checkerboard pattern, shadows, grid, labels, words or numbers. Portrait canvas4:5."
+    },
+    {
+      "hero": "nanya",
+      "asset": "walker",
+      "method": "built-in image generation",
+      "prompt": "Use case: stylized-concept. ONE Questing Heroes on-foot directional WALK animation sprite sheet for Nanya.\nImage1 is approved IDENTITY portrait. Image2 is LAYOUT and pixel-style reference only; do NOT copy its character.\nIdentity: young female human mage long dark burgundy hair red scarf pale gray clothes, carrot-shaped brooch and ONE tiny gray owl on shoulder. Preserve portrait species, face, hair, outfit palette and characteristic props. Infer simple matching lower-body clothes and boots or species-appropriate feet. No horses or new pets.\nLayout EXACTLY FOUR columns \u00d7 FIVE rows equal cells, no gutters, twenty frames total. EXACTLY ONE main character in EACH cell, twenty main bodies total, no twins or clones. Any small pet specified stays with the ONE hero.\nEach row is FOUR sequential walking frames with visible alternating legs: LEFT contact, passing, RIGHT contact, passing. Props held consistently and continuously joined through hands. Stable scale, feet on SAME baseline at88% cell height.\nROW1 SOUTH directly toward viewer. ROW2 SOUTHEAST down-right. ROW3 EAST right profile. ROW4 NORTHEAST up-right AWAY with back/side visible. ROW5 NORTH directly AWAY, show BACK of head and cape, NO face. Bottom two rows must show back views. Do not repeat front-facing bodies in rear rows. For rolling or flying species use four clear wheel/tail/wing motion phases instead of unnatural human legs.\nFull bodies and props entirely within cells with12% transparent padding; face readable at native48\u00d748. Crisp chunky hand-placed PIXEL ART, dark one-pixel outlines, limited24-color palette and flat three-tone shading, no anti-aliasing, no smooth gradients, no painterly texture or tiny detail noise.\nGenuinely TRANSPARENT alpha backdrop around and between ALL sprites, no white/gray backdrop, checkerboard pattern, shadows, grid, labels, words or numbers. Portrait canvas4:5."
+    },
+    {
+      "hero": "ned_and_nat",
+      "asset": "walker",
+      "method": "built-in image generation",
+      "prompt": "Use case: stylized-concept. ONE Questing Heroes on-foot directional WALK animation sprite sheet for Ned & Nat.\nImage1 is approved IDENTITY portrait. Image2 is LAYOUT and pixel-style reference only; do NOT copy its character.\nIdentity: INTENTIONAL PAIR of elderly white-bearded male DWARF stonecutters, one glasses navy work clothes, other red work clothes, small hammers. Preserve portrait species, face, hair, outfit palette and characteristic props. Infer simple matching lower-body clothes and boots or species-appropriate feet. No horses or new pets.\nLayout EXACTLY FOUR columns \u00d7 FIVE rows equal cells, no gutters, twenty frames total. EXACTLY TWO named partners together in EACH cell, twenty shared frames, forty bodies total. The pair is the hero. Never four partners in one cell.\nEach row is FOUR sequential walking frames with visible alternating legs: LEFT contact, passing, RIGHT contact, passing. Props held consistently and continuously joined through hands. Stable scale, feet on SAME baseline at88% cell height.\nROW1 SOUTH directly toward viewer. ROW2 SOUTHEAST down-right. ROW3 EAST right profile. ROW4 NORTHEAST up-right AWAY with back/side visible. ROW5 NORTH directly AWAY, show BACK of head and cape, NO face. Bottom two rows must show back views. Do not repeat front-facing bodies in rear rows. For rolling or flying species use four clear wheel/tail/wing motion phases instead of unnatural human legs.\nFull bodies and props entirely within cells with12% transparent padding; face readable at native48\u00d748. Crisp chunky hand-placed PIXEL ART, dark one-pixel outlines, limited24-color palette and flat three-tone shading, no anti-aliasing, no smooth gradients, no painterly texture or tiny detail noise.\nGenuinely TRANSPARENT alpha backdrop around and between ALL sprites, no white/gray backdrop, checkerboard pattern, shadows, grid, labels, words or numbers. Portrait canvas4:5."
+    },
+    {
+      "hero": "noel_dragonfire",
+      "asset": "walker",
+      "method": "built-in image generation",
+      "prompt": "Use case: stylized-concept. ONE Questing Heroes on-foot directional WALK animation sprite sheet for No\u00ebl Dragonfire.\nImage1 is approved IDENTITY portrait. Image2 is LAYOUT and pixel-style reference only; do NOT copy its character.\nIdentity: adult red curly-haired female witch, pink red gold-trim robe and cape, ONE purple white crystal staff. Preserve portrait species, face, hair, outfit palette and characteristic props. Infer simple matching lower-body clothes and boots or species-appropriate feet. No horses or new pets.\nLayout EXACTLY FOUR columns \u00d7 FIVE rows equal cells, no gutters, twenty frames total. EXACTLY ONE main character in EACH cell, twenty main bodies total, no twins or clones. Any small pet specified stays with the ONE hero.\nEach row is FOUR sequential walking frames with visible alternating legs: LEFT contact, passing, RIGHT contact, passing. Props held consistently and continuously joined through hands. Stable scale, feet on SAME baseline at88% cell height.\nROW1 SOUTH directly toward viewer. ROW2 SOUTHEAST down-right. ROW3 EAST right profile. ROW4 NORTHEAST up-right AWAY with back/side visible. ROW5 NORTH directly AWAY, show BACK of head and cape, NO face. Bottom two rows must show back views. Do not repeat front-facing bodies in rear rows. For rolling or flying species use four clear wheel/tail/wing motion phases instead of unnatural human legs.\nFull bodies and props entirely within cells with12% transparent padding; face readable at native48\u00d748. Crisp chunky hand-placed PIXEL ART, dark one-pixel outlines, limited24-color palette and flat three-tone shading, no anti-aliasing, no smooth gradients, no painterly texture or tiny detail noise.\nGenuinely TRANSPARENT alpha backdrop around and between ALL sprites, no white/gray backdrop, checkerboard pattern, shadows, grid, labels, words or numbers. Portrait canvas4:5."
+    },
+    {
+      "hero": "orla",
+      "asset": "walker",
+      "method": "built-in image generation",
+      "prompt": "Use case: stylized-concept. ONE Questing Heroes on-foot directional WALK animation sprite sheet for Orla.\nImage1 is approved IDENTITY portrait. Image2 is LAYOUT and pixel-style reference only; do NOT copy its character.\nIdentity: female DWARF rune priest, red hair in two long braids, blue beads bronze armor, one small rune stone. Preserve portrait species, face, hair, outfit palette and characteristic props. Infer simple matching lower-body clothes and boots or species-appropriate feet. No horses or new pets.\nLayout EXACTLY FOUR columns \u00d7 FIVE rows equal cells, no gutters, twenty frames total. EXACTLY ONE main character in EACH cell, twenty main bodies total, no twins or clones. Any small pet specified stays with the ONE hero.\nEach row is FOUR sequential walking frames with visible alternating legs: LEFT contact, passing, RIGHT contact, passing. Props held consistently and continuously joined through hands. Stable scale, feet on SAME baseline at88% cell height.\nROW1 SOUTH directly toward viewer. ROW2 SOUTHEAST down-right. ROW3 EAST right profile. ROW4 NORTHEAST up-right AWAY with back/side visible. ROW5 NORTH directly AWAY, show BACK of head and cape, NO face. Bottom two rows must show back views. Do not repeat front-facing bodies in rear rows. For rolling or flying species use four clear wheel/tail/wing motion phases instead of unnatural human legs.\nFull bodies and props entirely within cells with12% transparent padding; face readable at native48\u00d748. Crisp chunky hand-placed PIXEL ART, dark one-pixel outlines, limited24-color palette and flat three-tone shading, no anti-aliasing, no smooth gradients, no painterly texture or tiny detail noise.\nGenuinely TRANSPARENT alpha backdrop around and between ALL sprites, no white/gray backdrop, checkerboard pattern, shadows, grid, labels, words or numbers. Portrait canvas4:5."
+    },
+    {
+      "hero": "posy",
+      "asset": "walker",
+      "method": "built-in image generation",
+      "prompt": "Use case: stylized-concept. ONE Questing Heroes on-foot directional WALK animation sprite sheet for Posy.\nImage1 is approved IDENTITY portrait. Image2 is LAYOUT and pixel-style reference only; do NOT copy its character.\nIdentity: brown wavy-haired female potion maker, flowers in hair pink gown green details, ONE round green potion bottle held securely. Preserve portrait species, face, hair, outfit palette and characteristic props. Infer simple matching lower-body clothes and boots or species-appropriate feet. No horses or new pets.\nLayout EXACTLY FOUR columns \u00d7 FIVE rows equal cells, no gutters, twenty frames total. EXACTLY ONE main character in EACH cell, twenty main bodies total, no twins or clones. Any small pet specified stays with the ONE hero.\nEach row is FOUR sequential walking frames with visible alternating legs: LEFT contact, passing, RIGHT contact, passing. Props held consistently and continuously joined through hands. Stable scale, feet on SAME baseline at88% cell height.\nROW1 SOUTH directly toward viewer. ROW2 SOUTHEAST down-right. ROW3 EAST right profile. ROW4 NORTHEAST up-right AWAY with back/side visible. ROW5 NORTH directly AWAY, show BACK of head and cape, NO face. Bottom two rows must show back views. Do not repeat front-facing bodies in rear rows. For rolling or flying species use four clear wheel/tail/wing motion phases instead of unnatural human legs.\nFull bodies and props entirely within cells with12% transparent padding; face readable at native48\u00d748. Crisp chunky hand-placed PIXEL ART, dark one-pixel outlines, limited24-color palette and flat three-tone shading, no anti-aliasing, no smooth gradients, no painterly texture or tiny detail noise.\nGenuinely TRANSPARENT alpha backdrop around and between ALL sprites, no white/gray backdrop, checkerboard pattern, shadows, grid, labels, words or numbers. Portrait canvas4:5."
+    },
+    {
+      "hero": "posy_spinner",
+      "asset": "walker",
+      "method": "built-in image generation",
+      "prompt": "Use case: stylized-concept. ONE Questing Heroes on-foot directional WALK animation sprite sheet for Posy Spinner.\nImage1 is approved IDENTITY portrait. Image2 is LAYOUT and pixel-style reference only; do NOT copy its character.\nIdentity: warm brown-skinned human female star lantern mage, brown hair high bun navy moon cloak, ONE small white owl shoulder companion, brass lantern HELD by handle. Preserve portrait species, face, hair, outfit palette and characteristic props. Infer simple matching lower-body clothes and boots or species-appropriate feet. No horses or new pets.\nLayout EXACTLY FOUR columns \u00d7 FIVE rows equal cells, no gutters, twenty frames total. EXACTLY ONE main character in EACH cell, twenty main bodies total, no twins or clones. Any small pet specified stays with the ONE hero.\nEach row is FOUR sequential walking frames with visible alternating legs: LEFT contact, passing, RIGHT contact, passing. Props held consistently and continuously joined through hands. Stable scale, feet on SAME baseline at88% cell height.\nROW1 SOUTH directly toward viewer. ROW2 SOUTHEAST down-right. ROW3 EAST right profile. ROW4 NORTHEAST up-right AWAY with back/side visible. ROW5 NORTH directly AWAY, show BACK of head and cape, NO face. Bottom two rows must show back views. Do not repeat front-facing bodies in rear rows. For rolling or flying species use four clear wheel/tail/wing motion phases instead of unnatural human legs.\nFull bodies and props entirely within cells with12% transparent padding; face readable at native48\u00d748. Crisp chunky hand-placed PIXEL ART, dark one-pixel outlines, limited24-color palette and flat three-tone shading, no anti-aliasing, no smooth gradients, no painterly texture or tiny detail noise.\nGenuinely TRANSPARENT alpha backdrop around and between ALL sprites, no white/gray backdrop, checkerboard pattern, shadows, grid, labels, words or numbers. Portrait canvas4:5."
+    },
+    {
+      "hero": "rusk_hookhorn",
+      "asset": "walker",
+      "method": "built-in image generation",
+      "prompt": "Use case: stylized-concept. ONE Questing Heroes on-foot directional WALK animation sprite sheet for Rusk Hookhorn.\nImage1 is approved IDENTITY portrait. Image2 is LAYOUT and pixel-style reference only; do NOT copy its character.\nIdentity: red orange CARNOTAUR dinosaur pirate, short horns cream throat, red bandanna navy gold-trim coat, short cutlass. Preserve portrait species, face, hair, outfit palette and characteristic props. Infer simple matching lower-body clothes and boots or species-appropriate feet. No horses or new pets.\nLayout EXACTLY FOUR columns \u00d7 FIVE rows equal cells, no gutters, twenty frames total. EXACTLY ONE main character in EACH cell, twenty main bodies total, no twins or clones. Any small pet specified stays with the ONE hero.\nEach row is FOUR sequential walking frames with visible alternating legs: LEFT contact, passing, RIGHT contact, passing. Props held consistently and continuously joined through hands. Stable scale, feet on SAME baseline at88% cell height.\nROW1 SOUTH directly toward viewer. ROW2 SOUTHEAST down-right. ROW3 EAST right profile. ROW4 NORTHEAST up-right AWAY with back/side visible. ROW5 NORTH directly AWAY, show BACK of head and cape, NO face. Bottom two rows must show back views. Do not repeat front-facing bodies in rear rows. For rolling or flying species use four clear wheel/tail/wing motion phases instead of unnatural human legs.\nFull bodies and props entirely within cells with12% transparent padding; face readable at native48\u00d748. Crisp chunky hand-placed PIXEL ART, dark one-pixel outlines, limited24-color palette and flat three-tone shading, no anti-aliasing, no smooth gradients, no painterly texture or tiny detail noise.\nGenuinely TRANSPARENT alpha backdrop around and between ALL sprites, no white/gray backdrop, checkerboard pattern, shadows, grid, labels, words or numbers. Portrait canvas4:5."
+    },
+    {
+      "hero": "sir_giggachins",
+      "asset": "walker",
+      "method": "built-in image generation",
+      "prompt": "Use case: stylized-concept. ONE Questing Heroes on-foot directional WALK animation sprite sheet for Sir Giggachins.\nImage1 is approved IDENTITY portrait. Image2 is LAYOUT and pixel-style reference only; do NOT copy its character.\nIdentity: brown-haired human male knight, strong chin as reference without exaggeration, burgundy silver armor, one simple shield and sheathed sword. Preserve portrait species, face, hair, outfit palette and characteristic props. Infer simple matching lower-body clothes and boots or species-appropriate feet. No horses or new pets.\nLayout EXACTLY FOUR columns \u00d7 FIVE rows equal cells, no gutters, twenty frames total. EXACTLY ONE main character in EACH cell, twenty main bodies total, no twins or clones. Any small pet specified stays with the ONE hero.\nEach row is FOUR sequential walking frames with visible alternating legs: LEFT contact, passing, RIGHT contact, passing. Props held consistently and continuously joined through hands. Stable scale, feet on SAME baseline at88% cell height.\nROW1 SOUTH directly toward viewer. ROW2 SOUTHEAST down-right. ROW3 EAST right profile. ROW4 NORTHEAST up-right AWAY with back/side visible. ROW5 NORTH directly AWAY, show BACK of head and cape, NO face. Bottom two rows must show back views. Do not repeat front-facing bodies in rear rows. For rolling or flying species use four clear wheel/tail/wing motion phases instead of unnatural human legs.\nFull bodies and props entirely within cells with12% transparent padding; face readable at native48\u00d748. Crisp chunky hand-placed PIXEL ART, dark one-pixel outlines, limited24-color palette and flat three-tone shading, no anti-aliasing, no smooth gradients, no painterly texture or tiny detail noise.\nGenuinely TRANSPARENT alpha backdrop around and between ALL sprites, no white/gray backdrop, checkerboard pattern, shadows, grid, labels, words or numbers. Portrait canvas4:5."
+    },
+    {
+      "hero": "spike",
+      "asset": "walker",
+      "method": "built-in image generation",
+      "prompt": "Use case: stylized-concept. ONE Questing Heroes on-foot directional WALK animation sprite sheet for Spike.\nImage1 is approved IDENTITY portrait. Image2 is LAYOUT and pixel-style reference only; do NOT copy its character.\nIdentity: ONE brown PORCUPINE armorer with cream quills, purple cape leather apron, one small smith hammer. Preserve portrait species, face, hair, outfit palette and characteristic props. Infer simple matching lower-body clothes and boots or species-appropriate feet. No horses or new pets.\nLayout EXACTLY FOUR columns \u00d7 FIVE rows equal cells, no gutters, twenty frames total. EXACTLY ONE main character in EACH cell, twenty main bodies total, no twins or clones. Any small pet specified stays with the ONE hero.\nEach row is FOUR sequential walking frames with visible alternating legs: LEFT contact, passing, RIGHT contact, passing. Props held consistently and continuously joined through hands. Stable scale, feet on SAME baseline at88% cell height.\nROW1 SOUTH directly toward viewer. ROW2 SOUTHEAST down-right. ROW3 EAST right profile. ROW4 NORTHEAST up-right AWAY with back/side visible. ROW5 NORTH directly AWAY, show BACK of head and cape, NO face. Bottom two rows must show back views. Do not repeat front-facing bodies in rear rows. For rolling or flying species use four clear wheel/tail/wing motion phases instead of unnatural human legs.\nFull bodies and props entirely within cells with12% transparent padding; face readable at native48\u00d748. Crisp chunky hand-placed PIXEL ART, dark one-pixel outlines, limited24-color palette and flat three-tone shading, no anti-aliasing, no smooth gradients, no painterly texture or tiny detail noise.\nGenuinely TRANSPARENT alpha backdrop around and between ALL sprites, no white/gray backdrop, checkerboard pattern, shadows, grid, labels, words or numbers. Portrait canvas4:5."
+    },
+    {
+      "hero": "spindle",
+      "asset": "walker",
+      "method": "built-in image generation",
+      "prompt": "Use case: stylized-concept. ONE Questing Heroes on-foot directional WALK animation sprite sheet for Spindle.\nImage1 is approved IDENTITY portrait. Image2 is LAYOUT and pixel-style reference only; do NOT copy its character.\nIdentity: anthropomorphic golden orange SEAHORSE courier, tubular snout turquoise eye green fin crest curled tail, blue coral tunic and short spear. Preserve portrait species, face, hair, outfit palette and characteristic props. Infer simple matching lower-body clothes and boots or species-appropriate feet. No horses or new pets.\nLayout EXACTLY FOUR columns \u00d7 FIVE rows equal cells, no gutters, twenty frames total. EXACTLY ONE main character in EACH cell, twenty main bodies total, no twins or clones. Any small pet specified stays with the ONE hero.\nEach row is FOUR sequential walking frames with visible alternating legs: LEFT contact, passing, RIGHT contact, passing. Props held consistently and continuously joined through hands. Stable scale, feet on SAME baseline at88% cell height.\nROW1 SOUTH directly toward viewer. ROW2 SOUTHEAST down-right. ROW3 EAST right profile. ROW4 NORTHEAST up-right AWAY with back/side visible. ROW5 NORTH directly AWAY, show BACK of head and cape, NO face. Bottom two rows must show back views. Do not repeat front-facing bodies in rear rows. For rolling or flying species use four clear wheel/tail/wing motion phases instead of unnatural human legs.\nFull bodies and props entirely within cells with12% transparent padding; face readable at native48\u00d748. Crisp chunky hand-placed PIXEL ART, dark one-pixel outlines, limited24-color palette and flat three-tone shading, no anti-aliasing, no smooth gradients, no painterly texture or tiny detail noise.\nGenuinely TRANSPARENT alpha backdrop around and between ALL sprites, no white/gray backdrop, checkerboard pattern, shadows, grid, labels, words or numbers. Portrait canvas4:5."
+    },
+    {
+      "hero": "stargirl",
+      "asset": "walker",
+      "method": "built-in image generation",
+      "prompt": "Use case: stylized-concept. ONE Questing Heroes on-foot directional WALK animation sprite sheet for Stargirl.\nImage1 is approved IDENTITY portrait. Image2 is LAYOUT and pixel-style reference only; do NOT copy its character.\nIdentity: blue-haired tan female human star mage, PURPLE moon/star cloak pale silver gloves, TWO small NINJA STARS, NO sickle or scythe. Preserve portrait species, face, hair, outfit palette and characteristic props. Infer simple matching lower-body clothes and boots or species-appropriate feet. No horses or new pets.\nLayout EXACTLY FOUR columns \u00d7 FIVE rows equal cells, no gutters, twenty frames total. EXACTLY ONE main character in EACH cell, twenty main bodies total, no twins or clones. Any small pet specified stays with the ONE hero.\nEach row is FOUR sequential walking frames with visible alternating legs: LEFT contact, passing, RIGHT contact, passing. Props held consistently and continuously joined through hands. Stable scale, feet on SAME baseline at88% cell height.\nROW1 SOUTH directly toward viewer. ROW2 SOUTHEAST down-right. ROW3 EAST right profile. ROW4 NORTHEAST up-right AWAY with back/side visible. ROW5 NORTH directly AWAY, show BACK of head and cape, NO face. Bottom two rows must show back views. Do not repeat front-facing bodies in rear rows. For rolling or flying species use four clear wheel/tail/wing motion phases instead of unnatural human legs.\nFull bodies and props entirely within cells with12% transparent padding; face readable at native48\u00d748. Crisp chunky hand-placed PIXEL ART, dark one-pixel outlines, limited24-color palette and flat three-tone shading, no anti-aliasing, no smooth gradients, no painterly texture or tiny detail noise.\nGenuinely TRANSPARENT alpha backdrop around and between ALL sprites, no white/gray backdrop, checkerboard pattern, shadows, grid, labels, words or numbers. Portrait canvas4:5."
+    },
+    {
+      "hero": "tansy",
+      "asset": "walker",
+      "method": "built-in image generation",
+      "prompt": "Use case: stylized-concept. ONE Questing Heroes on-foot directional WALK animation sprite sheet for Penny.\nImage1 is approved IDENTITY portrait. Image2 is LAYOUT and pixel-style reference only; do NOT copy its character.\nIdentity: short elderly female DWARF clockmaker, white hair pink skin, bronze goggles on forehead, purple scarf, brown gold work coat, small brass wrench. Preserve portrait species, face, hair, outfit palette and characteristic props. Infer simple matching lower-body clothes and boots or species-appropriate feet. No horses or new pets.\nLayout EXACTLY FOUR columns \u00d7 FIVE rows equal cells, no gutters, twenty frames total. EXACTLY ONE main character in EACH cell, twenty main bodies total, no twins or clones. Any small pet specified stays with the ONE hero.\nEach row is FOUR sequential walking frames with visible alternating legs: LEFT contact, passing, RIGHT contact, passing. Props held consistently and continuously joined through hands. Stable scale, feet on SAME baseline at88% cell height.\nROW1 SOUTH directly toward viewer. ROW2 SOUTHEAST down-right. ROW3 EAST right profile. ROW4 NORTHEAST up-right AWAY with back/side visible. ROW5 NORTH directly AWAY, show BACK of head and cape, NO face. Bottom two rows must show back views. Do not repeat front-facing bodies in rear rows. For rolling or flying species use four clear wheel/tail/wing motion phases instead of unnatural human legs.\nFull bodies and props entirely within cells with12% transparent padding; face readable at native48\u00d748. Crisp chunky hand-placed PIXEL ART, dark one-pixel outlines, limited24-color palette and flat three-tone shading, no anti-aliasing, no smooth gradients, no painterly texture or tiny detail noise.\nGenuinely TRANSPARENT alpha backdrop around and between ALL sprites, no white/gray backdrop, checkerboard pattern, shadows, grid, labels, words or numbers. Portrait canvas4:5."
+    },
+    {
+      "hero": "teeka",
+      "asset": "walker",
+      "method": "built-in image generation",
+      "prompt": "Use case: stylized-concept. ONE Questing Heroes on-foot directional WALK animation sprite sheet for Teeka.\nImage1 is approved IDENTITY portrait. Image2 is LAYOUT and pixel-style reference only; do NOT copy its character.\nIdentity: red curly-haired half-mermaid woman, blue GREEN eyes fin ears royal BLUE star cloak, ONE bluebird shoulder companion, small gold crescent wand. Preserve portrait species, face, hair, outfit palette and characteristic props. Infer simple matching lower-body clothes and boots or species-appropriate feet. No horses or new pets.\nLayout EXACTLY FOUR columns \u00d7 FIVE rows equal cells, no gutters, twenty frames total. EXACTLY ONE main character in EACH cell, twenty main bodies total, no twins or clones. Any small pet specified stays with the ONE hero.\nEach row is FOUR sequential walking frames with visible alternating legs: LEFT contact, passing, RIGHT contact, passing. Props held consistently and continuously joined through hands. Stable scale, feet on SAME baseline at88% cell height.\nROW1 SOUTH directly toward viewer. ROW2 SOUTHEAST down-right. ROW3 EAST right profile. ROW4 NORTHEAST up-right AWAY with back/side visible. ROW5 NORTH directly AWAY, show BACK of head and cape, NO face. Bottom two rows must show back views. Do not repeat front-facing bodies in rear rows. For rolling or flying species use four clear wheel/tail/wing motion phases instead of unnatural human legs.\nFull bodies and props entirely within cells with12% transparent padding; face readable at native48\u00d748. Crisp chunky hand-placed PIXEL ART, dark one-pixel outlines, limited24-color palette and flat three-tone shading, no anti-aliasing, no smooth gradients, no painterly texture or tiny detail noise.\nGenuinely TRANSPARENT alpha backdrop around and between ALL sprites, no white/gray backdrop, checkerboard pattern, shadows, grid, labels, words or numbers. Portrait canvas4:5."
+    },
+    {
+      "hero": "teo",
+      "asset": "walker",
+      "method": "built-in image generation",
+      "prompt": "Use case: stylized-concept. ONE Questing Heroes on-foot directional WALK animation sprite sheet for Teo.\nImage1 is approved IDENTITY portrait. Image2 is LAYOUT and pixel-style reference only; do NOT copy its character.\nIdentity: GOLDEN MECHANICAL pharaoh with blue/gold striped Egyptian nemes headcloth turquoise glowing eyes gold armored body, Egyptian staff, NO Viking horns. Preserve portrait species, face, hair, outfit palette and characteristic props. Infer simple matching lower-body clothes and boots or species-appropriate feet. No horses or new pets.\nLayout EXACTLY FOUR columns \u00d7 FIVE rows equal cells, no gutters, twenty frames total. EXACTLY ONE main character in EACH cell, twenty main bodies total, no twins or clones. Any small pet specified stays with the ONE hero.\nEach row is FOUR sequential walking frames with visible alternating legs: LEFT contact, passing, RIGHT contact, passing. Props held consistently and continuously joined through hands. Stable scale, feet on SAME baseline at88% cell height.\nROW1 SOUTH directly toward viewer. ROW2 SOUTHEAST down-right. ROW3 EAST right profile. ROW4 NORTHEAST up-right AWAY with back/side visible. ROW5 NORTH directly AWAY, show BACK of head and cape, NO face. Bottom two rows must show back views. Do not repeat front-facing bodies in rear rows. For rolling or flying species use four clear wheel/tail/wing motion phases instead of unnatural human legs.\nFull bodies and props entirely within cells with12% transparent padding; face readable at native48\u00d748. Crisp chunky hand-placed PIXEL ART, dark one-pixel outlines, limited24-color palette and flat three-tone shading, no anti-aliasing, no smooth gradients, no painterly texture or tiny detail noise.\nGenuinely TRANSPARENT alpha backdrop around and between ALL sprites, no white/gray backdrop, checkerboard pattern, shadows, grid, labels, words or numbers. Portrait canvas4:5."
+    },
+    {
+      "hero": "yatt",
+      "asset": "walker",
+      "method": "built-in image generation",
+      "prompt": "Use case: stylized-concept. ONE Questing Heroes on-foot directional WALK animation sprite sheet for Yatt.\nImage1 is approved IDENTITY portrait. Image2 is LAYOUT and pixel-style reference only; do NOT copy its character.\nIdentity: red-haired bearded human male prince, small gold star crown, blue gold-trim robe cloak, one BLUE crystal staff. Preserve portrait species, face, hair, outfit palette and characteristic props. Infer simple matching lower-body clothes and boots or species-appropriate feet. No horses or new pets.\nLayout EXACTLY FOUR columns \u00d7 FIVE rows equal cells, no gutters, twenty frames total. EXACTLY ONE main character in EACH cell, twenty main bodies total, no twins or clones. Any small pet specified stays with the ONE hero.\nEach row is FOUR sequential walking frames with visible alternating legs: LEFT contact, passing, RIGHT contact, passing. Props held consistently and continuously joined through hands. Stable scale, feet on SAME baseline at88% cell height.\nROW1 SOUTH directly toward viewer. ROW2 SOUTHEAST down-right. ROW3 EAST right profile. ROW4 NORTHEAST up-right AWAY with back/side visible. ROW5 NORTH directly AWAY, show BACK of head and cape, NO face. Bottom two rows must show back views. Do not repeat front-facing bodies in rear rows. For rolling or flying species use four clear wheel/tail/wing motion phases instead of unnatural human legs.\nFull bodies and props entirely within cells with12% transparent padding; face readable at native48\u00d748. Crisp chunky hand-placed PIXEL ART, dark one-pixel outlines, limited24-color palette and flat three-tone shading, no anti-aliasing, no smooth gradients, no painterly texture or tiny detail noise.\nGenuinely TRANSPARENT alpha backdrop around and between ALL sprites, no white/gray backdrop, checkerboard pattern, shadows, grid, labels, words or numbers. Portrait canvas4:5."
+    }
+  ]
+}

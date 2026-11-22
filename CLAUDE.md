@@ -223,6 +223,11 @@ Everything lives in one object, `S`, so it can be saved as JSON:
 - New ability hooks (player side only): `forgePlus` (extra Great Forge attack), `armyDef` (whole army defense), `rangedPct` (shooter damage), `halfCost` (one spell at half mana), `manaCut` (all spells cheaper), `squallPct`, `weakenPct`.
 - Raised: Ivan (Forge half ore, +1 more attack), Oliver (30% cheaper rough ground, +5% movement), Shadow (harvest 20%), Sheila (Squall +30%), Grimes and Griffiths (+1 speed to their troop). Made distinct: Veyra, Gliss, Silka, Murmur, Boone, Mossback, Aster, Nessa Holt. Trimmed: Schmickle and Quillby to +200 gold a day. Battaglia is a Might hero.
 
+### v70 every hero walks as themselves
+
+- Remaining Walkers packs 1-4: personal map walkers for the last 102 heroes, so all 175 now walk the map as themselves (no hero uses the banner walker any more; it stays as the fallback while a sheet loads or for class heroes).
+- These are separate files, `heroes/walkers/<id>.png` (192×384, same layout as before, alpha made binary), listed in `WALK_FILES` (02-art.js). `walkerSheet` loads one only when that hero is drawn, because packing them into `walkers.png` made a 10.5 MB atlas. The first 73 stay in the `walkers.png` atlas. Originals in `art_source/remaining_walkers/`.
+
 ### v69 Eight New Heroes
 
 - Eight new tavern heroes (`student:true, tav:true`, after Zakai in `HEROES`), each arriving with a portrait, battle figure and personal map walker. The pack gave no banners or stats, so these were picked to fit the pictures: Aarna (Dwarves, Magic: Gem Golems +2 defense, +1 morale), Jun (Wizards, Might: Storm Elementals +2 attack, +1 speed), Juniper (Rangers, Magic: Moth Seers +2 growth, Mend +30%), Macie (Elves, Magic, a fairy: Sprites +2 attack, +1 speed), Petunia (Beastmasters, Magic, a mouse queen: War Rabbits +3 growth, +150 gold a day), Pihu (Pirates, Magic, a parrot: +2 vision, Powder Monkeys +2 attack), Saki (Merfolk, Magic: Sirens +2 attack, +1 luck) and X (Necromancers, Might: Vampires +2/+2).
