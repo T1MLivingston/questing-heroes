@@ -2,13 +2,13 @@
 
 Match the existing packs: warm storybook pixel art, dark plum outline (#2b1a33), light from the upper left, crisp pixel grid, no anti-aliasing, transparent PNGs, original designs, no text in the images. Hero art follows the Movement Sprites pack format (see `CLAUDE.md`, v63).
 
-Already complete (nothing needed): every troop (40 + upgrades, HD strips), every wild monster, every artifact icon, all eight towns (scenes, buildings, extra buildings, map stages), map terrain and sites, setup icons, skill icons (except one), a portrait for every one of the 167 heroes, and the main theme music.
+Already complete (nothing needed): every troop (40 + upgrades, HD strips), every wild monster, every artifact icon, all eight towns (scenes, buildings, extra buildings, map stages), map terrain and sites, setup icons, skill icons (except one), a portrait for every one of the 175 heroes, and the main theme music.
 
 ## 1. Hero battle figures
 Done in v67: every hero has one.
 
 ## 2. Hero map walkers (the biggest visual gap)
-65 of 167 heroes walk the map as themselves; the other 102 use their banner's generic walker. Same format as before: one 192×384 sheet per hero (48×48 frames, 4 walk phases × 8 directions s, sw, w, nw, n, ne, e, se, pivot 24,44), ids as in `js/01-data.js`.
+73 of 175 heroes walk the map as themselves (Aarna, Jun, Juniper, Macie, Petunia, Pihu, Saki and X arrived with theirs in v69); the other 102 use their banner's generic walker. Same format as before: one 192×384 sheet per hero (48×48 frames, 4 walk phases × 8 directions s, sw, w, nw, n, ne, e, se, pivot 24,44), ids as in `js/01-data.js`.
 
 - **Rangers (13)**: Wick, Gus & Glen, Midge, Azure Hype (student), Ericsonion (student), Deep Wave (student), Pottery (student), Cornelius II (student), Ward (student), Anastasia May Dvestia (student), Tida (student), Drew (student), J@ke (student)
 - **Wizards (18)**: Gale, Ada, Mags & Mae, Bloop, BobbytheBob (student), Luckenzo (student), Larishna (student), Katherine (student), Rose Flower (student), Banana Boy (student), Spirit of the Forest (student), Celestine Circe (student), Sir Quackars (student), Buffalo (student), Gerry (student), Vash (student), Liya (student), Boston (student)

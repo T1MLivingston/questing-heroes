@@ -1,0 +1,11 @@
+{
+  "heroes": 8,
+  "walkers": 8,
+  "battle": 8,
+  "portraits": 8,
+  "native_size_and_alpha": "passed",
+  "frame_bounds": "passed",
+  "frames_checked": 304,
+  "west_rows": "mirrored from east rows",
+  "integration": "asset pack only; game code not modified"
+}

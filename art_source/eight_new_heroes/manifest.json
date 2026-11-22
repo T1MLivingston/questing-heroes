@@ -1,0 +1,1481 @@
+{
+  "game": "Questing Heroes",
+  "pack": "Questing Heroes \u00b7 Eight New Heroes",
+  "version": 1,
+  "rendering": {
+    "filter": "nearest",
+    "alpha": "binary"
+  },
+  "battle": {
+    "aarna": {
+      "name": "Aarna",
+      "path": "assets/battle/heroes/upgrade/aarna/strip.png",
+      "frame_size": [
+        96,
+        64
+      ],
+      "frame_count": 6,
+      "pose_order": [
+        "idle",
+        "move_a",
+        "move_b",
+        "attack",
+        "hit",
+        "death"
+      ],
+      "pivot": [
+        48,
+        60
+      ],
+      "facing": "e",
+      "flip_x_for_west": true,
+      "source_rects": [
+        [
+          0,
+          0,
+          96,
+          64
+        ],
+        [
+          96,
+          0,
+          96,
+          64
+        ],
+        [
+          192,
+          0,
+          96,
+          64
+        ],
+        [
+          288,
+          0,
+          96,
+          64
+        ],
+        [
+          384,
+          0,
+          96,
+          64
+        ],
+        [
+          480,
+          0,
+          96,
+          64
+        ]
+      ],
+      "clips": {
+        "idle": {
+          "frames": [
+            0
+          ],
+          "durations_ms": [
+            600
+          ],
+          "loop": true
+        },
+        "move": {
+          "frames": [
+            1,
+            2
+          ],
+          "durations_ms": [
+            120,
+            120
+          ],
+          "loop": true
+        },
+        "attack": {
+          "frames": [
+            0,
+            3,
+            0
+          ],
+          "durations_ms": [
+            100,
+            180,
+            120
+          ],
+          "loop": false
+        },
+        "hit": {
+          "frames": [
+            4,
+            0
+          ],
+          "durations_ms": [
+            160,
+            120
+          ],
+          "loop": false
+        },
+        "death": {
+          "frames": [
+            4,
+            5
+          ],
+          "durations_ms": [
+            160,
+            400
+          ],
+          "loop": false,
+          "hold_last": true
+        }
+      }
+    },
+    "jun": {
+      "name": "Jun",
+      "path": "assets/battle/heroes/upgrade/jun/strip.png",
+      "frame_size": [
+        96,
+        64
+      ],
+      "frame_count": 6,
+      "pose_order": [
+        "idle",
+        "move_a",
+        "move_b",
+        "attack",
+        "hit",
+        "death"
+      ],
+      "pivot": [
+        48,
+        60
+      ],
+      "facing": "e",
+      "flip_x_for_west": true,
+      "source_rects": [
+        [
+          0,
+          0,
+          96,
+          64
+        ],
+        [
+          96,
+          0,
+          96,
+          64
+        ],
+        [
+          192,
+          0,
+          96,
+          64
+        ],
+        [
+          288,
+          0,
+          96,
+          64
+        ],
+        [
+          384,
+          0,
+          96,
+          64
+        ],
+        [
+          480,
+          0,
+          96,
+          64
+        ]
+      ],
+      "clips": {
+        "idle": {
+          "frames": [
+            0
+          ],
+          "durations_ms": [
+            600
+          ],
+          "loop": true
+        },
+        "move": {
+          "frames": [
+            1,
+            2
+          ],
+          "durations_ms": [
+            120,
+            120
+          ],
+          "loop": true
+        },
+        "attack": {
+          "frames": [
+            0,
+            3,
+            0
+          ],
+          "durations_ms": [
+            100,
+            180,
+            120
+          ],
+          "loop": false
+        },
+        "hit": {
+          "frames": [
+            4,
+            0
+          ],
+          "durations_ms": [
+            160,
+            120
+          ],
+          "loop": false
+        },
+        "death": {
+          "frames": [
+            4,
+            5
+          ],
+          "durations_ms": [
+            160,
+            400
+          ],
+          "loop": false,
+          "hold_last": true
+        }
+      }
+    },
+    "juniper": {
+      "name": "Juniper",
+      "path": "assets/battle/heroes/upgrade/juniper/strip.png",
+      "frame_size": [
+        96,
+        64
+      ],
+      "frame_count": 6,
+      "pose_order": [
+        "idle",
+        "move_a",
+        "move_b",
+        "attack",
+        "hit",
+        "death"
+      ],
+      "pivot": [
+        48,
+        60
+      ],
+      "facing": "e",
+      "flip_x_for_west": true,
+      "source_rects": [
+        [
+          0,
+          0,
+          96,
+          64
+        ],
+        [
+          96,
+          0,
+          96,
+          64
+        ],
+        [
+          192,
+          0,
+          96,
+          64
+        ],
+        [
+          288,
+          0,
+          96,
+          64
+        ],
+        [
+          384,
+          0,
+          96,
+          64
+        ],
+        [
+          480,
+          0,
+          96,
+          64
+        ]
+      ],
+      "clips": {
+        "idle": {
+          "frames": [
+            0
+          ],
+          "durations_ms": [
+            600
+          ],
+          "loop": true
+        },
+        "move": {
+          "frames": [
+            1,
+            2
+          ],
+          "durations_ms": [
+            120,
+            120
+          ],
+          "loop": true
+        },
+        "attack": {
+          "frames": [
+            0,
+            3,
+            0
+          ],
+          "durations_ms": [
+            100,
+            180,
+            120
+          ],
+          "loop": false
+        },
+        "hit": {
+          "frames": [
+            4,
+            0
+          ],
+          "durations_ms": [
+            160,
+            120
+          ],
+          "loop": false
+        },
+        "death": {
+          "frames": [
+            4,
+            5
+          ],
+          "durations_ms": [
+            160,
+            400
+          ],
+          "loop": false,
+          "hold_last": true
+        }
+      }
+    },
+    "macie": {
+      "name": "Macie",
+      "path": "assets/battle/heroes/upgrade/macie/strip.png",
+      "frame_size": [
+        96,
+        64
+      ],
+      "frame_count": 6,
+      "pose_order": [
+        "idle",
+        "move_a",
+        "move_b",
+        "attack",
+        "hit",
+        "death"
+      ],
+      "pivot": [
+        48,
+        60
+      ],
+      "facing": "e",
+      "flip_x_for_west": true,
+      "source_rects": [
+        [
+          0,
+          0,
+          96,
+          64
+        ],
+        [
+          96,
+          0,
+          96,
+          64
+        ],
+        [
+          192,
+          0,
+          96,
+          64
+        ],
+        [
+          288,
+          0,
+          96,
+          64
+        ],
+        [
+          384,
+          0,
+          96,
+          64
+        ],
+        [
+          480,
+          0,
+          96,
+          64
+        ]
+      ],
+      "clips": {
+        "idle": {
+          "frames": [
+            0
+          ],
+          "durations_ms": [
+            600
+          ],
+          "loop": true
+        },
+        "move": {
+          "frames": [
+            1,
+            2
+          ],
+          "durations_ms": [
+            120,
+            120
+          ],
+          "loop": true
+        },
+        "attack": {
+          "frames": [
+            0,
+            3,
+            0
+          ],
+          "durations_ms": [
+            100,
+            180,
+            120
+          ],
+          "loop": false
+        },
+        "hit": {
+          "frames": [
+            4,
+            0
+          ],
+          "durations_ms": [
+            160,
+            120
+          ],
+          "loop": false
+        },
+        "death": {
+          "frames": [
+            4,
+            5
+          ],
+          "durations_ms": [
+            160,
+            400
+          ],
+          "loop": false,
+          "hold_last": true
+        }
+      }
+    },
+    "petunia": {
+      "name": "Petunia",
+      "path": "assets/battle/heroes/upgrade/petunia/strip.png",
+      "frame_size": [
+        96,
+        64
+      ],
+      "frame_count": 6,
+      "pose_order": [
+        "idle",
+        "move_a",
+        "move_b",
+        "attack",
+        "hit",
+        "death"
+      ],
+      "pivot": [
+        48,
+        60
+      ],
+      "facing": "e",
+      "flip_x_for_west": true,
+      "source_rects": [
+        [
+          0,
+          0,
+          96,
+          64
+        ],
+        [
+          96,
+          0,
+          96,
+          64
+        ],
+        [
+          192,
+          0,
+          96,
+          64
+        ],
+        [
+          288,
+          0,
+          96,
+          64
+        ],
+        [
+          384,
+          0,
+          96,
+          64
+        ],
+        [
+          480,
+          0,
+          96,
+          64
+        ]
+      ],
+      "clips": {
+        "idle": {
+          "frames": [
+            0
+          ],
+          "durations_ms": [
+            600
+          ],
+          "loop": true
+        },
+        "move": {
+          "frames": [
+            1,
+            2
+          ],
+          "durations_ms": [
+            120,
+            120
+          ],
+          "loop": true
+        },
+        "attack": {
+          "frames": [
+            0,
+            3,
+            0
+          ],
+          "durations_ms": [
+            100,
+            180,
+            120
+          ],
+          "loop": false
+        },
+        "hit": {
+          "frames": [
+            4,
+            0
+          ],
+          "durations_ms": [
+            160,
+            120
+          ],
+          "loop": false
+        },
+        "death": {
+          "frames": [
+            4,
+            5
+          ],
+          "durations_ms": [
+            160,
+            400
+          ],
+          "loop": false,
+          "hold_last": true
+        }
+      }
+    },
+    "pihu": {
+      "name": "Pihu",
+      "path": "assets/battle/heroes/upgrade/pihu/strip.png",
+      "frame_size": [
+        96,
+        64
+      ],
+      "frame_count": 6,
+      "pose_order": [
+        "idle",
+        "move_a",
+        "move_b",
+        "attack",
+        "hit",
+        "death"
+      ],
+      "pivot": [
+        48,
+        60
+      ],
+      "facing": "e",
+      "flip_x_for_west": true,
+      "source_rects": [
+        [
+          0,
+          0,
+          96,
+          64
+        ],
+        [
+          96,
+          0,
+          96,
+          64
+        ],
+        [
+          192,
+          0,
+          96,
+          64
+        ],
+        [
+          288,
+          0,
+          96,
+          64
+        ],
+        [
+          384,
+          0,
+          96,
+          64
+        ],
+        [
+          480,
+          0,
+          96,
+          64
+        ]
+      ],
+      "clips": {
+        "idle": {
+          "frames": [
+            0
+          ],
+          "durations_ms": [
+            600
+          ],
+          "loop": true
+        },
+        "move": {
+          "frames": [
+            1,
+            2
+          ],
+          "durations_ms": [
+            120,
+            120
+          ],
+          "loop": true
+        },
+        "attack": {
+          "frames": [
+            0,
+            3,
+            0
+          ],
+          "durations_ms": [
+            100,
+            180,
+            120
+          ],
+          "loop": false
+        },
+        "hit": {
+          "frames": [
+            4,
+            0
+          ],
+          "durations_ms": [
+            160,
+            120
+          ],
+          "loop": false
+        },
+        "death": {
+          "frames": [
+            4,
+            5
+          ],
+          "durations_ms": [
+            160,
+            400
+          ],
+          "loop": false,
+          "hold_last": true
+        }
+      }
+    },
+    "saki": {
+      "name": "Saki",
+      "path": "assets/battle/heroes/upgrade/saki/strip.png",
+      "frame_size": [
+        96,
+        64
+      ],
+      "frame_count": 6,
+      "pose_order": [
+        "idle",
+        "move_a",
+        "move_b",
+        "attack",
+        "hit",
+        "death"
+      ],
+      "pivot": [
+        48,
+        60
+      ],
+      "facing": "e",
+      "flip_x_for_west": true,
+      "source_rects": [
+        [
+          0,
+          0,
+          96,
+          64
+        ],
+        [
+          96,
+          0,
+          96,
+          64
+        ],
+        [
+          192,
+          0,
+          96,
+          64
+        ],
+        [
+          288,
+          0,
+          96,
+          64
+        ],
+        [
+          384,
+          0,
+          96,
+          64
+        ],
+        [
+          480,
+          0,
+          96,
+          64
+        ]
+      ],
+      "clips": {
+        "idle": {
+          "frames": [
+            0
+          ],
+          "durations_ms": [
+            600
+          ],
+          "loop": true
+        },
+        "move": {
+          "frames": [
+            1,
+            2
+          ],
+          "durations_ms": [
+            120,
+            120
+          ],
+          "loop": true
+        },
+        "attack": {
+          "frames": [
+            0,
+            3,
+            0
+          ],
+          "durations_ms": [
+            100,
+            180,
+            120
+          ],
+          "loop": false
+        },
+        "hit": {
+          "frames": [
+            4,
+            0
+          ],
+          "durations_ms": [
+            160,
+            120
+          ],
+          "loop": false
+        },
+        "death": {
+          "frames": [
+            4,
+            5
+          ],
+          "durations_ms": [
+            160,
+            400
+          ],
+          "loop": false,
+          "hold_last": true
+        }
+      }
+    },
+    "x": {
+      "name": "X",
+      "path": "assets/battle/heroes/upgrade/x/strip.png",
+      "frame_size": [
+        96,
+        64
+      ],
+      "frame_count": 6,
+      "pose_order": [
+        "idle",
+        "move_a",
+        "move_b",
+        "attack",
+        "hit",
+        "death"
+      ],
+      "pivot": [
+        48,
+        60
+      ],
+      "facing": "e",
+      "flip_x_for_west": true,
+      "source_rects": [
+        [
+          0,
+          0,
+          96,
+          64
+        ],
+        [
+          96,
+          0,
+          96,
+          64
+        ],
+        [
+          192,
+          0,
+          96,
+          64
+        ],
+        [
+          288,
+          0,
+          96,
+          64
+        ],
+        [
+          384,
+          0,
+          96,
+          64
+        ],
+        [
+          480,
+          0,
+          96,
+          64
+        ]
+      ],
+      "clips": {
+        "idle": {
+          "frames": [
+            0
+          ],
+          "durations_ms": [
+            600
+          ],
+          "loop": true
+        },
+        "move": {
+          "frames": [
+            1,
+            2
+          ],
+          "durations_ms": [
+            120,
+            120
+          ],
+          "loop": true
+        },
+        "attack": {
+          "frames": [
+            0,
+            3,
+            0
+          ],
+          "durations_ms": [
+            100,
+            180,
+            120
+          ],
+          "loop": false
+        },
+        "hit": {
+          "frames": [
+            4,
+            0
+          ],
+          "durations_ms": [
+            160,
+            120
+          ],
+          "loop": false
+        },
+        "death": {
+          "frames": [
+            4,
+            5
+          ],
+          "durations_ms": [
+            160,
+            400
+          ],
+          "loop": false,
+          "hold_last": true
+        }
+      }
+    }
+  },
+  "walkers": {
+    "aarna": {
+      "name": "Aarna",
+      "banner": "",
+      "path": "assets/heroes/walkers_upgrade/aarna.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "sheet_size": [
+        192,
+        384
+      ],
+      "columns": 4,
+      "rows": 8,
+      "frame_count": 32,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      }
+    },
+    "jun": {
+      "name": "Jun",
+      "banner": "",
+      "path": "assets/heroes/walkers_upgrade/jun.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "sheet_size": [
+        192,
+        384
+      ],
+      "columns": 4,
+      "rows": 8,
+      "frame_count": 32,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      }
+    },
+    "juniper": {
+      "name": "Juniper",
+      "banner": "",
+      "path": "assets/heroes/walkers_upgrade/juniper.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "sheet_size": [
+        192,
+        384
+      ],
+      "columns": 4,
+      "rows": 8,
+      "frame_count": 32,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      }
+    },
+    "macie": {
+      "name": "Macie",
+      "banner": "",
+      "path": "assets/heroes/walkers_upgrade/macie.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "sheet_size": [
+        192,
+        384
+      ],
+      "columns": 4,
+      "rows": 8,
+      "frame_count": 32,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      }
+    },
+    "petunia": {
+      "name": "Petunia",
+      "banner": "",
+      "path": "assets/heroes/walkers_upgrade/petunia.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "sheet_size": [
+        192,
+        384
+      ],
+      "columns": 4,
+      "rows": 8,
+      "frame_count": 32,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      }
+    },
+    "pihu": {
+      "name": "Pihu",
+      "banner": "",
+      "path": "assets/heroes/walkers_upgrade/pihu.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "sheet_size": [
+        192,
+        384
+      ],
+      "columns": 4,
+      "rows": 8,
+      "frame_count": 32,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      }
+    },
+    "saki": {
+      "name": "Saki",
+      "banner": "",
+      "path": "assets/heroes/walkers_upgrade/saki.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "sheet_size": [
+        192,
+        384
+      ],
+      "columns": 4,
+      "rows": 8,
+      "frame_count": 32,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      }
+    },
+    "x": {
+      "name": "X",
+      "banner": "",
+      "path": "assets/heroes/walkers_upgrade/x.png",
+      "frame_size": [
+        48,
+        48
+      ],
+      "sheet_size": [
+        192,
+        384
+      ],
+      "columns": 4,
+      "rows": 8,
+      "frame_count": 32,
+      "direction_order": [
+        "s",
+        "sw",
+        "w",
+        "nw",
+        "n",
+        "ne",
+        "e",
+        "se"
+      ],
+      "frames_per_direction": 4,
+      "pivot": [
+        24,
+        44
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120
+      ],
+      "mirrored_directions": {
+        "sw": "se",
+        "w": "e",
+        "nw": "ne"
+      }
+    }
+  },
+  "portraits": {
+    "aarna": {
+      "name": "Aarna",
+      "path": "assets/portraits/heroes/aarna_128.png",
+      "size": [
+        128,
+        128
+      ],
+      "upscaled_path": "assets/portraits/heroes/aarna_256.png",
+      "master_path": "portraits/aarna_master.png"
+    },
+    "jun": {
+      "name": "Jun",
+      "path": "assets/portraits/heroes/jun_128.png",
+      "size": [
+        128,
+        128
+      ],
+      "upscaled_path": "assets/portraits/heroes/jun_256.png",
+      "master_path": "portraits/jun_master.png"
+    },
+    "juniper": {
+      "name": "Juniper",
+      "path": "assets/portraits/heroes/juniper_128.png",
+      "size": [
+        128,
+        128
+      ],
+      "upscaled_path": "assets/portraits/heroes/juniper_256.png",
+      "master_path": "portraits/juniper_master.png"
+    },
+    "macie": {
+      "name": "Macie",
+      "path": "assets/portraits/heroes/macie_128.png",
+      "size": [
+        128,
+        128
+      ],
+      "upscaled_path": "assets/portraits/heroes/macie_256.png",
+      "master_path": "portraits/macie_master.png"
+    },
+    "petunia": {
+      "name": "Petunia",
+      "path": "assets/portraits/heroes/petunia_128.png",
+      "size": [
+        128,
+        128
+      ],
+      "upscaled_path": "assets/portraits/heroes/petunia_256.png",
+      "master_path": "portraits/petunia_master.png"
+    },
+    "pihu": {
+      "name": "Pihu",
+      "path": "assets/portraits/heroes/pihu_128.png",
+      "size": [
+        128,
+        128
+      ],
+      "upscaled_path": "assets/portraits/heroes/pihu_256.png",
+      "master_path": "portraits/pihu_master.png"
+    },
+    "saki": {
+      "name": "Saki",
+      "path": "assets/portraits/heroes/saki_128.png",
+      "size": [
+        128,
+        128
+      ],
+      "upscaled_path": "assets/portraits/heroes/saki_256.png",
+      "master_path": "portraits/saki_master.png"
+    },
+    "x": {
+      "name": "X",
+      "path": "assets/portraits/heroes/x_128.png",
+      "size": [
+        128,
+        128
+      ],
+      "upscaled_path": "assets/portraits/heroes/x_256.png",
+      "master_path": "portraits/x_master.png"
+    }
+  },
+  "prompts": [
+    {
+      "hero": "aarna",
+      "asset": "battle",
+      "method": "built-in image generation",
+      "prompt": "Use case: stylized-concept. Asset: ONE battle animation sprite sheet for Questing Heroes hero Aarna.\nImage1 IDENTITY reference: approved portrait. Image2 LAYOUT reference ONLY: copy number of cells, pose order and chunky pixel scale, NEVER its character.\nSubject: female human mage, warm brown skin, long black curls and gold earrings, pink cream tunic, brown gold-trim shoulder armor, green cape. ONE continuous GOLD STAFF held upright in hand, with centered golden orb between symmetric matching antlers. No staff on back. Brown boots.\nEXACTLY SIX FULL-BODY poses, ONE character per cell, total SIX characters. Layout THREE columns by TWO rows of equal square cells. Follow image2's SIX-POSE layout precisely. Reading order IDLE, WALK left foot forward, WALK right foot forward, ATTACK or CAST, HIT recoil, DEFEATED lying down non-graphically. Fixed three-quarter side view facing RIGHT/east in all poses. Same body size and costume in all frames. Feet baseline near bottom of cells. EACH cell contains exactly ONE whole character, not two poses or twins. Do not add intermediate poses. Weapons remain within own cell.\nEach figure is COMPLETE full body, center in cell, 12% transparent padding on all sides, no cropped body or intersecting adjacent sprites. Consistent clearly connected hands, held tools and clothing. Native96x64 frame style. Deliberately hand-placed-looking chunky PIXEL ART, dark one-pixel outlines, limited24-color palette, flat three-tone shading, crisp pixel clusters and large readable face. Match approved portrait costume and colors. NO tiny noisy detail, no gradients, no blurry glow.\nGenuine TRANSPARENT alpha background around and between sprites. NO checkerboard pattern, no white rectangles, no backdrop, shadows, frame, grid lines, text, labels or numbers. Canvas landscape3:2."
+    },
+    {
+      "hero": "jun",
+      "asset": "battle",
+      "method": "built-in image generation",
+      "prompt": "Use case: stylized-concept. Asset: ONE battle animation sprite sheet for Questing Heroes hero Jun.\nImage1 IDENTITY reference: approved portrait. Image2 LAYOUT reference ONLY: copy number of cells, pose order and chunky pixel scale, NEVER its character.\nSubject: male human sword mage, warm dark brown skin BLUE eyes, long swept purple-black hair, black cloak underneath navy moon/star sash, black gold-edged armor, simple blue gem clasp and one chain, dark boots, ONE straight glowing blue-white SWORD in clear hand grip with simple symmetrical gold crossguard centered blue gem.\nEXACTLY SIX FULL-BODY poses, ONE character per cell, total SIX characters. Layout THREE columns by TWO rows of equal square cells. Follow image2's SIX-POSE layout precisely. Reading order IDLE, WALK left foot forward, WALK right foot forward, ATTACK or CAST, HIT recoil, DEFEATED lying down non-graphically. Fixed three-quarter side view facing RIGHT/east in all poses. Same body size and costume in all frames. Feet baseline near bottom of cells. EACH cell contains exactly ONE whole character, not two poses or twins. Do not add intermediate poses. Weapons remain within own cell.\nEach figure is COMPLETE full body, center in cell, 12% transparent padding on all sides, no cropped body or intersecting adjacent sprites. Consistent clearly connected hands, held tools and clothing. Native96x64 frame style. Deliberately hand-placed-looking chunky PIXEL ART, dark one-pixel outlines, limited24-color palette, flat three-tone shading, crisp pixel clusters and large readable face. Match approved portrait costume and colors. NO tiny noisy detail, no gradients, no blurry glow.\nGenuine TRANSPARENT alpha background around and between sprites. NO checkerboard pattern, no white rectangles, no backdrop, shadows, frame, grid lines, text, labels or numbers. Canvas landscape3:2."
+    },
+    {
+      "hero": "juniper",
+      "asset": "battle",
+      "method": "built-in image generation",
+      "prompt": "Use case: stylized-concept. Asset: ONE battle animation sprite sheet for Questing Heroes hero Juniper.\nImage1 IDENTITY reference: approved portrait. Image2 LAYOUT reference ONLY: copy number of cells, pose order and chunky pixel scale, NEVER its character.\nSubject: female human forest mage, pale warm skin, GREEN eyes, ginger auburn high bun and side curls, green gold-edged hooded cloak (hood down), cream blouse green laced bodice, brown boots, ONE small straight twig wand in hand.\nEXACTLY SIX FULL-BODY poses, ONE character per cell, total SIX characters. Layout THREE columns by TWO rows of equal square cells. Follow image2's SIX-POSE layout precisely. Reading order IDLE, WALK left foot forward, WALK right foot forward, ATTACK or CAST, HIT recoil, DEFEATED lying down non-graphically. Fixed three-quarter side view facing RIGHT/east in all poses. Same body size and costume in all frames. Feet baseline near bottom of cells. EACH cell contains exactly ONE whole character, not two poses or twins. Do not add intermediate poses. Weapons remain within own cell.\nEach figure is COMPLETE full body, center in cell, 12% transparent padding on all sides, no cropped body or intersecting adjacent sprites. Consistent clearly connected hands, held tools and clothing. Native96x64 frame style. Deliberately hand-placed-looking chunky PIXEL ART, dark one-pixel outlines, limited24-color palette, flat three-tone shading, crisp pixel clusters and large readable face. Match approved portrait costume and colors. NO tiny noisy detail, no gradients, no blurry glow.\nGenuine TRANSPARENT alpha background around and between sprites. NO checkerboard pattern, no white rectangles, no backdrop, shadows, frame, grid lines, text, labels or numbers. Canvas landscape3:2."
+    },
+    {
+      "hero": "macie",
+      "asset": "battle",
+      "method": "built-in image generation",
+      "prompt": "Use case: stylized-concept. Asset: ONE battle animation sprite sheet for Questing Heroes hero Macie.\nImage1 IDENTITY reference: approved portrait. Image2 LAYOUT reference ONLY: copy number of cells, pose order and chunky pixel scale, NEVER its character.\nSubject: female fairy, light warm tan skin BROWN eyes, long chestnut hair with pink white flowers and pointed ears, forest green gold-trim shawl over cream dress, FOUR matching cream leaf-veined wings with green veins and pink flowers balanced behind her. Cast golden sparkle from palm-up hand; no weapon. Brown shoes.\nEXACTLY SIX FULL-BODY poses, ONE character per cell, total SIX characters. Layout THREE columns by TWO rows of equal square cells. Follow image2's SIX-POSE layout precisely. Reading order IDLE, WALK left foot forward, WALK right foot forward, ATTACK or CAST, HIT recoil, DEFEATED lying down non-graphically. Fixed three-quarter side view facing RIGHT/east in all poses. Same body size and costume in all frames. Feet baseline near bottom of cells. EACH cell contains exactly ONE whole character, not two poses or twins. Do not add intermediate poses. Weapons remain within own cell.\nEach figure is COMPLETE full body, center in cell, 12% transparent padding on all sides, no cropped body or intersecting adjacent sprites. Consistent clearly connected hands, held tools and clothing. Native96x64 frame style. Deliberately hand-placed-looking chunky PIXEL ART, dark one-pixel outlines, limited24-color palette, flat three-tone shading, crisp pixel clusters and large readable face. Match approved portrait costume and colors. NO tiny noisy detail, no gradients, no blurry glow.\nGenuine TRANSPARENT alpha background around and between sprites. NO checkerboard pattern, no white rectangles, no backdrop, shadows, frame, grid lines, text, labels or numbers. Canvas landscape3:2."
+    },
+    {
+      "hero": "petunia",
+      "asset": "battle",
+      "method": "built-in image generation",
+      "prompt": "Use case: stylized-concept. Asset: ONE battle animation sprite sheet for Questing Heroes hero Petunia.\nImage1 IDENTITY reference: approved portrait. Image2 LAYOUT reference ONLY: copy number of cells, pose order and chunky pixel scale, NEVER its character.\nSubject: female anthropomorphic GRAY MOUSE QUEEN, large rounded PINK ears, red-pink eyes pink nose small white front teeth, gold crown symmetric pink gems, pink royal robe white fur collar, pink jewel clasp, tiny gray paws. ONE small gold star wand held in paw. No text or symbols resembling letters.\nEXACTLY SIX FULL-BODY poses, ONE character per cell, total SIX characters. Layout THREE columns by TWO rows of equal square cells. Follow image2's SIX-POSE layout precisely. Reading order IDLE, WALK left foot forward, WALK right foot forward, ATTACK or CAST, HIT recoil, DEFEATED lying down non-graphically. Fixed three-quarter side view facing RIGHT/east in all poses. Same body size and costume in all frames. Feet baseline near bottom of cells. EACH cell contains exactly ONE whole character, not two poses or twins. Do not add intermediate poses. Weapons remain within own cell.\nEach figure is COMPLETE full body, center in cell, 12% transparent padding on all sides, no cropped body or intersecting adjacent sprites. Consistent clearly connected hands, held tools and clothing. Native96x64 frame style. Deliberately hand-placed-looking chunky PIXEL ART, dark one-pixel outlines, limited24-color palette, flat three-tone shading, crisp pixel clusters and large readable face. Match approved portrait costume and colors. NO tiny noisy detail, no gradients, no blurry glow.\nGenuine TRANSPARENT alpha background around and between sprites. NO checkerboard pattern, no white rectangles, no backdrop, shadows, frame, grid lines, text, labels or numbers. Canvas landscape3:2."
+    },
+    {
+      "hero": "pihu",
+      "asset": "battle",
+      "method": "built-in image generation",
+      "prompt": "Use case: stylized-concept. Asset: ONE battle animation sprite sheet for Questing Heroes hero Pihu.\nImage1 IDENTITY reference: approved portrait. Image2 LAYOUT reference ONLY: copy number of cells, pose order and chunky pixel scale, NEVER its character.\nSubject: anthropomorphic AFRICAN GRAY PARROT mage, silver-gray feathers, pale face patch, GOLD yellow eyes and BLACK hooked beak, maroon green-vine cloak, leaf clasp, one RED APPLE in one feathered hand and ONE continuous upright WOODEN STAFF in other, wooden loop top enclosing silver crescent. Gray avian feet, no human skin.\nEXACTLY SIX FULL-BODY poses, ONE character per cell, total SIX characters. Layout THREE columns by TWO rows of equal square cells. Follow image2's SIX-POSE layout precisely. Reading order IDLE, WALK left foot forward, WALK right foot forward, ATTACK or CAST, HIT recoil, DEFEATED lying down non-graphically. Fixed three-quarter side view facing RIGHT/east in all poses. Same body size and costume in all frames. Feet baseline near bottom of cells. EACH cell contains exactly ONE whole character, not two poses or twins. Do not add intermediate poses. Weapons remain within own cell.\nEach figure is COMPLETE full body, center in cell, 12% transparent padding on all sides, no cropped body or intersecting adjacent sprites. Consistent clearly connected hands, held tools and clothing. Native96x64 frame style. Deliberately hand-placed-looking chunky PIXEL ART, dark one-pixel outlines, limited24-color palette, flat three-tone shading, crisp pixel clusters and large readable face. Match approved portrait costume and colors. NO tiny noisy detail, no gradients, no blurry glow.\nGenuine TRANSPARENT alpha background around and between sprites. NO checkerboard pattern, no white rectangles, no backdrop, shadows, frame, grid lines, text, labels or numbers. Canvas landscape3:2."
+    },
+    {
+      "hero": "saki",
+      "asset": "battle",
+      "method": "built-in image generation",
+      "prompt": "Use case: stylized-concept. Asset: ONE battle animation sprite sheet for Questing Heroes hero Saki.\nImage1 IDENTITY reference: approved portrait. Image2 LAYOUT reference ONLY: copy number of cells, pose order and chunky pixel scale, NEVER its character.\nSubject: cheerful tan freckled female ELF with short curly brown hair, pointed ears, silver crescent clips and earrings, one GREEN and one BLUE eye, pink cream tunic green cape and dark green trousers, boots. Cast with open hand and small green sparkle; silver crescent clasp. No text.\nEXACTLY SIX FULL-BODY poses, ONE character per cell, total SIX characters. Layout THREE columns by TWO rows of equal square cells. Follow image2's SIX-POSE layout precisely. Reading order IDLE, WALK left foot forward, WALK right foot forward, ATTACK or CAST, HIT recoil, DEFEATED lying down non-graphically. Fixed three-quarter side view facing RIGHT/east in all poses. Same body size and costume in all frames. Feet baseline near bottom of cells. EACH cell contains exactly ONE whole character, not two poses or twins. Do not add intermediate poses. Weapons remain within own cell.\nEach figure is COMPLETE full body, center in cell, 12% transparent padding on all sides, no cropped body or intersecting adjacent sprites. Consistent clearly connected hands, held tools and clothing. Native96x64 frame style. Deliberately hand-placed-looking chunky PIXEL ART, dark one-pixel outlines, limited24-color palette, flat three-tone shading, crisp pixel clusters and large readable face. Match approved portrait costume and colors. NO tiny noisy detail, no gradients, no blurry glow.\nGenuine TRANSPARENT alpha background around and between sprites. NO checkerboard pattern, no white rectangles, no backdrop, shadows, frame, grid lines, text, labels or numbers. Canvas landscape3:2."
+    },
+    {
+      "hero": "x",
+      "asset": "battle",
+      "method": "built-in image generation",
+      "prompt": "Use case: stylized-concept. Asset: ONE battle animation sprite sheet for Questing Heroes hero X.\nImage1 IDENTITY reference: approved portrait. Image2 LAYOUT reference ONLY: copy number of cells, pose order and chunky pixel scale, NEVER its character.\nSubject: male human dark knight, warm tan freckles and cheek scar, BLUE eyes, curly copper red hair, navy black gold-edged plate armor and burgundy cape, small silver skull clasp. ONE dark shield with simple ivory skull in front, ONE sheathed sword on back; attack with that same drawn sword, no extra weapons. Armored boots.\nEXACTLY SIX FULL-BODY poses, ONE character per cell, total SIX characters. Layout THREE columns by TWO rows of equal square cells. Follow image2's SIX-POSE layout precisely. Reading order IDLE, WALK left foot forward, WALK right foot forward, ATTACK or CAST, HIT recoil, DEFEATED lying down non-graphically. Fixed three-quarter side view facing RIGHT/east in all poses. Same body size and costume in all frames. Feet baseline near bottom of cells. EACH cell contains exactly ONE whole character, not two poses or twins. Do not add intermediate poses. Weapons remain within own cell.\nEach figure is COMPLETE full body, center in cell, 12% transparent padding on all sides, no cropped body or intersecting adjacent sprites. Consistent clearly connected hands, held tools and clothing. Native96x64 frame style. Deliberately hand-placed-looking chunky PIXEL ART, dark one-pixel outlines, limited24-color palette, flat three-tone shading, crisp pixel clusters and large readable face. Match approved portrait costume and colors. NO tiny noisy detail, no gradients, no blurry glow.\nGenuine TRANSPARENT alpha background around and between sprites. NO checkerboard pattern, no white rectangles, no backdrop, shadows, frame, grid lines, text, labels or numbers. Canvas landscape3:2."
+    },
+    {
+      "hero": "aarna",
+      "asset": "map",
+      "method": "built-in image generation",
+      "prompt": "Use case: stylized-concept. Asset: ONE map walking sprite sheet for Questing Heroes hero Aarna.\nImage1 IDENTITY reference: approved portrait. Image2 LAYOUT reference ONLY: copy number of cells, pose order and chunky pixel scale, NEVER its character.\nSubject: female human mage, warm brown skin, long black curls and gold earrings, pink cream tunic, brown gold-trim shoulder armor, green cape. ONE continuous GOLD STAFF held upright in hand, with centered golden orb between symmetric matching antlers. No staff on back. Brown boots.\nEXACTLY TWENTY FULL-BODY poses, ONE character per cell, total TWENTY characters. Layout FOUR columns by FIVE rows of equal square cells. Follow image2's20-pose directional walk layout. Each row is FOUR sequential walk-cycle frames with alternating legs and slight arm swing: left contact, passing, right contact, passing. Row1 SOUTH toward viewer; Row2 SOUTHEAST down-right; Row3 EAST right profile; Row4 NORTHEAST up-right AWAY from viewer with back/side visible; Row5 NORTH directly AWAY, BACK of head and cape visible, NO face. Bottom two rows must show walking AWAY. Stable body scale and foot baseline88% cell height. No doubles or twins.\nEach figure is COMPLETE full body, center in cell, 12% transparent padding on all sides, no cropped body or intersecting adjacent sprites. Consistent clearly connected hands, held tools and clothing. On foot, no horse. Native48x48 frame style. Deliberately hand-placed-looking chunky PIXEL ART, dark one-pixel outlines, limited24-color palette, flat three-tone shading, crisp pixel clusters and large readable face. Match approved portrait costume and colors. NO tiny noisy detail, no gradients, no blurry glow.\nGenuine TRANSPARENT alpha background around and between sprites. NO checkerboard pattern, no white rectangles, no backdrop, shadows, frame, grid lines, text, labels or numbers. Canvas portrait4:5."
+    },
+    {
+      "hero": "jun",
+      "asset": "map",
+      "method": "built-in image generation",
+      "prompt": "Use case: stylized-concept. Asset: ONE map walking sprite sheet for Questing Heroes hero Jun.\nImage1 IDENTITY reference: approved portrait. Image2 LAYOUT reference ONLY: copy number of cells, pose order and chunky pixel scale, NEVER its character.\nSubject: male human sword mage, warm dark brown skin BLUE eyes, long swept purple-black hair, black cloak underneath navy moon/star sash, black gold-edged armor, simple blue gem clasp and one chain, dark boots, ONE straight glowing blue-white SWORD in clear hand grip with simple symmetrical gold crossguard centered blue gem.\nEXACTLY TWENTY FULL-BODY poses, ONE character per cell, total TWENTY characters. Layout FOUR columns by FIVE rows of equal square cells. Follow image2's20-pose directional walk layout. Each row is FOUR sequential walk-cycle frames with alternating legs and slight arm swing: left contact, passing, right contact, passing. Row1 SOUTH toward viewer; Row2 SOUTHEAST down-right; Row3 EAST right profile; Row4 NORTHEAST up-right AWAY from viewer with back/side visible; Row5 NORTH directly AWAY, BACK of head and cape visible, NO face. Bottom two rows must show walking AWAY. Stable body scale and foot baseline88% cell height. No doubles or twins.\nEach figure is COMPLETE full body, center in cell, 12% transparent padding on all sides, no cropped body or intersecting adjacent sprites. Consistent clearly connected hands, held tools and clothing. On foot, no horse. Native48x48 frame style. Deliberately hand-placed-looking chunky PIXEL ART, dark one-pixel outlines, limited24-color palette, flat three-tone shading, crisp pixel clusters and large readable face. Match approved portrait costume and colors. NO tiny noisy detail, no gradients, no blurry glow.\nGenuine TRANSPARENT alpha background around and between sprites. NO checkerboard pattern, no white rectangles, no backdrop, shadows, frame, grid lines, text, labels or numbers. Canvas portrait4:5."
+    },
+    {
+      "hero": "juniper",
+      "asset": "map",
+      "method": "built-in image generation",
+      "prompt": "Use case: stylized-concept. Asset: ONE map walking sprite sheet for Questing Heroes hero Juniper.\nImage1 IDENTITY reference: approved portrait. Image2 LAYOUT reference ONLY: copy number of cells, pose order and chunky pixel scale, NEVER its character.\nSubject: female human forest mage, pale warm skin, GREEN eyes, ginger auburn high bun and side curls, green gold-edged hooded cloak (hood down), cream blouse green laced bodice, brown boots, ONE small straight twig wand in hand.\nEXACTLY TWENTY FULL-BODY poses, ONE character per cell, total TWENTY characters. Layout FOUR columns by FIVE rows of equal square cells. Follow image2's20-pose directional walk layout. Each row is FOUR sequential walk-cycle frames with alternating legs and slight arm swing: left contact, passing, right contact, passing. Row1 SOUTH toward viewer; Row2 SOUTHEAST down-right; Row3 EAST right profile; Row4 NORTHEAST up-right AWAY from viewer with back/side visible; Row5 NORTH directly AWAY, BACK of head and cape visible, NO face. Bottom two rows must show walking AWAY. Stable body scale and foot baseline88% cell height. No doubles or twins.\nEach figure is COMPLETE full body, center in cell, 12% transparent padding on all sides, no cropped body or intersecting adjacent sprites. Consistent clearly connected hands, held tools and clothing. On foot, no horse. Native48x48 frame style. Deliberately hand-placed-looking chunky PIXEL ART, dark one-pixel outlines, limited24-color palette, flat three-tone shading, crisp pixel clusters and large readable face. Match approved portrait costume and colors. NO tiny noisy detail, no gradients, no blurry glow.\nGenuine TRANSPARENT alpha background around and between sprites. NO checkerboard pattern, no white rectangles, no backdrop, shadows, frame, grid lines, text, labels or numbers. Canvas portrait4:5."
+    },
+    {
+      "hero": "macie",
+      "asset": "map",
+      "method": "built-in image generation",
+      "prompt": "Use case: stylized-concept. Asset: ONE map walking sprite sheet for Questing Heroes hero Macie.\nImage1 IDENTITY reference: approved portrait. Image2 LAYOUT reference ONLY: copy number of cells, pose order and chunky pixel scale, NEVER its character.\nSubject: female fairy, light warm tan skin BROWN eyes, long chestnut hair with pink white flowers and pointed ears, forest green gold-trim shawl over cream dress, FOUR matching cream leaf-veined wings with green veins and pink flowers balanced behind her. Cast golden sparkle from palm-up hand; no weapon. Brown shoes.\nEXACTLY TWENTY FULL-BODY poses, ONE character per cell, total TWENTY characters. Layout FOUR columns by FIVE rows of equal square cells. Follow image2's20-pose directional walk layout. Each row is FOUR sequential walk-cycle frames with alternating legs and slight arm swing: left contact, passing, right contact, passing. Row1 SOUTH toward viewer; Row2 SOUTHEAST down-right; Row3 EAST right profile; Row4 NORTHEAST up-right AWAY from viewer with back/side visible; Row5 NORTH directly AWAY, BACK of head and cape visible, NO face. Bottom two rows must show walking AWAY. Stable body scale and foot baseline88% cell height. No doubles or twins.\nEach figure is COMPLETE full body, center in cell, 12% transparent padding on all sides, no cropped body or intersecting adjacent sprites. Consistent clearly connected hands, held tools and clothing. On foot, no horse. Native48x48 frame style. Deliberately hand-placed-looking chunky PIXEL ART, dark one-pixel outlines, limited24-color palette, flat three-tone shading, crisp pixel clusters and large readable face. Match approved portrait costume and colors. NO tiny noisy detail, no gradients, no blurry glow.\nGenuine TRANSPARENT alpha background around and between sprites. NO checkerboard pattern, no white rectangles, no backdrop, shadows, frame, grid lines, text, labels or numbers. Canvas portrait4:5."
+    },
+    {
+      "hero": "petunia",
+      "asset": "map",
+      "method": "built-in image generation",
+      "prompt": "Use case: stylized-concept. Asset: ONE map walking sprite sheet for Questing Heroes hero Petunia.\nImage1 IDENTITY reference: approved portrait. Image2 LAYOUT reference ONLY: copy number of cells, pose order and chunky pixel scale, NEVER its character.\nSubject: female anthropomorphic GRAY MOUSE QUEEN, large rounded PINK ears, red-pink eyes pink nose small white front teeth, gold crown symmetric pink gems, pink royal robe white fur collar, pink jewel clasp, tiny gray paws. ONE small gold star wand held in paw. No text or symbols resembling letters.\nEXACTLY TWENTY FULL-BODY poses, ONE character per cell, total TWENTY characters. Layout FOUR columns by FIVE rows of equal square cells. Follow image2's20-pose directional walk layout. Each row is FOUR sequential walk-cycle frames with alternating legs and slight arm swing: left contact, passing, right contact, passing. Row1 SOUTH toward viewer; Row2 SOUTHEAST down-right; Row3 EAST right profile; Row4 NORTHEAST up-right AWAY from viewer with back/side visible; Row5 NORTH directly AWAY, BACK of head and cape visible, NO face. Bottom two rows must show walking AWAY. Stable body scale and foot baseline88% cell height. No doubles or twins.\nEach figure is COMPLETE full body, center in cell, 12% transparent padding on all sides, no cropped body or intersecting adjacent sprites. Consistent clearly connected hands, held tools and clothing. On foot, no horse. Native48x48 frame style. Deliberately hand-placed-looking chunky PIXEL ART, dark one-pixel outlines, limited24-color palette, flat three-tone shading, crisp pixel clusters and large readable face. Match approved portrait costume and colors. NO tiny noisy detail, no gradients, no blurry glow.\nGenuine TRANSPARENT alpha background around and between sprites. NO checkerboard pattern, no white rectangles, no backdrop, shadows, frame, grid lines, text, labels or numbers. Canvas portrait4:5."
+    },
+    {
+      "hero": "pihu",
+      "asset": "map",
+      "method": "built-in image generation",
+      "prompt": "Use case: stylized-concept. Asset: ONE map walking sprite sheet for Questing Heroes hero Pihu.\nImage1 IDENTITY reference: approved portrait. Image2 LAYOUT reference ONLY: copy number of cells, pose order and chunky pixel scale, NEVER its character.\nSubject: anthropomorphic AFRICAN GRAY PARROT mage, silver-gray feathers, pale face patch, GOLD yellow eyes and BLACK hooked beak, maroon green-vine cloak, leaf clasp, one RED APPLE in one feathered hand and ONE continuous upright WOODEN STAFF in other, wooden loop top enclosing silver crescent. Gray avian feet, no human skin.\nEXACTLY TWENTY FULL-BODY poses, ONE character per cell, total TWENTY characters. Layout FOUR columns by FIVE rows of equal square cells. Follow image2's20-pose directional walk layout. Each row is FOUR sequential walk-cycle frames with alternating legs and slight arm swing: left contact, passing, right contact, passing. Row1 SOUTH toward viewer; Row2 SOUTHEAST down-right; Row3 EAST right profile; Row4 NORTHEAST up-right AWAY from viewer with back/side visible; Row5 NORTH directly AWAY, BACK of head and cape visible, NO face. Bottom two rows must show walking AWAY. Stable body scale and foot baseline88% cell height. No doubles or twins.\nEach figure is COMPLETE full body, center in cell, 12% transparent padding on all sides, no cropped body or intersecting adjacent sprites. Consistent clearly connected hands, held tools and clothing. On foot, no horse. Native48x48 frame style. Deliberately hand-placed-looking chunky PIXEL ART, dark one-pixel outlines, limited24-color palette, flat three-tone shading, crisp pixel clusters and large readable face. Match approved portrait costume and colors. NO tiny noisy detail, no gradients, no blurry glow.\nGenuine TRANSPARENT alpha background around and between sprites. NO checkerboard pattern, no white rectangles, no backdrop, shadows, frame, grid lines, text, labels or numbers. Canvas portrait4:5."
+    },
+    {
+      "hero": "saki",
+      "asset": "map",
+      "method": "built-in image generation",
+      "prompt": "Use case: stylized-concept. Asset: ONE map walking sprite sheet for Questing Heroes hero Saki.\nImage1 IDENTITY reference: approved portrait. Image2 LAYOUT reference ONLY: copy number of cells, pose order and chunky pixel scale, NEVER its character.\nSubject: cheerful tan freckled female ELF with short curly brown hair, pointed ears, silver crescent clips and earrings, one GREEN and one BLUE eye, pink cream tunic green cape and dark green trousers, boots. Cast with open hand and small green sparkle; silver crescent clasp. No text.\nEXACTLY TWENTY FULL-BODY poses, ONE character per cell, total TWENTY characters. Layout FOUR columns by FIVE rows of equal square cells. Follow image2's20-pose directional walk layout. Each row is FOUR sequential walk-cycle frames with alternating legs and slight arm swing: left contact, passing, right contact, passing. Row1 SOUTH toward viewer; Row2 SOUTHEAST down-right; Row3 EAST right profile; Row4 NORTHEAST up-right AWAY from viewer with back/side visible; Row5 NORTH directly AWAY, BACK of head and cape visible, NO face. Bottom two rows must show walking AWAY. Stable body scale and foot baseline88% cell height. No doubles or twins.\nEach figure is COMPLETE full body, center in cell, 12% transparent padding on all sides, no cropped body or intersecting adjacent sprites. Consistent clearly connected hands, held tools and clothing. On foot, no horse. Native48x48 frame style. Deliberately hand-placed-looking chunky PIXEL ART, dark one-pixel outlines, limited24-color palette, flat three-tone shading, crisp pixel clusters and large readable face. Match approved portrait costume and colors. NO tiny noisy detail, no gradients, no blurry glow.\nGenuine TRANSPARENT alpha background around and between sprites. NO checkerboard pattern, no white rectangles, no backdrop, shadows, frame, grid lines, text, labels or numbers. Canvas portrait4:5."
+    },
+    {
+      "hero": "x",
+      "asset": "map",
+      "method": "built-in image generation",
+      "prompt": "Use case: stylized-concept. Asset: ONE map walking sprite sheet for Questing Heroes hero X.\nImage1 IDENTITY reference: approved portrait. Image2 LAYOUT reference ONLY: copy number of cells, pose order and chunky pixel scale, NEVER its character.\nSubject: male human dark knight, warm tan freckles and cheek scar, BLUE eyes, curly copper red hair, navy black gold-edged plate armor and burgundy cape, small silver skull clasp. ONE dark shield with simple ivory skull in front, ONE sheathed sword on back; attack with that same drawn sword, no extra weapons. Armored boots.\nEXACTLY TWENTY FULL-BODY poses, ONE character per cell, total TWENTY characters. Layout FOUR columns by FIVE rows of equal square cells. Follow image2's20-pose directional walk layout. Each row is FOUR sequential walk-cycle frames with alternating legs and slight arm swing: left contact, passing, right contact, passing. Row1 SOUTH toward viewer; Row2 SOUTHEAST down-right; Row3 EAST right profile; Row4 NORTHEAST up-right AWAY from viewer with back/side visible; Row5 NORTH directly AWAY, BACK of head and cape visible, NO face. Bottom two rows must show walking AWAY. Stable body scale and foot baseline88% cell height. No doubles or twins.\nEach figure is COMPLETE full body, center in cell, 12% transparent padding on all sides, no cropped body or intersecting adjacent sprites. Consistent clearly connected hands, held tools and clothing. On foot, no horse. Native48x48 frame style. Deliberately hand-placed-looking chunky PIXEL ART, dark one-pixel outlines, limited24-color palette, flat three-tone shading, crisp pixel clusters and large readable face. Match approved portrait costume and colors. NO tiny noisy detail, no gradients, no blurry glow.\nGenuine TRANSPARENT alpha background around and between sprites. NO checkerboard pattern, no white rectangles, no backdrop, shadows, frame, grid lines, text, labels or numbers. Canvas portrait4:5."
+    }
+  ]
+}
