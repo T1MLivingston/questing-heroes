@@ -227,6 +227,7 @@ Everything lives in one object, `S`, so it can be saved as JSON:
 
 - Remaining Walkers packs 1-4: personal map walkers for the last 102 heroes, so all 175 now walk the map as themselves (no hero uses the banner walker any more; it stays as the fallback while a sheet loads or for class heroes).
 - These are separate files, `heroes/walkers/<id>.png` (192×384, same layout as before, alpha made binary), listed in `WALK_FILES` (02-art.js). `walkerSheet` loads one only when that hero is drawn, because packing them into `walkers.png` made a 10.5 MB atlas. The first 73 stay in the `walkers.png` atlas. Originals in `art_source/remaining_walkers/`.
+- `ART_REQUEST_MOUNTED.md` is the brief for horseback art (mounted battle strip and mounted map walker) for the 155 heroes without it.
 
 ### v69 Eight New Heroes
 
