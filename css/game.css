@@ -1202,3 +1202,7 @@ p.mmarket{max-width:none!important;margin-left:0!important;margin-right:0!import
 
 /* v65: no stale game screen behind the title and setup pages */
 body.offgame #app{visibility:hidden}
+
+/* v67 Visual Upgrade icons (atlas ui/upgrade.png) */
+.upico{display:inline-block;vertical-align:middle;background-repeat:no-repeat;image-rendering:pixelated;flex:none}
+.tb-emoji .upico{vertical-align:-6px}

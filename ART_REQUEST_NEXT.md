@@ -4,30 +4,18 @@ Match the existing packs: warm storybook pixel art, dark plum outline (#2b1a33),
 
 Already complete (nothing needed): every troop (40 + upgrades, HD strips), every wild monster, every artifact icon, all eight towns (scenes, buildings, extra buildings, map stages), map terrain and sites, setup icons, skill icons (except one), a portrait for every one of the 167 heroes, and the main theme music.
 
-## 1. Hero battle figures (25 heroes still use their banner's figure)
-On foot, 6 poses (idle, move A, move B, attack, hit, defeat), 64×64 (or 96×64 for big silhouettes), facing east, pivot width/2,60:
-Mossback, Fern, Spindle, Coral, Penny, India, Rusk Hookhorn, Thornfrill, Mara, Sid & Tess, Wren, Mags & Mae, Odo & Otto, Aster & Briar, Ned & Nat, Spike, Rafe & Reed, Fut, Luckenzo, Larishna, Nanya, Posy Spinner, Katherine, King Pharoph the 3rd (three eyes), Zakai.
+## 1. Hero battle figures
+Done in v67: every hero has one.
 
 ## 2. Hero map walkers (the biggest visual gap)
-- **On foot**: only 18 of 167 heroes have their own walker (Bear, Perry, Dorothy, Oliver, Engelman, Tempest, Parker, Shadow, Boopis, Monkey, Binx, Vargas, Rago, Rimmer, Sookie, Schmickle, William IV, Battaglia). Everyone else walks as their banner's generic figure. One 192×384 sheet per hero (48×48 frames, 4 walk phases × 8 directions s, sw, w, nw, n, ne, e, se, pivot 24,44). Start with each banner's 8 picks (about 50), then the rest.
+- **On foot**: 65 of 167 heroes have their own walker (every banner's first eight are done in v67). The other 102 (mostly tavern wanderers and student heroes) walk as their banner's generic figure. One 192×384 sheet per hero (48×48 frames, 4 walk phases × 8 directions s, sw, w, nw, n, ne, e, se, pivot 24,44).
 - **On horseback**: 23 heroes have mounted walkers; the rest ride as their on-foot figure. Lower priority.
 
-## 3. Portraits that look off
-- **Dusty**: a wrapped mummy face, almost the same idea as the student hero Sus. Needs its own look (Dusty is a Necromancer Might hero).
-- **King Pharoph the 3rd**: add the third eye in the forehead.
-- **Kiln**: a dark rock blob; the face is hard to read at small sizes. Lighter stone, clear eyes.
-- **Shadow**: very dark skull in a hood; hard to read on dark backgrounds. More rim light or colour.
-- **Coral**: a coral plant with no face; reads as an object, not a hero. Give it a face or a coral-armoured merfolk.
-- To check with Tim: **Toad** is drawn as a bald man (the name suggests a toad); **Kaf** and **Teo** are both pharaohs; **Gerry** and **Trey** are both red-hooded reapers with scythes. Fine if intended, but they look alike in the Hero Book.
+## 3. Portraits
+Dusty, King Pharoph the 3rd, Kiln, Shadow and Coral were redrawn in v67. Toad, Kaf/Teo and Gerry/Trey stay as the students designed them.
 
-## 4. Spells
-- **Spell icons, 14** (64×64, one atlas 7 a row): Ember Dart, Chain Spark, Squall, Entangle, Raise Bones, Geyser, Mend, Swift Wind, Bark Skin, Starfall, Weaken, Frost Lance, Rally, Meteor. Shown in the spellbook, Library, tavern and level-up (today they show text only).
-- **Battle effect strips** (4-6 frames, about 96×96): Geyser and Weaken have none; Frost Lance borrows Squall, Rally borrows Mend, Meteor borrows Starfall.
-
-## 5. Small icons and sites
-- **Sorcery** skill icon (it borrows the spellbook icon).
-- **UI icons** (64×64) to replace emoji on buttons: Market (scales), Mines (pickaxe), Retreat, Ring the bell, Tavern, Hero Book, Create a hero, Kick out hero, Save/Load hero file.
-- **Lit lighthouse** map site (2 frames: dark, lit) so a lighthouse shows once it has revealed the coast.
+## 4. Spells and icons
+Done in v67: all 14 spell icons, effects for Geyser, Weaken, Frost Lance, Rally and Meteor, the Sorcery icon, nine button icons and the lit lighthouse.
 
 ## 6. Sound
 - **Music**: only `map.mp3` is still wanted (theme, acoustic, town, battle, victory and defeat are in).

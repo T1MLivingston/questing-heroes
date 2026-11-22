@@ -1176,6 +1176,8 @@ function drawMap(){
   c.save();c.translate(-Math.round(camX),-Math.round(camY));
   {const tcv=terrainPh?terrainPh[Math.floor(performance.now()/(terrainPh.length===2?440:220))%terrainPh.length]:terrainCv,k=tcv.width/(W*TS),sx=Math.max(0,Math.floor(camX*k)),sy=Math.max(0,Math.floor(camY*k)),
     sw=Math.min(tcv.width-sx,Math.ceil(vw*k)+2),sh=Math.min(tcv.height-sy,Math.ceil(vh*k)+2);if(sw>0&&sh>0)c.drawImage(tcv,sx,sy,sw,sh,sx/k,sy/k,sw/k,sh/k);}
+  /* v67: a lighthouse that has revealed the coast shows its lit art over the painted one */
+  if(S.lit&&S.lit.length&&LIGHTS.length){const ua=artImg('ui/upgrade.png');if(ua.ok){const q=TS/32,w=Math.round(64*0.7),hh=Math.round(96*0.7);for(const l of LIGHTS)if(S.lit.includes(l.x+','+l.y)){const fx=l.x*32+16,fy=l.y*32+34;c.drawImage(ua.img,0,64,64,96,(fx-w/2)*q,(fy-hh)*q,w*q,hh*q);}}}
   const x0=Math.max(0,Math.floor(camX/TS)-2),y0=Math.max(0,Math.floor(camY/TS)-1),x1=Math.min(W-1,Math.ceil((camX+vw)/TS)+2),y1=Math.min(H-1,Math.ceil((camY+vh)/TS)+4);
   if(path&&path.length){
     let mp=HERO().mp,px=HERO().x,py=HERO().y,day=0;

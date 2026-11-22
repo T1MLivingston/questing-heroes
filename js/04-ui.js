@@ -14,9 +14,9 @@ function renderUI(){if(S)document.body.classList.remove('offgame');
   applyTheme();
   $('#res').innerHTML=RES.map(k=>`<span class="${k}" title="${RESNAME[k]}"><img src="${iconURL('res',k,40)}" alt="${RESNAME[k]}">${fmt(S.res[k])}</span>`).join('');
   {const y=Object.fromEntries(RES.map(k=>[k,0]));y.gold=income();for(const o of S.objs)if(o.type==='mine'&&o.owned===ME())y[MINE[o.k].res]+=mineOut(o);if(!S.town.taken){if(facSpecial('amberDay'))y.amber+=1;if(facSpecial('oreDay'))y.ore+=2;}
-    {const cb=$('#cmdbar');if(cb&&!$('#bMarket')){const mk=document.createElement('button');mk.className='btn mktbtn';mk.id='bMarket';mk.title='Market: buy and sell goods';mk.innerHTML='⚖ Market';mk.onclick=()=>{if(!S||moving||modalOpen)return;openMarket();};cb.prepend(mk);const qt=$('#qTowns'),bt=$('#bTown');if(qt&&bt)cb.insertBefore(qt,bt);}}
+    {const cb=$('#cmdbar');if(cb&&!$('#bMarket')){const mk=document.createElement('button');mk.className='btn mktbtn';mk.id='bMarket';mk.title='Market: buy and sell goods';mk.innerHTML=upIco('ui_market',22)+' Market';mk.onclick=()=>{if(!S||moving||modalOpen)return;openMarket();};cb.prepend(mk);const qt=$('#qTowns'),bt=$('#bTown');if(qt&&bt)cb.insertBefore(qt,bt);}}
     {const acts=document.querySelector('.topbar .acts')||$('#bMenu').parentNode;let mb=$('#bMines');if(!mb&&acts){mb=document.createElement('button');mb.className='btn icon minesbtn';mb.id='bMines';mb.title='Your mines';mb.onclick=()=>{if(!S||moving||modalOpen)return;openMines();};acts.insertBefore(mb,acts.firstChild);}
-      if(mb){const n=S.objs.filter(o=>o.type==='mine'&&o.owned===ME()).length;mb.innerHTML=`<span class="mb-ic">⛏</span><b>${n}</b>`;}}
+      if(mb){const n=S.objs.filter(o=>o.type==='mine'&&o.owned===ME()).length;mb.innerHTML=`<span class="mb-ic">${upIco('ui_mines',26)}</span><b>${n}</b>`;}}
     $('#yield').innerHTML=`<small>per day</small>${RES.map(k=>y[k]?`<span><img src="${iconURL('res',k,32)}" alt="${RESNAME[k]}">+${fmt(y[k])}</span>`:'').join('')}`;}
   const d=dateParts();$('#date').innerHTML=`<span>Month ${d.m} · Week ${d.w} · Day ${d.d}</span><em>${S.event&&S.event.k!=='plain'?`${S.event.name} · `:''}${S.limit-S.day+1} days left</em>`;$('#date').title=S.event?`${S.event.name}: ${S.event.txt}`:'';
   const h=HERO(),hd=H_(),need=xpFor(h.lvl),prev=h.lvl>1?xpFor(h.lvl-1):0;
@@ -89,7 +89,7 @@ function openHeroSheet(){const h=HERO(),hd=H_();h.pack=h.pack||[];
       <p class="muted">Attack and Defense make every troop in the army hit harder and take less damage. Power makes spells stronger. Lore sets mana: 10 mana per point, and the hero gets back mana equal to their Lore each day.</p>
       <div class="label">Backpack · click an item to wear it</div><div class="pack">${h.pack.length?h.pack.map(k=>itemBox(k,'p')).join(''):'<p class="muted">Empty.</p>'}</div>
     </div></div>`;
-  const pr=showModal({title:`${esc(h.name)}: equipment`,body:body(),wide:true,top:true,buttons:[...S.heroes.length>1?[{label:'Kick out hero',value:'dismiss'}]:[],{label:'Done',value:1,primary:true}],dismiss:1});
+  const pr=showModal({title:`${esc(h.name)}: equipment`,body:body(),wide:true,top:true,buttons:[...S.heroes.length>1?[{label:`${upIco('ui_kick_hero',20)} Kick out hero`,value:'dismiss'}]:[],{label:'Done',value:1,primary:true}],dismiss:1});
   const b=$('#modal').querySelector('.body');
   b.addEventListener('click',e=>{const el=e.target.closest('[data-eq]');if(!el)return;const[where,k]=el.dataset.eq.split(':');
     if(where==='w'){h.items.splice(h.items.indexOf(k),1);h.pack.push(k);}
@@ -122,13 +122,13 @@ function openMines(){const ms=()=>S.objs.filter(o=>o.type==='mine'&&o.owned===ME
         <div class="mlist">${list.map(o=>{const lv=o.lvl||1,c=MINE_UP[lv];const tip=c?`<span class="uptip"><b>Level ${lv+1}: +${fmt(MINE[o.k].out[lv])} a day</b>${Object.entries(c).map(([r,v])=>`<span class="${(S.res[r]||0)<v?'short':''}"><img src="${iconURL('res',r,32)}" alt="">${fmt(S.res[r]||0)} / ${fmt(v)} ${RESNAME[r].toLowerCase()}</span>`).join('')}${canAfford(c)?'':'<em>Short on something? The market can trade for it.</em>'}</span>`:'';
           return`<div class="mone"><span>Level ${lv} · +${fmt(mineOut(o))} a day</span>${lv<MINE_MAX?`<span class="upwrap"><button class="btn sm" data-mineup="${o.id}" ${canAfford(c)?'':'aria-disabled="true"'}>Upgrade</button>${tip}</span>${canAfford(c)?'':'<button class="btn sm mmk" data-mmarket="1" title="Open the market">⚖</button>'}`:'<em>top level</em>'}</div>`;}).join('')}</div></div>`;}).join('');
     return`<div class="minesum">${Object.keys(t).length?RES.filter(k=>t[k]).map(k=>`<span><img src="${iconURL('res',k,32)}" alt="">+${fmt(t[k])} ${RESNAME[k].toLowerCase()} a day</span>`).join(''):'<span class="muted">No mines yet. Walk onto a mine on the map to claim it.</span>'}</div><div class="mgrps">${cards}</div><p class="mmarket"><button class="btn" data-mmarket="1">⚖ Market: trade goods</button></p>`;};
-  showModal({title:`⛏ Your mines (${ms().length})`,body:body(),wide:true,top:true,buttons:[{label:'Close',value:1,primary:true}],dismiss:1});
+  showModal({title:`${upIco('ui_mines',28)} Your mines (${ms().length})`,body:body(),wide:true,top:true,buttons:[{label:'Close',value:1,primary:true}],dismiss:1});
   const b=$('#modal').querySelector('.body');
   b.addEventListener('click',e=>{if(e.target.closest('[data-mmarket]')){$('#modal')._close(null);setTimeout(openMarket,0);return;}const el=e.target.closest('[data-mineup],[data-minego]');if(!el)return;
     if(el.dataset.mineup){const o=S.objs.find(q=>q.id===+el.dataset.mineup);if(!o||(o.lvl||1)>=MINE_MAX)return;const c=MINE_UP[o.lvl||1];if(!canAfford(c)){toast('Not enough yet: hover Upgrade to see what is missing.');return;}pay(c);o.lvl=(o.lvl||1)+1;toast(`${MINE[o.k].name} upgraded to level ${o.lvl}.`);b.innerHTML=body();renderUI();save();}
     else{const o=S.objs.find(q=>q.id===+el.dataset.minego);if(o){$('#modal')._close(null);centerOn(o.x,o.y);}}});}
 function viewSpellbook(){const h=HERO();
-  const list=h.spells.map(k=>{const sp=SP[k];return`<div class="spell${h.mana>=sp.cost?'':' dim'}"><b>${sp.name}</b><span class="scost">${sp.cost} mana</span><p>${sp.desc(hst(h,'pow'))}</p></div>`;}).join('');
+  const list=h.spells.map(k=>{const sp=SP[k];return`<div class="spell${h.mana>=sp.cost?'':' dim'}"><b>${spIco(k,24)} ${sp.name}</b><span class="scost">${sp.cost} mana</span><p>${sp.desc(hst(h,'pow'))}</p></div>`;}).join('');
   showModal({title:`📖 ${esc(h.name)}'s spellbook`,body:h.book?`<p class="muted" style="margin-top:0">${h.mana} of ${maxMana()} mana. Cast spells in battle by clicking your hero beside the field. Power makes them stronger; Lore gives more mana.</p><div class="spells">${list||'<p>No spells yet.</p>'}</div>
      <p class="muted">Learn more at the Lantern Library and Star Archive in town, at spell altars on the map, and at wayshrines.</p>`
      :`<p>${esc(h.name)} has no spellbook yet. Buy one for ${BOOK_COST} gold at the Lantern Library in your town.</p>`,buttons:[{label:'Close',value:1,primary:true}],dismiss:1});}

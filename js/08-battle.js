@@ -117,7 +117,7 @@ async function moveTo(s,c,r,rm){
 async function lunge(a,d){a.act={row:2,t0:performance.now(),dur:reduced?60:440,n:4};const p=hc(a.c,a.r),q=hc(d.c,d.r);await tween(reduced?1:110,t=>{a.anim={x:p.x+(q.x-p.x)*0.35*t,y:p.y+(q.y-p.y)*0.35*t};});await tween(reduced?1:110,t=>{a.anim={x:p.x+(q.x-p.x)*0.35*(1-t),y:p.y+(q.y-p.y)*0.35*(1-t)};});a.anim=null;}
 async function projectile(a,d,col){const p=hc(a.c,a.r),q=hc(d.c,d.r);const f={type:'shot',x:p.x,y:p.y,col,pk:PROJ_OF(a.k),t0:performance.now(),ang:Math.atan2(q.y-p.y,q.x-p.x)};bt.fx.push(f);
   await tween(reduced?1:Math.min(420,Math.hypot(q.x-p.x,q.y-p.y)*1.1),t=>{f.x=p.x+(q.x-p.x)*t;f.y=p.y+(q.y-p.y)*t-Math.sin(t*Math.PI)*BL.s*0.8;});bt.fx=bt.fx.filter(x=>x!==f);}
-const SPELL_FX={ember:'ember_dart',chain:'chain_spark',mend:'mend',swift:'swiftness',bark:'bark_skin',entangle:'entangle',squall:'squall',starfall:'starfall',raise:'raise_bones',frost:'squall',meteor:'starfall',rally:'mend'};
+const SPELL_FX={ember:'ember_dart',chain:'chain_spark',mend:'mend',swift:'swiftness',bark:'bark_skin',entangle:'entangle',squall:'squall',starfall:'starfall',raise:'raise_bones',frost:'frost_lance',meteor:'meteor',rally:'rally',geyser:'geyser',weaken:'weaken'};
 let curSpell=null;
 async function burst(s,col){const p=hc(s.c,s.r),sp=curSpell&&SPELL_FX[curSpell];const f={type:'burst',x:p.x,y:p.y,col,t:0,sp};bt.fx.push(f);await tween(reduced?1:sp?560:380,t=>{f.t=t;});bt.fx=bt.fx.filter(x=>x!==f);}
 const nm=s=>`<b style="color:${s.side?'var(--foe)':'var(--team)'}">${s.u.pl}</b>`;
@@ -297,7 +297,7 @@ async function spellEffect0(id,target,P){
 function openSpellbook(){
   if(!bt||!bt.pending)return;if(!HERO().book){toast(`${HERO().name} has no spellbook. Buy one at the Lantern Library.`);return;}if(bt.spellCast){toast('Only one spell per round.');return;}
   const h=HERO(),echo=S.fac==='wizards'&&bt.spellsCast<(fx().echo||1);
-  showModal({title:'Spellbook',body:`<p class="muted">One spell per round. ${sc('lore',h.mana)} mana · ${sc('pow',h.pow)} power${echo?' · <b style="color:var(--text)">Spell Echo ready: this spell casts twice</b>':''}</p><div class="grid">${h.spells.map(k=>{const c=spellCost(k),off=c>h.mana||(k==='geyser'&&bt.geyserUsed);return`<div class="bcard"><h4>${SP[k].name} <span class="muted">· ${c} mana</span></h4><p>${SP[k].desc(h.pow)}</p><div><button class="btn sm" data-cast="${k}" ${off?'disabled':''}>Cast</button></div></div>`;}).join('')}</div>`,
+  showModal({title:'Spellbook',body:`<p class="muted">One spell per round. ${sc('lore',h.mana)} mana · ${sc('pow',h.pow)} power${echo?' · <b style="color:var(--text)">Spell Echo ready: this spell casts twice</b>':''}</p><div class="grid">${h.spells.map(k=>{const c=spellCost(k),off=c>h.mana||(k==='geyser'&&bt.geyserUsed);return`<div class="bcard"><h4>${spIco(k,24)} ${SP[k].name} <span class="muted">· ${c} mana</span></h4><p>${SP[k].desc(h.pow)}</p><div><button class="btn sm" data-cast="${k}" ${off?'disabled':''}>Cast</button></div></div>`;}).join('')}</div>`,
     buttons:[{label:'Close',value:null}],dismiss:null});
   const m=$('#modal');
   m.querySelector('.body').addEventListener('click',e=>{const b=e.target.closest('[data-cast]');if(!b||b.disabled)return;const k=b.dataset.cast;m._close(null);
@@ -435,7 +435,8 @@ function drawBattle(){
     if(f.type==='shot'&&f.pk){const pa=artImg(`projectiles/${f.pk}.png`);if(pa.ok){const fr=Math.floor((now-f.t0)/90)%3,z=Math.max(2,Math.round(BL.s/16));c.save();c.translate(f.x,f.y);c.rotate(f.pk==='rock'?(now-f.t0)/80:f.ang);c.imageSmoothingEnabled=false;c.drawImage(pa.img,fr*16,0,16,16,-8*z,-8*z,16*z,16*z);c.restore();continue;}}
     if(f.type==='shot'){c.save();c.translate(f.x,f.y);c.rotate(f.ang);c.fillStyle=f.col;c.strokeStyle=f.col;c.lineWidth=2;
       if(f.col!=='#efe2bb'){c.beginPath();c.arc(0,0,5,0,7);c.fill();}else{c.beginPath();c.moveTo(-10,0);c.lineTo(8,0);c.stroke();c.beginPath();c.moveTo(10,0);c.lineTo(4,-3);c.lineTo(4,3);c.closePath();c.fill();}c.restore();}
-    if(f.type==='burst'&&f.sp){const sa=artImg(`battle/spells/${f.sp}.png`);if(sa.ok){const im=sa.img,fw=im.width/6,fh=im.height,fr=Math.min(5,Math.floor(f.t*6)),z=Math.max(1.5,BL.s*2/64);c.save();c.imageSmoothingEnabled=false;c.drawImage(im,fr*fw,0,fw,fh,Math.round(f.x-fw*z/2),Math.round(f.y-fh*z/2-BL.s*0.2),fw*z,fh*z);c.restore();continue;}}
+    if(f.type==='burst'&&f.sp&&UPG.fx[f.sp]){const ua=artImg('ui/upgrade.png');if(ua.ok){const[ox,oy]=UPG.fx[f.sp],fr=Math.min(5,Math.floor(f.t*6)),z=Math.max(1.5,BL.s*2/64);c.save();c.imageSmoothingEnabled=false;c.drawImage(ua.img,ox+fr*64,oy,64,64,Math.round(f.x-32*z),Math.round(f.y-32*z-BL.s*0.2),64*z,64*z);c.restore();continue;}}
+    if(f.type==='burst'&&f.sp&&!UPG.fx[f.sp]){const sa=artImg(`battle/spells/${f.sp}.png`);if(sa.ok){const im=sa.img,fw=im.width/6,fh=im.height,fr=Math.min(5,Math.floor(f.t*6)),z=Math.max(1.5,BL.s*2/64);c.save();c.imageSmoothingEnabled=false;c.drawImage(im,fr*fw,0,fw,fh,Math.round(f.x-fw*z/2),Math.round(f.y-fh*z/2-BL.s*0.2),fw*z,fh*z);c.restore();continue;}}
     if(f.type==='burst'){c.strokeStyle=f.col;c.globalAlpha=1-f.t;c.lineWidth=3;c.beginPath();c.arc(f.x,f.y,BL.s*(0.4+f.t*0.9),0,7);c.stroke();c.globalAlpha=1;}
   }
   bt.floats=bt.floats.filter(f=>now-f.t0<1100);
@@ -473,7 +474,7 @@ $('#bDefend').onclick=()=>bt&&bt.pending&&bt.pending({type:'defend'});
 $('#bSpell').onclick=openSpellbook;
 /* v50 Retreat: the hero escapes to your home town (or another town you hold) with half of each stack, and loses the rest of the day */
 const retreatTown=()=>[S.town,...myMajors()].find(t=>t&&!t.taken)||null;
-{const fb=document.createElement('button');fb.className='btn sm';fb.id='bFlee';fb.textContent='Retreat';fb.title='Flee home: lose half your army and the rest of the day';$('#bAuto').after(fb);
+{const fb=document.createElement('button');fb.className='btn sm';fb.id='bFlee';fb.innerHTML=upIco('ui_retreat',18)+' Retreat';fb.title='Flee home: lose half your army and the rest of the day';$('#bAuto').after(fb);
   fb.onclick=async()=>{if(!bt||!bt.pending||bt.auto)return;const tw=retreatTown();if(!tw){toast('You hold no town to retreat to.');return;}
     const v=await showModal({title:'Retreat?',body:`<p><b>${esc(HERO().name)}</b> flees the battle and rides back to <b>${esc(tw.name||'your town')}</b>.</p><p>Half of every stack is lost in the escape, and ${esc(HERO().name)} can't move again today.</p>`,buttons:[{label:'Keep fighting',value:0},{label:'Retreat',value:1,primary:true}],dismiss:0});
     if(v&&bt&&bt.pending)bt.pending({type:'flee'});};}

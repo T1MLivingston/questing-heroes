@@ -31,7 +31,7 @@ async function title(){
   const cont=has?`<img class="tb-face" src="${iconURL('hero',has.heroes[0].id,128)}" alt="">`:'';
   const v=await showModal({title:'',body:`<div class="titlescreen"><img class="tbanner" src="${ART_BASE}ui/banner.png" alt="Questing Heroes">
     <div class="tb-main">${big('n','new_campaign','New campaign')}${big('c','continue',has?'Continue':'Continue',!has,cont)}${big('l','load_game','Load',!slots)}</div>
-    <div class="tb-sub"><button class="tbtn sm" data-tv="h"><span class="tb-emoji">✎</span><b>Create a hero</b></button><button class="tbtn sm" data-tv="b"><span class="tb-emoji">📖</span><b>Hero Book</b></button><button class="tbtn sm" data-tv="f">${ico('relic_hunt',40)}<b>Hall of Fame</b></button></div>
+    <div class="tb-sub"><button class="tbtn sm" data-tv="h"><span class="tb-emoji">${upIco('ui_create_hero',36)}</span><b>Create a hero</b></button><button class="tbtn sm" data-tv="b"><span class="tb-emoji">${upIco('ui_hero_book',36)}</span><b>Hero Book</b></button><button class="tbtn sm" data-tv="f">${ico('relic_hunt',40)}<b>Hall of Fame</b></button></div>
     ${heroParade()}
     <p class="tcredit">Free game created by Tim Livingston, computer teacher · <button class="linkbtn" data-about="1">About &amp; credits</button></p></div>`,buttons:[]});
   if(v==='about'){await showModal({title:'About & credits',body:ABOUT_HTML,buttons:[{label:'Back',value:1,primary:true}],dismiss:1});title();return;}
@@ -55,7 +55,7 @@ function hbDetail(h){const book=h.type==='Magic'||h.sp.length>0,f=FAC[h.fac];
     <div class="hbd-top"><span class="hbd-port"><img src="${iconURL('hero',h.id,128)}" alt=""></span><div><h2 class="hbd-name">${esc(h.name)}</h2>
       <p class="hbd-sub">${f?`<img src="${iconURL('crest',h.fac,52)}" alt=""> ${f.arch}`:'No banner'} · ${h.type} hero · ${{pick:'Banner pick',tav:'Tavern hero',stu:'Student hero',cls:'Class hero'}[hbGroup(h)]}${book?' · 📖 spellbook':''}</p>
       <div class="bigstats">${['atk','def','pow','lore'].map((k,i)=>`<span title="${STAT_TIP[k]}"><em><img src="${iconURL('stat',k,44)}" alt="">${STATN[k]}</em><b>${h.st[i]}</b></span>`).join('')}</div></div></div>
-    <ul class="hkit"><li><b>★ ${esc(h.ab||'')}:</b> ${esc(h.ad||'')}</li>${h.sk.map(k=>SK[k]?`<li>${skIco(k,22)}<b>${SK[k].name}:</b> ${SK[k].desc}</li>`:'').join('')}${h.item&&ITEMS[h.item]?`<li><b>${ITEMS[h.item].name}:</b> ${itemTxt(h.item)}</li>`:''}${book?`<li><b>Spells:</b> ${(h.sp.length?h.sp:['ember']).map(k=>SP[k]?SP[k].name:k).join(', ')}</li>`:''}</ul>
+    <ul class="hkit"><li><b>★ ${esc(h.ab||'')}:</b> ${esc(h.ad||'')}</li>${h.sk.map(k=>SK[k]?`<li>${skIco(k,22)}<b>${SK[k].name}:</b> ${SK[k].desc}</li>`:'').join('')}${h.item&&ITEMS[h.item]?`<li><b>${ITEMS[h.item].name}:</b> ${itemTxt(h.item)}</li>`:''}${book?`<li><b>Spells:</b> ${(h.sp.length?h.sp:['ember']).map(k=>SP[k]?`${spIco(k,20)} ${SP[k].name}`:k).join(', ')}</li>`:''}</ul>
     ${h.story?`<p class="hbd-story">${esc(h.story)}</p>`:''}</div>`;}
 function hbHTML(){if(HB.open&&HBY[HB.open])return hbDetail(HBY[HB.open]);const l=hbList();
   const chip=(k,v,lab,on)=>`<button class="hbchip${on?' on':''}" data-hb="${k}:${v}">${lab}</button>`;
@@ -85,7 +85,7 @@ async function hbSave(){const l=hbList();if(!l.length)return;
   try{const url=cv.toDataURL('image/jpeg',0.92),a=document.createElement('a');a.href=url;a.download=`hero-book-${hbLabel().toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')||'all'}.jpg`;document.body.appendChild(a);a.click();a.remove();toast('Saved the picture to your downloads.');}
   catch(e){toast('Your browser would not save the picture here. Open the game from its web address and try again.');}}
 async function openHeroBook(){HB.open=null;
-  const pr=showModal({title:'📖 Hero Book',body:`<div class="herobook">${hbHTML()}</div>`,wide:true,top:true,buttons:[{label:'Back',value:1,primary:true}],dismiss:1});
+  const pr=showModal({title:`${upIco('ui_hero_book',30)} Hero Book`,body:`<div class="herobook">${hbHTML()}</div>`,wide:true,top:true,buttons:[{label:'Back',value:1,primary:true}],dismiss:1});
   const root=$('#modal').querySelector('.herobook'),redo=keep=>{root.innerHTML=hbHTML();if(keep){const q=root.querySelector('.hbq');if(q){q.focus();q.setSelectionRange(q.value.length,q.value.length);}}};
   root.addEventListener('click',e=>{const t=e.target.closest('[data-hb],[data-hbopen],[data-hbback],[data-hbsave]');if(!t)return;
     if(t.dataset.hb){const[k,v]=t.dataset.hb.split(':');HB[k]=v;redo();}else if(t.dataset.hbopen){HB.open=t.dataset.hbopen;redo();root.scrollTop=0;}else if(t.dataset.hbback){HB.open=null;redo();}else if(t.dataset.hbsave){t.disabled=true;t.textContent='Drawing…';hbSave().then(()=>redo());}});

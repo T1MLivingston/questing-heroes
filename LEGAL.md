@@ -67,6 +67,7 @@ No other libraries, images or audio are included. Art made later with ChatGPT or
 | Upscaled Redraws (19 legacy hero portraits) in `assets/portraits/heroes/` and `recruits.png` | Supplied by the author (generated pixel art, ChatGPT) | 2026-11-16 | |
 | Zakai portrait in `assets/portraits/heroes/zakai_128.png` and `recruits.png` | Supplied by the author (generated pixel art) | 2026-11-18 | |
 | Music: acoustic, town, battle, victory and defeat tracks in `assets/music/` | Made by the author with Suno | 2026-11-22 | |
+| Visual Upgrade pack: 25 hero battle figures, 47 map walkers, 5 portraits, 14 spell icons, 9 button icons, 5 spell effects, lit lighthouse (`battle/heroes/foot.png`, `heroes/walkers.png`, `portraits/heroes/`, `ui/upgrade.png`) | Supplied by the author (generated pixel art) | 2026-11-22 | |
 | Half-size move cursor (`assets/ui/cursors/move_small.png`) | Downscaled locally from Pack 09's move cursor | 2026-11-08 | Same as above |
 
 The generated source images (high-res magenta PNGs) are kept outside this repo.
