@@ -1,0 +1,26 @@
+{
+  "battle_heroes": 11,
+  "battle_frames": 66,
+  "portrait_redraws": 4,
+  "portrait_size": [
+    256,
+    256
+  ],
+  "battle_strip_size": [
+    576,
+    64
+  ],
+  "frame_size": [
+    96,
+    64
+  ],
+  "pivot": [
+    48,
+    60
+  ],
+  "binary_transparency": "passed",
+  "padding_and_anchors": "passed",
+  "six_distinct_poses_per_hero": "passed",
+  "source": "current 128px portrait identities",
+  "integration": "art assets only; no game code changed"
+}

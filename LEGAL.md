@@ -72,6 +72,7 @@ No other libraries, images or audio are included. Art made later with ChatGPT or
 | Remaining Walkers packs 1-4: personal map walkers for 102 heroes (`heroes/walkers/<id>.png`; originals in `art_source/remaining_walkers/`) | Supplied by the author (generated pixel art) | 2026-11-22 | |
 | Mounted Banner Picks and Mounted Extras 01 packs: horseback battle figures and map walkers for 54 heroes (`battle/heroes/mounted/`, `heroes/walkers_mounted/`; originals in `art_source/mounted/`) | Supplied by the author (generated pixel art) | 2026-11-22 | |
 | Mounted Packs 1-4: horseback battle figures and map walkers for all 155 remaining heroes (`battle/heroes/mounted/`, `heroes/walkers_mounted/`; originals in `art_source/mounted/`) | Supplied by the author (generated pixel art) | 2026-11-23 | |
+| On Foot and Portrait Fixes pack: on-foot battle figures for 11 heroes and 256 px portraits for Eelvis, William IV, Veyra and Zakai (`battle/heroes/foot.png`, `portraits/heroes/hd/`; originals in `art_source/on_foot_and_portrait_fixes/`) | Supplied by the author (generated pixel art) | 2026-11-23 | |
 | Half-size move cursor (`assets/ui/cursors/move_small.png`) | Downscaled locally from Pack 09's move cursor | 2026-11-08 | Same as above |
 
 The generated source images (high-res magenta PNGs) are kept outside this repo.

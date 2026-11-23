@@ -5,7 +5,7 @@ Match the existing packs: warm storybook pixel art, dark plum outline (#2b1a33),
 Already complete (nothing needed): every troop (40 + upgrades, HD strips), every wild monster, every artifact icon, all eight towns (scenes, buildings, extra buildings, map stages), map terrain and sites, setup icons, skill icons (except one), a portrait for every one of the 175 heroes, and the main theme music.
 
 ## 1. Hero battle figures
-Done in v67: every hero has one.
+Done: every hero has an on-foot figure (the last 11 arrived in v75) and a mounted one (v73).
 
 ## 2. Hero map walkers
 Done in v70: all 175 heroes walk the map as themselves.
@@ -14,6 +14,7 @@ Done in v70: all 175 heroes walk the map as themselves.
 Done in v73: all 175 heroes have horseback art.
 
 ## 3. Portraits
+Done in v75: all 175 heroes have a sharp 256 px portrait as well as the 128 px one.
 Dusty, King Pharoph the 3rd, Kiln, Shadow and Coral were redrawn in v67. Toad, Kaf/Teo and Gerry/Trey stay as the students designed them.
 
 ## 4. Spells and icons

@@ -1,0 +1,439 @@
+{
+  "game": "Questing Heroes",
+  "pack": "Missing on-foot battles and 256px portraits",
+  "version": 1,
+  "battle": {
+    "oliver": {
+      "name": "Oliver",
+      "path": "assets/battle/heroes/upgrade/oliver/strip.png",
+      "mounted": false,
+      "frame_size": [
+        96,
+        64
+      ],
+      "sheet_size": [
+        576,
+        64
+      ],
+      "pose_order": [
+        "idle",
+        "move_a",
+        "move_b",
+        "attack",
+        "hit",
+        "death"
+      ],
+      "pivot": [
+        48,
+        60
+      ],
+      "facing": "e",
+      "mirror_west": true,
+      "durations_ms": [
+        600,
+        120,
+        120,
+        180,
+        150,
+        400
+      ]
+    },
+    "sheila": {
+      "name": "Sheila",
+      "path": "assets/battle/heroes/upgrade/sheila/strip.png",
+      "mounted": false,
+      "frame_size": [
+        96,
+        64
+      ],
+      "sheet_size": [
+        576,
+        64
+      ],
+      "pose_order": [
+        "idle",
+        "move_a",
+        "move_b",
+        "attack",
+        "hit",
+        "death"
+      ],
+      "pivot": [
+        48,
+        60
+      ],
+      "facing": "e",
+      "mirror_west": true,
+      "durations_ms": [
+        600,
+        120,
+        120,
+        180,
+        150,
+        400
+      ]
+    },
+    "boone": {
+      "name": "Boone",
+      "path": "assets/battle/heroes/upgrade/boone/strip.png",
+      "mounted": false,
+      "frame_size": [
+        96,
+        64
+      ],
+      "sheet_size": [
+        576,
+        64
+      ],
+      "pose_order": [
+        "idle",
+        "move_a",
+        "move_b",
+        "attack",
+        "hit",
+        "death"
+      ],
+      "pivot": [
+        48,
+        60
+      ],
+      "facing": "e",
+      "mirror_west": true,
+      "durations_ms": [
+        600,
+        120,
+        120,
+        180,
+        150,
+        400
+      ]
+    },
+    "michael": {
+      "name": "Michael",
+      "path": "assets/battle/heroes/upgrade/michael/strip.png",
+      "mounted": false,
+      "frame_size": [
+        96,
+        64
+      ],
+      "sheet_size": [
+        576,
+        64
+      ],
+      "pose_order": [
+        "idle",
+        "move_a",
+        "move_b",
+        "attack",
+        "hit",
+        "death"
+      ],
+      "pivot": [
+        48,
+        60
+      ],
+      "facing": "e",
+      "mirror_west": true,
+      "durations_ms": [
+        600,
+        120,
+        120,
+        180,
+        150,
+        400
+      ]
+    },
+    "livingston": {
+      "name": "Livingston",
+      "path": "assets/battle/heroes/upgrade/livingston/strip.png",
+      "mounted": false,
+      "frame_size": [
+        96,
+        64
+      ],
+      "sheet_size": [
+        576,
+        64
+      ],
+      "pose_order": [
+        "idle",
+        "move_a",
+        "move_b",
+        "attack",
+        "hit",
+        "death"
+      ],
+      "pivot": [
+        48,
+        60
+      ],
+      "facing": "e",
+      "mirror_west": true,
+      "durations_ms": [
+        600,
+        120,
+        120,
+        180,
+        150,
+        400
+      ]
+    },
+    "zahara": {
+      "name": "Zarra",
+      "path": "assets/battle/heroes/upgrade/zahara/strip.png",
+      "mounted": false,
+      "frame_size": [
+        96,
+        64
+      ],
+      "sheet_size": [
+        576,
+        64
+      ],
+      "pose_order": [
+        "idle",
+        "move_a",
+        "move_b",
+        "attack",
+        "hit",
+        "death"
+      ],
+      "pivot": [
+        48,
+        60
+      ],
+      "facing": "e",
+      "mirror_west": true,
+      "durations_ms": [
+        600,
+        120,
+        120,
+        180,
+        150,
+        400
+      ]
+    },
+    "sera_venn": {
+      "name": "Sera Venn",
+      "path": "assets/battle/heroes/upgrade/sera_venn/strip.png",
+      "mounted": false,
+      "frame_size": [
+        96,
+        64
+      ],
+      "sheet_size": [
+        576,
+        64
+      ],
+      "pose_order": [
+        "idle",
+        "move_a",
+        "move_b",
+        "attack",
+        "hit",
+        "death"
+      ],
+      "pivot": [
+        48,
+        60
+      ],
+      "facing": "e",
+      "mirror_west": true,
+      "durations_ms": [
+        600,
+        120,
+        120,
+        180,
+        150,
+        400
+      ]
+    },
+    "vera": {
+      "name": "Vera",
+      "path": "assets/battle/heroes/upgrade/vera/strip.png",
+      "mounted": false,
+      "frame_size": [
+        96,
+        64
+      ],
+      "sheet_size": [
+        576,
+        64
+      ],
+      "pose_order": [
+        "idle",
+        "move_a",
+        "move_b",
+        "attack",
+        "hit",
+        "death"
+      ],
+      "pivot": [
+        48,
+        60
+      ],
+      "facing": "e",
+      "mirror_west": true,
+      "durations_ms": [
+        600,
+        120,
+        120,
+        180,
+        150,
+        400
+      ]
+    },
+    "zenvy": {
+      "name": "Zenvy",
+      "path": "assets/battle/heroes/upgrade/zenvy/strip.png",
+      "mounted": false,
+      "frame_size": [
+        96,
+        64
+      ],
+      "sheet_size": [
+        576,
+        64
+      ],
+      "pose_order": [
+        "idle",
+        "move_a",
+        "move_b",
+        "attack",
+        "hit",
+        "death"
+      ],
+      "pivot": [
+        48,
+        60
+      ],
+      "facing": "e",
+      "mirror_west": true,
+      "durations_ms": [
+        600,
+        120,
+        120,
+        180,
+        150,
+        400
+      ]
+    },
+    "liam": {
+      "name": "Liam",
+      "path": "assets/battle/heroes/upgrade/liam/strip.png",
+      "mounted": false,
+      "frame_size": [
+        96,
+        64
+      ],
+      "sheet_size": [
+        576,
+        64
+      ],
+      "pose_order": [
+        "idle",
+        "move_a",
+        "move_b",
+        "attack",
+        "hit",
+        "death"
+      ],
+      "pivot": [
+        48,
+        60
+      ],
+      "facing": "e",
+      "mirror_west": true,
+      "durations_ms": [
+        600,
+        120,
+        120,
+        180,
+        150,
+        400
+      ]
+    },
+    "sir_giggachins": {
+      "name": "Sir Giggachins",
+      "path": "assets/battle/heroes/upgrade/sir_giggachins/strip.png",
+      "mounted": false,
+      "frame_size": [
+        96,
+        64
+      ],
+      "sheet_size": [
+        576,
+        64
+      ],
+      "pose_order": [
+        "idle",
+        "move_a",
+        "move_b",
+        "attack",
+        "hit",
+        "death"
+      ],
+      "pivot": [
+        48,
+        60
+      ],
+      "facing": "e",
+      "mirror_west": true,
+      "durations_ms": [
+        600,
+        120,
+        120,
+        180,
+        150,
+        400
+      ]
+    }
+  },
+  "portraits": {
+    "elvis": {
+      "name": "Eelvis",
+      "path": "assets/portraits/heroes/upgrade/elvis_256.png",
+      "size": [
+        256,
+        256
+      ],
+      "method": "new identity-preserving redraw from current 128px design"
+    },
+    "necro4": {
+      "name": "William IV",
+      "path": "assets/portraits/heroes/upgrade/necro4_256.png",
+      "size": [
+        256,
+        256
+      ],
+      "method": "new identity-preserving redraw from current 128px design"
+    },
+    "veyra": {
+      "name": "Veyra",
+      "path": "assets/portraits/heroes/upgrade/veyra_256.png",
+      "size": [
+        256,
+        256
+      ],
+      "method": "new identity-preserving redraw from current 128px design"
+    },
+    "zakai": {
+      "name": "Zakai",
+      "path": "assets/portraits/heroes/upgrade/zakai_256.png",
+      "size": [
+        256,
+        256
+      ],
+      "method": "new identity-preserving redraw from current 128px design"
+    }
+  },
+  "rendering": {
+    "filter": "nearest",
+    "alpha": "binary"
+  },
+  "name_to_id": {
+    "Zarra": "zahara",
+    "Eelvis": "elvis",
+    "William IV": "necro4"
+  }
+}
