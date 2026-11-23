@@ -1211,3 +1211,6 @@ body.offgame #app{visibility:hidden}
 img[src*="portraits/heroes/hd/"]{image-rendering:auto!important}
 #bGo.off{filter:grayscale(.8) brightness(.8);opacity:.6}
 #bGo:not(.off){box-shadow:0 0 0 2px #ffd84a,0 0 10px rgba(255,216,74,.6)}
+.artsellh{margin:14px 0 4px}.artsell{margin:6px 0 10px}.artsrow{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:8px;margin-top:6px}
+.artsc{display:flex;align-items:center;gap:8px;padding:6px 8px;border:1px solid var(--rule);border-radius:4px;background:rgba(255,255,255,.35)}.artsc img{width:36px;height:36px;image-rendering:pixelated}.artsc span{flex:1;line-height:1.1}.artsc small{display:block;opacity:.7;font-size:12px}
+.tritems{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;min-height:40px}.tritems button{padding:2px;border:1px solid var(--rule);border-radius:3px;background:rgba(255,255,255,.4);cursor:pointer}.tritems img{width:32px;height:32px;image-rendering:pixelated;display:block}

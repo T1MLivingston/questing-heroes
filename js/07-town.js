@@ -107,6 +107,18 @@ const PRICE={timber:[100,400],ore:[100,400],amber:[250,900],gems:[300,1100],moon
 function mkt(){if(!S.mkt||S.mkt.week!==weekNo())S.mkt={week:weekNo(),b:{},s:{},a:{}};return S.mkt;}
 /* v50 Easter egg: a hero standing in one of your towns haggles: 10% off when buying, 15% more when selling */
 const haggler=()=>{const h=HERO();return h&&allTowns().some(t=>t.x===h.x&&t.y===h.y&&!t.taken)?h:null;};
+/* v74: selling artifacts at a Barter Yard. A hero standing in the town sells worn or packed artifacts for gold.
+   The price is set by the artifact's level; every Barter Yard you own adds 10% (40% of full value with one, up to 90% with six) */
+const ART_VALUE=[0,600,1200,2500,5000,9000];
+const marketsOwned=()=>allTowns().filter(t=>t.built&&t.built.market&&!t.taken).length;
+const artRate=()=>Math.min(0.9,0.3+0.1*marketsOwned());
+const artPrice=k=>Math.round(ART_VALUE[(ITEMS[k]&&ITEMS[k].lvl)||1]*artRate()*(haggler()?1.15:1)/10)*10;
+function artSellHTML(t){const hs=S.heroes.filter(h=>h.x===t.x&&h.y===t.y),n=marketsOwned();
+  const head=`<h3 class="artsellh">Sell artifacts</h3><p class="muted">You own ${n} Barter Yard${n===1?'':'s'}, so traders pay <b>${Math.round(artRate()*100)}%</b> of an artifact's worth${n<6?` (each Barter Yard you own adds 10%, up to 90%)`:''}.</p>`;
+  if(!hs.length)return head+`<p class="muted">Bring a hero into this town to sell their artifacts.</p>`;
+  return head+hs.map(h=>{const all=[...(h.items||[]).map(k=>[k,'w']),...(h.pack||[]).map(k=>[k,'p'])];
+    return`<div class="artsell"><b>${esc(h.name)}</b>${all.length?`<div class="artsrow">${all.map(([k,w])=>`<div class="artsc" title="${esc(ITEMS[k].name)} (${ITEMS[k].tier}): ${esc(itemTxt(k))}">${itemIcon(k)}<span>${esc(ITEMS[k].name)}<small>${w==='w'?'worn':'backpack'} · ${ITEMS[k].tier}</small></span><button class="btn sm" data-sellart="${S.heroes.indexOf(h)}|${k}|${w}">Sell ${fmt(artPrice(k))}</button></div>`).join('')}</div>`:'<span class="muted"> has no artifacts.</span>'}</div>`;}).join('');}
+
 const buyPrice=k=>Math.round(PRICE[k][1]*(1+0.12*(mkt().b[k]||0))*(haggler()?0.9:1)),sellPrice=k=>Math.round(Math.max(Math.round(PRICE[k][0]*0.4),Math.round(PRICE[k][0]*(1-0.08*(mkt().s[k]||0))))*(haggler()?1.15:1));
 const alchCost=id=>({...ALCHEMY[id].cost,gold:ALCHEMY[id].cost.gold+100*(mkt().a[id]||0)});
 const ALCHEMY={gem:{name:'Cut a gem',cost:{gold:250,ore:3},out:'gems'},moon:{name:'Distil moonwater',cost:{gold:250,amber:2},out:'moonwater'}};
@@ -198,7 +210,7 @@ function townHTML(){
     body=t.built.market?`${haggler()?`<p class="haggle">🤝 <b>${esc(haggler().name)}</b> is in town and haggles with the traders: 10% off what you buy, 15% more for what you sell.</p>`:''}<div class="grid">${RES.filter(k=>k!=='gold').map(k=>{const sell=sellPrice(k),buy=buyPrice(k);
       return`<div class="bcard"><h4><img src="${iconURL('res',k,32)}" alt="" style="width:18px;vertical-align:-3px"> ${RESNAME[k]} · you have ${S.res[k]}</h4><p>Sell for ${sell} gold each, buy for ${buy}.</p>
         <div class="rctl"><button class="btn sm" data-sell="${k}" data-n="1" ${S.res[k]<1?'disabled':''}>Sell 1</button><button class="btn sm" data-sell="${k}" data-n="5" ${S.res[k]<5?'disabled':''}>Sell 5</button>
-        <button class="btn sm" data-buy="${k}" data-n="1" ${S.res.gold<buy?'disabled':''}>Buy 1</button><button class="btn sm" data-buy="${k}" data-n="5" ${S.res.gold<buy*5?'disabled':''}>Buy 5</button></div></div>`;}).join('')}</div>${alchemyHTML()}${mineList()}`:`<div class="grid">${locked('The Barter Yard','market')}</div>`;
+        <button class="btn sm" data-buy="${k}" data-n="1" ${S.res.gold<buy?'disabled':''}>Buy 1</button><button class="btn sm" data-buy="${k}" data-n="5" ${S.res.gold<buy*5?'disabled':''}>Buy 5</button></div></div>`;}).join('')}</div>${artSellHTML(t)}${alchemyHTML()}${mineList()}`:`<div class="grid">${locked('The Barter Yard','market')}</div>`;
   }else if(townTab==='tavern'){
     body=!t.built.tavern?`<div class="grid">${locked('The Tavern','tavern')}</div>`:S.heroes.length>=heroCap()?`<p class="muted">You already lead ${heroCap()} heroes, the most you can.${heroCap()<5?' Build the Heroes\' Lodge to make room for a fifth.':''}</p>`:
       `<div class="tavgrid">${[...classHeroes(),...hireable()].map(x=>{const own=x.fac===TF()&&!x.rogue,it=x.item&&ITEMS[x.item];
@@ -439,6 +451,8 @@ async function openTown(tw,tab){
     else if(el.dataset.hire){const hx=HBY[el.dataset.hire];if(!hx||S.res.gold<hireCost(hx)||S.heroes.length>=heroCap())return;if(hx.custom){S.customHeroes=S.customHeroes||[];if(!S.customHeroes.some(c=>c.id===hx.id))S.customHeroes.push(hx._def);}S.res.gold-=hireCost(hx);const nh=mkHero(el.dataset.hire,t.x,t.y);const t1=FAC[TF()].units[0];nh.army=[{k:recruitKey(t1),n:Math.round(150/U[t1].hp)}];
       if(delivered(5)){nh.book=true;nh.spells.push('starfall');}const cur=S.cur;S.heroes.push(nh);S.cur=S.heroes.length-1;nh.mana=maxMana();nh.mp=maxMP();S.cur=cur;toast(`${nh.name} joins your banner and waits at the town gate.`);refresh();}
     else if(el.dataset.book){const x=S.heroes.find(q=>q.id===el.dataset.book);if(!x||x.book||S.res.gold<BOOK_COST)return;S.res.gold-=BOOK_COST;x.book=true;const cur=S.cur;S.cur=S.heroes.indexOf(x);learnLibrary();x.mana=maxMana();S.cur=cur;toast(`${x.name} now carries a spellbook.`);refresh();}
+    else if(el.dataset.sellart){const[hi,k,w]=el.dataset.sellart.split('|'),h=S.heroes[+hi];if(!h)return;const arr=w==='w'?h.items:h.pack,j=arr?arr.indexOf(k):-1;if(j<0)return;
+      const g=artPrice(k);arr.splice(j,1);S.res.gold+=g;toast(`${esc(h.name)} sold the <b>${esc(ITEMS[k].name)}</b> for ${fmt(g)} gold.`);refresh();}
     else if(el.dataset.sell){const k=el.dataset.sell,n=+el.dataset.n||1;if(S.res[k]<n)return;let g=0;for(let i=0;i<n;i++){g+=sellPrice(k);mkt().s[k]=(mkt().s[k]||0)+1;}S.res[k]-=n;S.res.gold+=g;refresh();}
     else if(el.dataset.alch){const id=el.dataset.alch,r=ALCHEMY[id];if(!r||!anyStill()||!canAfford(alchCost(id)))return;pay(alchCost(id));mkt().a[id]=(mkt().a[id]||0)+1;gain(r.out,1);lootPop(`+1 ${RESNAME[r.out].toLowerCase()}`,iconURL('res',r.out,64));refresh();}
     else if(el.dataset.mineup){const o=S.objs.find(q=>q.id===+el.dataset.mineup);if(!o||(o.lvl||1)>=MINE_MAX)return;const c=MINE_UP[o.lvl||1];if(!canAfford(c))return;pay(c);o.lvl=(o.lvl||1)+1;lootPop(`${MINE[o.k].name} upgraded to level ${o.lvl}`,iconURL('res',MINE[o.k].res,64));refresh();}

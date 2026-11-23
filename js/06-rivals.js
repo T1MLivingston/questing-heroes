@@ -11,7 +11,9 @@ function rivEco(fac){S.rivEco=S.rivEco||{};return S.rivEco[fac]||(S.rivEco[fac]=
 function rivalIncome(fac){const home=rivHome(fac);let g=home&&!home.owned&&home.built?hallGold(home):0;
   for(const o of S.objs){if(o.type==='camp'&&o.owned===fac)g+=campIncome(o);else if(o.type==='mine'&&o.owned===fac)g+=MINE[o.k].res==='gold'?mineOut(o):250*mineOut(o);}
   return Math.round(g*rvMul());}
-function rivalEconomy(weekly){if(S.players)return;const facs=[...new Set(S.rivals.filter(r=>!r.human).map(r=>r.fac))];
+function rivalEconomy(weekly){if(S.players)return;S.rivBanners=S.rivBanners||[...new Set(S.rivals.filter(r=>!r.human).map(r=>r.fac))];
+  // v74: a banner that lost every hero but still holds its home keeps its treasury and hires again a week later
+  const facs=S.rivBanners.filter(f=>S.rivals.some(r=>r.fac===f&&!r.human)||(rivHome(f)&&!rivHome(f).owned));
   for(const fac of facs){const e=rivEco(fac),home=rivHome(fac),u=FAC[fac].units;e.gold+=rivalIncome(fac);
     if(!weekly||!home||home.owned||!home.built)continue;
     // muster and recruit, strongest first, keeping a little back for building
@@ -30,7 +32,8 @@ function rivalEconomy(weekly){if(S.players)return;const facs=[...new Set(S.rival
     for(const r of S.rivals.filter(r=>r.fac===fac&&!r.human))for(const a of r.army){const i=u.indexOf(a.k);if(i>=0&&home.built['u'+(i+1)]&&U[a.k+'_u']&&e.gold>=(U[a.k+'_u'].cost-U[a.k].cost)*a.n){e.gold-=(U[a.k+'_u'].cost-U[a.k].cost)*a.n;a.k=a.k+'_u';}}
     // a second (or third, on Expert) hero once the banner can afford it
     const mine=S.rivals.filter(r=>r.fac===fac&&!r.human),cap=S.diff==='expert'?3:2,wk=weekNo();
-    if(mine.length<cap&&wk>=(S.diff==='hard'||S.diff==='expert'?2:3)&&e.gold>=3000){
+    if(!mine.length){if(!e.gone)e.gone=S.day;}else delete e.gone;
+    if(mine.length<cap&&wk>=(S.diff==='hard'||S.diff==='expert'?2:3)&&e.gold>=3000&&!(e.gone&&S.day-e.gone<7)){
       const taken=new Set([...S.heroes.map(h=>h.id),...S.rivals.map(r=>r.id)]),hid=(HEROES.find(h=>h.fac===fac&&!h.rogue&&!h.custom&&!taken.has(h.id))||{}).id;
       if(hid){e.gold-=2500;const nr=mkRival(hid,home.x,home.y);nr.army=[{k:u[0],n:Math.round(160*rvMul()/U[u[0]].hp)},{k:u[1],n:Math.round(80*rvMul()/U[u[1]].hp)}];
         // take some of the waiting garrison along
@@ -48,22 +51,65 @@ function rivalCost(rv,x,y,goal){
   {const z=zocMap.get(rv);if(z&&z.has(idx(x,y)))return Infinity;}
   if(heroIdxAt(x,y)>=0||S.rivals.some(r=>r!==rv&&r.x===x&&r.y===y))return Infinity;
   return c;}
+/* v74: rival personalities. Each banner has a style and each hero shifts it: Might heroes are bolder, Magic heroes more careful,
+   and a small twist from the hero's id. agg: fights heroes, towns and other rivals; explore: scouts unknown land;
+   greed: piles, chests, weekly sites, mines and artifacts; guard: hurries home when an enemy comes near, and to retake it */
+const RIVAL_STYLE={rangers:{agg:0.9,explore:1.0,greed:1.0,guard:1.3},wizards:{agg:0.8,explore:1.1,greed:1.25,guard:1.1},
+  necro:{agg:1.35,explore:0.9,greed:0.9,guard:0.8},centaurs:{agg:1.3,explore:1.3,greed:0.8,guard:0.7},
+  pirates:{agg:1.1,explore:1.1,greed:1.4,guard:0.7},elves:{agg:0.85,explore:1.35,greed:1.0,guard:1.0},
+  dwarves:{agg:0.9,explore:0.8,greed:1.35,guard:1.4},merfolk:{agg:1.0,explore:1.2,greed:1.1,guard:1.0}};
+function rivalStyle(rv){const b=RIVAL_STYLE[rv.fac]||{agg:1,explore:1,greed:1,guard:1},hb=HBY[rv.id]||{},might=hb.type==='Might';
+  let hs=7;for(const ch of String(rv.id))hs=(hs*31+ch.charCodeAt(0))>>>0;const j=k=>0.85+((hs>>>k)&15)/50;
+  const st={agg:b.agg*(might?1.15:0.9)*j(0),explore:b.explore*j(4),greed:b.greed*j(8),guard:b.guard*(might?0.9:1.1)*j(12)};
+  st.agg*=aggMul();
+  st.label=st.agg>1.3?'bold':st.agg<0.8?'careful':st.explore>1.3?'roaming':st.greed>1.35?'greedy':st.guard>1.35?'watchful':'steady';return st;}
+const within=(a,b,r)=>Math.max(Math.abs(a.x-b.x),Math.abs(a.y-b.y))<=r;
 function rivalTarget(rv){
-  const pw=armyPower(rv.army,rv),c=[];zocMap.set(rv,zocFor(rv.fac));
+  const pw=armyPower(rv.army,rv),c=[],st=rivalStyle(rv),home=rivHome(rv.fac);zocMap.set(rv,zocFor(rv.fac));
   for(const o of S.objs){let v=0;
-    if(o.type==='pile'||o.type==='gem')v=6;else if(o.type==='flot'&&(rv.fac==='pirates'||rv.fac==='merfolk'))v=8;else if(o.type==='artifact')v=8+4*ITEMS[o.item].lvl;else if(o.type==='drop')v=60;else if(o.type==='mine'&&o.owned!==rv.fac)v=o.owned===ME()?16:12;
-    else if(o.type==='relic'){if(S.day>7&&stackPower(o.k,o.n)*1.5<pw)v=45;}
-    else if(o.type==='neutral'&&o.guard){if(stackPower(o.k,o.n)*1.3<pw)v=14;}
-    else if(o.type==='spire'&&o.owned!==rv.fac){if(!o.garrison.length)v=o.owned?14:9;else if(armyPower(o.garrison)*1.4<pw)v=18;}
+    if(o.type==='pile'||o.type==='gem')v=7*st.greed;else if(o.type==='chest')v=10*st.greed;
+    else if(o.type==='site'&&o.week!==weekNo())v=9*st.greed;
+    else if(o.type==='flot'&&(rv.fac==='pirates'||rv.fac==='merfolk'))v=8*st.greed;else if(o.type==='artifact')v=(8+4*ITEMS[o.item].lvl)*st.greed;else if(o.type==='drop')v=60;
+    else if(o.type==='mine'&&o.owned!==rv.fac)v=(o.owned===ME()?16:13)*st.greed;
+    else if(o.type==='relic'){if(S.day>7&&stackPower(o.k,o.n)*1.5/st.agg<pw)v=45;}
+    else if(o.type==='neutral'&&o.guard){if(stackPower(o.k,o.n)*1.3/st.agg<pw)v=14;}
+    // wild stacks clearly weaker than the army are cleared for experience
+    else if(o.type==='neutral'&&!o.guard){if(stackPower(o.k,o.n)*1.8/st.agg<pw)v=8*st.agg;}
+    else if(o.type==='spire'&&o.owned!==rv.fac){if(!o.garrison.length)v=o.owned?14:9;else if(armyPower(o.garrison)*1.4/st.agg<pw)v=18;}
     if(v)c.push({o,x:o.x,y:o.y,v});}
-  for(const h of S.heroes)if(armyPower(h.army,h)*1.25/aggMul()<pw)c.push({heroObj:h,x:h.x,y:h.y,v:(20+h.relics.length*30)*aggMul()});
+  for(const h of S.heroes)if(armyPower(h.army,h)*1.25/st.agg<pw)c.push({heroObj:h,x:h.x,y:h.y,v:(20+h.relics.length*30)*st.agg});
+  // rivals of other banners are enemies too: weaker heroes are hunted, and so are weakly held rival homes (after the second week)
+  if(S.day>14)for(const r of S.rivals)if(r!==rv&&!r.human&&!r.occupy&&r.fac!==rv.fac&&armyPower(r.army,r)*1.8/st.agg<pw)c.push({foe:r,x:r.x,y:r.y,v:(12+r.relics.length*25)*st.agg});
+  if(S.day>28)for(const o of S.objs)if(o.type==='camp'&&!o.free&&!o.owned&&o.fac!==rv.fac&&(o.built?townDefense(o):armyPower(o.garrison||[]))*1.4/st.agg<pw)c.push({o,x:o.x,y:o.y,v:20*st.agg});
   // a weak town with no hero at home is a target, after the first week
-  if(!S.players&&!S.town.taken&&S.day>Math.round(7/aggMul())&&!S.heroes.some(h=>h.x===S.town.x&&h.y===S.town.y)&&townDefense()*1.3/aggMul()<pw)c.push({town:true,x:S.town.x,y:S.town.y,v:28*aggMul()});
-  // rivals want their own camp back, and raid holdings of others
-  for(const o of S.objs)if(o.type==='camp'&&o.owned!==rv.fac&&(o.owned||o.free)&&armyPower(o.garrison||[])*1.3/aggMul()<pw)c.push({o,x:o.x,y:o.y,v:!o.free&&o.fac===rv.fac?40:o.free&&!o.owned?16:18*aggMul()});
-  {const home=rivHome(rv.fac);if(home&&!home.owned&&home.garrison&&home.garrison.length>1&&armyPower(home.garrison)>pw*0.35)c.push({pickup:home,x:home.x,y:home.y,v:22+Math.min(30,armyPower(home.garrison)/Math.max(1,pw)*20)});}
+  if(!S.players&&!S.town.taken&&S.day>Math.round(7/st.agg)&&!S.heroes.some(h=>h.x===S.town.x&&h.y===S.town.y)&&townDefense()*1.3/st.agg<pw)c.push({town:true,x:S.town.x,y:S.town.y,v:28*st.agg});
+  // raid holdings of others (their own lost home is handled below)
+  for(const o of S.objs)if(o.type==='camp'&&o.owned!==rv.fac&&(o.owned||o.free)&&!(!o.free&&o.fac===rv.fac)&&armyPower(o.garrison||[])*1.3/st.agg<pw)c.push({o,x:o.x,y:o.y,v:o.free&&!o.owned?16:18*st.agg});
+  if(home){
+    if(home.owned&&home.owned!==rv.fac){// home lost: march back; retake it when strong enough, otherwise gather at the gate
+      const def=home.built?townDefense(home):armyPower(home.garrison||[]);
+      c.push(pw>def*0.9?{o:home,x:home.x,y:home.y,v:90,far:1}:{rally:home,x:home.x,y:home.y,v:(rv.waitd||0)>4?8:60,far:1});}
+    else{
+      if(home.garrison&&home.garrison.length>1&&armyPower(home.garrison)>pw*0.35)c.push({pickup:home,x:home.x,y:home.y,v:22+Math.min(30,armyPower(home.garrison)/Math.max(1,pw)*20)});
+      // an enemy near home brings the hero back to stand guard in the gate
+      // only a real danger keeps a hero home; a weak intruder near home is driven off instead
+      const hdef=Math.max(pw,home.built?townDefense(home):armyPower(home.garrison||[])),foes=[...S.heroes.filter(h=>within(h,home,7)),...S.rivals.filter(r=>r.fac!==rv.fac&&!r.human&&within(r,home,6))];
+      for(const f of foes)if(armyPower(f.army,f)*1.2<pw){if(S.heroes.includes(f))c.push({heroObj:f,x:f.x,y:f.y,v:40*st.guard,far:1});else c.push({foe:f,x:f.x,y:f.y,v:40*st.guard,far:1});}
+      const threat=foes.some(f=>armyPower(f.army,f)>hdef*0.5&&armyPower(f.army,f)*1.2>=pw);
+      if(threat)c.push(rv.x===home.x&&rv.y===home.y?{stay:1,x:rv.x,y:rv.y,v:45*st.guard}:{guardHome:home,x:home.x,y:home.y,v:45*st.guard,far:1});}}
+  // exploring: head for the nearest land this hero hasn't covered yet (and keep going toward last day's goal)
+  {const cw=Math.ceil(W/6),chn=Math.ceil(H/6),cov=rv.cov||{},skip=rv.skip||(rv.skip={}),cx0=Math.floor(rv.x/6),cy0=Math.floor(rv.y/6),cand=[];
+    for(let cy=0;cy<chn;cy++)for(let cx=0;cx<cw;cx++){const k=cx+cy*cw;if(cov[k]||skip[k])continue;cand.push({k,cx,cy,d:Math.hypot(cx-cx0,cy-cy0)});}
+    cand.sort((a,b)=>a.d-b.d);const pickC=cand.slice(0,3);if(rv.exp&&!cov[rv.exp.k]&&!skip[rv.exp.k]&&!pickC.some(q=>q.k===rv.exp.k)){const q=cand.find(q=>q.k===rv.exp.k);if(q)pickC.push(q);}
+    const early=S.day<=28?1.4:1;
+    for(const q of pickC){let t=null;for(let r=0;r<4&&!t;r++)for(let dy=-r;dy<=r&&!t;dy++)for(let dx=-r;dx<=r&&!t;dx++){const x=q.cx*6+3+dx,y=q.cy*6+3+dy;if(x<1||y<1||x>=W-1||y>=H-1)continue;if(passableT(tileAt(x,y))&&tileAt(x,y)!==T.LAKE&&!objAt(x,y)&&!townFoot(x,y))t={x,y};}
+      if(!t){skip[q.k]=1;continue;}c.push({explore:q.k,x:t.x,y:t.y,v:(rv.exp&&rv.exp.k===q.k?11:7)*st.explore*early});}}
   c.forEach(q=>q.s=q.v/(Math.hypot(q.x-rv.x,q.y-rv.y)+4));c.sort((a,b)=>b.s-a.s);
-  for(const q of c.slice(0,6)){if(Math.hypot(q.x-rv.x,q.y-rv.y)>Math.max(26,(W+H)/2))continue;const p=astar(rv.x,rv.y,q.x,q.y,(x,y,goal)=>rivalCost(rv,x,y,goal));if(p&&p.length){q.path=p;return q;}}
+  for(const q of c.slice(0,7)){if(q.stay){q.path=[];return q;}if(!q.far&&!q.explore&&Math.hypot(q.x-rv.x,q.y-rv.y)>Math.max(26,(W+H)/2))continue;
+    const p=astar(rv.x,rv.y,q.x,q.y,(x,y,goal)=>rivalCost(rv,x,y,goal));
+    if(!p||!p.length){if(q.explore!==undefined)rv.skip[q.explore]=1;continue;}
+    if(q.rally){rv.waitd=p.length<2?(rv.waitd||0)+1:0;q.path=p.length<2?[]:p.slice(0,-1);return q;}else q.path=p;
+    if(q.explore!==undefined)rv.exp={k:q.explore};return q;}
   return null;}
 function autoResolve(rv,theirs){const ours=armyPower(rv.army,rv);
   if(ours>theirs){const f=Math.min(0.85,Math.pow(theirs/ours,1.4)*0.75);rv.army.forEach(a=>a.n=Math.max(1,Math.round(a.n*(1-f))));return true;}
@@ -84,7 +130,7 @@ async function weeklyReport(){if(S.players||S.over)return;const d=dateParts(),yo
     const wealth=(camp&&camp.built&&!camp.owned?Object.keys(camp.built).length:0)+hold*2,ww=wealth<6?'lean':wealth<10?'comfortable':wealth<15?'rich':'overflowing';
     const top=rv.army.slice().sort((a,b)=>FAC[rv.fac].units.indexOf(b.k.replace(/_u$/,''))-FAC[rv.fac].units.indexOf(a.k.replace(/_u$/,'')))[0];
     return`<div class="wrow"><img src="${iconURL('crest',rv.fac,52)}" alt=""><div><b>${esc(rv.name)}</b> <span class="muted">· ${FAC[rv.fac].arch}${camp&&camp.owned===ME()?' · you hold their home':''}</span>
-      <p>Scouts say ${esc(rv.name)} ${covW(covFrac(rv))}. Their coffers look <b>${ww}</b>. Their best troops are <b>${top?U[top.k].pl:'none'}</b>, ${powW(armyPower(rv.army,rv)/best)}.</p>${mineRow(rmines)}</div>
+      <p>Scouts say ${esc(rv.name)} ${covW(covFrac(rv))}, and plays a <b>${rivalStyle(rv).label}</b> game (${({bold:'quick to attack',careful:'slow to risk a fight',roaming:'always scouting new land',greedy:'chasing every treasure',watchful:'never far from home',steady:'a bit of everything'})[rivalStyle(rv).label]}). Their coffers look <b>${ww}</b>. Their best troops are <b>${top?U[top.k].pl:'none'}</b>, ${powW(armyPower(rv.army,rv)/best)}.</p>${mineRow(rmines)}</div>
       ${top?`<div class="wtroop" title="Best troop: ${U[top.k].pl}"><img class="${U[top.k].up?'upg':''}" src="${iconURL('unit',top.k,64)}" alt=""><small>Best troop</small><b>${U[top.k].name}</b></div>`:'<div></div>'}</div>`;}).join('');
   await showModal({title:`Weekly report · Month ${d.m}, Week ${d.w}`,body:`<h3 class="gsec">Your kingdom</h3>
     <div class="wgrid"><div><em>Towns</em><b>${you.length}</b></div><div><em>Outposts</em><b>${S.objs.filter(o=>o.type==='camp'&&o.owned===ME()&&!o.built).length}</b></div><div><em>Heroes</em><b>${S.heroes.length}</b></div><div><em>Gold a day</em><b>${fmt(income())}</b></div><div><em>Land explored</em><b>${Math.round(exp*100)}%</b></div><div><em>Best army</em><b>${fmt(best)}</b></div></div>
@@ -128,8 +174,21 @@ async function rivalInteract(rv,tg){
     S.cur=S.heroes.indexOf(h);heroDraw.x=h.x;heroDraw.y=h.y;centerOn(h.x,h.y,true);renderUI();
     await showModal({title:`${rv.name} attacks!`,body:`<p>The rival ${FAC[rv.fac].arch} hero <b>${rv.name}</b> falls on ${h.name}'s army.</p>`,buttons:[{label:'To battle',value:1,primary:true}]});
     await startBattle({type:'rival',rival:rv,x:h.x,y:h.y});return'stop';}
+  if(tg.explore!==undefined){markCov(rv);return'go';}
+  if(tg.rally)return'stop';
+  if(tg.guardHome){rv.x=tg.x;rv.y=tg.y;return'stop';}
+  if(tg.foe){const f=tg.foe;if(!S.rivals.includes(f)||f.x!==tg.x||f.y!==tg.y)return'go';
+    const fp=armyPower(f.army,f),shown=seenNow(f.x,f.y)||seenNow(rv.x,rv.y);
+    if(autoResolve(rv,fp)){S.rivals=S.rivals.filter(r=>r!==f);if(f.relics.length)rv.relics.push(...f.relics.splice(0));rv.x=f.x;rv.y=f.y;growRival(rv);
+      if(shown)toast(`<b>${esc(rv.name)}</b> (${FAC[rv.fac].arch}) has beaten <b>${esc(f.name)}</b> (${FAC[f.fac].arch}).`);
+      if(!S.players&&S.mode==='conquest'&&!S.rivals.length)S.pendingWin=true;return'go';}
+    const loss=Math.min(0.6,Math.pow(armyPower(rv.army,rv)/Math.max(1,fp),1.2)*0.5);f.army.forEach(a=>a.n=Math.max(1,Math.round(a.n*(1-loss))));
+    if(shown)toast(`<b>${esc(f.name)}</b> held off an attack by <b>${esc(rv.name)}</b>.`);return'stop';}
   const o=tg.o;
-  if(o.type==='pile'||o.type==='gem'||o.type==='flot'){S.objs=S.objs.filter(q=>q!==o);rv.x=o.x;rv.y=o.y;return'go';}
+  // treasure feeds the banner's treasury, so it can recruit and build more
+  if(o.type==='pile'||o.type==='gem'||o.type==='flot'||o.type==='chest'){S.objs=S.objs.filter(q=>q!==o);rv.x=o.x;rv.y=o.y;
+    rivEco(rv.fac).gold+=o.type==='chest'?1000:o.type==='pile'&&o.k==='gold'?o.n:o.type==='gem'?400:250;return'go';}
+  if(o.type==='site'){o.week=weekNo();rv.x=o.x;rv.y=o.y;rivEco(rv.fac).gold+=600;return'go';}
   if(o.type==='artifact'){S.objs=S.objs.filter(q=>q!==o);(rv.items=rv.items||[]).push(o.item);rv.x=o.x;rv.y=o.y;return'go';}
   if(o.type==='drop'){S.objs=S.objs.filter(q=>q!==o);rv.relics.push(...o.rs);rv.x=o.x;rv.y=o.y;toast(`<b>${rv.name}</b> picked up ${o.rs.map(r=>RELICS[r].name).join(', ')}.`);return'go';}
   if(o.type==='mine'){rv.x=o.x;rv.y=o.y;if(o.owned===ME())toast(`<b>${rv.name}</b> seized your ${MINE[o.k].name}.`);o.owned=rv.fac;o.ownerName=rv.name;return'go';}
@@ -141,6 +200,6 @@ async function rivalInteract(rv,tg){
   if(o.type==='relic'||o.type==='neutral'){
     if(autoResolve(rv,stackPower(o.k,o.n))){S.objs=S.objs.filter(q=>q!==o);rv.x=o.x;rv.y=o.y;
       if(o.type==='relic'){rv.relics.push(o.r);toast(`<b>${rv.name}</b> has taken the ${RELICS[o.r].name}! Defeat them to claim it.`);}
-      else if(seenNow(o.x,o.y))toast(`${rv.name} has broken through a guarded pass.`);return'go';}
+      else if(o.guard&&seenNow(o.x,o.y))toast(`${rv.name} has broken through a guarded pass.`);if(Math.random()<0.35)growRival(rv);return'go';}
     o.n=Math.max(1,Math.round(o.n*0.6));return'stop';}
   return'stop';}
