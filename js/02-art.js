@@ -343,6 +343,8 @@ function preloadArt(){artImg('heroes/walkers.png');artImg('ui/upgrade.png');artI
   for(const[k,n]of Object.entries(ART_UNITS)){const f=unitFac(k);artImg(`units/${f}/${n}/${n}_sheet.png`);artImg(`team_masks/units/${f}/${n}/${n}_sheet.png`);}}
 function drawCrown(c,x,y,s){c.save();c.translate(x,y);c.scale(s/10,s/10);c.fillStyle='#f2d382';c.strokeStyle='#5a3a0a';c.lineWidth=1.2;c.beginPath();c.moveTo(-8,4);c.lineTo(-9,-3);c.lineTo(-4,1);c.lineTo(0,-5);c.lineTo(4,1);c.lineTo(9,-3);c.lineTo(8,4);c.closePath();c.fill();c.stroke();c.restore();}
 const iconCache={};
+/* v72: 256 px portraits (from each pack's original art) for every picture shown at 128 px or more */
+const HD_PORT=new Set(['aarna','ada','alderhide','alora','anastasia_may_dvestia','anna','ardcat','aster_and_briar','astronaut_steve','atoll','ava_young','axel','azure_hype','babka','bannana_boy','battaglia','bear','bess_and_bea','binx','bloop','bo','bobbythebob','boja','boone','boopis','bort_simesin','boston','briar','bristle','buffalo','capydara','catherine','cato','celestine_circe','cornelius_ii','cresset','dee','deepwave_the_ai','dorothy','drew','dupengeiser','eden','ella','emirk','engelman','enzo','ericsonion','estella','ezlen','fin_and_flo','flintback','friendo','fut_esports','gale','gerry','gilt','graven','grimes','gunt_gunt','gus_and_glen','h4l1s3','harlan_chalk','hart','inkwake','ivan','jake','jun','juniper','kaf_underworld_pharaoh','kiln','king_pharoph_the_3rd','kit_and_nell','kushalito_banana','lawrence','letchworth','liam','lily','lishy','livingston','liya','lord_krishna','love','luckenzo','lune','macie','mags_and_mae','mangrove','mara','mer2','michael','midge','monkey','mossback','mr_pinecone','murmur','nala','nanya','ned_and_nat','nerka','nissa','nix','noel_dragonfire','nohahahahah','odo_and_otto','oliver','omalley','orla','ossin','paitence_and_jay','parker','payton','percifire','perry','petunia','pihu','pip_quickline','poison','posy','posy_spinner','pottery','python_mage','rafe_and_reed','rago','rattleclaw','reedcall','remy','rimmer','rocky','rose_flower','rosie','rumble','rusk_hookhorn','saki','samba','schmickle','sera_venn','shadow','sheila','sid_and_tess','silka','sir_giggachins','sir_quackars','skimmer','slack','sookie','space_toad','spike','spindle','spirit_of_the_forest','stargirl','sus','tansy','teeka','tembor','tempest','teo','thornfrill','tida','trey','vargas','vash','vera','vinay','virel','ward','wren','x','yatt','yselle','zahara','zenvy']);
 function iconURL(kind,key,size=64){
   if(kind==='crest')return ART_BASE+`shields/${key}_96.png`;
   if(kind==='res'&&key==='amber')return ART_BASE+'gems/amber.png';
@@ -353,6 +355,7 @@ function iconURL(kind,key,size=64){
   if(kind==='ui')return ART_BASE+`ui/icons/${key}.png`;
   if(kind==='gem')return ART_BASE+`gems/${key}.png`;
   if(kind==='hero'&&HBY[key]&&HBY[key].custom&&HBY[key].port)return HBY[key].port;
+  if(kind==='hero'&&size>=128&&HD_PORT.has(key))return ART_BASE+`portraits/heroes/hd/${key}.png?v=72`;
   if(kind==='hero'&&RECRUIT_PORT.includes(key))return recruitPortrait(key);
   if(kind==='hero'&&ART_PORTRAITS.has(key))return ART_BASE+`portraits/heroes/${key}_128.png?v=67`;
   if(kind==='unit'&&ENEMY_ART[key])return ART_BASE+`portraits/enemies/${ENEMY_ART[key]}_64.png`;

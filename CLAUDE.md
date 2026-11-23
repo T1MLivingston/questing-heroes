@@ -223,6 +223,13 @@ Everything lives in one object, `S`, so it can be saved as JSON:
 - New ability hooks (player side only): `forgePlus` (extra Great Forge attack), `armyDef` (whole army defense), `rangedPct` (shooter damage), `halfCost` (one spell at half mana), `manaCut` (all spells cheaper), `squallPct`, `weakenPct`.
 - Raised: Ivan (Forge half ore, +1 more attack), Oliver (30% cheaper rough ground, +5% movement), Shadow (harvest 20%), Sheila (Squall +30%), Grimes and Griffiths (+1 speed to their troop). Made distinct: Veyra, Gliss, Silka, Murmur, Boone, Mossback, Aster, Nessa Holt. Trimmed: Schmickle and Quillby to +200 gold a day. Battaglia is a Might hero.
 
+### v72 sharper portraits, Keep going, selection ring
+
+- Sharper portraits: 171 heroes have a 256 px portrait in `portraits/heroes/hd/<id>.png` (`HD_PORT` in 02-art.js), made from each art pack's original (magenta backgrounds keyed out, alpha made binary). The source for each hero was picked by comparing it with the portrait in the game, so only the current design is used; O'Malley's file was already 256 px; Eelvis's original is an older design, and William IV, Veyra and Zakai had no larger original, so those keep 128 px. `iconURL('hero', id, size)` returns the HD file when `size>=128`; CSS shrinks these smoothly (`img[src*="portraits/heroes/hd/"]`) instead of stretching a 128 px picture with blocky pixels. Small icons still use the 128 px art.
+- Battle hero figures scale by a whole number of screen pixels (`s` rounded with `BL.dpr`), so their pixels stay even.
+- **▶ Go** (`#bGo`, key M) in the command bar marches the selected hero on along its saved route (`h.route`) without clicking the flag again. `goState()` (04-ui.js, called from `renderUI` and `setPath`) makes it glow gold when there is a route and movement left, and greys it out otherwise.
+- The selected hero stands on a bold, gently pulsing yellow ring (replacing the thin dashed ellipse in `drawMap`).
+
 ### v71 horseback heroes, first packs
 
 - Mounted Banner Picks and Mounted Extras 01: horseback art for 54 more heroes (every banner pick, plus Azure Hype, Wick `cresset`, Deep Wave, Ericsonion, Gus & Glen and Midge), so 74 of 175 heroes ride as themselves. Per-hero files like the v70 walkers: `battle/heroes/mounted/<id>.png` (768×64, eight 96×64 poses in `HM_POSE` order) and `heroes/walkers_mounted/<id>.png` (192×384), listed in `MOUNT_FILES`; `heroFigure` (when `h.mount==='horse'`) and `walkerMounted` load them on demand before falling back to the old atlases. Alpha made binary. Originals in `art_source/mounted/`. `ART_REQUEST_MOUNTED.md` lists the 101 still to come.

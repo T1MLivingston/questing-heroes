@@ -99,6 +99,12 @@ $('#bMenu').onclick=async()=>{if(!S||moving||modalOpen)return;closeHeroMenu();
 $('#bEnd').onclick=()=>{closeHeroMenu();endDay();};
 $('#bTown').onclick=()=>{if(!S||moving||modalOpen)return;const h=HERO();if(h.x===S.town.x&&h.y===S.town.y){arriveTown();return;}const mt=myMajors().find(o=>o.x===h.x&&o.y===h.y);if(mt)arriveTown(mt);else openTown();};
 $('#bCenter').onclick=()=>S&&centerOn(HERO().x,HERO().y);
+/* v72: Keep going: march on along the hero's saved route without clicking the flag again */
+$('#bGo').onclick=async()=>{if(!S||moving||bt)return;const h=HERO();if(!h)return;
+  if(!h.route){toast('No route yet: click a spot on the map to plan one.');return;}
+  if(!path)restoreRoute();if(!path){toast('That route is blocked now. Click a new spot to plan another.');renderUI();return;}
+  if(mpUsable(h)<=0){toast(`${h.name} has no movement left today. End the day to keep going tomorrow.`);return;}
+  await walk();renderUI();};
 /* quick icons beside Town and Hero: your town and holdings, and each hero; click to go there or select */
 function renderQuick(){if(!S)return;const hold=S.objs.filter(o=>o.type==='camp'&&o.owned===ME()&&!o.built),maj=myMajors();
   const todo=t=>withTown(t,()=>townTabs().filter(x=>x.id!=='overview').reduce((a,x)=>a+(x.n||0),0)),tn=S.town.taken?0:todo(S.town);
@@ -117,7 +123,7 @@ addEventListener('keydown',e=>{
   if(modalOpen||!S)return;const k=e.key.toLowerCase();
   if(S.editor&&!e.key.startsWith('Arrow'))return;
   if(k==='h'&&S.heroes.length>1)selectHero((S.cur+1)%S.heroes.length);
-  else if(k==='e')endDay();else if(k==='g')gatherNext();else if(k==='t')$('#bTown').click();else if(k==='c')$('#bCenter').click();
+  else if(k==='e')endDay();else if(k==='g')gatherNext();else if(k==='t')$('#bTown').click();else if(k==='c')$('#bCenter').click();else if(k==='m')$('#bGo').click();
   else if(e.key.startsWith('Arrow')){camTX=camTY=null;const st=TS*2;if(e.key==='ArrowLeft')camX-=st;if(e.key==='ArrowRight')camX+=st;if(e.key==='ArrowUp')camY-=st;if(e.key==='ArrowDown')camY+=st;clampCam();e.preventDefault();}
 });
 addEventListener('resize',()=>{sizeMap();if(bt){layoutBattle();renderBG();}});

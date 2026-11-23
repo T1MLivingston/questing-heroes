@@ -43,7 +43,7 @@ function renderUI(){if(S)document.body.classList.remove('offgame');
   $('#armyPow').textContent=`Strength ${fmt(armyPower(h.army,h))}`;
   const tn=withTown(null,()=>townTabs().filter(x=>x.id!=='overview').reduce((a,x)=>a+(x.n||0),0));
   $('#bTown').innerHTML=`<img class="bi" src="${ART_BASE}ui/icons/town.png" alt="">Town<span class="kbd">T</span>${tn?`<span class="bdg">${tn}</span>`:''}`;$('#bTown').classList.toggle('need',tn>0);
-  $('#bEnd').classList.toggle('need',S.heroes.every(x=>x.mp<70));renderQuick();
+  $('#bEnd').classList.toggle('need',S.heroes.every(x=>x.mp<70));goState();renderQuick();
 }
 function relicState(i){
   if(delivered(i))return{cls:'done',short:'Home',txt:'safe in the Relic Hall'};
@@ -169,3 +169,6 @@ function showModal({title,body,buttons=[],wide=false,dismiss,top=false}){
     const f=m.querySelector('footer .btn.primary')||m.querySelector('footer .btn');if(f)f.focus();
   });
 }
+
+/* v72: the Keep going button glows when the selected hero has a route and can still move */
+function goState(){const h=HERO(),g=$('#bGo');if(g){const ok=!!(h&&h.route&&mpUsable(h)>0);g.classList.toggle('off',!ok);g.title=h&&h.route?(ok?`Keep going: ${h.name} marches on along the route (M)`:`${h.name} has no movement left today`):'Keep going: plan a route first by clicking the map (M)';}}

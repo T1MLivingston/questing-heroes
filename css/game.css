@@ -1206,3 +1206,8 @@ body.offgame #app{visibility:hidden}
 /* v67 Visual Upgrade icons (atlas ui/upgrade.png) */
 .upico{display:inline-block;vertical-align:middle;background-repeat:no-repeat;image-rendering:pixelated;flex:none}
 .tb-emoji .upico{vertical-align:-6px}
+
+/* v72: 256 px hero portraits are shrunk smoothly, so they keep their detail */
+img[src*="portraits/heroes/hd/"]{image-rendering:auto!important}
+#bGo.off{filter:grayscale(.8) brightness(.8);opacity:.6}
+#bGo:not(.off){box-shadow:0 0 0 2px #ffd84a,0 0 10px rgba(255,216,74,.6)}

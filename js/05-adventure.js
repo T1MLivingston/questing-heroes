@@ -51,7 +51,7 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-inn]');if(
 /* boarding or leaving a ship ends the day's movement (pirates and anyone with a boat; swimmers are not affected) */
 const shipSwap=(h,ax,ay,bx,by)=>!!h.boat&&FAC[S.fac].travel!=='swim'&&(tileAt(ax,ay)===T.LAKE)!==(tileAt(bx,by)===T.LAKE);
 /* a hero's route survives the end of the day: h.route is the destination (and a hero to meet there) */
-function setPath(p,meet){path=p&&p.length?p:null;const h=HERO();if(path){const e=path[path.length-1];h.route={x:e.x,y:e.y,meet:meet||null};}else delete h.route;}
+function setPath(p,meet){path=p&&p.length?p:null;const h=HERO();if(path){const e=path[path.length-1];h.route={x:e.x,y:e.y,meet:meet||null};}else delete h.route;if(typeof goState==='function')goState();}
 function restoreRoute(){const h=HERO();path=null;if(!h||!h.route)return;const p=planTo(h.route.x,h.route.y);if(p&&p.length)path=p;else delete h.route;}
 /* influence: wild creatures facing a far stronger army may offer to join (free when it is overwhelming), or at least run away */
 function joinOffer(o){if(!o||o.type!=='neutral'||isKeyGuard(o)||o.lvl===4)return null;const h=HERO(),ours=armyPower(h.army,h),theirs=stackPower(o.k,o.n)||1;
