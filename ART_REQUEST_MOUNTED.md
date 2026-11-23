@@ -1,3 +1,9 @@
+# Art brief: horseback heroes (done in v73)
+
+All 175 heroes now have horseback art: Mounted Packs 1-4 delivered the last 101 (2026-11-23). Nothing more is needed. The original brief is kept below for reference.
+
+---
+
 # Art brief: horseback heroes (v71, 2026-11-22)
 
 Every hero now has a portrait, an on-foot battle figure and an on-foot map walker. Only 20 heroes also have **horseback** art. A hero picks up a horse at a Horse Fair or the town's Stables. When that happens, the 20 switch to their mounted figure and walker; everyone else keeps walking and fighting on foot. This brief asks for horseback art for the other **155 heroes**. **Progress (v71): 74 heroes now ride; 101 to go.** The Mounted Banner Picks pack covered all 48 remaining banner picks, and Mounted Extras 01 added Azure Hype, Wick, Deep Wave, Ericsonion, Gus & Glen and Midge.

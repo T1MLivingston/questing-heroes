@@ -223,6 +223,12 @@ Everything lives in one object, `S`, so it can be saved as JSON:
 - New ability hooks (player side only): `forgePlus` (extra Great Forge attack), `armyDef` (whole army defense), `rangedPct` (shooter damage), `halfCost` (one spell at half mana), `manaCut` (all spells cheaper), `squallPct`, `weakenPct`.
 - Raised: Ivan (Forge half ore, +1 more attack), Oliver (30% cheaper rough ground, +5% movement), Shadow (harvest 20%), Sheila (Squall +30%), Grimes and Griffiths (+1 speed to their troop). Made distinct: Veyra, Gliss, Silka, Murmur, Boone, Mossback, Aster, Nessa Holt. Trimmed: Schmickle and Quillby to +200 gold a day. Battaglia is a Might hero.
 
+### v73 every hero rides, sharper hero sprites
+
+- Mounted Packs 1-4 (155 heroes; the 54 from v71 are the same art): horseback battle strips and map walkers for every hero, per-hero files in `battle/heroes/mounted/` and `heroes/walkers_mounted/`, all listed in `MOUNT_FILES`. Originals in `art_source/mounted/pack_*`.
+- Hero sprites came from AI art shrunk to 48-64 px and carried thousands of near-identical colours, which blurred their edges. Every hero battle figure and walker (atlases and per-hero files) was reduced to a clean 32-colour palette per hero (alpha untouched; originals in `art_source/`).
+- `epx2()` (02-art.js) is an EPX / Scale2x pixel-art upscaler: it doubles a sprite and rounds off staircase edges while keeping the pixel look. Battle hero figures are drawn from a 4x copy (`heroUp4`, EPX twice, cached per frame) shrunk smoothly to size (nearest when magnifying past 4x). On screens with `dpr>1`, the hero's own map walker is drawn from a 2x copy (`sheetUp2`). On `file://` pixel reads fail and the plain sprite is used.
+
 ### v72 sharper portraits, Keep going, selection ring
 
 - Sharper portraits: 171 heroes have a 256 px portrait in `portraits/heroes/hd/<id>.png` (`HD_PORT` in 02-art.js), made from each art pack's original (magenta backgrounds keyed out, alpha made binary). The source for each hero was picked by comparing it with the portrait in the game, so only the current design is used; O'Malley's file was already 256 px; Eelvis's original is an older design, and William IV, Veyra and Zakai had no larger original, so those keep 128 px. `iconURL('hero', id, size)` returns the HD file when `size>=128`; CSS shrinks these smoothly (`img[src*="portraits/heroes/hd/"]`) instead of stretching a 128 px picture with blocky pixels. Small icons still use the 128 px art.

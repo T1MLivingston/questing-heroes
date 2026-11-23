@@ -1,0 +1,488 @@
+{
+  "game": "Questing Heroes",
+  "format_version": 1,
+  "heroes": [
+    {
+      "id": "parker",
+      "name": "Parker",
+      "group": "banner pick",
+      "banner": "Necromancers",
+      "battle_path": "assets/battle/heroes/parker/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/parker/mounted/sheet.png",
+      "mount": "a healthy gentle pale grey horse with soft blue accents, ordinary flesh and fur, absolutely no skeletal anatomy",
+      "tack_color": "crimson"
+    },
+    {
+      "id": "shadow",
+      "name": "Shadow",
+      "group": "banner pick",
+      "banner": "Necromancers",
+      "battle_path": "assets/battle/heroes/shadow/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/shadow/mounted/sheet.png",
+      "mount": "a healthy gentle pale grey horse with soft blue accents, ordinary flesh and fur, absolutely no skeletal anatomy",
+      "tack_color": "crimson"
+    },
+    {
+      "id": "rago",
+      "name": "Rago",
+      "group": "banner pick",
+      "banner": "Necromancers",
+      "battle_path": "assets/battle/heroes/rago/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/rago/mounted/sheet.png",
+      "mount": "a healthy gentle pale grey horse with soft blue accents, ordinary flesh and fur, absolutely no skeletal anatomy",
+      "tack_color": "crimson"
+    },
+    {
+      "id": "necro4",
+      "name": "William IV",
+      "group": "banner pick",
+      "banner": "Necromancers",
+      "battle_path": "assets/battle/heroes/necro4/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/necro4/mounted/sheet.png",
+      "mount": "a healthy gentle pale grey horse with soft blue accents, ordinary flesh and fur, absolutely no skeletal anatomy",
+      "tack_color": "crimson"
+    },
+    {
+      "id": "veyra",
+      "name": "Willa",
+      "group": "banner pick",
+      "banner": "Necromancers",
+      "battle_path": "assets/battle/heroes/veyra/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/veyra/mounted/sheet.png",
+      "mount": "a healthy gentle pale grey horse with soft blue accents, ordinary flesh and fur, absolutely no skeletal anatomy",
+      "tack_color": "crimson"
+    },
+    {
+      "id": "graven",
+      "name": "Lore",
+      "group": "banner pick",
+      "banner": "Necromancers",
+      "battle_path": "assets/battle/heroes/graven/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/graven/mounted/sheet.png",
+      "mount": "a healthy gentle pale grey horse with soft blue accents, ordinary flesh and fur, absolutely no skeletal anatomy",
+      "tack_color": "crimson"
+    },
+    {
+      "id": "ossin",
+      "name": "Dusty",
+      "group": "banner pick",
+      "banner": "Necromancers",
+      "battle_path": "assets/battle/heroes/ossin/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/ossin/mounted/sheet.png",
+      "mount": "a healthy gentle pale grey horse with soft blue accents, ordinary flesh and fur, absolutely no skeletal anatomy",
+      "tack_color": "crimson"
+    },
+    {
+      "id": "rattleclaw",
+      "name": "Rattleclaw",
+      "group": "banner pick",
+      "banner": "Necromancers",
+      "battle_path": "assets/battle/heroes/rattleclaw/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/rattleclaw/mounted/sheet.png",
+      "mount": "a healthy gentle pale grey horse with soft blue accents, ordinary flesh and fur, absolutely no skeletal anatomy",
+      "tack_color": "crimson"
+    },
+    {
+      "id": "bear",
+      "name": "Bear",
+      "group": "banner pick",
+      "banner": "Beastmasters",
+      "battle_path": "assets/battle/heroes/bear/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/bear/mounted/sheet.png",
+      "mount": "a sturdy friendly horse",
+      "tack_color": "leaf green"
+    },
+    {
+      "id": "monkey",
+      "name": "Monkey",
+      "group": "banner pick",
+      "banner": "Beastmasters",
+      "battle_path": "assets/battle/heroes/monkey/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/monkey/mounted/sheet.png",
+      "mount": "a sturdy friendly horse",
+      "tack_color": "leaf green"
+    },
+    {
+      "id": "binx",
+      "name": "Binx",
+      "group": "banner pick",
+      "banner": "Beastmasters",
+      "battle_path": "assets/battle/heroes/binx/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/binx/mounted/sheet.png",
+      "mount": "a sturdy friendly horse",
+      "tack_color": "leaf green"
+    },
+    {
+      "id": "tembor",
+      "name": "India",
+      "group": "banner pick",
+      "banner": "Beastmasters",
+      "battle_path": "assets/battle/heroes/tembor/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/tembor/mounted/sheet.png",
+      "mount": "a sturdy friendly horse",
+      "tack_color": "leaf green"
+    },
+    {
+      "id": "virel",
+      "name": "Plume",
+      "group": "banner pick",
+      "banner": "Beastmasters",
+      "battle_path": "assets/battle/heroes/virel/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/virel/mounted/sheet.png",
+      "mount": "a sturdy friendly horse",
+      "tack_color": "leaf green"
+    },
+    {
+      "id": "silka",
+      "name": "Violet",
+      "group": "banner pick",
+      "banner": "Beastmasters",
+      "battle_path": "assets/battle/heroes/silka/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/silka/mounted/sheet.png",
+      "mount": "a sturdy friendly horse",
+      "tack_color": "leaf green"
+    },
+    {
+      "id": "flintback",
+      "name": "Flintback",
+      "group": "banner pick",
+      "banner": "Beastmasters",
+      "battle_path": "assets/battle/heroes/flintback/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/flintback/mounted/sheet.png",
+      "mount": "a sturdy friendly horse",
+      "tack_color": "leaf green"
+    },
+    {
+      "id": "murmur",
+      "name": "Hush",
+      "group": "tavern",
+      "banner": "Necromancers",
+      "battle_path": "assets/battle/heroes/murmur/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/murmur/mounted/sheet.png",
+      "mount": "a healthy gentle pale grey horse with soft blue accents, ordinary flesh and fur, absolutely no skeletal anatomy",
+      "tack_color": "crimson"
+    },
+    {
+      "id": "mara",
+      "name": "Mara",
+      "group": "tavern",
+      "banner": "Necromancers",
+      "battle_path": "assets/battle/heroes/mara/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/mara/mounted/sheet.png",
+      "mount": "a healthy gentle pale grey horse with soft blue accents, ordinary flesh and fur, absolutely no skeletal anatomy",
+      "tack_color": "crimson"
+    },
+    {
+      "id": "odo_and_otto",
+      "name": "Odo & Otto",
+      "group": "tavern",
+      "banner": "Necromancers",
+      "battle_path": "assets/battle/heroes/odo_and_otto/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/odo_and_otto/mounted/sheet.png",
+      "mount": "a healthy gentle pale grey horse with soft blue accents, ordinary flesh and fur, absolutely no skeletal anatomy",
+      "tack_color": "crimson"
+    },
+    {
+      "id": "bort_simesin",
+      "name": "Bort",
+      "group": "student",
+      "banner": "Necromancers",
+      "battle_path": "assets/battle/heroes/bort_simesin/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/bort_simesin/mounted/sheet.png",
+      "mount": "a healthy gentle pale grey horse with soft blue accents, ordinary flesh and fur, absolutely no skeletal anatomy",
+      "tack_color": "crimson"
+    },
+    {
+      "id": "nix",
+      "name": "Nyx",
+      "group": "student",
+      "banner": "Necromancers",
+      "battle_path": "assets/battle/heroes/nix/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/nix/mounted/sheet.png",
+      "mount": "a healthy gentle pale grey horse with soft blue accents, ordinary flesh and fur, absolutely no skeletal anatomy",
+      "tack_color": "crimson"
+    },
+    {
+      "id": "kushalito_banana",
+      "name": "Kushalito",
+      "group": "student",
+      "banner": "Necromancers",
+      "battle_path": "assets/battle/heroes/kushalito_banana/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/kushalito_banana/mounted/sheet.png",
+      "mount": "a healthy gentle pale grey horse with soft blue accents, ordinary flesh and fur, absolutely no skeletal anatomy",
+      "tack_color": "crimson"
+    },
+    {
+      "id": "kaf_underworld_pharaoh",
+      "name": "Kaf",
+      "group": "student",
+      "banner": "Necromancers",
+      "battle_path": "assets/battle/heroes/kaf_underworld_pharaoh/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/kaf_underworld_pharaoh/mounted/sheet.png",
+      "mount": "a healthy gentle pale grey horse with soft blue accents, ordinary flesh and fur, absolutely no skeletal anatomy",
+      "tack_color": "crimson"
+    },
+    {
+      "id": "sus",
+      "name": "Sus",
+      "group": "student",
+      "banner": "Necromancers",
+      "battle_path": "assets/battle/heroes/sus/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/sus/mounted/sheet.png",
+      "mount": "a healthy gentle pale grey horse with soft blue accents, ordinary flesh and fur, absolutely no skeletal anatomy",
+      "tack_color": "crimson"
+    },
+    {
+      "id": "samba",
+      "name": "Samba",
+      "group": "student",
+      "banner": "Necromancers",
+      "battle_path": "assets/battle/heroes/samba/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/samba/mounted/sheet.png",
+      "mount": "a healthy gentle pale grey horse with soft blue accents, ordinary flesh and fur, absolutely no skeletal anatomy",
+      "tack_color": "crimson"
+    },
+    {
+      "id": "emirk",
+      "name": "Emirk",
+      "group": "student",
+      "banner": "Necromancers",
+      "battle_path": "assets/battle/heroes/emirk/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/emirk/mounted/sheet.png",
+      "mount": "a healthy gentle pale grey horse with soft blue accents, ordinary flesh and fur, absolutely no skeletal anatomy",
+      "tack_color": "crimson"
+    },
+    {
+      "id": "friendo",
+      "name": "Friendo",
+      "group": "student",
+      "banner": "Necromancers",
+      "battle_path": "assets/battle/heroes/friendo/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/friendo/mounted/sheet.png",
+      "mount": "a healthy gentle pale grey horse with soft blue accents, ordinary flesh and fur, absolutely no skeletal anatomy",
+      "tack_color": "crimson"
+    },
+    {
+      "id": "dee",
+      "name": "Dee",
+      "group": "student",
+      "banner": "Necromancers",
+      "battle_path": "assets/battle/heroes/dee/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/dee/mounted/sheet.png",
+      "mount": "a healthy gentle pale grey horse with soft blue accents, ordinary flesh and fur, absolutely no skeletal anatomy",
+      "tack_color": "crimson"
+    },
+    {
+      "id": "trey",
+      "name": "Trey",
+      "group": "student",
+      "banner": "Necromancers",
+      "battle_path": "assets/battle/heroes/trey/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/trey/mounted/sheet.png",
+      "mount": "a healthy gentle pale grey horse with soft blue accents, ordinary flesh and fur, absolutely no skeletal anatomy",
+      "tack_color": "crimson"
+    },
+    {
+      "id": "x",
+      "name": "X",
+      "group": "student",
+      "banner": "Necromancers",
+      "battle_path": "assets/battle/heroes/x/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/x/mounted/sheet.png",
+      "mount": "a healthy gentle pale grey horse with soft blue accents, ordinary flesh and fur, absolutely no skeletal anatomy",
+      "tack_color": "crimson"
+    },
+    {
+      "id": "briar",
+      "name": "Rusty",
+      "group": "tavern",
+      "banner": "Beastmasters",
+      "battle_path": "assets/battle/heroes/briar/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/briar/mounted/sheet.png",
+      "mount": "a sturdy friendly horse",
+      "tack_color": "leaf green"
+    },
+    {
+      "id": "wren",
+      "name": "Wren",
+      "group": "tavern",
+      "banner": "Beastmasters",
+      "battle_path": "assets/battle/heroes/wren/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/wren/mounted/sheet.png",
+      "mount": "a sturdy friendly horse",
+      "tack_color": "leaf green"
+    },
+    {
+      "id": "rumble",
+      "name": "Rumble",
+      "group": "tavern",
+      "banner": "Beastmasters",
+      "battle_path": "assets/battle/heroes/rumble/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/rumble/mounted/sheet.png",
+      "mount": "a sturdy friendly horse",
+      "tack_color": "leaf green"
+    },
+    {
+      "id": "bess_and_bea",
+      "name": "Bess & Bea",
+      "group": "tavern",
+      "banner": "Beastmasters",
+      "battle_path": "assets/battle/heroes/bess_and_bea/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/bess_and_bea/mounted/sheet.png",
+      "mount": "a sturdy friendly horse",
+      "tack_color": "leaf green"
+    },
+    {
+      "id": "gilt",
+      "name": "Gilt",
+      "group": "tavern",
+      "banner": "Beastmasters",
+      "battle_path": "assets/battle/heroes/gilt/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/gilt/mounted/sheet.png",
+      "mount": "a friendly horse-sized giant hare with four long steed legs, a proper saddle and a bridle",
+      "tack_color": "leaf green"
+    },
+    {
+      "id": "fut_esports",
+      "name": "Fut",
+      "group": "student",
+      "banner": "Beastmasters",
+      "battle_path": "assets/battle/heroes/fut_esports/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/fut_esports/mounted/sheet.png",
+      "mount": "a sturdy friendly horse",
+      "tack_color": "leaf green"
+    },
+    {
+      "id": "king_pharoph_the_3rd",
+      "name": "King Pharoph the 3rd",
+      "group": "student",
+      "banner": "Beastmasters",
+      "battle_path": "assets/battle/heroes/king_pharoph_the_3rd/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/king_pharoph_the_3rd/mounted/sheet.png",
+      "mount": "a sturdy friendly horse",
+      "tack_color": "leaf green"
+    },
+    {
+      "id": "nohahahahah",
+      "name": "Nohahahahah",
+      "group": "student",
+      "banner": "Beastmasters",
+      "battle_path": "assets/battle/heroes/nohahahahah/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/nohahahahah/mounted/sheet.png",
+      "mount": "a sturdy friendly horse",
+      "tack_color": "leaf green"
+    },
+    {
+      "id": "boja",
+      "name": "Boja",
+      "group": "student",
+      "banner": "Beastmasters",
+      "battle_path": "assets/battle/heroes/boja/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/boja/mounted/sheet.png",
+      "mount": "a sturdy friendly horse",
+      "tack_color": "leaf green"
+    },
+    {
+      "id": "paitence_and_jay",
+      "name": "Paitence & Jay",
+      "group": "student",
+      "banner": "Beastmasters",
+      "battle_path": "assets/battle/heroes/paitence_and_jay/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/paitence_and_jay/mounted/sheet.png",
+      "mount": "a sturdy friendly horse",
+      "tack_color": "leaf green"
+    },
+    {
+      "id": "python_mage",
+      "name": "Python Mage",
+      "group": "student",
+      "banner": "Beastmasters",
+      "battle_path": "assets/battle/heroes/python_mage/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/python_mage/mounted/sheet.png",
+      "mount": "a sturdy friendly horse",
+      "tack_color": "leaf green"
+    },
+    {
+      "id": "percifire",
+      "name": "Percifire",
+      "group": "student",
+      "banner": "Beastmasters",
+      "battle_path": "assets/battle/heroes/percifire/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/percifire/mounted/sheet.png",
+      "mount": "a sturdy friendly horse",
+      "tack_color": "leaf green"
+    },
+    {
+      "id": "petunia",
+      "name": "Petunia",
+      "group": "student",
+      "banner": "Beastmasters",
+      "battle_path": "assets/battle/heroes/petunia/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/petunia/mounted/sheet.png",
+      "mount": "a friendly horse-sized giant hare with four long steed legs, a proper saddle and a bridle",
+      "tack_color": "leaf green"
+    }
+  ],
+  "battle_format": {
+    "sheet_size": [
+      768,
+      64
+    ],
+    "frame_size": [
+      96,
+      64
+    ],
+    "pivot": [
+      48,
+      60
+    ],
+    "facing": "E",
+    "pose_order": [
+      "idle",
+      "move_a",
+      "move_b",
+      "move_c",
+      "move_d",
+      "attack",
+      "hit",
+      "defeated"
+    ],
+    "gallop_frames": [
+      1,
+      2,
+      3,
+      4
+    ]
+  },
+  "walker_format": {
+    "sheet_size": [
+      192,
+      384
+    ],
+    "frame_size": [
+      48,
+      48
+    ],
+    "pivot": [
+      24,
+      44
+    ],
+    "direction_order": [
+      "S",
+      "SW",
+      "W",
+      "NW",
+      "N",
+      "NE",
+      "E",
+      "SE"
+    ],
+    "frames_per_direction": 4,
+    "frame_duration_ms": 120,
+    "mirrored_rows": {
+      "SW": "SE",
+      "W": "E",
+      "NW": "NE"
+    }
+  }
+}

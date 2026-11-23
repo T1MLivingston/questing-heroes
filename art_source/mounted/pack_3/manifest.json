@@ -1,0 +1,388 @@
+{
+  "game": "Questing Heroes",
+  "format_version": 1,
+  "heroes": [
+    {
+      "id": "lawrence",
+      "name": "Lawrence",
+      "group": "banner pick",
+      "banner": "Pirates",
+      "battle_path": "assets/battle/heroes/lawrence/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/lawrence/mounted/sheet.png",
+      "mount": "a sturdy friendly horse",
+      "tack_color": "gold"
+    },
+    {
+      "id": "inkwake",
+      "name": "Inkwake",
+      "group": "banner pick",
+      "banner": "Pirates",
+      "battle_path": "assets/battle/heroes/inkwake/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/inkwake/mounted/sheet.png",
+      "mount": "a sturdy friendly horse",
+      "tack_color": "gold"
+    },
+    {
+      "id": "pip_quickline",
+      "name": "Pip Quickline",
+      "group": "banner pick",
+      "banner": "Pirates",
+      "battle_path": "assets/battle/heroes/pip_quickline/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/pip_quickline/mounted/sheet.png",
+      "mount": "a friendly horse-sized giant hare with four long steed legs, a proper saddle and a bridle",
+      "tack_color": "gold"
+    },
+    {
+      "id": "payton",
+      "name": "Peyto",
+      "group": "banner pick",
+      "banner": "Pirates",
+      "battle_path": "assets/battle/heroes/payton/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/payton/mounted/sheet.png",
+      "mount": "a sturdy friendly horse",
+      "tack_color": "gold"
+    },
+    {
+      "id": "alderhide",
+      "name": "Alderhide",
+      "group": "banner pick",
+      "banner": "Elves",
+      "battle_path": "assets/battle/heroes/alderhide/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/alderhide/mounted/sheet.png",
+      "mount": "a friendly horse-sized stag with a proper saddle and bridle",
+      "tack_color": "forest green"
+    },
+    {
+      "id": "mossback",
+      "name": "Mossback",
+      "group": "banner pick",
+      "banner": "Elves",
+      "battle_path": "assets/battle/heroes/mossback/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/mossback/mounted/sheet.png",
+      "mount": "a friendly horse-sized stag with a proper saddle and bridle",
+      "tack_color": "forest green"
+    },
+    {
+      "id": "lune",
+      "name": "Lunt",
+      "group": "banner pick",
+      "banner": "Elves",
+      "battle_path": "assets/battle/heroes/lune/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/lune/mounted/sheet.png",
+      "mount": "a friendly horse-sized stag with a proper saddle and bridle",
+      "tack_color": "forest green"
+    },
+    {
+      "id": "cato",
+      "name": "Cato",
+      "group": "tavern",
+      "banner": "Pirates",
+      "battle_path": "assets/battle/heroes/cato/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/cato/mounted/sheet.png",
+      "mount": "a friendly horse-sized giant hare with four long steed legs, a proper saddle and a bridle",
+      "tack_color": "gold"
+    },
+    {
+      "id": "sid_and_tess",
+      "name": "Sid & Tess",
+      "group": "tavern",
+      "banner": "Pirates",
+      "battle_path": "assets/battle/heroes/sid_and_tess/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/sid_and_tess/mounted/sheet.png",
+      "mount": "a sturdy friendly horse",
+      "tack_color": "gold"
+    },
+    {
+      "id": "rafe_and_reed",
+      "name": "Rafe & Reed",
+      "group": "tavern",
+      "banner": "Pirates",
+      "battle_path": "assets/battle/heroes/rafe_and_reed/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/rafe_and_reed/mounted/sheet.png",
+      "mount": "a sturdy friendly horse",
+      "tack_color": "gold"
+    },
+    {
+      "id": "bo",
+      "name": "Bo",
+      "group": "tavern",
+      "banner": "Pirates",
+      "battle_path": "assets/battle/heroes/bo/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/bo/mounted/sheet.png",
+      "mount": "a sturdy friendly horse",
+      "tack_color": "gold"
+    },
+    {
+      "id": "gunt_gunt",
+      "name": "Gunt Gunt",
+      "group": "student",
+      "banner": "Pirates",
+      "battle_path": "assets/battle/heroes/gunt_gunt/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/gunt_gunt/mounted/sheet.png",
+      "mount": "a sturdy friendly horse",
+      "tack_color": "gold"
+    },
+    {
+      "id": "ardcat",
+      "name": "Ardcat",
+      "group": "student",
+      "banner": "Pirates",
+      "battle_path": "assets/battle/heroes/ardcat/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/ardcat/mounted/sheet.png",
+      "mount": "a sturdy friendly horse",
+      "tack_color": "gold"
+    },
+    {
+      "id": "space_toad",
+      "name": "Toad",
+      "group": "student",
+      "banner": "Pirates",
+      "battle_path": "assets/battle/heroes/space_toad/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/space_toad/mounted/sheet.png",
+      "mount": "a sturdy friendly horse",
+      "tack_color": "gold"
+    },
+    {
+      "id": "capydara",
+      "name": "Capybara",
+      "group": "student",
+      "banner": "Pirates",
+      "battle_path": "assets/battle/heroes/capydara/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/capydara/mounted/sheet.png",
+      "mount": "a sturdy friendly horse",
+      "tack_color": "gold"
+    },
+    {
+      "id": "lishy",
+      "name": "Lishi",
+      "group": "student",
+      "banner": "Pirates",
+      "battle_path": "assets/battle/heroes/lishy/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/lishy/mounted/sheet.png",
+      "mount": "a sturdy friendly horse",
+      "tack_color": "gold"
+    },
+    {
+      "id": "alora",
+      "name": "Alora",
+      "group": "student",
+      "banner": "Pirates",
+      "battle_path": "assets/battle/heroes/alora/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/alora/mounted/sheet.png",
+      "mount": "a sturdy friendly horse",
+      "tack_color": "gold"
+    },
+    {
+      "id": "pihu",
+      "name": "Pihu",
+      "group": "student",
+      "banner": "Pirates",
+      "battle_path": "assets/battle/heroes/pihu/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/pihu/mounted/sheet.png",
+      "mount": "a friendly horse-sized giant hare with four long steed legs, a proper saddle and a bridle",
+      "tack_color": "gold"
+    },
+    {
+      "id": "love",
+      "name": "Love",
+      "group": "tavern",
+      "banner": "Elves",
+      "battle_path": "assets/battle/heroes/love/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/love/mounted/sheet.png",
+      "mount": "a friendly horse-sized stag with a proper saddle and bridle",
+      "tack_color": "forest green"
+    },
+    {
+      "id": "yselle",
+      "name": "Fern",
+      "group": "tavern",
+      "banner": "Elves",
+      "battle_path": "assets/battle/heroes/yselle/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/yselle/mounted/sheet.png",
+      "mount": "a friendly horse-sized stag with a proper saddle and bridle",
+      "tack_color": "forest green"
+    },
+    {
+      "id": "hart",
+      "name": "Hart",
+      "group": "tavern",
+      "banner": "Elves",
+      "battle_path": "assets/battle/heroes/hart/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/hart/mounted/sheet.png",
+      "mount": "a friendly horse-sized stag with a proper saddle and bridle",
+      "tack_color": "forest green"
+    },
+    {
+      "id": "aster_and_briar",
+      "name": "Aster & Briar",
+      "group": "tavern",
+      "banner": "Elves",
+      "battle_path": "assets/battle/heroes/aster_and_briar/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/aster_and_briar/mounted/sheet.png",
+      "mount": "a friendly horse-sized stag with a proper saddle and bridle",
+      "tack_color": "forest green"
+    },
+    {
+      "id": "mr_pinecone",
+      "name": "Mr. Pinecone",
+      "group": "student",
+      "banner": "Elves",
+      "battle_path": "assets/battle/heroes/mr_pinecone/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/mr_pinecone/mounted/sheet.png",
+      "mount": "a friendly horse-sized stag with a proper saddle and bridle",
+      "tack_color": "forest green"
+    },
+    {
+      "id": "ava_young",
+      "name": "Ava",
+      "group": "student",
+      "banner": "Elves",
+      "battle_path": "assets/battle/heroes/ava_young/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/ava_young/mounted/sheet.png",
+      "mount": "a friendly horse-sized stag with a proper saddle and bridle",
+      "tack_color": "forest green"
+    },
+    {
+      "id": "rosie",
+      "name": "Rousie",
+      "group": "student",
+      "banner": "Elves",
+      "battle_path": "assets/battle/heroes/rosie/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/rosie/mounted/sheet.png",
+      "mount": "a friendly horse-sized stag with a proper saddle and bridle",
+      "tack_color": "forest green"
+    },
+    {
+      "id": "estella",
+      "name": "Estella",
+      "group": "student",
+      "banner": "Elves",
+      "battle_path": "assets/battle/heroes/estella/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/estella/mounted/sheet.png",
+      "mount": "a friendly horse-sized stag with a proper saddle and bridle",
+      "tack_color": "forest green"
+    },
+    {
+      "id": "lily",
+      "name": "Lily",
+      "group": "student",
+      "banner": "Elves",
+      "battle_path": "assets/battle/heroes/lily/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/lily/mounted/sheet.png",
+      "mount": "a friendly horse-sized stag with a proper saddle and bridle",
+      "tack_color": "forest green"
+    },
+    {
+      "id": "poison",
+      "name": "Poison",
+      "group": "student",
+      "banner": "Elves",
+      "battle_path": "assets/battle/heroes/poison/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/poison/mounted/sheet.png",
+      "mount": "a friendly horse-sized stag with a proper saddle and bridle",
+      "tack_color": "forest green"
+    },
+    {
+      "id": "ella",
+      "name": "Ella",
+      "group": "student",
+      "banner": "Elves",
+      "battle_path": "assets/battle/heroes/ella/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/ella/mounted/sheet.png",
+      "mount": "a friendly horse-sized stag with a proper saddle and bridle",
+      "tack_color": "forest green"
+    },
+    {
+      "id": "ezlen",
+      "name": "Ezlen",
+      "group": "student",
+      "banner": "Elves",
+      "battle_path": "assets/battle/heroes/ezlen/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/ezlen/mounted/sheet.png",
+      "mount": "a friendly horse-sized stag with a proper saddle and bridle",
+      "tack_color": "forest green"
+    },
+    {
+      "id": "anna",
+      "name": "Anna",
+      "group": "student",
+      "banner": "Elves",
+      "battle_path": "assets/battle/heroes/anna/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/anna/mounted/sheet.png",
+      "mount": "a friendly horse-sized stag with a proper saddle and bridle",
+      "tack_color": "forest green"
+    },
+    {
+      "id": "macie",
+      "name": "Macie",
+      "group": "student",
+      "banner": "Elves",
+      "battle_path": "assets/battle/heroes/macie/mounted/strip.png",
+      "walker_path": "assets/map/walkers/heroes/macie/mounted/sheet.png",
+      "mount": "a friendly horse-sized stag with a proper saddle and bridle",
+      "tack_color": "forest green"
+    }
+  ],
+  "battle_format": {
+    "sheet_size": [
+      768,
+      64
+    ],
+    "frame_size": [
+      96,
+      64
+    ],
+    "pivot": [
+      48,
+      60
+    ],
+    "facing": "E",
+    "pose_order": [
+      "idle",
+      "move_a",
+      "move_b",
+      "move_c",
+      "move_d",
+      "attack",
+      "hit",
+      "defeated"
+    ],
+    "gallop_frames": [
+      1,
+      2,
+      3,
+      4
+    ]
+  },
+  "walker_format": {
+    "sheet_size": [
+      192,
+      384
+    ],
+    "frame_size": [
+      48,
+      48
+    ],
+    "pivot": [
+      24,
+      44
+    ],
+    "direction_order": [
+      "S",
+      "SW",
+      "W",
+      "NW",
+      "N",
+      "NE",
+      "E",
+      "SE"
+    ],
+    "frames_per_direction": 4,
+    "frame_duration_ms": 120,
+    "mirrored_rows": {
+      "SW": "SE",
+      "W": "E",
+      "NW": "NE"
+    }
+  }
+}

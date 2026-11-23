@@ -1135,7 +1135,9 @@ function drawHero(c,x,y,h=HERO(),col=teamCol()){
   const sheet=mode!=='boat'&&mode!=='swim'?heroSheet(h.id,col,h.mount==='horse'):null;
   if(sheet){const row=Math.max(0,ART_DIRS.indexOf(h.face||'s')),fr=moving&&!bt&&h===HERO()?Math.floor(performance.now()/120)%4:0;
     c.fillStyle='rgba(0,0,0,.4)';c.beginPath();c.ellipse(cx,cy+15,14,5,0,0,7);c.fill();c.strokeStyle=col;c.lineWidth=2;c.beginPath();c.ellipse(cx,cy+15,14,5,0,0,7);c.stroke();
-    c.imageSmoothingEnabled=false;c.drawImage(sheet,fr*48,row*48,48,48,Math.round(cx-24),Math.round(cy+16-44),48,48);return;}
+    {const own=walkCache[h.id]===sheet||walkMCache[h.id]===sheet,u=own&&dpr>1?sheetUp2(sheet):null;
+     if(u){c.imageSmoothingEnabled=true;c.imageSmoothingQuality='high';c.drawImage(u,fr*96,row*96,96,96,Math.round(cx-24),Math.round(cy+16-44),48,48);}
+     else{c.imageSmoothingEnabled=false;c.drawImage(sheet,fr*48,row*48,48,48,Math.round(cx-24),Math.round(cy+16-44),48,48);}}return;}
   if(mode==='boat'){const sl=tinted('waterfront/coastal_sloop.png','team_masks/waterfront/coastal_sloop.png',col);
     if(sl){const k=TS/32*0.6,flip=/w/.test(h.face||'');c.fillStyle='rgba(200,230,240,.35)';c.beginPath();c.ellipse(cx,cy+14,22,6,0,0,7);c.fill();c.save();c.translate(cx,0);if(flip)c.scale(-1,1);c.imageSmoothingEnabled=false;
       c.drawImage(sl,Math.round(-48*k),Math.round(cy+TS/2-2-92*k),Math.round(96*k),Math.round(96*k));c.restore();return;}

@@ -326,12 +326,24 @@ const upIco=(n,px=20,cls='')=>{const p=UPG.icons[n];if(!p)return'';const z=px/32
 const spIco=(k,px=20)=>upIco('sp_'+k,px,'spico');
 const HF_POSE={idle:0,move:1,attack:3,hit:4,death:5},HM_POSE={idle:0,move:1,attack:5,hit:6,death:7};
 /* v71: Mounted packs: one file per hero, battle/heroes/mounted/<id>.png (768x64, HM_POSE order) and heroes/walkers_mounted/<id>.png (192x384), loaded when needed */
-const MOUNT_FILES=new Set(['alderhide','atoll','azure_hype','bear','binx','boopis','cresset','deepwave_the_ai','dupengeiser','elvis','engelman','enzo','ericsonion','fin_and_flo','flintback','graven','grimes','gus_and_glen','harlan_chalk','inkwake','ivan','kiln','kit_and_nell','lawrence','letchworth','lune','mer2','midge','monkey','mossback','necro4','nerka','nissa','ossin','parker','payton','pip_quickline','rago','rattleclaw','reedcall','remy','rimmer','rocky','shadow','silka','skimmer','slack','sookie','tembor','tempest','thornfrill','veyra','virel','zakai']);
+const MOUNT_FILES=new Set(['aarna','ada','alderhide','alora','anna','ardcat','aster_and_briar','astronaut_steve','atoll','ava_young','axel','azure_hype','babka','bannana_boy','bear','bess_and_bea','binx','bloop','bo','bobbythebob','boja','boopis','bort_simesin','boston','briar','bristle','buffalo','capydara','catherine','cato','celestine_circe','cornelius_ii','cresset','dee','deepwave_the_ai','drew','dupengeiser','ella','elvis','emirk','engelman','enzo','ericsonion','estella','ezlen','fin_and_flo','flintback','friendo','fut_esports','gale','gerry','gilt','graven','grimes','gunt_gunt','gus_and_glen','h4l1s3','harlan_chalk','hart','inkwake','ivan','jake','jun','juniper','kaf_underworld_pharaoh','kiln','king_pharoph_the_3rd','kit_and_nell','kushalito_banana','lawrence','letchworth','lily','lishy','liya','lord_krishna','love','luckenzo','lune','macie','mags_and_mae','mangrove','mara','mer2','midge','monkey','mossback','mr_pinecone','murmur','nala','nanya','necro4','ned_and_nat','nerka','nissa','nix','noel_dragonfire','nohahahahah','odo_and_otto','orla','ossin','paitence_and_jay','parker','payton','percifire','petunia','pihu','pip_quickline','poison','posy','posy_spinner','pottery','python_mage','rafe_and_reed','rago','rattleclaw','reedcall','remy','rimmer','rocky','rose_flower','rosie','rumble','rusk_hookhorn','saki','samba','schmickle','shadow','sid_and_tess','silka','sir_quackars','skimmer','slack','sookie','space_toad','spike','spindle','spirit_of_the_forest','stargirl','sus','tansy','teeka','tembor','tempest','teo','thornfrill','trey','vash','veyra','virel','ward','wren','x','yatt','yselle','zakai']);
 function heroFigure(h,pose){const id=h&&h.id;if(!id)return null;
   if(h.mount==='horse'&&MOUNT_FILES.has(id)){const a=artImg(`battle/heroes/mounted/${id}.png`);if(a.ok)return{img:a.img,sx:(HM_POSE[pose]||0)*96,sy:0};}
   const mi=h.mount==='horse'||!HERO_FOOT.includes(id)?HERO_MOUNT.indexOf(id):-1;
   if(mi>=0){const a=artImg('battle/heroes/mounted.png');if(a.ok)return{img:a.img,sx:(HM_POSE[pose]||0)*96,sy:mi*64};}
   const i=HERO_FOOT.indexOf(id);if(i<0)return null;const a=artImg('battle/heroes/foot.png');if(!a.ok)return null;return{img:a.img,sx:(i%2)*576+(HF_POSE[pose]||0)*96,sy:Math.floor(i/2)*64};}
+/* v73: EPX / Scale2x pixel-art upscaling. Hero sprites are 48-64 px art; doubling them this way rounds off staircase edges
+   while keeping the pixel look, so heroes stay sharp when drawn large (battle) or on high-density screens (map). Fails quietly on file:// */
+function epx2(src,sx=0,sy=0,w=src.width,h=src.height){const c=document.createElement('canvas');c.width=w;c.height=h;const x=c.getContext('2d');x.drawImage(src,sx,sy,w,h,0,0,w,h);let P;try{P=new Uint32Array(x.getImageData(0,0,w,h).data.buffer);}catch(e){return null;}
+  const o=document.createElement('canvas');o.width=w*2;o.height=h*2;const ox=o.getContext('2d'),od=ox.createImageData(w*2,h*2),Q=new Uint32Array(od.data.buffer),W2=w*2;
+  for(let y=0;y<h;y++)for(let i=0;i<w;i++){const p=P[y*w+i],A=y?P[(y-1)*w+i]:p,B=i<w-1?P[y*w+i+1]:p,C=i?P[y*w+i-1]:p,D=y<h-1?P[(y+1)*w+i]:p,q=2*y*W2+2*i;
+    Q[q]=(C===A&&C!==D&&A!==B)?A:p;Q[q+1]=(A===B&&A!==C&&B!==D)?B:p;Q[q+W2]=(D===C&&D!==B&&C!==A)?C:p;Q[q+W2+1]=(B===D&&B!==A&&D!==C)?D:p;}
+  ox.putImageData(od,0,0);return o;}
+const UP4=new Map(),UP2=new WeakMap();
+/* one battle frame at 4x (EPX twice), cached by image and frame */
+function heroUp4(img,sx,sy,w,h){const k=img.src+'|'+sx+'|'+sy;if(UP4.has(k))return UP4.get(k);const a=epx2(img,sx,sy,w,h),b=a&&epx2(a);UP4.set(k,b||null);return b||null;}
+/* a whole map walker sheet at 2x */
+function sheetUp2(sh){if(UP2.has(sh))return UP2.get(sh);const u=epx2(sh);UP2.set(sh,u);return u;}
 const walkMCache={};
 const walkerMounted=id=>{if(walkMCache[id])return walkMCache[id];if(MOUNT_FILES.has(id)){const a=artImg(`heroes/walkers_mounted/${id}.png`);return a.ok?(walkMCache[id]=a.img):null;}const i=WALK_MOUNT.indexOf(id);if(i<0)return null;const a=artImg('heroes/walkers_mounted.png');if(!a.ok)return null;
   const cv=document.createElement('canvas');cv.width=192;cv.height=384;cv.getContext('2d').drawImage(a.img,(i%7)*192,Math.floor(i/7)*384,192,384,0,0,192,384);return walkMCache[id]=cv;};
